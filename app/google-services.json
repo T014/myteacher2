@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "22882612762",
+    "firebase_url": "https://myteacher2-f17f8.firebaseio.com",
+    "project_id": "myteacher2-f17f8",
+    "storage_bucket": "myteacher2-f17f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22882612762:android:7d428e989aa3adde",
+        "android_client_info": {
+          "package_name": "com.example.tyanai.myteacher2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22882612762-v28u9cbl9g5c201vkp7vel4ohmd6lqud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFYR0HiwnRuIgsVw6vU3PVAugmJh059Qc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
