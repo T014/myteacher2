@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_Area"
+            android:title="l"
+            android:icon="@drawable/ic_launcher_background"/>
+        <item
+            android:id="@+id/item_Search"
+            android:title="s"
+            android:icon="@drawable/ic_launcher_background"/>
+        <item
+            android:id="@+id/item_Notification"
+            android:title="n"
+            android:icon="@drawable/ic_launcher_background"/>
+        <item
+            android:id="@+id/item_Message"
+            android:title="m"
+            android:icon="@drawable/ic_launcher_background"/>
+
+    </group>
+
+</menu>
