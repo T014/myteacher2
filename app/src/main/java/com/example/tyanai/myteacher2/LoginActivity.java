@@ -59,35 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                     String email = mEmailEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
                     login(email, password);
-                    View view = findViewById(android.R.id.content);
-                    Snackbar.make(view, "アカウント作成に成功しました", Snackbar.LENGTH_LONG).show();
-
-
-
-
-                    //プロフィールフラグメントに切り替える
-                    //switchProfileFragment();
-
-                } else {
-
-                    // 失敗した場合
-                    // エラーを表示する
-                    View view = findViewById(android.R.id.content);
-                    Snackbar.make(view, "アカウント作成に失敗しました", Snackbar.LENGTH_LONG).show();
-
-                }
-            }
-        };
-
-        // ログイン処理のリスナー
-        mLoginListener = new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(Task<AuthResult> task) {
-
-                if (task.isSuccessful()) {
-
-                    View view = findViewById(android.R.id.content);
-                    Snackbar.make(view, "ログインに成功しました", Snackbar.LENGTH_LONG).show();
 
                     // 成功した場合
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -140,6 +111,36 @@ public class LoginActivity extends AppCompatActivity {
                     //プロフィールフラグメントに切り替える
                     intentProfileActivity();
 
+
+
+
+
+
+
+
+
+                    //プロフィールフラグメントに切り替える
+                    //switchProfileFragment();
+
+                } else {
+
+                    // 失敗した場合
+                    // エラーを表示する
+                    View view = findViewById(android.R.id.content);
+                    Snackbar.make(view, "アカウント作成に失敗しました", Snackbar.LENGTH_LONG).show();
+
+                }
+            }
+        };
+
+        // ログイン処理のリスナー
+        mLoginListener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(Task<AuthResult> task) {
+
+                if (task.isSuccessful()) {
+                    //プロフィールフラグメントに切り替える
+                    intentProfileActivity();
 
                 } else {
                     // 失敗した場合
