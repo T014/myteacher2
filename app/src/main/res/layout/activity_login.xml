@@ -26,11 +26,6 @@
 
             </FrameLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/nameText"
-                android:hint="ユーザー名" />
 
             <EditText
                 android:layout_width="match_parent"

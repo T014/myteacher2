@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText mEmailEditText;
     EditText mPasswordEditText;
-    EditText mNameEditText;
 
     FirebaseAuth mAuth;
     OnCompleteListener<AuthResult> mCreateAccountListener;
@@ -95,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                     DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH).child(user.getUid());
 
                     // アカウント作成の時は表示名をFirebaseに保存する
-                    String uName = mNameEditText.getText().toString();
+                    String uName = "";
                     String uId = user.getUid();
                     String comment = "未設定";
                     String follows = "0";
@@ -139,8 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                     //プロフィールフラグメントに切り替える
-                    //switchProfileFragment();
-                    intentMain();
+                    intentProfileActivity();
 
 
                 } else {
@@ -157,7 +155,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mEmailEditText = (EditText) findViewById(R.id.emailText);
         mPasswordEditText = (EditText) findViewById(R.id.passwordText);
-        mNameEditText = (EditText) findViewById(R.id.nameText);
 
         Button createButton = (Button) findViewById(R.id.createButton);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -227,8 +224,8 @@ public class LoginActivity extends AppCompatActivity {
         transaction.commit();
     }
     */
-    public void intentMain() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    public void intentProfileActivity() {
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
     }
 

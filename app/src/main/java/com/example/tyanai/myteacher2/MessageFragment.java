@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-//activityloginのボタンとかテキストを非表示にする
 
 public class MessageFragment extends Fragment {
     public static final String TAG = "MessageFragment";
