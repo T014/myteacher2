@@ -155,7 +155,10 @@ public class InputProfileFragment extends Fragment {
 
                 //Firebaseにデータ作成、データのkey取得
 
-                Map<String,String> data = new HashMap<>();
+                //Map<String,String> data = new HashMap<>();
+                //objectでないと更新できない
+                Map<String,Object> data = new HashMap<>();
+
 
                 //データベースへの書き方の確認
 
@@ -165,14 +168,9 @@ public class InputProfileFragment extends Fragment {
                 data.put("icon", iconBitmapString);
                 data.put("header", headerBitmapString);
 
-                userRef.child(userId).setValue(data);
-
-
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(userId, data);
-
-
-                userRef.updateChildren(childUpdates);
+                //userRef.child(userId).setValue(data);
+                //setだとデータをつけるだけupdateだと任意の値だけを変更できる
+                userRef.child(userId).updateChildren(data);
 
 
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
