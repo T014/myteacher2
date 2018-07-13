@@ -27,5 +27,7 @@ public class MessageFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainActivity.mToolbar.setTitle("メッセージ");
+
     }
 }

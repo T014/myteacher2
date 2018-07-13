@@ -123,9 +123,11 @@ public class ProfileActivity extends AppCompatActivity {
                     in.close();
                     if(pFlag==1){
                         //ヘッダー画像を表示
+                        InputProfileFragment.headerImageView.setImageBitmap(null);
                         InputProfileFragment.headerImageView.setImageBitmap(img);
                     }else if(pFlag==2){
                         //アイコン画像を表示
+                        InputProfileFragment.iconImageView.setImageBitmap(null);
                         InputProfileFragment.iconImageView.setImageBitmap(img);
                     }
 

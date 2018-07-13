@@ -20,11 +20,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="name"
         android:id="@+id/userNameTextView"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="comment"
         android:id="@+id/commentTextView"/>
 
     <Button

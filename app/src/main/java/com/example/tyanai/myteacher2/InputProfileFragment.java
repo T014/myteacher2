@@ -32,7 +32,6 @@ public class InputProfileFragment extends Fragment {
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
-    FirebaseAuth mAuth;
 
 
     @Override
@@ -53,8 +52,7 @@ public class InputProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
 
@@ -116,6 +114,7 @@ public class InputProfileFragment extends Fragment {
                 BitmapDrawable headerDrawable = (BitmapDrawable) headerImageView.getDrawable();
                 //画像を取り出しエンコードする
                 Bitmap headerBitmap = headerDrawable.getBitmap();
+
                 int headerImageWidth = headerBitmap.getWidth();
                 int headerImageHeight = headerBitmap.getHeight();
                 float headerScale = Math.min((float)500 / headerImageWidth,(float)500 / headerImageHeight);
@@ -147,7 +146,7 @@ public class InputProfileFragment extends Fragment {
                 iconResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, iconBaos);
                 String iconBitmapString = Base64.encodeToString(iconBaos.toByteArray(), Base64.DEFAULT);
 
-                user = mAuth.getCurrentUser();
+
                 userRef = mDataBaseReference.child(Const.UsersPATH);
 
                 String userId = user.getUid();
@@ -155,9 +154,9 @@ public class InputProfileFragment extends Fragment {
 
                 //Firebaseにデータ作成、データのkey取得
 
-                //Map<String,String> data = new HashMap<>();
+                Map<String,String> data = new HashMap<>();
                 //objectでないと更新できない
-                Map<String,Object> data = new HashMap<>();
+                //Map<String,Object> data = new HashMap<>();
 
 
                 //データベースへの書き方の確認
@@ -168,9 +167,14 @@ public class InputProfileFragment extends Fragment {
                 data.put("icon", iconBitmapString);
                 data.put("header", headerBitmapString);
 
+                Map<String,Object> chidUpdates = new HashMap<>();
+                chidUpdates.put(userId,data);
+                userRef.updateChildren(chidUpdates);
+
                 //userRef.child(userId).setValue(data);
                 //setだとデータをつけるだけupdateだと任意の値だけを変更できる
-                userRef.child(userId).updateChildren(data);
+                //userRef.child(userId).updateChildren(data);
+                //userRef.child(userId).setValue(data);
 
 
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();

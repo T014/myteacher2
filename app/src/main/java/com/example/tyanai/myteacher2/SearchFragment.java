@@ -28,5 +28,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainActivity.mToolbar.setTitle("探す");
+
     }
 }

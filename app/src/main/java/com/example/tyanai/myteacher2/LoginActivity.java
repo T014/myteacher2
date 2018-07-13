@@ -78,8 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                     String favorites = "未設定";
 
                     //初期アイコンとヘッダーを読み込みたい
-                    String icon = "";
-                    String header = "";
+                    String iconBitmapString = "";
+                    String headerBitmapString = "";
 
 
 
@@ -102,25 +102,12 @@ public class LoginActivity extends AppCompatActivity {
                     //参加グループ数
                     data.put("groups", groups);
                     //アイコン画像bitmapstring
-                    data.put("icon", icon);
+                    data.put("icon", iconBitmapString);
                     //ヘッダー画像bitmapstring
-                    data.put("header", header);
+                    data.put("header", headerBitmapString);
                     userRef.setValue(data);
 
 
-                    //プロフィールフラグメントに切り替える
-                    intentProfileActivity();
-
-
-
-
-
-
-
-
-
-                    //プロフィールフラグメントに切り替える
-                    //switchProfileFragment();
 
                 } else {
 

@@ -11,60 +11,40 @@
     android:orientation="vertical"
     tools:context="com.example.tyanai.myteacher2.LoginActivity">
 
-    <ScrollView
+
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:id="@+id/emailText"
+        android:hint="メールアドレス" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="パスワード(6文字以上)"
+        android:id="@+id/passwordText"/>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="ログイン"
+        android:id="@+id/loginButton" />
 
-            </FrameLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="アカウント作成"
+        android:id="@+id/createButton" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="※このアプリはアカウントを作成するか、ログインしないと利用できません"
+        android:textColor="#ff0000"/>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/emailText"
-                android:hint="メールアドレス" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="パスワード(6文字以上)"
-                android:id="@+id/passwordText"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="ログイン"
-                android:id="@+id/loginButton" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="アカウント作成"
-                android:id="@+id/createButton" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="※このアプリはアカウントを作成するか、ログインしないと利用できません"
-                android:textColor="#ff0000"/>
-
-        </LinearLayout>
-
-
-
-    </ScrollView>
 
 
 

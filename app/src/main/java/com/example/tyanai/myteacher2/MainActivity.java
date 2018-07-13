@@ -3,9 +3,14 @@ package com.example.tyanai.myteacher2;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,8 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static Toolbar mToolbar;
     private FirebaseUser user;
     public AreaFragment fragmentArea;
     public SearchFragment fragmentSearch;
@@ -67,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         //BottomNavigationViewの定義して設置する
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -81,17 +86,50 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.container, fragmentArea);
         transaction.commit();
 
-
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user==null){
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
         }
+
+
+        // ナビゲーションドロワーの設定
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
 
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.nav_profile) {
+            mToolbar.setTitle("プロフィール");
+        } else if (id == R.id.nav_group) {
+            mToolbar.setTitle("グループ");
+        } else if (id == R.id.nav_business) {
+            mToolbar.setTitle("取引履歴");
+        } else if (id == R.id.nav_schedule) {
+            mToolbar.setTitle("スケジュール");
+        } else if (id == R.id.nav_contract) {
+            mToolbar.setTitle("利用規約");
+        } else if (id == R.id.nav_inquiry) {
+            mToolbar.setTitle("お問い合わせ");
+        } else if (id == R.id.nav_logout) {
+            mToolbar.setTitle("ログアウト");
+        }
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
