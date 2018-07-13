@@ -37,25 +37,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.item_Area:
                     fragmentArea = new AreaFragment();
-                    transaction.replace(R.id.container, fragmentArea);
+                    transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Search:
                     fragmentSearch = new SearchFragment();
-                    transaction.replace(R.id.container, fragmentSearch);
+                    transaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Notification:
                     fragmentNotification = new NotificationFragment();
-                    transaction.replace(R.id.container, fragmentNotification);
+                    transaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Message:
                     fragmentMessage = new MessageFragment();
-                    transaction.replace(R.id.container, fragmentMessage);
+                    transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
                     transaction.commit();
                     return true;
 
@@ -81,15 +81,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //リスナーのセット
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //最初に表示させるフラグメントを指定
-        AreaFragment fragmentArea = new AreaFragment();
-        transaction.add(R.id.container, fragmentArea);
-        transaction.commit();
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user==null){
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
+        }else {
+            //最初に表示させるフラグメントを指定
+            AreaFragment fragmentArea = new AreaFragment();
+            transaction.add(R.id.container, fragmentArea);
+            transaction.commit();
         }
 
 
@@ -108,24 +110,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_options,menu);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+       /* switch (item.getItemId()){
+            case R.id.addButton:
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user==null) {
+                    intentLogin();
+                }else{
+                    sendFragment fragmentSend = new sendFragment();
+                    FragmentTransaction transactions = getSupportFragmentManager().beginTransaction();
+                    transactions.replace(R.id.container, fragmentSend);
+                    transactions.commit();
+                }
+                break;
+        }*/
+        return false;
+    }
+
+
+
+
+
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
 
         if (id == R.id.nav_profile) {
             mToolbar.setTitle("プロフィール");
+            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+            drawerTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+            drawerTransaction.commit();
         } else if (id == R.id.nav_group) {
             mToolbar.setTitle("グループ");
+
         } else if (id == R.id.nav_business) {
             mToolbar.setTitle("取引履歴");
+
         } else if (id == R.id.nav_schedule) {
             mToolbar.setTitle("スケジュール");
+            
         } else if (id == R.id.nav_contract) {
             mToolbar.setTitle("利用規約");
+            ContractFragment fragmentContract = new ContractFragment();
+            drawerTransaction.replace(R.id.container, fragmentContract ,ContractFragment.TAG);
+            drawerTransaction.commit();
         } else if (id == R.id.nav_inquiry) {
             mToolbar.setTitle("お問い合わせ");
         } else if (id == R.id.nav_logout) {
             mToolbar.setTitle("ログアウト");
+            LogoutFragment fragmentLogout = new LogoutFragment();
+            drawerTransaction.replace(R.id.container, fragmentLogout ,LogoutFragment.TAG);
+            drawerTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
