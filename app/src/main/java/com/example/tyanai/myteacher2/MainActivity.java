@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        mToolbar.setTitle("ホーム");
+
         //BottomNavigationViewの定義して設置する
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         //リスナーのセット
@@ -121,19 +123,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       /* switch (item.getItemId()){
+        switch (item.getItemId()){
             case R.id.addButton:
                 user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user==null) {
-                    intentLogin();
-                }else{
-                    sendFragment fragmentSend = new sendFragment();
-                    FragmentTransaction transactions = getSupportFragmentManager().beginTransaction();
-                    transactions.replace(R.id.container, fragmentSend);
-                    transactions.commit();
-                }
+
+                //電話番号とか身分証を登録しているかの確認
+                FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
+                MakePostFragment fragmentMakePost = new MakePostFragment();
+                optionsTransaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                optionsTransaction.commit();
+
                 break;
-        }*/
+        }
         return false;
     }
 
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_schedule) {
             mToolbar.setTitle("スケジュール");
-            
+
         } else if (id == R.id.nav_contract) {
             mToolbar.setTitle("利用規約");
             ContractFragment fragmentContract = new ContractFragment();
