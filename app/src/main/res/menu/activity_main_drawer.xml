@@ -25,6 +25,6 @@
         android:title="ログアウト"/>
     <item
         android:id="@+id/nav"
-        android:title="Main-itemselected,drawerxml."/>
+        android:title="Main-itemselected,drawerxml. aboutus"/>
 </group>
 </menu>

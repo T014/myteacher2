@@ -1,8 +1,14 @@
 package com.example.tyanai.myteacher2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class ConfirmProfileFragment extends Fragment {
+public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
+        ProfileGoodFragment.OnFragmentInteractionListener {
     public static final String TAG = "ConfirmProfileFragment";
     ImageView newHeaderImageView;
     ImageView newIconImageView;
@@ -32,6 +39,8 @@ public class ConfirmProfileFragment extends Fragment {
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
 
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
 
 
@@ -112,6 +121,9 @@ public class ConfirmProfileFragment extends Fragment {
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
         editButton = (Button)v.findViewById(R.id.editButton);
         okButton = (Button)v.findViewById(R.id.okButton);
+        tabLayout = (TabLayout)v.findViewById(R.id.tabs);
+        viewPager = (ViewPager)v.findViewById(R.id.pager);
+
 
         return v;
     }
@@ -128,7 +140,40 @@ public class ConfirmProfileFragment extends Fragment {
 
         userRef.child(user.getUid()).addChildEventListener(pEventListener);
 
+        final String[] pageTitle = {"投稿", "いいね"};
 
+
+
+        ProfileGoodFragment fragmentProfileGood = new ProfileGoodFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.tabContainer, fragmentProfileGood);
+        transaction.commit();
+
+
+
+        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return ProfileGoodFragment.newInstance(position + 1);
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return pageTitle[position];
+            }
+
+            @Override
+            public int getCount() {
+                return pageTitle.length;
+            }
+        };
+
+        // ViewPagerにページを設定
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
+
+        // ViewPagerをTabLayoutを設定
+        tabLayout.setupWithViewPager(viewPager);
 
 
 
@@ -142,13 +187,36 @@ public class ConfirmProfileFragment extends Fragment {
             }
         });
 
-        okButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),MainActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        int page = viewPager.getCurrentItem();
+        if (page==1){
+            //いいねリストを表示
+        }else if(page==2){
+            //投稿リストを表示
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        //同上
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        //同上
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //同上
+    }
+
+
+
+
 }
