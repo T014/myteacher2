@@ -40,6 +40,14 @@ public class ConfirmProfileFragment extends Fragment {
         @Override
         public void onChildAdded( final DataSnapshot dataSnapshot, String s) {
 
+//
+//            UserData userData = dataSnapshot.getValue(UserData.class);
+//            userNameTextView.setText(userData.getName());
+//            commentTextView.setText(userData.getComment());
+//
+
+
+/*
             HashMap map = (HashMap) dataSnapshot.getValue();
             final String userName = (String) map.get("userName");
             final String userId = (String) map.get("userId");
@@ -55,7 +63,7 @@ public class ConfirmProfileFragment extends Fragment {
             final String iconBitmapString = (String) map.get("iconBitmapString");
             final String headerBitmapString = (String) map.get("headerBitmapString");
 
-            userNameTextView.setText(userName);
+            userNameTextView.setText(userName);*/
 /*
 
             articleData post = new articleData(mUid, date, companyName, blackName, content, cases, ref, key);

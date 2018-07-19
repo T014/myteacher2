@@ -41,4 +41,6 @@
         android:id="@+id/okButton"
         android:text="確認"/>
 
+
+
 </LinearLayout>

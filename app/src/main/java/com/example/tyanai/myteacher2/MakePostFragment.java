@@ -26,10 +26,10 @@ public class MakePostFragment extends Fragment {
 
         return v;
     }
-/*
+
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+/*
 
 
         ActionBar actionBar = getActivity().getActionBar();
@@ -95,7 +95,7 @@ public class MakePostFragment extends Fragment {
             }
         }
 
-
-}*/
+*/
+}
 
 }

@@ -152,29 +152,65 @@ public class InputProfileFragment extends Fragment {
                 String userId = user.getUid();
 
 
+
+
+//
+//                String follows = "0";
+//                String followers = "0";
+//                String posts = "0";
+//                String evaluations = "0";
+//                String taught = "0";
+//                String period = "0";
+//                String groups = "0";
+//                String favorites = "未設定";
+//
+
+
+
+
                 //Firebaseにデータ作成、データのkey取得
 
-                Map<String,String> data = new HashMap<>();
+                //Map<String,String> data = new HashMap<>();
                 //objectでないと更新できない
-                //Map<String,Object> data = new HashMap<>();
+                Map<String,Object> data = new HashMap<>();
 
 
                 //データベースへの書き方の確認
 
-                data.put("userId", userId);
                 data.put("userName", userName);
+                data.put("userId", userId);
                 data.put("comment", comment);
+
+
+
+//
+//                data.put("follows", follows);
+//                data.put("followers", followers);
+//                data.put("posts", posts);
+//                data.put("favorites",favorites);
+//                //評価
+//                data.put("evaluations", evaluations);
+//                //指導人数
+//                data.put("taught", taught);
+//                //アプリ使用期間
+//                data.put("period", period);
+//                //参加グループ数
+//                data.put("groups", groups);
+
+
+
+
+
                 data.put("icon", iconBitmapString);
                 data.put("header", headerBitmapString);
 
-                Map<String,Object> chidUpdates = new HashMap<>();
-                chidUpdates.put(userId,data);
-                userRef.updateChildren(chidUpdates);
+                Map<String,Object> childUpdates = new HashMap<>();
+                childUpdates.put(userId,data);
+                userRef.updateChildren(childUpdates);
 
                 //userRef.child(userId).setValue(data);
                 //setだとデータをつけるだけupdateだと任意の値だけを変更できる
                 //userRef.child(userId).updateChildren(data);
-                //userRef.child(userId).setValue(data);
 
 
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();

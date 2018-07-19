@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.tyanai.myteacher2.MainActivity">
+
+    <item
+        android:id="@+id/addButton"
+        android:icon="@drawable/plusbutton"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="action_add"/>
+</menu>
