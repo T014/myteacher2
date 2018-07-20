@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity{
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //最初に表示させるフラグメントを指定
         InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-        transaction.add(R.id.profileContainer, fragmentInputProfile);
+        transaction.add(R.id.profileContainer, fragmentInputProfile,InputProfileFragment.TAG);
         transaction.commit();
 
 
