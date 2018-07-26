@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
@@ -38,6 +39,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
+    private ArrayList<UserData> userDataArrayList;
 
     TabLayout tabLayout;
     public static ViewPager viewPager;
@@ -45,45 +47,38 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
     //mEventListenerの設定と初期化
-    ChildEventListener pEventListener = new ChildEventListener() {
+    private ChildEventListener pEventListener = new ChildEventListener() {
         @Override
-        public void onChildAdded( final DataSnapshot dataSnapshot, String s) {
-
-//
-//            UserData userData = dataSnapshot.getValue(UserData.class);
-//            userNameTextView.setText(userData.getName());
-//            commentTextView.setText(userData.getComment());
-//
-
-
-/*
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
-            final String userName = (String) map.get("userName");
-            final String userId = (String) map.get("userId");
-            final String comment = (String) map.get("comment");
-            final String follows = (String) map.get("follows");
-            final String followers = (String) map.get("followers");
-            final String posts = (String) map.get("posts");
-            final String favorites = (String) map.get("favorites");
-            final String evaluations = (String) map.get("evaluations");
-            final String taught = (String) map.get("taught");
-            final String period = (String) map.get("period");
-            final String groups = (String) map.get("groups");
-            final String iconBitmapString = (String) map.get("iconBitmapString");
-            final String headerBitmapString = (String) map.get("headerBitmapString");
 
-            userNameTextView.setText(userName);*/
-/*
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String headerBitmapString = (String) map.get("headerBitmapString");
 
-            articleData post = new articleData(mUid, date, companyName, blackName, content, cases, ref, key);
-            mArticleDataArrayList.add(post);
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
+            userDataArrayList = new ArrayList<UserData>();
+            userDataArrayList.add(userData);
 
-            mAdapter.setArticleDataArrayList(mArticleDataArrayList);
-            mListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            for(UserData aaa : userDataArrayList){
+                if (aaa.getUid().equals(user.getUid())){
+                    userNameTextView.setText(userData.getName());
+                    commentTextView.setText(userData.getComment());
+                    bitmapstringをbyteに変更？まあそんな感じ
 
-            cArticleDataArrayList = mArticleDataArrayList;
-*/
+                    //画像も！
+                }
+            }
         }
 
         @Override
@@ -101,6 +96,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
+
+
+
+
     };
 
 
@@ -138,7 +137,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userRef = mDataBaseReference.child(Const.UsersPATH);
 
 
-        userRef.child(user.getUid()).addChildEventListener(pEventListener);
+        String uid = user.getUid();
+        //userRef.child(uid).addChildEventListener(pEventListener);
+        userRef.addChildEventListener(pEventListener);
 
         final String[] pageTitle = {"投稿", "いいね"};
 
