@@ -20,7 +20,7 @@ public class ProfileGoodFragment extends Fragment {
     private String mParam;
     private OnFragmentInteractionListener mListener;
     int page;
-    TextView textView;
+    public static TextView textView1;
 
     public ProfileGoodFragment() {
     }
@@ -37,7 +37,7 @@ public class ProfileGoodFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam = getArguments().getString(ARG_PARAM);
+            //mParam = getArguments().getString(ARG_PARAM);
         }
     }
 
@@ -49,7 +49,7 @@ public class ProfileGoodFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profilegood,container,false);
 
 
-        textView =(TextView)v.findViewById(R.id.textView);
+        textView1 =(TextView)v.findViewById(R.id.textView1);
 
 
         return v;
@@ -60,10 +60,19 @@ public class ProfileGoodFragment extends Fragment {
 
 
         if (getArguments() != null) {
-            mParam = getArguments().getString(ARG_PARAM);
+            //mParam = getArguments().getString(ARG_PARAM);
 
         }
-        textView.setText("Page" + page);
+
+        int page = ConfirmProfileFragment.viewPager.getCurrentItem();
+        if (page==0){
+            //いいねリストを表示
+            textView1.setText("投稿");
+        }else if(page==1){
+            //投稿リストを表示
+            textView1.setText("いいね");
+        }
+
 
 
     }
