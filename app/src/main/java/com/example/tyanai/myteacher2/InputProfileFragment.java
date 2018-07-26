@@ -154,16 +154,16 @@ public class InputProfileFragment extends Fragment {
 
 
 
-//
-//                String follows = "0";
-//                String followers = "0";
-//                String posts = "0";
-//                String evaluations = "0";
-//                String taught = "0";
-//                String period = "0";
-//                String groups = "0";
-//                String favorites = "未設定";
-//
+
+                String follows = "0";
+                String followers = "0";
+                String posts = "0";
+                String evaluations = "0";
+                String taught = "0";
+                String period = "0";
+                String groups = "0";
+                String favorites = "未設定";
+
 
 
 
@@ -183,26 +183,26 @@ public class InputProfileFragment extends Fragment {
 
 
 
-//
-//                data.put("follows", follows);
-//                data.put("followers", followers);
-//                data.put("posts", posts);
-//                data.put("favorites",favorites);
-//                //評価
-//                data.put("evaluations", evaluations);
-//                //指導人数
-//                data.put("taught", taught);
-//                //アプリ使用期間
-//                data.put("period", period);
-//                //参加グループ数
-//                data.put("groups", groups);
+
+                data.put("follows", follows);
+                data.put("followers", followers);
+                data.put("posts", posts);
+                data.put("favorites",favorites);
+                //評価
+                data.put("evaluations", evaluations);
+                //指導人数
+                data.put("taught", taught);
+                //アプリ使用期間
+                data.put("period", period);
+                //参加グループ数
+                data.put("groups", groups);
 
 
 
 
 
-                data.put("icon", iconBitmapString);
-                data.put("header", headerBitmapString);
+                data.put("iconBitmapString", iconBitmapString);
+                data.put("headerBitmapString", headerBitmapString);
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(userId,data);
