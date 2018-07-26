@@ -40,7 +40,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference mDataBaseReference;
 
     TabLayout tabLayout;
-    ViewPager viewPager;
+    public static ViewPager viewPager;
 
 
 
@@ -193,12 +193,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        int page = viewPager.getCurrentItem();
-        if (page==1){
-            //いいねリストを表示
-        }else if(page==2){
-            //投稿リストを表示
-        }
+
+        ProfileGoodFragment fragmentProfileGood = new ProfileGoodFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.tabContainer, fragmentProfileGood);
+        transaction.commit();
     }
 
     @Override

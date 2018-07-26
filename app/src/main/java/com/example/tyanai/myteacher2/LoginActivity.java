@@ -26,6 +26,8 @@ import java.util.Map;
  * Created by taiso on 2018/01/21.
  */
 
+
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText mEmailEditText;
@@ -44,6 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
+
+
+
+
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
 
         // FirebaseAuthのオブジェクトを取得する
@@ -59,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                     String email = mEmailEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
                     login(email, password);
+
+
 
                     // 成功した場合
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -108,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
                     userRef.setValue(data);
 
 
-
                 } else {
 
                     // 失敗した場合
@@ -126,12 +135,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
+
                     //プロフィールフラグメントに切り替える
                     intentProfileActivity();
 
+
                 } else {
                     // 失敗した場合
-                    // エラーを表示する
+// エラーを表示する
                     View view = findViewById(android.R.id.content);
                     Snackbar.make(view, "ログインに失敗しました", Snackbar.LENGTH_LONG).show();
                 }
@@ -200,25 +211,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String email, String password) {
+
         // ログインする
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(mLoginListener);
-    }
 
 
-    /*public void switchProfileFragment() {
-        ProfileFragment fragmentProfile = new ProfileFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container, fragmentProfile, ProfileFragment.TAG);
-        transaction.commit();
+
     }
-    */
+
     public void intentProfileActivity() {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
     }
 
-
-
-
-
 }
+
+
+
