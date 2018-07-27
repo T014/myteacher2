@@ -1,6 +1,8 @@
 package com.example.tyanai.myteacher2;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -15,10 +17,14 @@ import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +38,69 @@ public class InputProfileFragment extends Fragment {
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
+
+
+
+
+    private ChildEventListener iEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String headerBitmapString = (String) map.get("headerBitmapString");
+
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
+
+            if(userData.getUid().equals(user.getUid())) {
+                userNameEditText.setText(userData.getName());
+                commentEditText.setText(userData.getComment());
+                byte[] headerBytes = Base64.decode(headerBitmapString, Base64.DEFAULT);
+                if (headerBytes.length != 0) {
+                    Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes, 0, headerBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                    headerImageView.setImageBitmap(headerBitmap);
+                }
+                byte[] iconBytes = Base64.decode(iconBitmapString, Base64.DEFAULT);
+                if (iconBytes.length != 0) {
+                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                    iconImageView.setImageBitmap(iconBitmap);
+                }
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+
+
+
+
+    };
+
+
+
+
+
 
 
     @Override
@@ -53,6 +122,9 @@ public class InputProfileFragment extends Fragment {
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+
+        userRef.addChildEventListener(iEventListener);
 
 
 
@@ -213,10 +285,19 @@ public class InputProfileFragment extends Fragment {
                 //userRef.child(userId).updateChildren(data);
 
 
+
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.profileContainer, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
-                        .commit();
+                Activity activity = getActivity();
+                if(activity.getLocalClassName().equals("MainActivity")){
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
+                            .commit();
+                }else{
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.profileContainer, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
+                            .commit();
+                }
+
             }
         });
 
