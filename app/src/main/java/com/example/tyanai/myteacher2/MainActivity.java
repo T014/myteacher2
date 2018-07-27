@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.addButton:
                 user = FirebaseAuth.getInstance().getCurrentUser();
 
+                mToolbar.setTitle("投稿");
+
                 //電話番号とか身分証を登録しているかの確認
                 FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
                 MakePostFragment fragmentMakePost = new MakePostFragment();
