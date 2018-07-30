@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static Toolbar mToolbar;
     private FirebaseUser user;
     public AreaFragment fragmentArea;
-    public SearchFragment fragmentSearch;
+    public TimelineFragment fragmentTimeline;
     public NotificationFragment fragmentNotification;
     public MessageFragment fragmentMessage;
 
@@ -40,15 +40,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
-                case R.id.item_Area:
-                    fragmentArea = new AreaFragment();
-                    transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
+                case R.id.item_Timeline:
+                    fragmentTimeline = new TimelineFragment();
+                    transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
                     transaction.commit();
                     return true;
 
-                case R.id.item_Search:
-                    fragmentSearch = new SearchFragment();
-                    transaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                case R.id.item_Area:
+                    fragmentArea = new AreaFragment();
+                    transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
                     transaction.commit();
                     return true;
 
@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }else {
             //最初に表示させるフラグメントを指定
-            AreaFragment fragmentArea = new AreaFragment();
-            transaction.add(R.id.container, fragmentArea);
+            TimelineFragment fragmentTimeline = new TimelineFragment();
+            transaction.add(R.id.container, fragmentTimeline,TimelineFragment.TAG);
             transaction.commit();
         }
 
