@@ -94,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
+
                     Map<String, String> data = new HashMap<String, String>();
                     data.put("userName", uName);
                     data.put("userId", uId);
@@ -112,9 +114,9 @@ public class LoginActivity extends AppCompatActivity {
                     //参加グループ数
                     data.put("groups", groups);
                     //アイコン画像bitmapstring
-                    data.put("icon", iconBitmapString);
+                    data.put("iconBitmapString", iconBitmapString);
                     //ヘッダー画像bitmapstring
-                    data.put("header", headerBitmapString);
+                    data.put("headerBitmapString", headerBitmapString);
                     userRef.setValue(data);
 
 
