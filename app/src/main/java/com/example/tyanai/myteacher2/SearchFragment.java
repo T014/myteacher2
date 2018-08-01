@@ -6,20 +6,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-
-//activityloginのボタンとかテキストを非表示にする
+import android.widget.Spinner;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";
+    Spinner postAreaSpinner;
+    Spinner postTypeSpinner;
+    Spinner levelSpinner;
+    Spinner userEvaluationSpinner;
+    Spinner evaluationSpinner;
+    Spinner taughtSpinner;
+    Spinner methodSpinner;
+    Spinner dateSpinner;
+    Spinner placeSpinner;
+    Spinner costSpinner;
+    Spinner sexSpinner;
+    Spinner ageSpinner;
+    Button searchButton;
 
-    private EditText searchEditText;
-    private ImageButton closeButton;
-    private Button searchButton;
+    String level;
+    String userEvaluation;
+    String taught;
+    String method;
+    String date;
+    String cost;
+    String sex;
+    String age;
 
 
     @Override
@@ -27,9 +39,20 @@ public class SearchFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_search,container,false);
 
-        searchEditText = (EditText)v.findViewById(R.id.searchEditText);
-        closeButton = (ImageButton)v.findViewById(R.id.closeButton);
+        postAreaSpinner = (Spinner)v.findViewById(R.id.postAreaSpinner);
+        postTypeSpinner = (Spinner)v.findViewById(R.id.postTypeSpinner);
+        levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
+        userEvaluationSpinner = (Spinner)v.findViewById(R.id.userEvaluationSpinner);
+        evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
+        taughtSpinner = (Spinner)v.findViewById(R.id.taughtSpinner);
+        methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
+        dateSpinner = (Spinner)v.findViewById(R.id.dateSpinner);
+        costSpinner = (Spinner)v.findViewById(R.id.costSpinner);
+        sexSpinner = (Spinner)v.findViewById(R.id.sexSpinner);
+        ageSpinner = (Spinner)v.findViewById(R.id.ageSpinner);
         searchButton = (Button)v.findViewById(R.id.searchButton);
+
+
 
 
 
@@ -41,10 +64,24 @@ public class SearchFragment extends Fragment {
 
         MainActivity.mToolbar.setTitle("探す");
 
-        closeButton.setOnClickListener(new View.OnClickListener(){
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                searchEditText.getEditableText().clear();
+            public void onClick(View view) {
+                String postArea = (String)postAreaSpinner.getSelectedItem();
+                String postType = (String)postTypeSpinner.getSelectedItem();
+                level = (String)levelSpinner.getSelectedItem();
+                userEvaluation = (String)userEvaluationSpinner.getSelectedItem();
+                taught = (String)taughtSpinner.getSelectedItem();
+                method = (String)methodSpinner.getSelectedItem();
+                date = (String)dateSpinner.getSelectedItem();
+                cost = (String)costSpinner.getSelectedItem();
+                sex = (String)sexSpinner.getSelectedItem();
+                age = (String)ageSpinner.getSelectedItem();
+
+
+
+
+
             }
         });
 
