@@ -39,6 +39,7 @@ public class SearchFragment extends Fragment {
     String taught;
     String method;
     String date;
+    String place;
     String cost;
     String sex;
     String age;
@@ -181,6 +182,7 @@ public class SearchFragment extends Fragment {
                 taught = (String)taughtSpinner.getSelectedItem();
                 method = (String)methodSpinner.getSelectedItem();
                 date = (String)dateSpinner.getSelectedItem();
+                place = (String)placeSpinner.getSelectedItem();
                 cost = (String)costSpinner.getSelectedItem();
                 sex = (String)sexSpinner.getSelectedItem();
                 age = (String)ageSpinner.getSelectedItem();
