@@ -9,6 +9,8 @@ public class UserData {
     private String mFollowers;
     private String mPosts;
     private String mFavorites;
+    private String mSex;
+    private String mAge;
     private String mEvaluations;
     private String mTaught;
     private String mPeriod;
@@ -39,6 +41,15 @@ public class UserData {
     public String getFavorites(){
         return mFavorites;
     }
+
+    public String getSex() {
+        return mSex;
+    }
+
+    public String getAge() {
+        return mAge;
+    }
+
     public String getEvaluations(){
         return mEvaluations;
     }
@@ -58,7 +69,9 @@ public class UserData {
         return mHeaderBitmapString;
     }
 
-    public UserData(String name, String userId, String comment, String follows, String followers, String posts, String favorites, String evaluations, String taught, String period, String group, String iconBitmapString, String headerBitmapString) {
+    public UserData(String name, String userId, String comment, String follows, String followers
+            , String posts, String favorites,String sex,String age, String evaluations, String taught
+            , String period, String group, String iconBitmapString, String headerBitmapString) {
         mName = name;
         mUserId = userId;
         mComment = comment;
@@ -66,6 +79,8 @@ public class UserData {
         mFollowers = followers;
         mPosts = posts;
         mFavorites = favorites;
+        mSex = sex;
+        mAge = age;
         mEvaluations = evaluations;
         mTaught = taught;
         mPeriod = period;
