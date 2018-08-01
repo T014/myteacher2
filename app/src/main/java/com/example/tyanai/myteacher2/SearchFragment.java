@@ -150,6 +150,7 @@ public class SearchFragment extends Fragment {
         taughtSpinner = (Spinner)v.findViewById(R.id.taughtSpinner);
         methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
         dateSpinner = (Spinner)v.findViewById(R.id.dateSpinner);
+        placeSpinner = (Spinner)v.findViewById(R.id.placeSpinner);
         costSpinner = (Spinner)v.findViewById(R.id.costSpinner);
         sexSpinner = (Spinner)v.findViewById(R.id.sexSpinner);
         ageSpinner = (Spinner)v.findViewById(R.id.ageSpinner);
