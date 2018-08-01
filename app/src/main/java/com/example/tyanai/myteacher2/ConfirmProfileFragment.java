@@ -1,6 +1,9 @@
 package com.example.tyanai.myteacher2;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
-        ProfileGoodFragment.OnFragmentInteractionListener {
+        ProfilePostGoodFragment.OnFragmentInteractionListener {
     public static final String TAG = "ConfirmProfileFragment";
     ImageView newHeaderImageView;
     ImageView newIconImageView;
@@ -39,7 +43,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
-    private ArrayList<UserData> userDataArrayList;
 
     TabLayout tabLayout;
     public static ViewPager viewPager;
@@ -47,7 +50,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
     //mEventListenerの設定と初期化
-    private ChildEventListener pEventListener = new ChildEventListener() {
+    private ChildEventListener cEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
@@ -67,17 +70,22 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String headerBitmapString = (String) map.get("headerBitmapString");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
-            userDataArrayList = new ArrayList<UserData>();
-            userDataArrayList.add(userData);
 
-            for(UserData aaa : userDataArrayList){
-                if (aaa.getUid().equals(user.getUid())){
-                    userNameTextView.setText(userData.getName());
-                    commentTextView.setText(userData.getComment());
-                    bitmapstringをbyteに変更？まあそんな感じ
 
-                    //画像も！
+            if(userData.getUid().equals(user.getUid())){
+                userNameTextView.setText(userData.getName());
+                commentTextView.setText(userData.getComment());
+                byte[] headerBytes = Base64.decode(headerBitmapString,Base64.DEFAULT);
+                if(headerBytes.length!=0){
+                    Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes,0, headerBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    newHeaderImageView.setImageBitmap(headerBitmap);
                 }
+                byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+                if(iconBytes.length!=0){
+                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    newIconImageView.setImageBitmap(iconBitmap);
+            }
+
             }
         }
 
@@ -139,23 +147,20 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         String uid = user.getUid();
         //userRef.child(uid).addChildEventListener(pEventListener);
-        userRef.addChildEventListener(pEventListener);
+        userRef.addChildEventListener(cEventListener);
 
         final String[] pageTitle = {"投稿", "いいね"};
 
 
-
-        ProfileGoodFragment fragmentProfileGood = new ProfileGoodFragment();
+        ProfilePostGoodFragment fragmentProfilePostGood = new ProfilePostGoodFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.tabContainer, fragmentProfileGood);
+        transaction.add(R.id.tabContainer, fragmentProfilePostGood);
         transaction.commit();
-
-
 
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return ProfileGoodFragment.newInstance(position + 1);
+                return ProfilePostGoodFragment.newInstance(position + 1);
             }
 
             @Override
@@ -181,10 +186,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
+                Activity activity = getActivity();
                 InputProfileFragment fragmentInputProfile = new InputProfileFragment();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.profileContainer, fragmentInputProfile, InputProfileFragment.TAG)
+                        .replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG)
                         .commit();
+
+
             }
         });
 
@@ -194,11 +203,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        
 
-        ProfileGoodFragment fragmentProfileGood = new ProfileGoodFragment();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.tabContainer, fragmentProfileGood);
-        transaction.commit();
+        int tabPosition = tabLayout.getSelectedTabPosition();
+        if (tabPosition==1){
+            //good
+        }else if(tabPosition==0){
+            //post
+        }
     }
 
     @Override
