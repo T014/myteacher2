@@ -5,12 +5,17 @@
     android:orientation="vertical">
 
 
-    <Button
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/logoutButton"
-        android:layout_gravity="center"
+        android:src="@drawable/noimage"
+        android:id="@+id/postContentsImageView"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="ログアウト"/>
+        android:id="@+id/detailsTextView"/>
 
 </LinearLayout>

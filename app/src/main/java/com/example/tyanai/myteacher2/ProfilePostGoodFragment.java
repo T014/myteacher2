@@ -12,25 +12,25 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-//activityloginのボタンとかテキストを非表示にする
+public class ProfilePostGoodFragment  extends Fragment {
 
-public class ProfileGoodFragment extends Fragment {
-    public static final String TAG = "ProfileGoodFragment";
+
+    public static final String TAG = "ProfilePostGoodFragment";
     private static final String ARG_PARAM = "page";
     private String mParam;
     private OnFragmentInteractionListener mListener;
     int page;
     public static TextView textView1;
 
-    public ProfileGoodFragment() {
+    public ProfilePostGoodFragment() {
     }
 
-    public static ProfileGoodFragment newInstance(int page) {
-        ProfileGoodFragment fragmentProfileGood = new ProfileGoodFragment();
+    public static ProfilePostGoodFragment newInstance(int page) {
+        ProfilePostGoodFragment fragmentProfilePostGood = new ProfilePostGoodFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM, page);
-        fragmentProfileGood.setArguments(args);
-        return fragmentProfileGood;
+        fragmentProfilePostGood.setArguments(args);
+        return fragmentProfilePostGood;
     }
 
     @Override
@@ -106,4 +106,6 @@ public class ProfileGoodFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

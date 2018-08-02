@@ -31,6 +31,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/commentEditText"
         android:hint="自己紹介を入力"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="性別を選択"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/sexList"
+        android:id="@+id/sexSpinner"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="年齢を選択"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/ageList"
+        android:id="@+id/ageSpinner"/>
 
     <Button
         android:layout_width="wrap_content"

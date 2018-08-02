@@ -36,13 +36,13 @@ public class SearchFragment extends Fragment {
     String postLevel;
     String postUserEvaluation;
     String postEvaluation;
-    String taught;
-    String method;
+    String postTaught;
+    String postMethod;
     String date;
     String place;
-    String cost;
-    String sex;
-    String age;
+    String postCost;
+    String postSex;
+    String postAge;
 
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
@@ -97,12 +97,54 @@ public class SearchFragment extends Fragment {
             int iPostEvaluation = Integer.parseInt(evaluation);
             int iSelectedPostEvaluation = Character.getNumericValue(postEvaluation.codePointAt(0));
 
-            if (postLevel.equals("指定しない") || level.equals(postLevel)){
-                if (userEvaluation.equals("指定しない") || iUserEvaluation>iSelectedUserEvaluation){
-                    if(postEvaluation.equals("指定しない") || iPostEvaluation>iSelectedPostEvaluation){
-                        searchArrayList.add(postData);
+            int iPostTaught = Integer.parseInt(taught);
+            int iSelectedPostTaught=0;
+            if (!(postTaught.equals("指定しない"))){
+                String aaa[] = postTaught.split("人",0);
+                iSelectedPostTaught = Integer.parseInt(aaa[0]);
+            }
 
-                        //ここに条件を追加する
+
+
+
+
+            int iPostCost = Integer.parseInt(taught);
+            int iSelectedPostCost=0;
+            if (!(postCost.equals("指定しない"))){
+                String bbb[] = postCost.split("コイン",0);
+                iSelectedPostCost = Integer.parseInt(bbb[0]);
+            }
+
+
+
+
+
+            //難易度
+            if (postLevel.equals("指定しない") || level.equals(postLevel)){
+                //ユーザーの評価
+                if (userEvaluation.equals("指定しない") || iUserEvaluation>iSelectedUserEvaluation){
+                    //投稿の評価
+                    if(postEvaluation.equals("指定しない") || iPostEvaluation>iSelectedPostEvaluation){
+                        //指導人数
+                        if(postTaught.equals("指定しない") || iPostTaught>iSelectedPostTaught) {
+                            //受講方法
+                            if (postMethod.equals("指定しない") || postMethod.equals(method)){
+                                //日時
+
+                                //場所
+
+                                //価格
+                                if(postCost.equals("指定しない") || iPostCost<=iSelectedPostCost){
+                                    //性別
+                                    if (postSex.equals("指定しない") || sex.equals(postSex)){
+                                        //年齢
+                                        if (postAge.equals("指定しない") || age.equals(postAge)){
+                                            searchArrayList.add(postData);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -179,13 +221,13 @@ public class SearchFragment extends Fragment {
                 postLevel = (String)levelSpinner.getSelectedItem();
                 postUserEvaluation = (String)userEvaluationSpinner.getSelectedItem();
                 postEvaluation = (String)evaluationSpinner.getSelectedItem();
-                taught = (String)taughtSpinner.getSelectedItem();
-                method = (String)methodSpinner.getSelectedItem();
+                postTaught = (String)taughtSpinner.getSelectedItem();
+                postMethod = (String)methodSpinner.getSelectedItem();
                 date = (String)dateSpinner.getSelectedItem();
                 place = (String)placeSpinner.getSelectedItem();
-                cost = (String)costSpinner.getSelectedItem();
-                sex = (String)sexSpinner.getSelectedItem();
-                age = (String)ageSpinner.getSelectedItem();
+                postCost = (String)costSpinner.getSelectedItem();
+                postSex = (String)sexSpinner.getSelectedItem();
+                postAge = (String)ageSpinner.getSelectedItem();
 
                 String refArea="";
                 String refType="";

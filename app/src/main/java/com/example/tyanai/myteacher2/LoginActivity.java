@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +33,13 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText mEmailEditText;
     EditText mPasswordEditText;
+    private int mYear, mMonth, mDay;
 
     FirebaseAuth mAuth;
     OnCompleteListener<AuthResult> mCreateAccountListener;
     OnCompleteListener<AuthResult> mLoginListener;
     DatabaseReference mDataBaseReference;
+    DatabaseReference followRef;
 
     // アカウント作成時にフラグを立て、ログイン処理後に名前をFirebaseに保存する
     boolean mIsCreateAccount = false;
@@ -45,6 +48,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
+        Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
 
 
@@ -73,11 +83,12 @@ public class LoginActivity extends AppCompatActivity {
                     // 成功した場合
                     FirebaseUser user = mAuth.getCurrentUser();
                     DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH).child(user.getUid());
+                    followRef = mDataBaseReference.child(Const.FollowPATH);
 
                     // アカウント作成の時は表示名をFirebaseに保存する
                     String uName = "";
                     String uId = user.getUid();
-                    String comment = "未設定";
+                    String comment = "";
                     String follows = "0";
                     String followers = "0";
                     String posts = "0";
@@ -86,6 +97,11 @@ public class LoginActivity extends AppCompatActivity {
                     String period = "0";
                     String groups = "0";
                     String favorites = "未設定";
+                    String sex="未設定";
+                    String age ="未設定";
+
+                    String date = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay);
+                    //ここで指定
 
                     //初期アイコンとヘッダーを読み込みたい
                     String iconBitmapString = "";
@@ -105,6 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("followers", followers);
                     data.put("posts", posts);
                     data.put("favorites",favorites);
+                    data.put("sex",sex);
+                    data.put("age",age);
                     //評価
                     data.put("evaluations", evaluations);
                     //指導人数
@@ -113,11 +131,29 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("period", period);
                     //参加グループ数
                     data.put("groups", groups);
+                    //日付け
+                    data.put("date",date);
                     //アイコン画像bitmapstring
                     data.put("iconBitmapString", iconBitmapString);
                     //ヘッダー画像bitmapstring
                     data.put("headerBitmapString", headerBitmapString);
                     userRef.setValue(data);
+
+
+
+
+
+                    //自分をfollowrefに入れておく
+                    Map<String,Object> followData = new HashMap<>();
+
+                    String key = followRef.child(user.getUid()).push().getKey();
+
+                    followData.put("followUid",uId);
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,followData);
+                    Map<String,Object> childUpdate = new HashMap<>();
+                    childUpdate.put(key,followData);
+                    followRef.child(user.getUid()).updateChildren(childUpdate);
 
 
                 } else {
@@ -138,8 +174,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
 
-                    //プロフィールフラグメントに切り替える
-                    intentProfileActivity();
+                    intentMainActivity();
 
 
                 } else {
@@ -221,8 +256,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void intentProfileActivity() {
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+    public void intentMainActivity() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
 

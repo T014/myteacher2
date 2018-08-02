@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
         ProfilePostGoodFragment.OnFragmentInteractionListener {
@@ -38,18 +39,19 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     ImageView newIconImageView;
     TextView userNameTextView;
     TextView commentTextView;
-    Button editButton;
     Button okButton;
     TextView sexTextView;
     TextView ageTextView;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
+    DatabaseReference followRef;
 
     TabLayout tabLayout;
     public static ViewPager viewPager;
     String intentUserId;
     String uid;
+    private Button followEditButton;
 
 
 
@@ -81,10 +83,23 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
             if (intentUserId!=null){
+                //ある
                 uid=intentUserId;
+                if (uid.equals(user.getUid())){
+                    //自分-
+                    followEditButton.setText("編集");
+                    //フォローボタンと編集ボタンを同じボタンにして
+                    //uidが一致するか否かでテキストとリスナーを変えるtwitterみたいに
+                }else{
+                    //他の人
+                    followEditButton.setText("フォロー");
+                }
             }else{
+                //ない自分-
                 uid=user.getUid();
+                followEditButton.setText("編集");
             }
+
 
 
             if(userData.getUid().equals(uid)){
@@ -143,12 +158,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         newIconImageView = (ImageView)v.findViewById(R.id.newIconImageView);
         userNameTextView = (TextView)v.findViewById(R.id.userNameTextView);
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
-        editButton = (Button)v.findViewById(R.id.editButton);
         okButton = (Button)v.findViewById(R.id.okButton);
         tabLayout = (TabLayout)v.findViewById(R.id.tabs);
         viewPager = (ViewPager)v.findViewById(R.id.pager);
         sexTextView = (TextView)v.findViewById(R.id.sexTextView);
         ageTextView = (TextView)v.findViewById(R.id.ageTextView);
+        followEditButton = (Button)v.findViewById(R.id.followEditButton);
 
 
         return v;
@@ -162,10 +177,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
+        followRef = mDataBaseReference.child(Const.FollowPATH);
 
 
         Bundle userBundle = getArguments();
-        intentUserId = userBundle.getString("userId");
+        if (userBundle!=null){
+            intentUserId = userBundle.getString("userId");
+        }
+
 
 
 
@@ -206,15 +225,33 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
-        editButton.setOnClickListener(new View.OnClickListener(){
+        followEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
 
-                Activity activity = getActivity();
-                InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG)
-                        .commit();
+                if (followEditButton.getText().toString().equals("編集")){
+                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG)
+                            .commit();
+                }else{
+                    //フォロー
+                    Map<String,Object> followData = new HashMap<>();
+
+                    String key = followRef.child(user.getUid()).push().getKey();
+
+                    followData.put("followUid",intentUserId);
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,followData);
+                    Map<String,Object> childUpdate = new HashMap<>();
+                    childUpdate.put(key,followData);
+                    followRef.child(user.getUid()).updateChildren(childUpdate);
+
+
+                    //follorfollower数追加
+                }
+
+
 
 
             }

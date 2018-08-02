@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +36,9 @@ public class InputProfileFragment extends Fragment {
     EditText userNameEditText;
     EditText commentEditText;
     Button okButton;
+    Spinner sexSpinner;
+    Spinner ageSpinner;
+    String startDate;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
@@ -54,16 +58,45 @@ public class InputProfileFragment extends Fragment {
             String followers = (String) map.get("followers");
             String posts = (String) map.get("posts");
             String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
             String evaluations = (String) map.get("evaluations");
             String taught = (String) map.get("taught");
             String period = (String) map.get("period");
             String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
             String headerBitmapString = (String) map.get("headerBitmapString");
 
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
             if(userData.getUid().equals(user.getUid())) {
+                if (sex.equals("未設定")){
+                    sexSpinner.setSelection(0);
+                }else if (sex.equals("男性")){
+                    sexSpinner.setSelection(1);
+                }else if(sex.equals("女性")){
+                    sexSpinner.setSelection(2);
+                }else if (sex.equals("中性")){
+                    sexSpinner.setSelection(3);
+                }
+                if (age.equals("未設定")){
+                    ageSpinner.setSelection(0);
+                }else if (age.equals("60代")){
+                    ageSpinner.setSelection(1);
+                }else if (age.equals("50代")){
+                    ageSpinner.setSelection(2);
+                }else if (age.equals("40代")){
+                    ageSpinner.setSelection(3);
+                }else if (age.equals("30代")){
+                    ageSpinner.setSelection(4);
+                }else if (age.equals("20代")){
+                    ageSpinner.setSelection(5);
+                }else if (age.equals("10代")){
+                    ageSpinner.setSelection(6);
+                }
+                startDate = userData.getDate();
                 userNameEditText.setText(userData.getName());
                 commentEditText.setText(userData.getComment());
                 byte[] headerBytes = Base64.decode(headerBitmapString, Base64.DEFAULT);
@@ -91,10 +124,6 @@ public class InputProfileFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
-
-
-
     };
 
 
@@ -112,6 +141,8 @@ public class InputProfileFragment extends Fragment {
         iconImageView = (ImageView)v.findViewById(R.id.iconImageView);
         userNameEditText = (EditText)v.findViewById(R.id.userNameEditText);
         commentEditText = (EditText)v.findViewById(R.id.commentEditText);
+        sexSpinner = (Spinner)v.findViewById(R.id.sexSpinner);
+        ageSpinner = (Spinner)v.findViewById(R.id.ageSpinner);
         okButton = (Button)v.findViewById(R.id.okButton);
 
         return v;
@@ -135,12 +166,11 @@ public class InputProfileFragment extends Fragment {
             public void onClick(View v){
 
                 //pFragを変更
-                ProfileActivity.pFlag=1;
+                MainActivity.pFlag=1;
 
                 //header画像選択に移動
-                ProfileActivity profileActivity = (ProfileActivity)getActivity();
-                profileActivity.onSelfCheck();
-
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.onSelfCheck();
 
 
 
@@ -156,11 +186,11 @@ public class InputProfileFragment extends Fragment {
 
 
                 //pFragを変更
-                ProfileActivity.pFlag=2;
+                MainActivity.pFlag=2;
 
                 //icon画像選択に移動
-                ProfileActivity profileActivity = (ProfileActivity)getActivity();
-                profileActivity.onSelfCheck();
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.onSelfCheck();
 
 
             }
@@ -235,6 +265,8 @@ public class InputProfileFragment extends Fragment {
                 String period = "0";
                 String groups = "0";
                 String favorites = "未設定";
+                String sex = (String)sexSpinner.getSelectedItem();
+                String age = (String)ageSpinner.getSelectedItem();
 
 
 
@@ -260,7 +292,8 @@ public class InputProfileFragment extends Fragment {
                 data.put("followers", followers);
                 data.put("posts", posts);
                 data.put("favorites",favorites);
-                //評価
+                data.put("sex",sex);
+                data.put("age",age);                //評価
                 data.put("evaluations", evaluations);
                 //指導人数
                 data.put("taught", taught);
@@ -268,6 +301,7 @@ public class InputProfileFragment extends Fragment {
                 data.put("period", period);
                 //参加グループ数
                 data.put("groups", groups);
+                data.put("date",startDate);
 
 
 
@@ -288,15 +322,9 @@ public class InputProfileFragment extends Fragment {
 
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
                 Activity activity = getActivity();
-                if(activity.getLocalClassName().equals("MainActivity")){
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
-                            .commit();
-                }else{
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.profileContainer, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
-                            .commit();
-                }
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
+                        .commit();
 
             }
         });

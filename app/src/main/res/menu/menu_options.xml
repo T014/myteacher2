@@ -4,10 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.tyanai.myteacher2.MainActivity">
 
+
     <item
-        android:id="@+id/addButton"
-        android:icon="@drawable/plusbutton"
+        android:id="@+id/notificationButton"
+        android:icon="@drawable/noimage"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:title="action_add"/>
+        android:title="action_notification"/>
+
+    <item
+        android:id="@+id/searchButton"
+        android:icon="@drawable/noimage"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="action_search"/>
+
 </menu>

@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.tyanai.myteacher2.LoginActivity"></activity>
-        <activity android:name="com.example.tyanai.myteacher2.ProfileActivity"></activity>
     </application>
 
 </manifest>

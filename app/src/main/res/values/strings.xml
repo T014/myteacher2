@@ -1,3 +1,236 @@
 <resources>
     <string name="app_name">myteacher2</string>
+
+
+
+    <string-array name="areaList">
+        <item>スポーツ</item>
+        <item>音楽</item>
+        <item>動画</item>
+        <item>学習</item>
+        <item>料理</item>
+        <item>手芸</item>
+        <item>芸術</item>
+        <item>漫画</item>
+        <item>その他</item>
+    </string-array>
+    <string-array name="sportsTypeList">
+        <item>テニス</item>
+        <item>サッカー</item>
+        <item>陸上</item>
+        <item>水泳</item>
+        <item>ゴルフ</item>
+        <item>卓球</item>
+        <item>その他</item>
+    </string-array>
+    <string-array name="musicTypeList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="movieTypeList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="studyTypeList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="cookTypeList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="handcraftList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="artList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="comicList">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="levelList">
+        <item>指定しない</item>
+        <item>初心者</item>
+        <item>中級者</item>
+        <item>上級者</item>
+        <item>未設定</item>
+    </string-array>
+    <string-array name="postLevelList">
+        <item>未設定</item>
+        <item>初心者</item>
+        <item>中級者</item>
+        <item>上級者</item>
+    </string-array>
+    <string-array name="evaluationList">
+        <item>指定しない</item>
+        <item>4以上</item>
+        <item>3以上</item>
+        <item>2以上</item>
+        <item>1以上</item>
+    </string-array>
+    <string-array name="taughtList">
+        <item>指定しない</item>
+        <item>10人以上</item>
+        <item>5人以上</item>
+        <item>3人以上</item>
+        <item>1人以上</item>
+        <item>0人</item>
+    </string-array>
+    <string-array name="methodList">
+        <item>指定しない</item>
+        <item>会う</item>
+        <item>電話</item>
+        <item>テレビ電話</item>
+        <item>チャット</item>
+        <item>その他</item>
+    </string-array>
+    <string-array name="dateList">
+        <item>指定しない</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="placeList">
+        <item>指定しない</item>
+        <item>北海道</item>
+        <item>青森県</item>
+        <item>岩手県</item>
+        <item>宮城県</item>
+        <item>秋田県</item>
+        <item>山形県</item>
+        <item>福島県</item>
+        <item>茨城県</item>
+        <item>栃木県</item>
+        <item>群馬県</item>
+        <item>埼玉県</item>
+        <item>千葉県</item>
+        <item>東京都</item>
+        <item>神奈川県</item>
+        <item>新潟県</item>
+        <item>富山県</item>
+        <item>石川県</item>
+        <item>福井県</item>
+        <item>山梨県</item>
+        <item>長野県</item>
+        <item>岐阜県</item>
+        <item>静岡県</item>
+        <item>愛知県</item>
+        <item>三重県</item>
+        <item>滋賀県</item>
+        <item>京都府</item>
+        <item>大阪府</item>
+        <item>兵庫県</item>
+        <item>奈良県</item>
+        <item>和歌山県</item>
+        <item>鳥取県</item>
+        <item>島根県</item>
+        <item>岡山県</item>
+        <item>広島県</item>
+        <item>山口県</item>
+        <item>徳島県</item>
+        <item>香川県</item>
+        <item>愛媛県</item>
+        <item>高知県</item>
+        <item>福岡県</item>
+        <item>佐賀県</item>
+        <item>長崎県</item>
+        <item>熊本県</item>
+        <item>大分県</item>
+        <item>宮崎県</item>
+        <item>鹿児島県</item>
+        <item>沖縄県</item>
+
+    </string-array>
+    <string-array name="costList">
+        <item>指定しない</item>
+        <item>3000コイン～</item>
+        <item>3000コイン以下</item>
+        <item>2500コイン以下</item>
+        <item>2000コイン以下</item>
+        <item>1500コイン以下</item>
+        <item>1000コイン以下</item>
+        <item>500コイン以下</item>
+        <item>0コイン</item>
+    </string-array>
+
+
+
+
+    <string-array name="sexList">
+        <item>未設定</item>
+        <item>男性</item>
+        <item>女性</item>
+        <item>中性</item>
+    </string-array>
+
+    <string-array name="ageList">
+        <item>未設定</item>
+        <item>60代</item>
+        <item>50代</item>
+        <item>40代</item>
+        <item>30代</item>
+        <item>20代</item>
+        <item>10代</item>
+    </string-array>
+
+
+    <string-array name="howLongList">
+        <item>指定しない</item>
+        <item>0.5時間</item>
+        <item>1時間</item>
+        <item>1.5時間</item>
+        <item>2時間</item>
+        <item>2.5時間</item>
+        <item>3時間</item>
+        <item>3.5時間</item>
+        <item>4時間</item>
+        <item>4時間以上</item>
+    </string-array>
+
+    <string-array name="careerList">
+    <item>指定しない</item>
+    <item>10年</item>
+    <item>8年</item>
+    <item>5年</item>
+    <item>3年</item>
+    <item>2年</item>
+    <item>1年</item>
+    <item>1年未満</item>
+    </string-array>
+
+
+
 </resources>

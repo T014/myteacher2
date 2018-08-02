@@ -1,54 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="100dp"
     android:orientation="vertical">
 
-
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck0"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck1"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck2"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck3"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck4"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck5"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck6"/>
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaCheck7"/>
-
-
-
-    </LinearLayout>-->
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100dp"
+    android:layout_marginBottom="100dp"
+    android:orientation="vertical">
 
     <RadioGroup
         android:layout_width="wrap_content"
@@ -60,50 +21,93 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton1"
+            android:id="@+id/sportsRadiobutton"
             android:text="スポーツ"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton2"
+            android:id="@+id/musicRadioButton"
             android:text="音楽"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton3"
+            android:id="@+id/movieRadioButton"
             android:text="動画"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton4"
+            android:id="@+id/studyRadioButton"
             android:text="学習"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton5"
+            android:id="@+id/cookRadioButton"
             android:text="料理"/>
-
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton6"
+            android:id="@+id/handicraftRadioButton"
             android:text="手芸"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton7"
+            android:id="@+id/artRadioButton"
             android:text="芸術"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton8"
+            android:id="@+id/comicRadioButton"
             android:text="漫画"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/areaButton9"
+            android:id="@+id/otherRadioButton"
             android:text="その他"/>
 
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sportsRadioGroup"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tennisRadioButton"
+            android:text="テニス"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/soccerRadioButton"
+            android:text="サッカー"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/athleticsRadioButton"
+            android:text="陸上"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swimRadioButton"
+            android:text="水泳"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/golfRadioButton"
+            android:text="ゴルフ"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableTennisRadioButton"
+            android:text="卓球"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/otherSportsRadioButton"
+            android:text="その他"/>
 
     </RadioGroup>
 
@@ -118,43 +122,103 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/postImageView"
+            android:layout_gravity="center"
             android:src="@drawable/noimage"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/postEditText"
+            android:id="@+id/contentsEditText"
             android:hint="内容を入力"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateButton"
+            android:text="日時を選択"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <EditText
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:layout_height="wrap_content"
+                android:id="@+id/dateTextView"
+                android:text="指定しない"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:id="@+id/clearDateButton"
+                android:text="消去"/>
+
+        </LinearLayout>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dateEditText"
-            android:hint="日時を入力"/>
-        <EditText
+            android:text="都道府県を選択"/>
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/methodEditText"
-            android:hint="手段を入力"/>
+            android:id="@+id/placeSpinner"
+            android:entries="@array/placeList"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/costEditText"
-            android:hint="1時間いくら？"/>
-        <EditText
+            android:inputType="number"
+            android:hint="自給を入力(コイン)"/>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/longEditText"
-            android:hint="何時間教える？"/>
-        <EditText
+            android:text="指導時間"/>
+        <Spinner
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/careerEditText"
-            android:hint="あなたのキャリアは何年？"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/howLongSpinner"
+            android:entries="@array/howLongList"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="指導方法を選択"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/methodSpinner"
+            android:entries="@array/methodList"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="何年やってる？"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/careerSpinner"
+            android:entries="@array/careerList"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="レベルを選択する"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/levelSpinner"
+            android:entries="@array/postLevelList"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/sendButton"
+            android:text="送信"/>
 
         <!--いくつかスクロールで選択させたい-->
 
     </LinearLayout>
 
-
 </LinearLayout>
+
+
+
+</ScrollView>
