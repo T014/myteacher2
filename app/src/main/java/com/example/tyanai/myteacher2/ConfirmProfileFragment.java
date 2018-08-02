@@ -48,6 +48,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     TabLayout tabLayout;
     public static ViewPager viewPager;
+    String intentUserId;
+    String uid;
 
 
 
@@ -78,7 +80,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
 
-            if(userData.getUid().equals(user.getUid())){
+            if (intentUserId!=null){
+                uid=intentUserId;
+            }else{
+                uid=user.getUid();
+            }
+
+
+            if(userData.getUid().equals(uid)){
                 userNameTextView.setText(userData.getName());
                 commentTextView.setText(userData.getComment());
                 sexTextView.setText(sex);
@@ -155,7 +164,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userRef = mDataBaseReference.child(Const.UsersPATH);
 
 
-        String uid = user.getUid();
+        Bundle userBundle = getArguments();
+        intentUserId = userBundle.getString("userId");
+
+
+
         //userRef.child(uid).addChildEventListener(pEventListener);
         userRef.addChildEventListener(cEventListener);
 
