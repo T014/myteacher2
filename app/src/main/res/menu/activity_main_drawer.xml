@@ -6,9 +6,6 @@
         android:id="@+id/nav_profile"
         android:title="プロフィール"/>
     <item
-        android:id="@+id/nav_group"
-        android:title="グループ"/>
-    <item
         android:id="@+id/nav_business"
         android:title="取引履歴"/>
     <item
@@ -25,6 +22,6 @@
         android:title="ログアウト"/>
     <item
         android:id="@+id/nav"
-        android:title="Main-itemselected,drawerxml. aboutus"/>
+        android:title="aboutus"/>
 </group>
 </menu>
