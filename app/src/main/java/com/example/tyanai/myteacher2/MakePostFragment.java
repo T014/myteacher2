@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +40,6 @@ public class MakePostFragment extends Fragment {
 
     public static ImageView postImageView;
     private EditText contentsEditText;
-    private EditText dateEditText;
     private EditText costEditText;
     private Spinner methodSpinner;
     private Spinner howLongSpinner;
@@ -51,6 +51,9 @@ public class MakePostFragment extends Fragment {
     private Button sendButton;
     private String area;
     private String type;
+    private Button dateButton;
+    private Button clearDateButton;
+    public static TextView dateTextView;
     FirebaseUser user;
     DatabaseReference usersContentsRef;
     DatabaseReference userRef;
@@ -124,13 +127,15 @@ public class MakePostFragment extends Fragment {
 
         postImageView = (ImageView)v.findViewById(R.id.postImageView);
         contentsEditText = (EditText)v.findViewById(R.id.contentsEditText);
-        dateEditText = (EditText)v.findViewById(R.id.dateEditText);
         costEditText = (EditText)v.findViewById(R.id.costEditText);
         methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
         howLongSpinner = (Spinner)v.findViewById(R.id.howLongSpinner);
         careerSpinner = (Spinner)v.findViewById(R.id.careerSpinner);
         levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
         placeSpinner = (Spinner)v.findViewById(R.id.placeSpinner);
+        dateButton = (Button)v.findViewById(R.id.dateButton);
+        dateTextView = (TextView)v.findViewById(R.id.dateTextView);
+        clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
 
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
@@ -291,6 +296,23 @@ public class MakePostFragment extends Fragment {
 
 
 
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ダイアログクラスをインスタンス化
+                CustomDialogFragment dialog = new CustomDialogFragment();
+                // 表示  getFagmentManager()は固定、sampleは識別タグ
+                dialog.show(getFragmentManager(), "sample");
+            }
+        });
+
+        clearDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dateTextView.setText("指定しない");
+
+            }
+        });
 
 
 
@@ -301,7 +323,7 @@ public class MakePostFragment extends Fragment {
 
                 String userId = user.getUid();
                 String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-                String date=dateEditText.getText().toString();
+                String date=dateTextView.getText().toString();
 
                 BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
                 Bitmap postImageBitmap = postImageDrawable.getBitmap();
