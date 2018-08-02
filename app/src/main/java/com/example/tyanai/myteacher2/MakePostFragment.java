@@ -3,6 +3,8 @@ package com.example.tyanai.myteacher2;
 import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +37,15 @@ public class MakePostFragment extends Fragment {
     public static final String TAG = "MakePostFragment";
 
 
-    private ImageView postImageView;
+    public static ImageView postImageView;
     private EditText contentsEditText;
     private EditText dateEditText;
-    private EditText methodEditText;
     private EditText costEditText;
-    private EditText howLongEditText;
-    private EditText careerEditText;
+    private Spinner methodSpinner;
+    private Spinner howLongSpinner;
+    private Spinner careerSpinner;
+    private Spinner levelSpinner;
+    private Spinner placeSpinner;
     private RadioGroup areaGroup;
     private RadioGroup sportsGroup;
     private Button sendButton;
@@ -49,8 +56,10 @@ public class MakePostFragment extends Fragment {
     DatabaseReference userRef;
     DatabaseReference areaRef;
     DatabaseReference mDataBaseReference;
-    String userName;
-
+    UserData myData;
+    String makeAreaRef;
+    String makeTypeRef;
+    private int mYear, mMonth, mDay, mHour, mMinute;
 
 
     private ChildEventListener mEventListener = new ChildEventListener() {
@@ -65,20 +74,22 @@ public class MakePostFragment extends Fragment {
             String followers = (String) map.get("followers");
             String posts = (String) map.get("posts");
             String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
             String evaluations = (String) map.get("evaluations");
             String taught = (String) map.get("taught");
             String period = (String) map.get("period");
             String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
             String headerBitmapString = (String) map.get("headerBitmapString");
 
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
 
             if(userData.getUid().equals(user.getUid())){
-                userName = userData.getName();
-
-
+                myData = userData;
             }
         }
 
@@ -114,14 +125,19 @@ public class MakePostFragment extends Fragment {
         postImageView = (ImageView)v.findViewById(R.id.postImageView);
         contentsEditText = (EditText)v.findViewById(R.id.contentsEditText);
         dateEditText = (EditText)v.findViewById(R.id.dateEditText);
-        methodEditText = (EditText)v.findViewById(R.id.methodEditText);
         costEditText = (EditText)v.findViewById(R.id.costEditText);
-        howLongEditText = (EditText)v.findViewById(R.id.howLongEditText);
-        careerEditText = (EditText)v.findViewById(R.id.careerEditText);
+        methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
+        howLongSpinner = (Spinner)v.findViewById(R.id.howLongSpinner);
+        careerSpinner = (Spinner)v.findViewById(R.id.careerSpinner);
+        levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
+        placeSpinner = (Spinner)v.findViewById(R.id.placeSpinner);
+
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
         areaGroup = (RadioGroup)v.findViewById(R.id.areaRadioGroup);
         sportsGroup = (RadioGroup)v.findViewById(R.id.sportsRadioGroup);
+
+
 
 
 
@@ -131,6 +147,15 @@ public class MakePostFragment extends Fragment {
 
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -143,6 +168,7 @@ public class MakePostFragment extends Fragment {
         sportsGroup.setVisibility(View.GONE);
         area = "";
         type = "";
+        MainActivity.mToolbar.setTitle("投稿");
 
 
 
@@ -160,30 +186,39 @@ public class MakePostFragment extends Fragment {
                         //スポーツの一覧を表示する
                         sportsGroup.setVisibility(View.VISIBLE);
                         area=selectedArea;
+                        makeAreaRef="sports";
                     }else if(selectedArea.equals("音楽")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="music";
                     }else if(selectedArea.equals("動画")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="movie";
                     }else if(selectedArea.equals("学習")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="study";
                     }else if(selectedArea.equals("料理")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="cook";
                     }else if(selectedArea.equals("手芸")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="handicraft";
                     }else if(selectedArea.equals("芸術")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="art";
                     }else if(selectedArea.equals("漫画")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="comic";
                     }else if(selectedArea.equals("その他")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
+                        makeAreaRef="other";
                     }
 
                 }else{
@@ -208,18 +243,25 @@ public class MakePostFragment extends Fragment {
                     if (selectedType.equals("テニス")){
                         //スポーツの一覧を表示する
                         type=selectedType;
+                        makeTypeRef="tennis";
                     }else if(selectedType.equals("サッカー")){
                         type=selectedType;
+                        makeTypeRef="soccer";
                     }else if(selectedType.equals("陸上")){
                         type=selectedType;
+                        makeTypeRef="athletics";
                     }else if(selectedType.equals("水泳")){
                         type=selectedType;
+                        makeTypeRef="swim";
                     }else if(selectedType.equals("ゴルフ")){
                         type=selectedType;
+                        makeTypeRef="golf";
                     }else if(selectedType.equals("卓球")){
                         type=selectedType;
+                        makeTypeRef="tableTennis";
                     }else if(selectedType.equals("その他")){
                         type=selectedType;
+                        makeTypeRef="otherSports";
                     }
 
                 }else{
@@ -227,6 +269,22 @@ public class MakePostFragment extends Fragment {
                     //すべての一覧を非表示
                     sportsGroup.setVisibility(View.GONE);
                 }
+
+            }
+        });
+
+        postImageView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+
+                //pFragを変更
+                MainActivity.pFlag=3;
+
+                //icon画像選択に移動
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.onSelfCheck();
+
 
             }
         });
@@ -242,29 +300,46 @@ public class MakePostFragment extends Fragment {
                 //必須事項が入力されているかの確認
 
                 String userId = user.getUid();
-                String time="";
+                String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                 String date=dateEditText.getText().toString();
-                String imageBitmapString="";
+
+                BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
+                Bitmap postImageBitmap = postImageDrawable.getBitmap();
+
+                int postImageWidth = postImageBitmap.getWidth();
+                int postImageHeight = postImageBitmap.getHeight();
+                float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
+
+                //resize
+                Matrix postImageMatrix = new Matrix();
+                postImageMatrix.postScale(postImageScale,postImageScale);
+                Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
+
+                ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+                postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
+
+
                 String contents=contentsEditText.getText().toString();
                 String cost = costEditText.getText().toString();
-                String howLong = howLongEditText.getText().toString();
+                String howLong = (String)  howLongSpinner.getSelectedItem();
                 String goods="0";
                 String share="0";
                 String bought="0";
-                String evaluation="";
-                String cancel="";
-                String method=methodEditText.getText().toString();
-                String postArea="";
-                String postType="";
-                String level="";
-                String career = careerEditText.getText().toString();
+                String evaluation="0";
+                String cancel="0";
+                String method=(String) methodSpinner.getSelectedItem();
+                String level=(String) levelSpinner.getSelectedItem();
+                String career = (String) careerSpinner.getSelectedItem();
+                String userName=myData.getName();
+                String place=(String) placeSpinner.getSelectedItem();
 
                 Map<String,Object> data = new HashMap<>();
 
-                String key = areaRef.child(area).child(type).push().getKey();
+                String key = areaRef.child(makeAreaRef).child(makeTypeRef).push().getKey();
 
                 data.put("userId", userId);
-                data.put("userName",userName );
+                data.put("userName",userName);
                 data.put("time", time);
                 data.put("key", key);
                 data.put("date", date);
@@ -278,26 +353,29 @@ public class MakePostFragment extends Fragment {
                 data.put("evaluation", evaluation);
                 data.put("cancel",cancel );
                 data.put("method", method);
-                data.put("postArea", postArea);
-                data.put("postType",postType );
+                data.put("postArea", area);
+                data.put("postType",type );
                 data.put("level",level );
                 data.put("career", career);
+                data.put("place",place);
+                data.put("sex",myData.getSex());
+                data.put("age",myData.getAge());
+                data.put("taught",myData.getTaught());
+                data.put("userEvaluation",myData.getEvaluations());
+
 
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,data);
                 usersContentsRef.child(userId).updateChildren(childUpdates);
-
                 Map<String,Object> childUpdate = new HashMap<>();
                 childUpdate.put(key,data);
-                areaRef.child(area).child(type).updateChildren(childUpdate);
+                areaRef.child(makeAreaRef).child(makeTypeRef).updateChildren(childUpdate);
 
-
-
-//                usersContentsRef.child(userId).setValue(data);
-//
-//
-//                areaRef.child(area).child(type).setValue(data);
+                MakePostFragment fragmentMakePost = new MakePostFragment();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragmentMakePost, MakePostFragment.TAG)
+                        .commit();
 
             }
         });
