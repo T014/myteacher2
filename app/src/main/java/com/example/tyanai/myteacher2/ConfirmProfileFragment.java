@@ -40,6 +40,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     TextView commentTextView;
     Button editButton;
     Button okButton;
+    TextView sexTextView;
+    TextView ageTextView;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
@@ -62,19 +64,25 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String followers = (String) map.get("followers");
             String posts = (String) map.get("posts");
             String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
             String evaluations = (String) map.get("evaluations");
             String taught = (String) map.get("taught");
             String period = (String) map.get("period");
             String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
             String headerBitmapString = (String) map.get("headerBitmapString");
 
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts,favorites,evaluations,taught,period,groups,iconBitmapString,headerBitmapString);
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
 
             if(userData.getUid().equals(user.getUid())){
                 userNameTextView.setText(userData.getName());
                 commentTextView.setText(userData.getComment());
+                sexTextView.setText(sex);
+                ageTextView.setText(age);
                 byte[] headerBytes = Base64.decode(headerBitmapString,Base64.DEFAULT);
                 if(headerBytes.length!=0){
                     Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes,0, headerBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -130,6 +138,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         okButton = (Button)v.findViewById(R.id.okButton);
         tabLayout = (TabLayout)v.findViewById(R.id.tabs);
         viewPager = (ViewPager)v.findViewById(R.id.pager);
+        sexTextView = (TextView)v.findViewById(R.id.sexTextView);
+        ageTextView = (TextView)v.findViewById(R.id.ageTextView);
 
 
         return v;
@@ -203,11 +213,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        
+
 
         int tabPosition = tabLayout.getSelectedTabPosition();
         if (tabPosition==1){
-            //good
+            //goodグリッドリストでいいかな
+
         }else if(tabPosition==0){
             //post
         }
