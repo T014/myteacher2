@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,12 +47,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
     DatabaseReference followRef;
+    DatabaseReference followerRef;
+    int followCount;
+    int followerCount;
 
     TabLayout tabLayout;
     public static ViewPager viewPager;
     String intentUserId;
     String uid;
     private Button followEditButton;
+    private ArrayList<String> followArrayList;
 
 
 
@@ -82,6 +87,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
 
+            if (user.getUid().equals(userData.getUid())){
+                followCount = Integer.parseInt(userData.getFollows());
+            }else if (intentUserId.equals(userData.getUid())){
+                followerCount = Integer.parseInt(userData.getFollowers());
+            }
             if (intentUserId!=null){
                 //ある
                 uid=intentUserId;
@@ -116,16 +126,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 if(iconBytes.length!=0){
                     Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                     newIconImageView.setImageBitmap(iconBitmap);
-            }
-
+                }
             }
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -136,12 +142,41 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
-
-
-
     };
 
+    private ChildEventListener followEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String followUid = (String) map.get("followerUid");
+            followArrayList.add(followUid);
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        followArrayList = new ArrayList<String>();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
+        followRef.addChildEventListener(followEventListener);
+    }
 
 
 
@@ -174,10 +209,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
         //画像とテキストを引っ張ってくる
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        //mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        //user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-        followRef = mDataBaseReference.child(Const.FollowPATH);
+        //followRef = mDataBaseReference.child(Const.FollowPATH);
+        followerRef  = mDataBaseReference.child(Const.FollowerPATH);
 
 
         Bundle userBundle = getArguments();
@@ -237,18 +273,34 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 }else{
                     //フォロー
                     Map<String,Object> followData = new HashMap<>();
-
                     String key = followRef.child(user.getUid()).push().getKey();
-
                     followData.put("followUid",intentUserId);
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,followData);
+                    followRef.child(user.getUid()).updateChildren(childUpdates);
+
+                    //フォロー数追加
+                    Map<String,Object> plusFollowCount = new HashMap<>();
+                    followCount += 1;
+                    String strFollowCount = String.valueOf(followCount);
+                    plusFollowCount.put("follows",strFollowCount);
+                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+
+
+                    //フォロワー
+                    Map<String,Object> followerData = new HashMap<>();
+                    String key2 = followerRef.child(intentUserId).push().getKey();
+                    followerData.put("followerUid",user.getUid());
                     Map<String,Object> childUpdate = new HashMap<>();
-                    childUpdate.put(key,followData);
-                    followRef.child(user.getUid()).updateChildren(childUpdate);
+                    childUpdate.put(key2,followerData);
+                    followerRef.child(intentUserId).updateChildren(childUpdate);
 
-
-                    //follorfollower数追加
+                    //フォロワー数追加
+                    Map<String,Object> plusFollowerCount = new HashMap<>();
+                    followerCount += 1;
+                    String strFollowerCount = String.valueOf(followerCount);
+                    plusFollowerCount.put("followers",strFollowerCount);
+                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
                 }
 
 
