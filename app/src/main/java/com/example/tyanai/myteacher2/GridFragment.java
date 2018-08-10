@@ -131,12 +131,12 @@ public class GridFragment extends Fragment {
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
 
-        Bundle flagBundle = getArguments();
-        flag = flagBundle.getString("flag");
+        final Bundle flagBundle = getArguments();
         if (flagBundle==null){
             gridRef = mDataBaseReference.child(Const.AreaPATH).child("sports").child("tennis");
             gridRef.addChildEventListener(gEventListener);
         }else{
+            flag = flagBundle.getString("flag");
             mAdapter.setPostDataArrayList(SearchFragment.searchArrayList);
             gridView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -148,27 +148,52 @@ public class GridFragment extends Fragment {
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
+
                 Bundle bundle = new Bundle();
-                bundle.putString("userId",postDataArrayList.get(position).getUserId());
-                bundle.putString("userName",postDataArrayList.get(position).getName());
-                bundle.putString("time",postDataArrayList.get(position).getTime());
-                bundle.putString("key",postDataArrayList.get(position).getKey());
-                bundle.putString("date",postDataArrayList.get(position).getDate());
-                bundle.putString("imageBitmapString",postDataArrayList.get(position).getImageBitmapString());
-                bundle.putString("contents",postDataArrayList.get(position).getContents());
-                bundle.putString("cost",postDataArrayList.get(position).getCost());
-                bundle.putString("howLong",postDataArrayList.get(position).getHowLong());
-                bundle.putString("goods",postDataArrayList.get(position).getGood());
-                bundle.putString("share",postDataArrayList.get(position).getShare());
-                bundle.putString("bought",postDataArrayList.get(position).getBought());
-                bundle.putString("evaluation",postDataArrayList.get(position).getEvaluation());
-                bundle.putString("cancel",postDataArrayList.get(position).getCancel());
-                bundle.putString("method",postDataArrayList.get(position).getMethod());
-                bundle.putString("postArea",postDataArrayList.get(position).getPostArea());
-                bundle.putString("postType",postDataArrayList.get(position).getPostType());
-                bundle.putString("level",postDataArrayList.get(position).getLevel());
-                bundle.putString("career",postDataArrayList.get(position).getCareer());
-                bundle.putString("place",postDataArrayList.get(position).getPlace());
+                if (flagBundle==null){
+                    bundle.putString("userId",postDataArrayList.get(position).getUserId());
+                    bundle.putString("userName",postDataArrayList.get(position).getName());
+                    bundle.putString("time",postDataArrayList.get(position).getTime());
+                    bundle.putString("key",postDataArrayList.get(position).getKey());
+                    bundle.putString("date",postDataArrayList.get(position).getDate());
+                    bundle.putString("imageBitmapString",postDataArrayList.get(position).getImageBitmapString());
+                    bundle.putString("contents",postDataArrayList.get(position).getContents());
+                    bundle.putString("cost",postDataArrayList.get(position).getCost());
+                    bundle.putString("howLong",postDataArrayList.get(position).getHowLong());
+                    bundle.putString("goods",postDataArrayList.get(position).getGood());
+                    bundle.putString("share",postDataArrayList.get(position).getShare());
+                    bundle.putString("bought",postDataArrayList.get(position).getBought());
+                    bundle.putString("evaluation",postDataArrayList.get(position).getEvaluation());
+                    bundle.putString("cancel",postDataArrayList.get(position).getCancel());
+                    bundle.putString("method",postDataArrayList.get(position).getMethod());
+                    bundle.putString("postArea",postDataArrayList.get(position).getPostArea());
+                    bundle.putString("postType",postDataArrayList.get(position).getPostType());
+                    bundle.putString("level",postDataArrayList.get(position).getLevel());
+                    bundle.putString("career",postDataArrayList.get(position).getCareer());
+                    bundle.putString("place",postDataArrayList.get(position).getPlace());
+                }else{
+                    bundle.putString("userId",SearchFragment.searchArrayList.get(position).getUserId());
+                    bundle.putString("userName",SearchFragment.searchArrayList.get(position).getName());
+                    bundle.putString("time",SearchFragment.searchArrayList.get(position).getTime());
+                    bundle.putString("key",SearchFragment.searchArrayList.get(position).getKey());
+                    bundle.putString("date",SearchFragment.searchArrayList.get(position).getDate());
+                    bundle.putString("imageBitmapString",SearchFragment.searchArrayList.get(position).getImageBitmapString());
+                    bundle.putString("contents",SearchFragment.searchArrayList.get(position).getContents());
+                    bundle.putString("cost",SearchFragment.searchArrayList.get(position).getCost());
+                    bundle.putString("howLong",SearchFragment.searchArrayList.get(position).getHowLong());
+                    bundle.putString("goods",SearchFragment.searchArrayList.get(position).getGood());
+                    bundle.putString("share",SearchFragment.searchArrayList.get(position).getShare());
+                    bundle.putString("bought",SearchFragment.searchArrayList.get(position).getBought());
+                    bundle.putString("evaluation",SearchFragment.searchArrayList.get(position).getEvaluation());
+                    bundle.putString("cancel",SearchFragment.searchArrayList.get(position).getCancel());
+                    bundle.putString("method",SearchFragment.searchArrayList.get(position).getMethod());
+                    bundle.putString("postArea",SearchFragment.searchArrayList.get(position).getPostArea());
+                    bundle.putString("postType",SearchFragment.searchArrayList.get(position).getPostType());
+                    bundle.putString("level",SearchFragment.searchArrayList.get(position).getLevel());
+                    bundle.putString("career",SearchFragment.searchArrayList.get(position).getCareer());
+                    bundle.putString("place",SearchFragment.searchArrayList.get(position).getPlace());
+                }
+
 
                 DetailsFragment fragmentDetails = new DetailsFragment();
                 fragmentDetails.setArguments(bundle);
