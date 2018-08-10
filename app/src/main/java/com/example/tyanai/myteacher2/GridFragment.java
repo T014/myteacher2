@@ -29,6 +29,7 @@ public class GridFragment extends Fragment {
     private ArrayList<PostData> postDataArrayList = new ArrayList<PostData>();
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
+    String flag;
 
 
 
@@ -129,8 +130,20 @@ public class GridFragment extends Fragment {
         mAdapter = new GridListAdapter(this.getActivity(),R.layout.grid_items);
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        gridRef = mDataBaseReference.child(Const.AreaPATH).child("sports").child("tennis");
-        gridRef.addChildEventListener(gEventListener);
+
+        Bundle flagBundle = getArguments();
+        flag = flagBundle.getString("flag");
+        if (flagBundle==null){
+            gridRef = mDataBaseReference.child(Const.AreaPATH).child("sports").child("tennis");
+            gridRef.addChildEventListener(gEventListener);
+        }else{
+            mAdapter.setPostDataArrayList(SearchFragment.searchArrayList);
+            gridView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
+
+
+
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
