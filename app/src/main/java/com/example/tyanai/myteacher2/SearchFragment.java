@@ -46,7 +46,7 @@ public class SearchFragment extends Fragment {
 
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
-    private ArrayList<PostData> searchArrayList = new ArrayList<PostData>();
+    public static ArrayList<PostData> searchArrayList;
 
 
 
@@ -136,10 +136,16 @@ public class SearchFragment extends Fragment {
                                 //価格
                                 if(postCost.equals("指定しない") || iPostCost<=iSelectedPostCost){
                                     //性別
-                                    if (postSex.equals("指定しない") || sex.equals(postSex)){
+                                    if (postSex.equals("未設定") || sex.equals(postSex)){
                                         //年齢
-                                        if (postAge.equals("指定しない") || age.equals(postAge)){
+                                        if (postAge.equals("未設定") || age.equals(postAge)){
+
                                             searchArrayList.add(postData);
+
+
+
+
+
                                         }
                                     }
                                 }
@@ -210,7 +216,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("探す");
-
+        searchArrayList = new ArrayList<PostData>();
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -229,19 +235,28 @@ public class SearchFragment extends Fragment {
                 postSex = (String)sexSpinner.getSelectedItem();
                 postAge = (String)ageSpinner.getSelectedItem();
 
-                String refArea="";
-                String refType="";
-
-                if (postArea.equals("スポーツ")){
-                    refArea = "sports";
-                }
-                if (postType.equals("テニス")){
-                    refType = "tennis";
-                }
+//                String refArea="";
+//                String refType="";
+//
+//                if (postArea.equals("スポーツ")){
+//                    refArea = "sports";
+//                }
+//                if (postType.equals("テニス")){
+//                    refType = "tennis";
+//                }
                 mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-                gridRef = mDataBaseReference.child(Const.AreaPATH).child(refArea).child(refType);
-                gridRef.addChildEventListener(sEventListener);
+                gridRef = mDataBaseReference.child(Const.ContentsPATH);
+                gridRef.orderByChild("postType").equalTo(postType).addChildEventListener(sEventListener);
 
+
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","search");
+
+                GridFragment fragmentGrid = new GridFragment();
+                fragmentGrid.setArguments(flagBundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
+                        .commit();
 
             }
         });
