@@ -110,6 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
             android:id="@+id/sportsGroup"
             android:orientation="vertical">
 
@@ -205,6 +206,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
             android:id="@+id/musicGroup"
             android:orientation="vertical">
 
@@ -300,6 +302,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
             android:id="@+id/movieGroup"
             android:orientation="vertical">
 
@@ -351,6 +354,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
+                android:layout_marginBottom="60dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -481,5 +485,5 @@
 
 
     </LinearLayout>
-    
+
 </ScrollView>
