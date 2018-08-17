@@ -28,7 +28,7 @@ public class TimelineFragment extends Fragment {
     private ArrayList<PostData> timeLineArrayList = new ArrayList<PostData>();
     DatabaseReference mDataBaseReference;
     DatabaseReference followRef;
-    DatabaseReference usersContentsRef;
+    DatabaseReference contentsRef;
     FirebaseUser user;
     private ListView timeLineListView;
     private ListAdapter mAdapter;
@@ -41,9 +41,8 @@ public class TimelineFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String followUid = (String) map.get("followUid");
-
-            usersContentsRef.child(followUid).addChildEventListener(tEventListener);
             followArrayList.add(followUid);
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -95,11 +94,12 @@ public class TimelineFragment extends Fragment {
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation);
 
-
-            timeLineArrayList.add(postData);
-            mAdapter.setTimeLineArrayList(timeLineArrayList);
-            timeLineListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            if (followArrayList.contains(postData.getUserId())){
+                timeLineArrayList.add(postData);
+                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                timeLineListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+            }
 
         }
         @Override
@@ -136,8 +136,8 @@ public class TimelineFragment extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         followRef.addChildEventListener(fEventListener);
-        usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
-
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        contentsRef.addChildEventListener(tEventListener);
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -145,26 +145,9 @@ public class TimelineFragment extends Fragment {
 
 
                 Bundle bundle = new Bundle();
-                bundle.putString("userId",timeLineArrayList.get(position).getUserId());
-                bundle.putString("userName",timeLineArrayList.get(position).getName());
-                bundle.putString("time",timeLineArrayList.get(position).getTime());
+
                 bundle.putString("key",timeLineArrayList.get(position).getKey());
-                bundle.putString("date",timeLineArrayList.get(position).getDate());
-                bundle.putString("imageBitmapString",timeLineArrayList.get(position).getImageBitmapString());
-                bundle.putString("contents",timeLineArrayList.get(position).getContents());
-                bundle.putString("cost",timeLineArrayList.get(position).getCost());
-                bundle.putString("howLong",timeLineArrayList.get(position).getHowLong());
-                bundle.putString("goods",timeLineArrayList.get(position).getGood());
-                bundle.putString("share",timeLineArrayList.get(position).getShare());
-                bundle.putString("bought",timeLineArrayList.get(position).getBought());
-                bundle.putString("evaluation",timeLineArrayList.get(position).getEvaluation());
-                bundle.putString("cancel",timeLineArrayList.get(position).getCancel());
-                bundle.putString("method",timeLineArrayList.get(position).getMethod());
-                bundle.putString("postArea",timeLineArrayList.get(position).getPostArea());
-                bundle.putString("postType",timeLineArrayList.get(position).getPostType());
-                bundle.putString("level",timeLineArrayList.get(position).getLevel());
-                bundle.putString("career",timeLineArrayList.get(position).getCareer());
-                bundle.putString("place",timeLineArrayList.get(position).getPlace());
+
 
                 DetailsFragment fragmentDetails = new DetailsFragment();
                 fragmentDetails.setArguments(bundle);
