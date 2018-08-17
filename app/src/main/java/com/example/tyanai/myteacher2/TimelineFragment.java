@@ -87,12 +87,13 @@ public class TimelineFragment extends Fragment {
             String age = (String) map.get("age");
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
 
             if (followArrayList.contains(postData.getUserId())){
                 timeLineArrayList.add(postData);
