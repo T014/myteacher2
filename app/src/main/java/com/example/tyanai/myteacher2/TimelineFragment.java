@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TimelineFragment extends Fragment {
@@ -97,6 +99,7 @@ public class TimelineFragment extends Fragment {
 
             //if (followArrayList.contains(postData.getUserId())){
                 timeLineArrayList.add(postData);
+                Collections.reverse(timeLineArrayList);
                 mAdapter.setTimeLineArrayList(timeLineArrayList);
                 timeLineListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
@@ -138,7 +141,7 @@ public class TimelineFragment extends Fragment {
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         //followRef.addChildEventListener(fEventListener);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.limitToFirst(50).addChildEventListener(tEventListener);
+        contentsRef.addChildEventListener(tEventListener);
         //取得数の上限を100から50に制限
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
