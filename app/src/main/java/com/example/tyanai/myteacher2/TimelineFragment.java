@@ -138,7 +138,8 @@ public class TimelineFragment extends Fragment {
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         //followRef.addChildEventListener(fEventListener);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.addChildEventListener(tEventListener);
+        contentsRef.limitToFirst(50).addChildEventListener(tEventListener);
+        //取得数の上限を100から50に制限
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
