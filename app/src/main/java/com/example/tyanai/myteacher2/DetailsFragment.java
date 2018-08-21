@@ -14,9 +14,13 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,26 +28,7 @@ public class DetailsFragment extends Fragment {
     public static final String TAG = "DetailsFragment";
 
 
-    String intentUserId;
-    String intentUserName;
-    String intentTime;
     String intentKey;
-    String intentDate;
-    String intentImageBitmapString;
-    String intentContents;
-    String intentCost;
-    String intentHowLong;
-    String intentGoods;
-    String intentShare;
-    String intentBought;
-    String intentEvaluation;
-    String intentCancel;
-    String intentMethod;
-    String intentPostArea;
-    String intentPostType;
-    String intentLevel;
-    String intentCareer;
-    String intentPlace;
     TextView detailsTextView;
     ImageView postContentsImageView;
     Button favButton;
@@ -52,6 +37,84 @@ public class DetailsFragment extends Fragment {
     private DatabaseReference tradeRef;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
+    DatabaseReference contentsRef;
+    PostData thisPost;
+    Button shareButton;
+    DatabaseReference usersContentsRef;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
+
+
+
+
+    private ChildEventListener dEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("userId");
+            String userName = (String) map.get("userName");
+            String time = (String) map.get("time");
+            String key = (String) map.get("key");
+            String date = (String) map.get("date");
+            String imageBitmapString = (String) map.get("imageBitmapString");
+            String contents = (String) map.get("contents");
+            String cost = (String) map.get("cost");
+            String howLong = (String) map.get("howLong");
+            String goods = (String) map.get("goods");
+            String share = (String) map.get("share");
+            String bought = (String) map.get("bought");
+            String evaluation = (String) map.get("evaluation");
+            String cancel = (String) map.get("cancel");
+            String method = (String) map.get("method");
+            String postArea = (String) map.get("postArea");
+            String postType = (String) map.get("postType");
+            String level = (String) map.get("level");
+            String career = (String) map.get("career");
+            String place = (String) map.get("place");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String taught = (String) map.get("taught");
+            String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
+
+
+
+            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
+                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+
+            thisPost=postData;
+
+            byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
+            if(postImageBytes.length!=0){
+                Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                postContentsImageView.setImageBitmap(postImageBitmap);
+            }
+            detailsTextView.setText("ユーザー名"+postData.getName()+"投稿日時"+postData.getDate()
+                    +"この投稿の評価"+postData.getEvaluation()+"分野"+postData.getPostArea()+"種目"+postData.getPostType()
+                    +"難易度"+postData.getLevel()+"手段"+postData.getMethod()+"場所"+postData.getPlace()+"内容"+postData.getContents()
+                    + "価格"+postData.getCost()+"何時間"+postData.getHowLong()+"いいね"+postData.getGood()+"拡散"+postData.getShare()
+                    +"買った人数"+postData.getBought()+"キャンセル"+postData.getCancel()+"指導人数"+postData.getTaught()+"投稿者の評価"
+                    +"　　　　＊ユーザーに関する情報はユーザーが投稿した時点でのものです");
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+
+
 
 
 
@@ -65,6 +128,7 @@ public class DetailsFragment extends Fragment {
         postContentsImageView = (ImageView)v.findViewById(R.id.postContentsImageView);
         favButton = (Button)v.findViewById(R.id.favButton);
         buyButton = (Button)v.findViewById(R.id.buyButton);
+        shareButton = (Button)v.findViewById(R.id.shareButton);
 
         return v;
     }
@@ -73,51 +137,35 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("詳細");
+
+        Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
+
 
         Bundle bundle = getArguments();
-        intentUserId = bundle.getString("userId");
-        intentUserName = bundle.getString("userName");
-        intentTime = bundle.getString("time");
         intentKey = bundle.getString("key");
-        intentDate = bundle.getString("date");
-        intentImageBitmapString = bundle.getString("imageBitmapString");
-        intentContents = bundle.getString("contents");
-        intentCost = bundle.getString("cost");
-        intentHowLong = bundle.getString("howLong");
-        intentGoods = bundle.getString("goods");
-        intentShare = bundle.getString("share");
-        intentBought = bundle.getString("bought");
-        intentEvaluation = bundle.getString("evaluation");
-        intentCancel = bundle.getString("cancel");
-        intentMethod = bundle.getString("method");
-        intentPostArea = bundle.getString("postArea");
-        intentPostType= bundle.getString("postType");
-        intentLevel = bundle.getString("level");
-        intentCareer = bundle.getString("career");
-        intentPlace = bundle.getString("place");
 
 
-        byte[] postImageBytes = Base64.decode(intentImageBitmapString,Base64.DEFAULT);
-        if(postImageBytes.length!=0){
-            Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-            postContentsImageView.setImageBitmap(postImageBitmap);
-        }
+        contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
 
 
 
 
-        detailsTextView.setText("ユーザー名"+intentUserName+"投稿日時"+intentTime
-                +"この投稿の評価"+intentEvaluation+"分野"+intentPostArea+"種目"+intentPostType
-                +"難易度"+intentLevel+"手段"+intentMethod+"場所"+intentPlace+"内容"+intentContents
-                + "価格"+intentCost+"何時間"+intentHowLong+"いいね"+intentGoods+"拡散"+intentShare
-                +"買った人数"+intentBought+"キャンセル"+intentCancel+"指導人数"+intentCareer+"投稿者の評価"
-        +"　　　　＊ユーザーに関する情報はユーザーが投稿した時点でのものです");
+
+
 
 
 
@@ -127,7 +175,7 @@ public class DetailsFragment extends Fragment {
 
 
                 Bundle userBundle = new Bundle();
-                userBundle.putString("userId",intentUserId);
+                userBundle.putString("userId",thisPost.getUserId());
 
                 ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
                 fragmentProfileConfirm.setArguments(userBundle);
@@ -152,23 +200,50 @@ public class DetailsFragment extends Fragment {
 
             }
         });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String,Object> shareKey = new HashMap<>();
+                String key = usersContentsRef.child(user.getUid()).push().getKey();
+
+                shareKey.put("key",intentKey);
+                shareKey.put("userId",user.getUid());
+
+                Map<String,Object> childUpdates = new HashMap<>();
+                childUpdates.put(key,shareKey);
+                usersContentsRef.child(user.getUid()).updateChildren(childUpdates);
+
+            }
+        });
+
+
+
+
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
                 Map<String,Object> tradeKey = new HashMap<>();
                 String key = tradeRef.child(user.getUid()).push().getKey();
 
-                tradeKey.put("tradeKey",intentKey);
+                tradeKey.put("tradeKey",key);
                 tradeKey.put("bought",user.getUid());
-                tradeKey.put("sold",intentUserId);
+                tradeKey.put("sold",thisPost.getUserId());
                 tradeKey.put("cancel","false");
                 tradeKey.put("receiveDate","0");
-                tradeKey.put("date","0");
-                tradeKey.put("tradeDate","0");
+                tradeKey.put("date",time);
+                tradeKey.put("payDay","0");
+                tradeKey.put("userName",thisPost.getName());
+                tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
+                tradeKey.put("evaluation","0");
+                tradeKey.put("case","0");
+                tradeKey.put("postKey",intentKey);
+                tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,tradeKey);
-                tradeRef.child(user.getUid()).updateChildren(childUpdates);
+                tradeRef.updateChildren(childUpdates);
             }
         });
 
