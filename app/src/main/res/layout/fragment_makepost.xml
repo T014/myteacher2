@@ -1,224 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="100dp"
-    android:layout_marginBottom="100dp"
-    android:orientation="vertical">
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/areaRadioGroup">
-
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sportsRadiobutton"
-            android:text="スポーツ"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/musicRadioButton"
-            android:text="音楽"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/movieRadioButton"
-            android:text="動画"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/studyRadioButton"
-            android:text="学習"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cookRadioButton"
-            android:text="料理"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/handicraftRadioButton"
-            android:text="手芸"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/artRadioButton"
-            android:text="芸術"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/comicRadioButton"
-            android:text="漫画"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/otherRadioButton"
-            android:text="その他"/>
-
-
-    </RadioGroup>
-
-    <RadioGroup
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sportsRadioGroup"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tennisRadioButton"
-            android:text="テニス"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/soccerRadioButton"
-            android:text="サッカー"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/athleticsRadioButton"
-            android:text="陸上"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/swimRadioButton"
-            android:text="水泳"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/golfRadioButton"
-            android:text="ゴルフ"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tableTennisRadioButton"
-            android:text="卓球"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/otherSportsRadioButton"
-            android:text="その他"/>
-
-    </RadioGroup>
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/postImageView"
-            android:layout_gravity="center"
-            android:src="@drawable/noimage"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/contentsEditText"
-            android:hint="内容を入力"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/dateButton"
-            android:text="日時を選択"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="8"
+            <RadioGroup
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dateTextView"
-                android:text="指定しない"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:id="@+id/areaRadioGroup">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sportsRadiobutton"
+                    android:text="スポーツ"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/musicRadioButton"
+                    android:text="音楽"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/movieRadioButton"
+                    android:text="動画"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/studyRadioButton"
+                    android:text="学習"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cookRadioButton"
+                    android:text="料理"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/handicraftRadioButton"
+                    android:text="手芸"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/artRadioButton"
+                    android:text="芸術"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/comicRadioButton"
+                    android:text="漫画"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/otherRadioButton"
+                    android:text="その他"/>
+
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/clearDateButton"
-                android:text="消去"/>
+                android:id="@+id/sportsRadioGroup"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tennisRadioButton"
+                    android:text="テニス"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/soccerRadioButton"
+                    android:text="サッカー"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/athleticsRadioButton"
+                    android:text="陸上"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swimRadioButton"
+                    android:text="水泳"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/golfRadioButton"
+                    android:text="ゴルフ"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tableTennisRadioButton"
+                    android:text="卓球"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/otherSportsRadioButton"
+                    android:text="その他"/>
+
+            </RadioGroup>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postImageView"
+                    android:layout_gravity="center"
+                    android:src="@drawable/noimage"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/contentsEditText"
+                    android:hint="内容を入力"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dateButton"
+                    android:text="日時を選択"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="8"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dateTextView"
+                        android:text="指定しない"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/clearDateButton"
+                        android:text="消去"/>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="都道府県を選択"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/placeSpinner"
+                    android:entries="@array/placeList"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/costEditText"
+                    android:inputType="number"
+                    android:hint="自給を入力(コイン)"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="指導時間"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/howLongSpinner"
+                    android:entries="@array/howLongList"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="指導方法を選択"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/methodSpinner"
+                    android:entries="@array/methodList"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="何年やってる？"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/careerSpinner"
+                    android:entries="@array/careerList"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="レベルを選択する"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/levelSpinner"
+                    android:entries="@array/postLevelList"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/sendButton"
+                    android:text="送信"/>
+
+                <!--いくつかスクロールで選択させたい-->
+
+            </LinearLayout>
 
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="都道府県を選択"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/placeSpinner"
-            android:entries="@array/placeList"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/costEditText"
-            android:inputType="number"
-            android:hint="自給を入力(コイン)"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="指導時間"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/howLongSpinner"
-            android:entries="@array/howLongList"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="指導方法を選択"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/methodSpinner"
-            android:entries="@array/methodList"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="何年やってる？"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/careerSpinner"
-            android:entries="@array/careerList"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="レベルを選択する"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/levelSpinner"
-            android:entries="@array/postLevelList"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/sendButton"
-            android:text="送信"/>
 
-        <!--いくつかスクロールで選択させたい-->
+    </ScrollView>
 
-    </LinearLayout>
-
-</LinearLayout>
 
 
 
-</ScrollView>
+</LinearLayout>
