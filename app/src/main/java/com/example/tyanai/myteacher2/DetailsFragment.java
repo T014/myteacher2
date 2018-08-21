@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,15 +36,80 @@ public class DetailsFragment extends Fragment {
     Button buyButton;
     private DatabaseReference favRef;
     private DatabaseReference tradeRef;
+    private DatabaseReference usersRef;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference contentsRef;
     PostData thisPost;
-    Button shareButton;
+    Spinner evaluationSpinner;
     DatabaseReference usersContentsRef;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    Button saveButton;
+    TextView evaluationTextView;
+    String ev;
 
 
+
+
+    private ChildEventListener cEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String headerBitmapString = (String) map.get("headerBitmapString");
+
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+
+
+            int totalUserEvaluation = Integer.parseInt(userData.getEvaluations());
+            totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
+            String totalUserEv = String.valueOf(totalUserEvaluation);
+
+            int totalUserTaught = Integer.parseInt(userData.getTaught());
+            totalUserTaught =totalUserTaught+1;
+            String totalUserTa =String.valueOf(totalUserTaught);
+
+
+
+            Map<String,Object> userDataKey = new HashMap<>();
+
+            userDataKey.put("evaluations",totalUserEv);
+            userDataKey.put("taught",totalUserTa);
+
+            usersRef.child(user.getUid()).updateChildren(userDataKey);
+
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
 
@@ -128,7 +194,9 @@ public class DetailsFragment extends Fragment {
         postContentsImageView = (ImageView)v.findViewById(R.id.postContentsImageView);
         favButton = (Button)v.findViewById(R.id.favButton);
         buyButton = (Button)v.findViewById(R.id.buyButton);
-        shareButton = (Button)v.findViewById(R.id.shareButton);
+        evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
+        saveButton = (Button)v.findViewById(R.id.saveButton);
+        evaluationTextView = (TextView)v.findViewById(R.id.evaluationTextView);
 
         return v;
     }
@@ -137,6 +205,13 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("詳細");
+
+
+        if (BusinessFragment.tradeKey==null){
+            evaluationSpinner.setVisibility(View.GONE);
+            evaluationTextView.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
+        }
 
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
@@ -151,6 +226,7 @@ public class DetailsFragment extends Fragment {
         tradeRef = mDataBaseReference.child(Const.TradePATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
+        usersRef = mDataBaseReference.child(Const.UsersPATH);
 
 
         Bundle bundle = getArguments();
@@ -198,21 +274,82 @@ public class DetailsFragment extends Fragment {
                 childUpdates.put(key,favKey);
                 favRef.child(user.getUid()).updateChildren(childUpdates);
 
+
+
+                int totalGoods = Integer.parseInt(thisPost.getGood());
+                totalGoods =totalGoods+1;
+                String totalGd =String.valueOf(totalGoods);
+
+
+
+                Map<String,Object> postGoodKey = new HashMap<>();
+
+                postGoodKey.put("goods",totalGd);
+
+                contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+
+                favButton.setVisibility(View.GONE);
+
+
+
             }
         });
-        shareButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<String,Object> shareKey = new HashMap<>();
-                String key = usersContentsRef.child(user.getUid()).push().getKey();
 
-                shareKey.put("key",intentKey);
-                shareKey.put("userId",user.getUid());
 
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,shareKey);
-                usersContentsRef.child(user.getUid()).updateChildren(childUpdates);
+                ev = (String) evaluationSpinner.getSelectedItem();
 
+                usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
+
+
+                if (!(ev.equals("評価する"))){
+
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    Map<String,Object> tradeKey = new HashMap<>();
+
+                    tradeKey.put("evaluation",ev);
+                    tradeKey.put("case","評価済み");
+                    tradeKey.put("receiveDate",time);
+
+                    tradeRef.child(BusinessFragment.tradeKey).updateChildren(tradeKey);
+
+                    int totalEvaluation = Integer.parseInt(thisPost.getEvaluation());
+                    totalEvaluation = totalEvaluation+ Integer.parseInt(ev);
+                    String totalEv = String.valueOf(totalEvaluation);
+
+                    int totalTaught = Integer.parseInt(thisPost.getTaught());
+                    totalTaught =totalTaught+1;
+                    String totalTa =String.valueOf(totalTaught);
+
+
+
+                    Map<String,Object> taughtKey = new HashMap<>();
+
+                    taughtKey.put("evaluation",totalEv);
+                    taughtKey.put("taught",totalTa);
+
+                    contentsRef.child(thisPost.getKey()).updateChildren(taughtKey);
+
+
+//                    Map<String,Object> userDataKey = new HashMap<>();
+//
+//                    userDataKey.put("evaluation",totalEv);
+//                    userDataKey.put("taught",totalTa);
+//
+//                    usersRef.child(user.getUid()).updateChildren(userDataKey);
+
+
+
+
+                    evaluationSpinner.setVisibility(View.GONE);
+                    evaluationTextView.setVisibility(View.GONE);
+                    saveButton.setVisibility(View.GONE);
+
+
+
+                }
             }
         });
 
@@ -226,6 +363,7 @@ public class DetailsFragment extends Fragment {
 
                 Map<String,Object> tradeKey = new HashMap<>();
                 String key = tradeRef.child(user.getUid()).push().getKey();
+
 
                 tradeKey.put("tradeKey",key);
                 tradeKey.put("bought",user.getUid());
@@ -244,9 +382,28 @@ public class DetailsFragment extends Fragment {
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,tradeKey);
                 tradeRef.updateChildren(childUpdates);
+
+
+                int totalBought = Integer.parseInt(thisPost.getBought());
+                totalBought =totalBought+1;
+                String totalBg =String.valueOf(totalBought);
+
+                
+
+                Map<String,Object> userDataKey = new HashMap<>();
+                userDataKey.put("bought",totalBg);
+                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+                buyButton.setVisibility(View.GONE);
+
             }
         });
 
 
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        BusinessFragment.tradeKey=null;
     }
 }
