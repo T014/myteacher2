@@ -388,7 +388,7 @@ public class DetailsFragment extends Fragment {
                 totalBought =totalBought+1;
                 String totalBg =String.valueOf(totalBought);
 
-                
+
 
                 Map<String,Object> userDataKey = new HashMap<>();
                 userDataKey.put("bought",totalBg);
