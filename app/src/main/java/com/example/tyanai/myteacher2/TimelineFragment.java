@@ -36,6 +36,7 @@ public class TimelineFragment extends Fragment {
     FirebaseUser user;
     private ListView timeLineListView;
     private ListAdapter mAdapter;
+    int goodPosition;
 
 /*
 
@@ -114,47 +115,47 @@ public class TimelineFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String userId = (String) map.get("userId");
-            String userName = (String) map.get("userName");
-            String time = (String) map.get("time");
-            String key = (String) map.get("key");
-            String date = (String) map.get("date");
-            String imageBitmapString = (String) map.get("imageBitmapString");
-            String contents = (String) map.get("contents");
-            String cost = (String) map.get("cost");
-            String howLong = (String) map.get("howLong");
-            String goods = (String) map.get("goods");
-            String share = (String) map.get("share");
-            String bought = (String) map.get("bought");
-            String evaluation = (String) map.get("evaluation");
-            String cancel = (String) map.get("cancel");
-            String method = (String) map.get("method");
-            String postArea = (String) map.get("postArea");
-            String postType = (String) map.get("postType");
-            String level = (String) map.get("level");
-            String career = (String) map.get("career");
-            String place = (String) map.get("place");
-            String sex = (String) map.get("sex");
-            String age = (String) map.get("age");
-            String taught = (String) map.get("taught");
-            String userEvaluation = (String) map.get("userEvaluation");
-            String userIconBitmapString = (String) map.get("userIconBitmapString");
-
-
-
-            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
-
-            Collections.reverse(timeLineArrayList);
-            timeLineArrayList.add(postData);
-            Collections.reverse(timeLineArrayList);
-
-            mAdapter.setTimeLineArrayList(timeLineArrayList);
-            timeLineListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+//            HashMap map = (HashMap) dataSnapshot.getValue();
+//
+//            String userId = (String) map.get("userId");
+//            String userName = (String) map.get("userName");
+//            String time = (String) map.get("time");
+//            String key = (String) map.get("key");
+//            String date = (String) map.get("date");
+//            String imageBitmapString = (String) map.get("imageBitmapString");
+//            String contents = (String) map.get("contents");
+//            String cost = (String) map.get("cost");
+//            String howLong = (String) map.get("howLong");
+//            String goods = (String) map.get("goods");
+//            String share = (String) map.get("share");
+//            String bought = (String) map.get("bought");
+//            String evaluation = (String) map.get("evaluation");
+//            String cancel = (String) map.get("cancel");
+//            String method = (String) map.get("method");
+//            String postArea = (String) map.get("postArea");
+//            String postType = (String) map.get("postType");
+//            String level = (String) map.get("level");
+//            String career = (String) map.get("career");
+//            String place = (String) map.get("place");
+//            String sex = (String) map.get("sex");
+//            String age = (String) map.get("age");
+//            String taught = (String) map.get("taught");
+//            String userEvaluation = (String) map.get("userEvaluation");
+//            String userIconBitmapString = (String) map.get("userIconBitmapString");
+//
+//
+//
+//            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
+//                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+//                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+//
+//            //Collections.reverse(timeLineArrayList);
+//            timeLineArrayList.add(goodPosition,postData);
+//            Collections.reverse(timeLineArrayList);
+//
+//            mAdapter.setTimeLineArrayList(timeLineArrayList);
+//            timeLineListView.setAdapter(mAdapter);
+//            mAdapter.notifyDataSetChanged();
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -199,17 +200,21 @@ public class TimelineFragment extends Fragment {
                 if (view.getId()==R.id.goodButton){
                     //いいねの処理
 
+                    goodPosition = position;
+
                     int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                     totalGoods =totalGoods+1;
                     String totalGd =String.valueOf(totalGoods);
 
-                    timeLineArrayList.remove(timeLineArrayList.get(position));
+
+                    //timeLineArrayList.remove(timeLineArrayList.get(position));
 
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
-
+                    timeLineArrayList.clear();
+                    contentsRef.limitToLast(5).addChildEventListener(tEventListener);
                 }else{
 
                     Bundle bundle = new Bundle();
