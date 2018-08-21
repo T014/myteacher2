@@ -99,7 +99,11 @@ public class TimelineFragment extends Fragment {
 
             //if (followArrayList.contains(postData.getUserId())){
                 timeLineArrayList.add(postData);
-                Collections.reverse(timeLineArrayList);
+
+                if (timeLineArrayList.size()==5){
+                    Collections.reverse(timeLineArrayList);
+                }
+
                 mAdapter.setTimeLineArrayList(timeLineArrayList);
                 timeLineListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
@@ -120,7 +124,7 @@ public class TimelineFragment extends Fragment {
         }
     };
 
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,7 +146,7 @@ public class TimelineFragment extends Fragment {
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         //followRef.addChildEventListener(fEventListener);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.addChildEventListener(tEventListener);
+        contentsRef.limitToLast(5).addChildEventListener(tEventListener);
         //取得数の上限を100から50に制限
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
