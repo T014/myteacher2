@@ -156,7 +156,7 @@ public class TimelineFragment extends Fragment {
 
                 if (view.getId()==R.id.goodButton){
                     String aaa="1";
-                }
+              }
 
                 Bundle bundle = new Bundle();
 
