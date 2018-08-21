@@ -33,7 +33,7 @@ public class TimelineFragment extends Fragment {
     private ListView timeLineListView;
     private ListAdapter mAdapter;
 
-
+/*
 
     private ChildEventListener fEventListener = new ChildEventListener() {
         @Override
@@ -56,7 +56,7 @@ public class TimelineFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-    };
+    };*/
 
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
@@ -95,12 +95,12 @@ public class TimelineFragment extends Fragment {
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
 
-            if (followArrayList.contains(postData.getUserId())){
+            //if (followArrayList.contains(postData.getUserId())){
                 timeLineArrayList.add(postData);
                 mAdapter.setTimeLineArrayList(timeLineArrayList);
                 timeLineListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-            }
+            //}
 
         }
         @Override
@@ -136,7 +136,7 @@ public class TimelineFragment extends Fragment {
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
-        followRef.addChildEventListener(fEventListener);
+        //followRef.addChildEventListener(fEventListener);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         contentsRef.addChildEventListener(tEventListener);
 
