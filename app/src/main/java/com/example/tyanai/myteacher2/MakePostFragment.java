@@ -50,11 +50,25 @@ public class MakePostFragment extends Fragment {
     private RadioGroup areaGroup1;
     private RadioGroup areaGroup2;
     private RadioGroup sportsGroup;
+    private RadioGroup musicGroup;
+    private RadioGroup movieGroup;
+    private RadioGroup studyGroup;
     private Button sendButton;
     private String area;
     private String type;
     private Button dateButton;
     private Button clearDateButton;
+    private RadioButton sportsRadioButton;
+    private RadioButton musicRadioButton;
+    private RadioButton movieRadioButton;
+    private RadioButton studyRadioButton;
+    private RadioButton cookRadioButton;
+    private RadioButton handicraftRadioButton;
+    private RadioButton artRadioButton;
+    private RadioButton comicRadioButton;
+    private RadioButton gameRadioButton;
+    private RadioButton otherRadioButton;
+
     public static TextView dateTextView;
     FirebaseUser user;
     DatabaseReference usersContentsRef;
@@ -134,8 +148,23 @@ public class MakePostFragment extends Fragment {
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
         areaGroup1 = (RadioGroup)v.findViewById(R.id.areaRadioGroup1);
-        areaGroup2 = (RadioGroup)v.findViewById(R.id.areaRadioGroup2);
+        //areaGroup2 = (RadioGroup)v.findViewById(R.id.areaRadioGroup2);
         sportsGroup = (RadioGroup)v.findViewById(R.id.sportsRadioGroup);
+        musicGroup = (RadioGroup)v.findViewById(R.id.musicRadioGroup);
+        movieGroup = (RadioGroup)v.findViewById(R.id.movieRadioGroup);
+        studyGroup = (RadioGroup)v.findViewById(R.id.studyRadioGroup);
+
+
+        sportsRadioButton = (RadioButton)v.findViewById(R.id.sportsRadiobutton);
+        musicRadioButton = (RadioButton)v.findViewById(R.id.musicRadioButton);
+        movieRadioButton = (RadioButton)v.findViewById(R.id.movieRadioButton);
+        studyRadioButton = (RadioButton)v.findViewById(R.id.studyRadioButton);
+        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
+//        handicraftRadioButton = (RadioButton)v.findViewById(R.id.handicraftRadioButton);
+//        artRadioButton = (RadioButton)v.findViewById(R.id.artRadioButton);
+//        comicRadioButton = (RadioButton)v.findViewById(R.id.comicRadioButton);
+//        gameRadioButton = (RadioButton)v.findViewById(R.id.gameRadioButton);
+//        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
 
 
 
@@ -167,9 +196,16 @@ public class MakePostFragment extends Fragment {
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
 
         sportsGroup.setVisibility(View.GONE);
+        musicGroup.setVisibility(View.GONE);
+        movieGroup.setVisibility(View.GONE);
+        studyGroup.setVisibility(View.GONE);
+
+
+
         area = "";
         type = "";
         MainActivity.mToolbar.setTitle("投稿");
+        //areaGroup1.check(R.id.sportsRadiobutton);
 
 
 
@@ -178,43 +214,91 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
 
+
                 if (checkedId != -1){
 
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedArea = selectedRadioButton.getText().toString();
 
+
+
+
                     if (selectedArea.equals("スポーツ")){
                         //スポーツの一覧を表示する
                         sportsGroup.setVisibility(View.VISIBLE);
+                        musicGroup.setVisibility(View.GONE);
+                        movieGroup.setVisibility(View.GONE);
+                        studyGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="sports";
                     }else if(selectedArea.equals("音楽")){
                         sportsGroup.setVisibility(View.GONE);
+                        musicGroup.setVisibility(View.VISIBLE);
+                        movieGroup.setVisibility(View.GONE);
+                        studyGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="music";
                     }else if(selectedArea.equals("動画")){
                         sportsGroup.setVisibility(View.GONE);
+                        musicGroup.setVisibility(View.GONE);
+                        movieGroup.setVisibility(View.VISIBLE);
+                        studyGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="movie";
                     }else if(selectedArea.equals("学習")){
                         sportsGroup.setVisibility(View.GONE);
+                        musicGroup.setVisibility(View.GONE);
+                        movieGroup.setVisibility(View.GONE);
+                        studyGroup.setVisibility(View.VISIBLE);
                         area=selectedArea;
                         makeAreaRef="study";
-                    }else if(selectedArea.equals("料理")){
+                    }else if(selectedArea.equals("その他")){
                         sportsGroup.setVisibility(View.GONE);
+                        musicGroup.setVisibility(View.GONE);
+                        movieGroup.setVisibility(View.GONE);
+                        studyGroup.setVisibility(View.GONE);
                         area=selectedArea;
-                        makeAreaRef="cook";
+                        makeAreaRef="other";
                     }
+
+//                    areaGroup2.clearCheck();
+
+
                 }
+                //else{
+//                    //clearが呼ばれたとき
+//                    if (area.equals("スポーツ")){
+//                        sportsRadioButton.setChecked(true);
+//                    }else if (area.equals("音楽")){
+//                        musicRadioButton.setChecked(true);
+//                    }else if (area.equals("動画")){
+//                        movieRadioButton.setChecked(true);
+//                    }else if (area.equals("学習")){
+//                        studyRadioButton.setChecked(true);
+//                    }else if (area.equals("料理")){
+//                        cookRadioButton.setChecked(true);
+//                    }
+//
+//                    if (area.equals("手芸")){
+//                        handicraftRadioButton.setChecked(true);
+//                    }else if (area.equals("芸術")){
+//                        artRadioButton.setChecked(true);
+//                    }else if (area.equals("漫画")){
+//                        comicRadioButton.setChecked(true);
+//                    }else if (area.equals("ゲーム")){
+//                        gameRadioButton.setChecked(true);
+//                    }else if (area.equals("その他")){
+//                        otherRadioButton.setChecked(true);
+//                    }
+//
+//                }
             }
         });
-
+/*
         areaGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                areaGroup1.clearCheck();
 
                 if (checkedId != -1){
                     //選択されているボタンの取得
@@ -233,22 +317,53 @@ public class MakePostFragment extends Fragment {
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="comic";
+                    }else if(selectedArea.equals("ゲーム")){
+                        sportsGroup.setVisibility(View.GONE);
+                        area=selectedArea;
+                        makeAreaRef="game";
                     }else if(selectedArea.equals("その他")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="other";
                     }
 
+                    areaGroup1.clearCheck();
+
                 }else{
-                    //何も選択されていない
-                    //すべての一覧を非表示
-                    sportsGroup.setVisibility(View.GONE);
+                    //clearが呼ばれたとき
+
+                    if (area.equals("手芸")){
+                        handicraftRadioButton.setChecked(true);
+                    }else if (area.equals("芸術")){
+                        artRadioButton.setChecked(true);
+                    }else if (area.equals("漫画")){
+                        comicRadioButton.setChecked(true);
+                    }else if (area.equals("ゲーム")){
+                        gameRadioButton.setChecked(true);
+                    }else if (area.equals("その他")){
+                        otherRadioButton.setChecked(true);
+                    }
+
+                    if (area.equals("スポーツ")){
+                        sportsRadioButton.setChecked(true);
+                    }else if (area.equals("音楽")){
+                        musicRadioButton.setChecked(true);
+                    }else if (area.equals("動画")){
+                        movieRadioButton.setChecked(true);
+                    }else if (area.equals("学習")){
+                        studyRadioButton.setChecked(true);
+                    }else if (area.equals("料理")){
+                        cookRadioButton.setChecked(true);
+                    }
+
+
+
                 }
 
             }
         });
 
-
+*/
 
         sportsGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -258,6 +373,8 @@ public class MakePostFragment extends Fragment {
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedType = selectedRadioButton.getText().toString();
+
+
 
                     if (selectedType.equals("テニス")){
                         //スポーツの一覧を表示する
@@ -283,14 +400,107 @@ public class MakePostFragment extends Fragment {
                         makeTypeRef="otherSports";
                     }
 
-                }else{
-                    //何も選択されていない
-                    //すべての一覧を非表示
-                    sportsGroup.setVisibility(View.GONE);
                 }
 
             }
         });
+
+        musicGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                if (checkedId != -1){
+                    //選択されているボタンの取得
+                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
+                    String selectedType = selectedRadioButton.getText().toString();
+
+                    if (selectedType.equals("歌")){
+                        //スポーツの一覧を表示する
+                        type=selectedType;
+                        makeTypeRef="sing";
+                    }else if(selectedType.equals("ピアノ")){
+                        type=selectedType;
+                        makeTypeRef="piano";
+                    }else if(selectedType.equals("ギター")){
+                        type=selectedType;
+                        makeTypeRef="guitar";
+                    }else if(selectedType.equals("ドラム")){
+                        type=selectedType;
+                        makeTypeRef="drum";
+                    }else if(selectedType.equals("その他")){
+                        type=selectedType;
+                        makeTypeRef="otherMusic";
+                    }
+                }
+            }
+        });
+
+
+        movieGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                if (checkedId != -1){
+                    //選択されているボタンの取得
+                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
+                    String selectedType = selectedRadioButton.getText().toString();
+
+                    if (selectedType.equals("撮影")){
+                        //スポーツの一覧を表示する
+                        type=selectedType;
+                        makeTypeRef="film";
+                    }else if(selectedType.equals("編集")){
+                        type=selectedType;
+                        makeTypeRef="edit";
+                    }else if(selectedType.equals("その他")){
+                        type=selectedType;
+                        makeTypeRef="otherMovie";
+                    }
+                }
+            }
+        });
+
+
+
+        studyGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                if (checkedId != -1){
+                    //選択されているボタンの取得
+                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
+                    String selectedType = selectedRadioButton.getText().toString();
+
+                    if (selectedType.equals("国語")){
+                        //スポーツの一覧を表示する
+                        type=selectedType;
+                        makeTypeRef="japanese";
+                    }else if(selectedType.equals("数学")){
+                        type=selectedType;
+                        makeTypeRef="mathematics";
+                    }else if(selectedType.equals("英語")){
+                        type=selectedType;
+                        makeTypeRef="english";
+                    }else if(selectedType.equals("理科")){
+                        type=selectedType;
+                        makeTypeRef="science";
+                    }else if(selectedType.equals("その他")){
+                        type=selectedType;
+                        makeTypeRef="otherStudy";
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
 
         postImageView.setOnClickListener(new View.OnClickListener(){
             @Override
