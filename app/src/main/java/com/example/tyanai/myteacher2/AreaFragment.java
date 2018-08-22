@@ -84,7 +84,6 @@ public class AreaFragment extends Fragment {
         englishImageButton = (ImageButton)v.findViewById(R.id.englishImageButton);
         scienceImageButton = (ImageButton)v.findViewById(R.id.scienceImageButton);
         societyImageButton = (ImageButton)v.findViewById(R.id.societyImageButton);
-        historyImageButton = (ImageButton)v.findViewById(R.id.historyImageButton);
 
 
         return v;
@@ -133,11 +132,11 @@ public class AreaFragment extends Fragment {
         tennisImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -146,11 +145,11 @@ public class AreaFragment extends Fragment {
         soccerImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","サッカー");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","サッカー");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -159,11 +158,11 @@ public class AreaFragment extends Fragment {
         athleticsImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","陸上");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","陸上");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -172,11 +171,11 @@ public class AreaFragment extends Fragment {
         swimImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","水泳");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","水泳");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -186,11 +185,11 @@ public class AreaFragment extends Fragment {
         singImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -199,11 +198,11 @@ public class AreaFragment extends Fragment {
         instrumentImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -212,11 +211,11 @@ public class AreaFragment extends Fragment {
         vocalPercussionImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -225,11 +224,11 @@ public class AreaFragment extends Fragment {
         rapImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -239,17 +238,24 @@ public class AreaFragment extends Fragment {
         filmImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
+                GridFragment fragmentGrid = new GridFragment();
+                fragmentGrid.setArguments(flagBundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
+                        .commit();
             }
         });
         editImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -259,11 +265,11 @@ public class AreaFragment extends Fragment {
         japaneseImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -272,11 +278,11 @@ public class AreaFragment extends Fragment {
         mathematicsImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -285,11 +291,11 @@ public class AreaFragment extends Fragment {
         englishImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -298,11 +304,11 @@ public class AreaFragment extends Fragment {
         scienceImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
@@ -311,29 +317,17 @@ public class AreaFragment extends Fragment {
         societyImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flag","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
+                fragmentGrid.setArguments(flagBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentGrid,GridFragment.TAG)
                         .commit();
             }
         });
-        historyImageButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Bundle areaBundle = new Bundle();
-                areaBundle.putString("type","テニス");
 
-                GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(areaBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
-            }
-        });
 
 
     }
