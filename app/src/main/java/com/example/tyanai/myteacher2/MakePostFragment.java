@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -46,7 +47,8 @@ public class MakePostFragment extends Fragment {
     private Spinner careerSpinner;
     private Spinner levelSpinner;
     private Spinner placeSpinner;
-    private RadioGroup areaGroup;
+    private RadioGroup areaGroup1;
+    private RadioGroup areaGroup2;
     private RadioGroup sportsGroup;
     private Button sendButton;
     private String area;
@@ -58,6 +60,7 @@ public class MakePostFragment extends Fragment {
     DatabaseReference usersContentsRef;
     DatabaseReference userRef;
     DatabaseReference areaRef;
+    DatabaseReference contentsRef;
     DatabaseReference mDataBaseReference;
     UserData myData;
     String makeAreaRef;
@@ -90,17 +93,12 @@ public class MakePostFragment extends Fragment {
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
+            myData = userData;
 
-            if(userData.getUid().equals(user.getUid())){
-                myData = userData;
-            }
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -111,10 +109,6 @@ public class MakePostFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
-
-
-
     };
 
 
@@ -139,7 +133,8 @@ public class MakePostFragment extends Fragment {
 
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
-        areaGroup = (RadioGroup)v.findViewById(R.id.areaRadioGroup);
+        areaGroup1 = (RadioGroup)v.findViewById(R.id.areaRadioGroup1);
+        areaGroup2 = (RadioGroup)v.findViewById(R.id.areaRadioGroup2);
         sportsGroup = (RadioGroup)v.findViewById(R.id.sportsRadioGroup);
 
 
@@ -167,8 +162,9 @@ public class MakePostFragment extends Fragment {
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         userRef = mDataBaseReference.child(Const.UsersPATH);
         areaRef = mDataBaseReference.child(Const.AreaPATH);
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
 
-        userRef.addChildEventListener(mEventListener);
+        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
 
         sportsGroup.setVisibility(View.GONE);
         area = "";
@@ -178,11 +174,12 @@ public class MakePostFragment extends Fragment {
 
 
 
-        areaGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        areaGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
 
                 if (checkedId != -1){
+
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedArea = selectedRadioButton.getText().toString();
@@ -208,7 +205,23 @@ public class MakePostFragment extends Fragment {
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="cook";
-                    }else if(selectedArea.equals("手芸")){
+                    }
+                }
+            }
+        });
+
+        areaGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                areaGroup1.clearCheck();
+
+                if (checkedId != -1){
+                    //選択されているボタンの取得
+                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
+                    String selectedArea = selectedRadioButton.getText().toString();
+
+                    if(selectedArea.equals("手芸")){
                         sportsGroup.setVisibility(View.GONE);
                         area=selectedArea;
                         makeAreaRef="handicraft";
@@ -234,6 +247,7 @@ public class MakePostFragment extends Fragment {
 
             }
         });
+
 
 
         sportsGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -353,15 +367,14 @@ public class MakePostFragment extends Fragment {
                 String method=(String) methodSpinner.getSelectedItem();
                 String level=(String) levelSpinner.getSelectedItem();
                 String career = (String) careerSpinner.getSelectedItem();
-                String userName=myData.getName();
                 String place=(String) placeSpinner.getSelectedItem();
 
                 Map<String,Object> data = new HashMap<>();
 
-                String key = areaRef.child(makeAreaRef).child(makeTypeRef).push().getKey();
+                String key = contentsRef.push().getKey();
 
                 data.put("userId", userId);
-                data.put("userName",userName);
+                data.put("userName",myData.getName());
                 data.put("time", time);
                 data.put("key", key);
                 data.put("date", date);
@@ -384,15 +397,29 @@ public class MakePostFragment extends Fragment {
                 data.put("age",myData.getAge());
                 data.put("taught",myData.getTaught());
                 data.put("userEvaluation",myData.getEvaluations());
+                data.put("userIconBitmapString",myData.getIconBitmapString());
 
 
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,data);
-                usersContentsRef.child(userId).updateChildren(childUpdates);
-                Map<String,Object> childUpdate = new HashMap<>();
-                childUpdate.put(key,data);
-                areaRef.child(makeAreaRef).child(makeTypeRef).updateChildren(childUpdate);
+                contentsRef.updateChildren(childUpdates);
+
+
+
+
+                Map<String,Object> postKey = new HashMap<>();
+                String aaa = usersContentsRef.child(user.getUid()).push().getKey();
+
+                postKey.put("key",key);
+                postKey.put("userId",user.getUid());
+
+                Map<String,Object> postUpdates = new HashMap<>();
+                postUpdates.put(aaa,postKey);
+                usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+
+
+
 
                 MakePostFragment fragmentMakePost = new MakePostFragment();
                 getFragmentManager().beginTransaction()
