@@ -8,8 +8,10 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.flags.IFlagProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -33,8 +35,87 @@ public class MessageFragment extends Fragment {
     ListView messageKeyListView;
     MessageKeyListAdapter mAdapter;
     private ArrayList<MessageListData> messageListDataArrayList;
+    private ArrayList<String> uidArrayList;
+    private ArrayList<String> keyArrayList;
     private ArrayList<MessageListData> newMessageListDataArrayList;
-    int i = -1;
+    int i = 0;
+
+
+
+    private ChildEventListener mkEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String messageKey = (String) map.get("messageKey");
+            String uid = (String) map.get("uid");
+
+
+            uidArrayList.add(uid);
+            keyArrayList.add(messageKey);
+            messageRef.child(messageKey).limitToLast(1).addChildEventListener(fmEventListener);
+
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+    private ChildEventListener fmEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+
+            String userId = (String) map.get("userId");
+            String content = (String) map.get("contents");
+            String time = (String) map.get("time");
+            String bitmapString=(String) map.get("bitmapString");
+
+            String userName = "";
+            String iconBitmapString = "";
+            String key = "";
+
+
+            MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid());
+
+            messageListDataArrayList.add(messageListData);
+
+            if (uidArrayList.size()!=0){
+                if (i < uidArrayList.size())
+                userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
+            }
+
+
+
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -46,7 +127,7 @@ public class MessageFragment extends Fragment {
             String iconBitmapString = (String) map.get("iconBitmapString");
 
             MessageListData aaa = messageListDataArrayList.get(i);
-            MessageListData newMessageListData = new MessageListData(aaa.getUid(),userName,iconBitmapString,aaa.getTime(),aaa.getContent(),aaa.getBitmapString());
+            MessageListData newMessageListData = new MessageListData(aaa.getUid(),userName,iconBitmapString,aaa.getTime(),aaa.getContent(),aaa.getBitmapString(),keyArrayList.get(i),user.getUid());
 
             newMessageListDataArrayList.add(newMessageListData);
 
@@ -54,79 +135,8 @@ public class MessageFragment extends Fragment {
             messageKeyListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
 
-
-
-
-
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-    private ChildEventListener mkEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String messageKey = (String) map.get("messageKey");
-
-            messageRef.child(messageKey).limitToLast(1).addChildEventListener(mEventListener);
-
-
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-
-    private ChildEventListener mEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-
-            String userId = (String) map.get("userId");
-            String content = (String) map.get("content");
-            String time = (String) map.get("time");
-            String bitmapString=(String) map.get("bitmapString");
-
-            String userName = "";
-            String iconBitmapString = "";
-
-
-            MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString);
-
-            messageListDataArrayList.add(messageListData);
-
-
-
             i=i+1;
 
-
-
-            userRef.orderByChild("userId").equalTo(userId).addChildEventListener(cEventListener);
 
 
         }
@@ -175,8 +185,38 @@ public class MessageFragment extends Fragment {
 
         messageListDataArrayList = new ArrayList<MessageListData>();
         newMessageListDataArrayList = new ArrayList<MessageListData>();
+        uidArrayList = new ArrayList<String>();
+        keyArrayList = new ArrayList<String>();
+        messageListDataArrayList.clear();
+        newMessageListDataArrayList.clear();
+        uidArrayList.clear();
+        keyArrayList.clear();
+
         mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagakey_item);
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
+
+
+
+        messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Bundle messageKeyBundle = new Bundle();
+                messageKeyBundle.putString("key",newMessageListDataArrayList.get(position).getKey());
+
+                i=0;
+                messageListDataArrayList.clear();
+                newMessageListDataArrayList.clear();
+                uidArrayList.clear();
+                keyArrayList.clear();
+
+                ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                fragmentThisMessage.setArguments(messageKeyBundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG)
+                        .commit();
+            }
+        });
 
 
     }
