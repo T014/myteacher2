@@ -211,10 +211,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // ナビゲーションドロワーの設定
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name) {
+            // 閉じた時のイベント
+            public void onDrawerClosed(View view) {
+                invalidateOptionsMenu();
+                String a = "aaa";
+            }
+            // 開いた時のイベント
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+                if (user !=null){
+                    userRef.addChildEventListener(aEventListener);
+                }
+            }
+        };
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
+
+
+
+
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -263,9 +283,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-        if (user !=null){
-            userRef.addChildEventListener(aEventListener);
-        }
+//        if (user !=null){
+//            userRef.addChildEventListener(aEventListener);
+//        }
 
 
 
@@ -275,6 +295,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    public void onDrawerOpened(View drawerView){
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
