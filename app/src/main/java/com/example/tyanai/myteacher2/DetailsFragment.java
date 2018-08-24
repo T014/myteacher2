@@ -143,14 +143,23 @@ public class DetailsFragment extends Fragment {
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             thisPost=postData;
+
+            if (stock.equals("0")){
+                buyButton.setVisibility(View.GONE);
+            }
+            if (userId.equals(user.getUid())){
+                favButton.setVisibility(View.GONE);
+                buyButton.setVisibility(View.GONE);
+            }
 
             byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
             if(postImageBytes.length!=0){
@@ -359,42 +368,60 @@ public class DetailsFragment extends Fragment {
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
-                Map<String,Object> tradeKey = new HashMap<>();
-                String key = tradeRef.child(user.getUid()).push().getKey();
 
 
-                tradeKey.put("tradeKey",key);
-                tradeKey.put("bought",user.getUid());
-                tradeKey.put("sold",thisPost.getUserId());
-                tradeKey.put("cancel","false");
-                tradeKey.put("receiveDate","0");
-                tradeKey.put("date",time);
-                tradeKey.put("payDay","0");
-                tradeKey.put("userName",thisPost.getName());
-                tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
-                tradeKey.put("evaluation","0");
-                tradeKey.put("case","0");
-                tradeKey.put("postKey",intentKey);
-                tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
-
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,tradeKey);
-                tradeRef.updateChildren(childUpdates);
+                int stockCount = Integer.parseInt(thisPost.getStock());
+                if (stockCount!=0){
 
 
-                int totalBought = Integer.parseInt(thisPost.getBought());
-                totalBought =totalBought+1;
-                String totalBg =String.valueOf(totalBought);
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+                    Map<String,Object> tradeKey = new HashMap<>();
+                    String key = tradeRef.child(user.getUid()).push().getKey();
+
+                    stockCount = stockCount-1;
+                    String stc = String.valueOf(stockCount);
+
+                    tradeKey.put("tradeKey",key);
+                    tradeKey.put("bought",user.getUid());
+                    tradeKey.put("sold",thisPost.getUserId());
+                    tradeKey.put("cancel","false");
+                    tradeKey.put("receiveDate","0");
+                    tradeKey.put("date",time);
+                    tradeKey.put("payDay","0");
+                    tradeKey.put("userName",thisPost.getName());
+                    tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
+                    tradeKey.put("evaluation","0");
+                    tradeKey.put("case","0");
+                    tradeKey.put("postKey",intentKey);
+                    tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                    tradeKey.put("stock",stc);
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,tradeKey);
+                    tradeRef.updateChildren(childUpdates);
+
+                    int totalBought = Integer.parseInt(thisPost.getBought());
+                    totalBought =totalBought+1;
+                    String totalBg =String.valueOf(totalBought);
+
+                    Map<String,Object> userDataKey = new HashMap<>();
+                    userDataKey.put("bought",totalBg);
+                    userDataKey.put("stock",stc);
+                    contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+                    buyButton.setVisibility(View.GONE);
+
+//                    Map<String,Object> stockCountKey = new HashMap<>();
+//                    stockCountKey.put("stock",stockCount);
+//                    contentsRef.child(thisPost.getKey()).updateChildren(stockCountKey);
 
 
 
-                Map<String,Object> userDataKey = new HashMap<>();
-                userDataKey.put("bought",totalBg);
-                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+                }else{
+                    //sold
+                }
 
-                buyButton.setVisibility(View.GONE);
 
             }
         });
