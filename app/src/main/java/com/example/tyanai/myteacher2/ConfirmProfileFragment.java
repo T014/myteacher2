@@ -99,12 +99,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             timeLineArrayList.add(postData);
             mAdapter.setTimeLineArrayList(timeLineArrayList);
@@ -152,6 +153,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+
+
 
 
 
@@ -303,11 +306,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             if (uid.equals(user.getUid())){
                 //自分-
                 followEditButton.setText("編集");
+                messageButton.setVisibility(View.GONE);
             }
         }else{
             //ない自分-
             uid=user.getUid();
             followEditButton.setText("編集");
+            messageButton.setVisibility(View.GONE);
         }
 
         contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
