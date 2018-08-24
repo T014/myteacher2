@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -21,16 +22,28 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -46,6 +59,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static final int CHOOSER_REQUEST_CODE = 100;
     public static int pFlag = 0;
+    ImageView accountImageView;
+    TextView accountNameTextView;
+    TextView accountFollowTextView;
+    TextView accountFollowerTextView;
+    TextView followTextView;
+    TextView followerTextView;
+    DatabaseReference userRef;
+    DatabaseReference mDataBaseReference;
+    public static BottomNavigationView bottomNavigationView;
+
+
+
 
 
 
@@ -90,6 +115,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    private ChildEventListener aEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String headerBitmapString = (String) map.get("headerBitmapString");
+
+            if (userId.equals(user.getUid())){
+                accountNameTextView.setText(userName);
+                //自分を引いておく
+                int f = Integer.parseInt(follows);
+                f-=1;
+                String strF = String.valueOf(f);
+                accountFollowTextView.setText(strF);
+                accountFollowerTextView.setText(followers);
+
+                byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+                if(iconBytes.length!=0) {
+                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                    int postImageWidth = iconBitmap.getWidth();
+                    int postImageHeight = iconBitmap.getHeight();
+                    float postImageScale = Math.min((float)150 / postImageWidth,(float)150 / postImageHeight);
+
+                    //resize
+                    Matrix postImageMatrix = new Matrix();
+                    postImageMatrix.postScale(postImageScale,postImageScale);
+                    Bitmap postImageResizedImage = Bitmap.createBitmap(iconBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
+
+                    ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+                    postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                    accountImageView.setImageBitmap(postImageResizedImage);
+                }
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
     @Override
@@ -102,13 +190,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //BottomNavigationViewの定義して設置する
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         //リスナーのセット
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+
         if(user==null){
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
@@ -121,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // ナビゲーションドロワーの設定
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
 
         drawer.addDrawerListener(toggle);
@@ -129,6 +218,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+        View navHeaderMain = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        accountImageView = (ImageView)navHeaderMain.findViewById(R.id.accountImageView);
+        accountNameTextView = (TextView)navHeaderMain.findViewById(R.id.accountNameTextView);
+        accountFollowTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollow);
+        accountFollowerTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollower);
+        followTextView = (TextView)navHeaderMain.findViewById(R.id.followTextView);
+        followerTextView = (TextView)navHeaderMain.findViewById(R.id.followerTextView);
+
+        followTextView.setClickable(true);
+        followTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flagBundle","follow");
+
+                FragmentTransaction ffListTransaction = getSupportFragmentManager().beginTransaction();
+                FFListFragment fragmentFFList = new FFListFragment();
+                fragmentFFList.setArguments(flagBundle);
+                ffListTransaction.replace(R.id.container, fragmentFFList,FFListFragment.TAG);
+                ffListTransaction.commit();
+                drawer.closeDrawer(Gravity.LEFT);
+            }
+        });
+        followerTextView.setClickable(true);
+        followerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle flagBundle = new Bundle();
+                flagBundle.putString("flagBundle","follower");
+
+                FragmentTransaction ffListTransaction = getSupportFragmentManager().beginTransaction();
+                FFListFragment fragmentFFList = new FFListFragment();
+                fragmentFFList.setArguments(flagBundle);
+                ffListTransaction.replace(R.id.container, fragmentFFList,FFListFragment.TAG);
+                ffListTransaction.commit();
+                drawer.closeDrawer(Gravity.LEFT);
+            }
+        });
+
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+        if (user !=null){
+            userRef.addChildEventListener(aEventListener);
+        }
+
+
 
 
 
@@ -150,7 +289,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
 
             case R.id.notificationButton:
-                //user = FirebaseAuth.getInstance().getCurrentUser();
 
 
                 //電話番号とか身分証を登録しているかの確認
@@ -185,21 +323,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
 
+
+
         if (id == R.id.nav_profile) {
             mToolbar.setTitle("プロフィール");
             ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
             drawerTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
             drawerTransaction.commit();
-        } else if (id == R.id.nav_group) {
-            mToolbar.setTitle("グループ");
-
-        } else if (id == R.id.nav_business) {
+        }else if (id == R.id.nav_business) {
             mToolbar.setTitle("取引履歴");
-
-        } else if (id == R.id.nav_schedule) {
-            mToolbar.setTitle("スケジュール");
-
-        } else if (id == R.id.nav_contract) {
+            BusinessFragment fragmentBusiness = new BusinessFragment();
+            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+            drawerTransaction.commit();
+            } else if (id == R.id.nav_contract) {
             mToolbar.setTitle("利用規約");
             ContractFragment fragmentContract = new ContractFragment();
             drawerTransaction.replace(R.id.container, fragmentContract ,ContractFragment.TAG);
