@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
-        ProfilePostGoodFragment.OnFragmentInteractionListener {
+        ConfirmProfilePageFragment.OnFragmentInteractionListener {
     public static final String TAG = "ConfirmProfileFragment";
     ImageView newHeaderImageView;
     ImageView newIconImageView;
@@ -57,15 +57,18 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     int followCount;
     int followerCount;
 
-    TabLayout tabLayout;
-    public static ViewPager viewPager;
+
     String intentUserId;
     String uid;
     private Button followEditButton;
     private ArrayList<String> followArrayList;
     private ArrayList<PostData> timeLineArrayList;
     ListAdapter mAdapter;
-    ListView postListView;
+    //ListView postListView;
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    FragmentPagerAdapter adapter;
 
 
 
@@ -109,7 +112,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
             timeLineArrayList.add(postData);
             mAdapter.setTimeLineArrayList(timeLineArrayList);
-            postListView.setAdapter(mAdapter);
+            ConfirmProfilePageFragment.profileListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
 
 
@@ -270,13 +273,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userNameTextView = (TextView)v.findViewById(R.id.userNameTextView);
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
         okButton = (Button)v.findViewById(R.id.okButton);
-        tabLayout = (TabLayout)v.findViewById(R.id.tabs);
-        viewPager = (ViewPager)v.findViewById(R.id.pager);
         sexTextView = (TextView)v.findViewById(R.id.sexTextView);
         ageTextView = (TextView)v.findViewById(R.id.ageTextView);
         followEditButton = (Button)v.findViewById(R.id.followEditButton);
-        postListView = (ListView)v.findViewById(R.id.postListView);
+        //postListView = (ListView)v.findViewById(R.id.postListView);
         messageButton = (Button)v.findViewById(R.id.messageButton);
+
+        tabLayout = (TabLayout) v.findViewById(R.id.tabs);
+        viewPager = (ViewPager) v.findViewById(R.id.pager);
 
 
         return v;
@@ -288,10 +292,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
         //画像とテキストを引っ張ってくる
-        //mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        //user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-        //followRef = mDataBaseReference.child(Const.FollowPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         timeLineArrayList = new ArrayList<PostData>();
@@ -320,18 +321,20 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
 
-        final String[] pageTitle = {"投稿", "いいね"};
 
 
-//        ProfilePostGoodFragment fragmentProfilePostGood = new ProfilePostGoodFragment();
-//        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        transaction.add(R.id.tabContainer, fragmentProfilePostGood);
-//        transaction.commit();
 
-        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+
+
+
+
+
+        final String[] pageTitle = {"HOME", "EVENT", "SETTING","aaa"};
+
+        adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return ProfilePostGoodFragment.newInstance(position + 1);
+                return ConfirmProfilePageFragment.newInstance(position + 1);
             }
 
             @Override
@@ -351,6 +354,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -453,35 +466,22 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-
     }
 
     @Override
     public void onPageSelected(int position) {
-        //同上
-        int tabPosition = tabLayout.getSelectedTabPosition();
-        if (tabPosition==1){
-            //goodグリッドリストでいいかな
-        }else if(tabPosition==0){
-            //post
-            contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
-        }
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        //同上
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //同上
     }
-
 
 
 
