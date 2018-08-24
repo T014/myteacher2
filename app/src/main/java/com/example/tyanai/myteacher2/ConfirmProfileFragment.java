@@ -249,7 +249,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         messageRef = mDataBaseReference.child(Const.MessagePATH);
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-
+        mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
 
 
         followRef.addChildEventListener(followEventListener);
@@ -276,7 +276,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         sexTextView = (TextView)v.findViewById(R.id.sexTextView);
         ageTextView = (TextView)v.findViewById(R.id.ageTextView);
         followEditButton = (Button)v.findViewById(R.id.followEditButton);
-        //postListView = (ListView)v.findViewById(R.id.postListView);
+
         messageButton = (Button)v.findViewById(R.id.messageButton);
 
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
@@ -290,11 +290,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onViewCreated(view, savedInstanceState);
 
 
-
+        mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
         userRef = mDataBaseReference.child(Const.UsersPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
-        mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
+
         timeLineArrayList = new ArrayList<PostData>();
 
         Bundle userBundle = getArguments();
@@ -315,19 +315,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             followEditButton.setText("編集");
             messageButton.setVisibility(View.GONE);
         }
-
-        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
-
-
-        userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
-
-
-
-
-
-
-
-
 
         final String[] pageTitle = {"HOME", "EVENT", "SETTING","aaa"};
 
@@ -358,7 +345,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
+        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
 
+
+        userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
 
 
 
@@ -473,6 +463,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageSelected(int position) {
+//        if (position==0){
+//
+//        }
+        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
     }
 
     @Override
@@ -482,6 +476,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
+
 
 
 
