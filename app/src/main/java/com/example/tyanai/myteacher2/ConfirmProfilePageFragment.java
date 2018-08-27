@@ -30,8 +30,37 @@ public class ConfirmProfilePageFragment extends Fragment {
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference contentsRef;
+    DatabaseReference favoriteRef;
     private ArrayList<PostData> timeLineArrayList;
+    private ArrayList<String> favKeyArrayList;
     ListAdapter mAdapter;
+    int page;
+
+
+
+    private ChildEventListener fvdEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+
+            String key = (String) map.get("favKey");
+            favKeyArrayList.add(key);
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
 
@@ -73,12 +102,26 @@ public class ConfirmProfilePageFragment extends Fragment {
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
-            timeLineArrayList.add(postData);
-            mAdapter.setTimeLineArrayList(timeLineArrayList);
-            profileListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            if (page==2){
+                if (favKeyArrayList.size()!=0){
+                    for (String aaa:favKeyArrayList){
+                        if (aaa.equals(postData.getKey())){
+                            timeLineArrayList.add(postData);
+                            mAdapter.setTimeLineArrayList(timeLineArrayList);
+                            profileListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }else if (page==1){
+                timeLineArrayList.add(postData);
+                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                profileListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
 
 
+
+            }
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -93,13 +136,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
-
-
-
-
 
 
 
@@ -148,12 +184,13 @@ public class ConfirmProfilePageFragment extends Fragment {
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         timeLineArrayList = new ArrayList<PostData>();
 
-        int page = getArguments().getInt(ARG_PARAM, 0);
+        page = getArguments().getInt(ARG_PARAM, 0);
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
-
-        
-        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
-
+        if (page==1){
+            contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
+        }else if (page==2){
+            contentsRef.addChildEventListener(updEventListener);
+        }
 
 
     }
@@ -173,6 +210,22 @@ public class ConfirmProfilePageFragment extends Fragment {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
         }
+
+        page = getArguments().getInt(ARG_PARAM, 0);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
+        mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
+        favKeyArrayList = new ArrayList<String>();
+
+        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+
+
+
+
+
+
     }
 
     @Override
