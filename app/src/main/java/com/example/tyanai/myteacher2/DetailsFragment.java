@@ -157,7 +157,6 @@ public class DetailsFragment extends Fragment {
                 buyButton.setVisibility(View.GONE);
             }
             if (userId.equals(user.getUid())){
-                favButton.setVisibility(View.GONE);
                 buyButton.setVisibility(View.GONE);
             }
 
