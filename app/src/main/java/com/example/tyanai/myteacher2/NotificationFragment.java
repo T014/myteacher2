@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -42,7 +41,7 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
         super.onViewCreated(view, savedInstanceState);
         MainActivity.mToolbar.setTitle("通知");
 
-        final String[] pageTitle = {"HOME", "EVENT", "SETTING"};
+        final String[] pageTitle = {"いいね", "購入", "その他"};
 
         adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
