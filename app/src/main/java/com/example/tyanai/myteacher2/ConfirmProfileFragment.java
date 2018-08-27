@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
@@ -62,74 +62,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     String uid;
     private Button followEditButton;
     private ArrayList<String> followArrayList;
-    private ArrayList<PostData> timeLineArrayList;
     ListAdapter mAdapter;
-    //ListView postListView;
 
     TabLayout tabLayout;
     ViewPager viewPager;
-    FragmentPagerAdapter adapter;
+    FragmentStatePagerAdapter adapter;
 
 
-
-    private ChildEventListener updEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String userId = (String) map.get("userId");
-            String userName = (String) map.get("userName");
-            String time = (String) map.get("time");
-            String key = (String) map.get("key");
-            String date = (String) map.get("date");
-            String imageBitmapString = (String) map.get("imageBitmapString");
-            String contents = (String) map.get("contents");
-            String cost = (String) map.get("cost");
-            String howLong = (String) map.get("howLong");
-            String goods = (String) map.get("goods");
-            String share = (String) map.get("share");
-            String bought = (String) map.get("bought");
-            String evaluation = (String) map.get("evaluation");
-            String cancel = (String) map.get("cancel");
-            String method = (String) map.get("method");
-            String postArea = (String) map.get("postArea");
-            String postType = (String) map.get("postType");
-            String level = (String) map.get("level");
-            String career = (String) map.get("career");
-            String place = (String) map.get("place");
-            String sex = (String) map.get("sex");
-            String age = (String) map.get("age");
-            String taught = (String) map.get("taught");
-            String userEvaluation = (String) map.get("userEvaluation");
-            String userIconBitmapString = (String) map.get("userIconBitmapString");
-            String stock = (String) map.get("stock");
-
-
-
-            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
-
-            timeLineArrayList.add(postData);
-            mAdapter.setTimeLineArrayList(timeLineArrayList);
-            ConfirmProfilePageFragment.profileListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-
-
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
 
     //mEventListenerの設定と初期化
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -295,7 +234,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userRef = mDataBaseReference.child(Const.UsersPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
 
-        timeLineArrayList = new ArrayList<PostData>();
 
         Bundle userBundle = getArguments();
         if (userBundle!=null){
@@ -316,9 +254,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             messageButton.setVisibility(View.GONE);
         }
 
-        final String[] pageTitle = {"HOME", "EVENT", "SETTING","aaa"};
+        final String[] pageTitle = {"HOME", "EVENT"};
 
-        adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+        adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return ConfirmProfilePageFragment.newInstance(position + 1);
@@ -345,7 +283,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
-        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
 
 
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
@@ -466,7 +403,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 //        if (position==0){
 //
 //        }
-        contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
+        //contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
     }
 
     @Override
