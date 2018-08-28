@@ -1,5 +1,6 @@
 package com.example.tyanai.myteacher2;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -28,40 +29,70 @@ import java.util.Map;
 
 public class TimelineFragment extends Fragment {
     public static  final String TAG = "TimelineFragment";
-    private ArrayList<String> followArrayList = new ArrayList<String>();
     private ArrayList<PostData> timeLineArrayList = new ArrayList<PostData>();
     DatabaseReference mDataBaseReference;
+    DatabaseReference favRef;
     DatabaseReference followRef;
+    DatabaseReference usersRef;
     DatabaseReference contentsRef;
     FirebaseUser user;
     private ListView timeLineListView;
     private ListAdapter mAdapter;
     int goodPosition;
+    UserData myData;
 
-/*
 
-    private ChildEventListener fEventListener = new ChildEventListener() {
+
+    private ChildEventListener cEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String followUid = (String) map.get("followUid");
-            followArrayList.add(followUid);
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String headerBitmapString = (String) map.get("headerBitmapString");
+
+            UserData userData = new UserData(userName, userId, comment, follows, followers, posts
+                    , favorites, sex, age, evaluations, taught, period, groups, date, iconBitmapString, headerBitmapString);
+
+            myData = userData;
+
 
         }
+
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
+
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
         }
+
         @Override
         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
         }
+
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-    };*/
+    };
+
+
+
+
 
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
@@ -93,12 +124,13 @@ public class TimelineFragment extends Fragment {
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             //if (followArrayList.contains(postData.getUserId())){
                 timeLineArrayList.add(postData);
@@ -184,13 +216,16 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("タイムライン");
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
-        //followRef.addChildEventListener(fEventListener);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        favRef = mDataBaseReference.child(Const.FavoritePATH);
+
+
         contentsRef.limitToLast(5).addChildEventListener(tEventListener);
+
         //取得数の上限を5から50に制限上のreverseも
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -207,32 +242,76 @@ public class TimelineFragment extends Fragment {
                     String totalGd =String.valueOf(totalGoods);
 
 
-                    //timeLineArrayList.remove(timeLineArrayList.get(position));
 
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
+
+
+                    Map<String,Object> favKey = new HashMap<>();
+                    String key = favRef.child(user.getUid()).push().getKey();
+
+
+                    favKey.put("postUid",timeLineArrayList.get(position).getUserId());
+                    favKey.put("userId",user.getUid());
+                    favKey.put("userName",myData.getName());
+                    favKey.put("iconBitmapString",myData.getIconBitmapString());
+                    favKey.put("time","0");
+                    favKey.put("favKey",timeLineArrayList.get(position).getKey());
+
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,favKey);
+                    favRef.updateChildren(childUpdates);
+
+
+
+
+
                     timeLineArrayList.clear();
                     contentsRef.limitToLast(5).addChildEventListener(tEventListener);
-                }else{
+                }else if (view.getId()==R.id.userIconImageView){
 
-                    Bundle bundle = new Bundle();
+                    Bundle userBundle = new Bundle();
+                    userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
 
-                    bundle.putString("key",timeLineArrayList.get(position).getKey());
-
-
-                    DetailsFragment fragmentDetails = new DetailsFragment();
-                    fragmentDetails.setArguments(bundle);
+                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                    fragmentProfileConfirm.setArguments(userBundle);
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
+                            .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
                             .commit();
 
+                }else if (view.getId()==R.id.contentImageView) {
+                    //画像拡大表示
+                }else{
+
+                        Bundle bundle = new Bundle();
+
+                        bundle.putString("key",timeLineArrayList.get(position).getKey());
+
+
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(bundle);
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
+                                .commit();
+
+                    }
                 }
 
-            }
+
         });
 
     }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        usersRef = mDataBaseReference.child(Const.UsersPATH);
+        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
+
+        }
 
 }
