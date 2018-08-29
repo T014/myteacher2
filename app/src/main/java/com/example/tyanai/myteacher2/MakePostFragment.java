@@ -47,6 +47,7 @@ public class MakePostFragment extends Fragment {
     private Spinner careerSpinner;
     private Spinner levelSpinner;
     private Spinner placeSpinner;
+    private Spinner stockSpinner;
     private RadioGroup areaGroup1;
     private RadioGroup areaGroup2;
     private RadioGroup sportsGroup;
@@ -141,6 +142,7 @@ public class MakePostFragment extends Fragment {
         careerSpinner = (Spinner)v.findViewById(R.id.careerSpinner);
         levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
         placeSpinner = (Spinner)v.findViewById(R.id.placeSpinner);
+        stockSpinner = (Spinner)v.findViewById(R.id.stockSpinner);
         dateButton = (Button)v.findViewById(R.id.dateButton);
         dateTextView = (TextView)v.findViewById(R.id.dateTextView);
         clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
@@ -395,7 +397,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("卓球")){
                         type=selectedType;
                         makeTypeRef="tableTennis";
-                    }else if(selectedType.equals("その他")){
+                    }else if(selectedType.equals("その他のスポーツ")){
                         type=selectedType;
                         makeTypeRef="otherSports";
                     }
@@ -427,7 +429,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("ドラム")){
                         type=selectedType;
                         makeTypeRef="drum";
-                    }else if(selectedType.equals("その他")){
+                    }else if(selectedType.equals("その他の音楽")){
                         type=selectedType;
                         makeTypeRef="otherMusic";
                     }
@@ -452,7 +454,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("編集")){
                         type=selectedType;
                         makeTypeRef="edit";
-                    }else if(selectedType.equals("その他")){
+                    }else if(selectedType.equals("その他の動画")){
                         type=selectedType;
                         makeTypeRef="otherMovie";
                     }
@@ -484,7 +486,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("理科")){
                         type=selectedType;
                         makeTypeRef="science";
-                    }else if(selectedType.equals("その他")){
+                    }else if(selectedType.equals("その他の教科")){
                         type=selectedType;
                         makeTypeRef="otherStudy";
                     }
@@ -578,6 +580,7 @@ public class MakePostFragment extends Fragment {
                 String level=(String) levelSpinner.getSelectedItem();
                 String career = (String) careerSpinner.getSelectedItem();
                 String place=(String) placeSpinner.getSelectedItem();
+                String stock = (String) stockSpinner.getSelectedItem();
 
                 Map<String,Object> data = new HashMap<>();
 
@@ -608,6 +611,7 @@ public class MakePostFragment extends Fragment {
                 data.put("taught",myData.getTaught());
                 data.put("userEvaluation",myData.getEvaluations());
                 data.put("userIconBitmapString",myData.getIconBitmapString());
+                data.put("stock",stock);
 
 
 
