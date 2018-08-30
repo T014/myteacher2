@@ -1,9 +1,12 @@
 package com.example.tyanai.myteacher2;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -30,7 +34,6 @@ public class DetailsFragment extends Fragment {
 
 
     String intentKey;
-    TextView detailsTextView;
     ImageView postContentsImageView;
     Button favButton;
     Button buyButton;
@@ -47,8 +50,23 @@ public class DetailsFragment extends Fragment {
     Button saveButton;
     TextView evaluationTextView;
     String ev;
-
-
+    UserData myData;
+    UserData postUserData;
+    ImageView iconDetailImageView;
+    TextView userNameDetailTextView;
+    TextView evaluationDetailTextView;
+    TextView timeDetailTextView;
+    TextView goodDetailTextView;
+    TextView boughtDetailTextView;
+    TextView contentsDetailTextView;
+    TextView areaDetailTextView;
+    TextView typeDetailTextView;
+    TextView levelDetailTextView;
+    TextView dateDetailTextView;
+    TextView placeDetailTextView;
+    TextView howLongDetailTextView;
+    TextView costDetailTextView;
+    TextView methodDetailTextView;
 
 
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -76,23 +94,12 @@ public class DetailsFragment extends Fragment {
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
+            if (userData.getUid().equals(user.getUid())){
+                myData = userData;
+            }else if(userData.getUid().equals(thisPost.getUserId())){
+                postUserData = userData;
+            }
 
-            int totalUserEvaluation = Integer.parseInt(userData.getEvaluations());
-            totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
-            String totalUserEv = String.valueOf(totalUserEvaluation);
-
-            int totalUserTaught = Integer.parseInt(userData.getTaught());
-            totalUserTaught =totalUserTaught+1;
-            String totalUserTa =String.valueOf(totalUserTaught);
-
-
-
-            Map<String,Object> userDataKey = new HashMap<>();
-
-            userDataKey.put("evaluations",totalUserEv);
-            userDataKey.put("taught",totalUserTa);
-
-            usersRef.child(user.getUid()).updateChildren(userDataKey);
 
 
         }
@@ -165,12 +172,29 @@ public class DetailsFragment extends Fragment {
                 Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                 postContentsImageView.setImageBitmap(postImageBitmap);
             }
-            detailsTextView.setText("ユーザー名"+postData.getName()+"投稿日時"+postData.getDate()
-                    +"この投稿の評価"+postData.getEvaluation()+"分野"+postData.getPostArea()+"種目"+postData.getPostType()
-                    +"難易度"+postData.getLevel()+"手段"+postData.getMethod()+"場所"+postData.getPlace()+"内容"+postData.getContents()
-                    + "価格"+postData.getCost()+"何時間"+postData.getHowLong()+"いいね"+postData.getGood()+"拡散"+postData.getShare()
-                    +"買った人数"+postData.getBought()+"キャンセル"+postData.getCancel()+"指導人数"+postData.getTaught()+"投稿者の評価"
-                    +"　　　　＊ユーザーに関する情報はユーザーが投稿した時点でのものです");
+            byte[] iconDetailImageBytes = Base64.decode(postData.getUserIconBitmapString(),Base64.DEFAULT);
+            if(iconDetailImageBytes.length!=0){
+                Bitmap iconDetailImageBitmap = BitmapFactory.decodeByteArray(iconDetailImageBytes,0, iconDetailImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                iconDetailImageView.setImageBitmap(iconDetailImageBitmap);
+            }
+
+
+            userNameDetailTextView.setText(postData.getName());
+            evaluationDetailTextView.setText("評価："+postData.getEvaluation());
+            timeDetailTextView.setText(postData.getTime());
+            goodDetailTextView.setText(postData.getGood());
+            boughtDetailTextView.setText(postData.getBought());
+            contentsDetailTextView.setText(postData.getContents());
+            areaDetailTextView.setText(postData.getPostArea());
+            typeDetailTextView.setText(postData.getPostType());
+            levelDetailTextView.setText(postData.getLevel());
+            dateDetailTextView.setText("日時："+postData.getDate());
+            placeDetailTextView.setText("場所："+postData.getPlace());
+            howLongDetailTextView.setText("期間："+postData.getHowLong());
+            costDetailTextView.setText("時給："+postData.getCost());
+            methodDetailTextView.setText("手段："+postData.getMethod());
+
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -198,13 +222,27 @@ public class DetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_details,container,false);
 
 
-        detailsTextView = (TextView)v.findViewById(R.id.detailsTextView);
+        iconDetailImageView = (ImageView)v.findViewById(R.id.iconDetailImageView);
+        userNameDetailTextView = (TextView)v.findViewById(R.id.userNameDetailTextView);
+        evaluationDetailTextView  = (TextView)v.findViewById(R.id.evaluationDetailTextView);
+        timeDetailTextView = (TextView)v.findViewById(R.id.timeDetailTextView);
         postContentsImageView = (ImageView)v.findViewById(R.id.postContentsImageView);
         favButton = (Button)v.findViewById(R.id.favButton);
         buyButton = (Button)v.findViewById(R.id.buyButton);
         evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
         saveButton = (Button)v.findViewById(R.id.saveButton);
         evaluationTextView = (TextView)v.findViewById(R.id.evaluationTextView);
+        goodDetailTextView = (TextView)v.findViewById(R.id.goodDetailTextView);
+        boughtDetailTextView = (TextView)v.findViewById(R.id.boughtDetailTextView);
+        contentsDetailTextView = (TextView)v.findViewById(R.id.contentsDetailTextView);
+        areaDetailTextView = (TextView)v.findViewById(R.id.areaDetailTextView);
+        typeDetailTextView = (TextView)v.findViewById(R.id.typeDetailTextView);
+        levelDetailTextView = (TextView)v.findViewById(R.id.levelDetailTextView);
+        dateDetailTextView = (TextView)v.findViewById(R.id.dateDetailTextView);
+        placeDetailTextView = (TextView)v.findViewById(R.id.placeDetailTextView);
+        howLongDetailTextView = (TextView)v.findViewById(R.id.howLongDetailTextView);
+        costDetailTextView = (TextView)v.findViewById(R.id.costDetailTextView);
+        methodDetailTextView = (TextView)v.findViewById(R.id.methodDetailTextView);
 
         return v;
     }
@@ -228,23 +266,15 @@ public class DetailsFragment extends Fragment {
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
-        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
 
 
-        Bundle bundle = getArguments();
-        intentKey = bundle.getString("key");
 
-
-        contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-
-
+        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
 
 
 
@@ -275,12 +305,19 @@ public class DetailsFragment extends Fragment {
                 Map<String,Object> favKey = new HashMap<>();
                 String key = favRef.child(user.getUid()).push().getKey();
 
-                favKey.put("favKey",intentKey);
+
+                favKey.put("postUid",thisPost.getUserId());
                 favKey.put("userId",user.getUid());
+                favKey.put("userName",myData.getName());
+                favKey.put("iconBitmapString",myData.getIconBitmapString());
+                favKey.put("time","0");
+                favKey.put("favKey",thisPost.getKey());
+
+
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,favKey);
-                favRef.child(user.getUid()).updateChildren(childUpdates);
+                favRef.updateChildren(childUpdates);
 
 
 
@@ -300,6 +337,23 @@ public class DetailsFragment extends Fragment {
 
 
 
+
+                //notification
+
+
+//                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "default");
+//                builder.setSmallIcon(R.drawable.noimage);
+//                builder.setContentText(myData.getName()+"さんがあなたの投稿にいいねしました。");
+//                NotificationManagerCompat manager = NotificationManagerCompat.from(getContext());
+//                manager.notify(123, builder.build());
+
+
+
+
+
+
+
+
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +363,7 @@ public class DetailsFragment extends Fragment {
 
                 ev = (String) evaluationSpinner.getSelectedItem();
 
-                usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
+
 
 
                 if (!(ev.equals("評価する"))){
@@ -347,6 +401,25 @@ public class DetailsFragment extends Fragment {
 //                    userDataKey.put("taught",totalTa);
 //
 //                    usersRef.child(user.getUid()).updateChildren(userDataKey);
+
+                    int totalUserEvaluation = Integer.parseInt(postUserData.getEvaluations());
+                    totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
+                    String totalUserEv = String.valueOf(totalUserEvaluation);
+
+                    int totalUserTaught = Integer.parseInt(postUserData.getTaught());
+                    totalUserTaught =totalUserTaught+1;
+                    String totalUserTa =String.valueOf(totalUserTaught);
+
+
+
+                    Map<String,Object> userDataKey = new HashMap<>();
+
+                    userDataKey.put("evaluations",totalUserEv);
+                    userDataKey.put("taught",totalUserTa);
+
+                    usersRef.child(user.getUid()).updateChildren(userDataKey);
+
+
 
 
 
@@ -427,6 +500,26 @@ public class DetailsFragment extends Fragment {
 
 
     }
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        Bundle bundle = getArguments();
+        intentKey = bundle.getString("key");
+        contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+
+    }
+
+
+
+
     @Override
     public void onDetach() {
         super.onDetach();
