@@ -20,7 +20,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -39,6 +43,7 @@ public class MessageFragment extends Fragment {
     private ArrayList<String> keyArrayList;
     private ArrayList<MessageListData> newMessageListDataArrayList;
     int i = 0;
+    int n;
 
 
 
@@ -91,6 +96,7 @@ public class MessageFragment extends Fragment {
 
             MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid());
 
+
             messageListDataArrayList.add(messageListData);
 
             if (uidArrayList.size()!=0){
@@ -129,8 +135,28 @@ public class MessageFragment extends Fragment {
             MessageListData aaa = messageListDataArrayList.get(i);
             MessageListData newMessageListData = new MessageListData(aaa.getUid(),userName,iconBitmapString,aaa.getTime(),aaa.getContent(),aaa.getBitmapString(),keyArrayList.get(i),user.getUid());
 
-            newMessageListDataArrayList.add(newMessageListData);
+            n = newMessageListDataArrayList.size();
 
+//            if (n==0){
+//                Collections.reverse(newMessageListDataArrayList);
+//                newMessageListDataArrayList.add(newMessageListData);
+//                Collections.reverse(newMessageListDataArrayList);
+//            }else{
+//                for (int i=0; i <= n-1;i++){
+//                    String strCld = newMessageListData.getTime();
+//                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+//                    Date d =df.parse(strCld);
+//
+//                }
+//            }
+
+
+
+
+
+            Collections.reverse(newMessageListDataArrayList);
+            newMessageListDataArrayList.add(newMessageListData);
+            Collections.reverse(newMessageListDataArrayList);
             mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
             messageKeyListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
