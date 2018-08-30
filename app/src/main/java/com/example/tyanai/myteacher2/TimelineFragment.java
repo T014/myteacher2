@@ -132,23 +132,23 @@ public class TimelineFragment extends Fragment {
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
-            //if (followArrayList.contains(postData.getUserId())){
-                timeLineArrayList.add(postData);
 
-                if (timeLineArrayList.size()==5){
-                    Collections.reverse(timeLineArrayList);
-                }
 
-                mAdapter.setTimeLineArrayList(timeLineArrayList);
-                timeLineListView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-            //}
+
+            Collections.reverse(timeLineArrayList);
+            timeLineArrayList.add(postData);
+            Collections.reverse(timeLineArrayList);
+
+            mAdapter.setTimeLineArrayList(timeLineArrayList);
+            timeLineListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+
 
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            HashMap map = (HashMap) dataSnapshot.getValue();
-//
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
 //            String userId = (String) map.get("userId");
 //            String userName = (String) map.get("userName");
 //            String time = (String) map.get("time");
@@ -174,12 +174,13 @@ public class TimelineFragment extends Fragment {
 //            String taught = (String) map.get("taught");
 //            String userEvaluation = (String) map.get("userEvaluation");
 //            String userIconBitmapString = (String) map.get("userIconBitmapString");
+//            String stock = (String) map.get("stock");
 //
 //
 //
 //            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
 //                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-//                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString);
+//                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 //
 //            //Collections.reverse(timeLineArrayList);
 //            timeLineArrayList.add(goodPosition,postData);
@@ -224,7 +225,7 @@ public class TimelineFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
 
 
-        contentsRef.limitToLast(5).addChildEventListener(tEventListener);
+        contentsRef.addChildEventListener(tEventListener);
 
         //取得数の上限を5から50に制限上のreverseも
 
