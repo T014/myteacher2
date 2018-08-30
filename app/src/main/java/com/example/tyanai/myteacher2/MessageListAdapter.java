@@ -25,7 +25,6 @@ class MessageListViewHolder {
 
     TextView messageTimeTextView;
     TextView messageContentsTextView;
-    ImageView messageIconImageView;
     ImageView myMessageImageView;
     ImageView myMessageImageIconImageView;
     TextView myMessageImageTimeTextView;
@@ -72,12 +71,10 @@ public class MessageListAdapter extends BaseAdapter {
             messageListViewHolder = new com.example.tyanai.myteacher2.MessageListViewHolder();
             messageListViewHolder.messageTimeTextView = (TextView) convertView.findViewById(R.id.messageTimeTextView);
             messageListViewHolder.messageContentsTextView = (TextView) convertView.findViewById(R.id.messageContentsTextView);
-            messageListViewHolder.messageIconImageView = (ImageView) convertView.findViewById(R.id.messageIconImageView);
 
 
             messageListViewHolder.myMessageImageTimeTextView = (TextView) convertView.findViewById(R.id.myMessageImageTimeTextView);
             messageListViewHolder.myMessageImageView = (ImageView) convertView.findViewById(R.id.myMessageImageView);
-            messageListViewHolder.myMessageImageIconImageView = (ImageView) convertView.findViewById(R.id.myMessageImageIconImageView);
 
             messageListViewHolder.otherMessageIconImageView = (ImageView) convertView.findViewById(R.id.otherMessageIconImageView);
             messageListViewHolder.otherMessageContentsTextView = (TextView) convertView.findViewById(R.id.otherMessageContentsTextView);
@@ -110,7 +107,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.myMessageImageTimeTextView.setText(time);
                     }
-                    byte[] myMessageIconImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+                    byte[] myMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(myMessageIconImageBytes.length!=0) {
                         Bitmap myMessageIconImageBitmap = BitmapFactory.decodeByteArray(myMessageIconImageBytes, 0, myMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
                         messageListViewHolder.myMessageImageIconImageView.setImageBitmap(myMessageIconImageBitmap);
@@ -127,11 +124,6 @@ public class MessageListAdapter extends BaseAdapter {
                     if (contents!=null){
                         messageListViewHolder.messageContentsTextView.setText(contents);
                     }
-                    byte[] myMessageIconImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
-                    if(myMessageIconImageBytes.length!=0) {
-                        Bitmap myMessageIconImageBitmap = BitmapFactory.decodeByteArray(myMessageIconImageBytes, 0, myMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                        messageListViewHolder.messageIconImageView.setImageBitmap(myMessageIconImageBitmap);
-                    }
                     messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
@@ -146,7 +138,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.otherMessageImageTimeTextView.setText(time);
                     }
-                    byte[] otherMessageIconImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+                    byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(otherMessageIconImageBytes.length!=0) {
                         Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
                         messageListViewHolder.otherMessageImageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
@@ -163,7 +155,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (contents!=null){
                         messageListViewHolder.otherMessageContentsTextView.setText(contents);
                     }
-                    byte[] otherMessageIconImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+                    byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(otherMessageIconImageBytes.length!=0) {
                         Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
                         messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
