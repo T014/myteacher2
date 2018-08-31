@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,8 +45,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     TextView commentTextView;
     Button okButton;
     Button messageButton;
-    TextView sexTextView;
-    TextView ageTextView;
+    TextView sexConfirmProfileTextView;
+    TextView ageConfirmProfileTextView;
+    TextView evaluationConfirmProfileTextView;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
@@ -56,10 +58,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference messageKeyRef;
     int followCount;
     int followerCount;
-
+    Toolbar cToolbar;
 
     String intentUserId;
-    String uid;
+    public static String uid;
     private Button followEditButton;
     private ArrayList<String> followArrayList;
     ListAdapter mAdapter;
@@ -110,8 +112,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
             userNameTextView.setText(userData.getName());
             commentTextView.setText(userData.getComment());
-            sexTextView.setText(sex);
-            ageTextView.setText(age);
+            evaluationConfirmProfileTextView.setText(userData.getEvaluations());
+            sexConfirmProfileTextView.setText("性別"+userData.getSex());
+            ageConfirmProfileTextView.setText("年齢"+userData.getAge());
             byte[] headerBytes = Base64.decode(headerBitmapString,Base64.DEFAULT);
             if(headerBytes.length!=0){
                 Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes,0, headerBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -182,6 +185,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         followArrayList = new ArrayList<String>();
 
+
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
@@ -199,9 +204,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -212,28 +214,32 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userNameTextView = (TextView)v.findViewById(R.id.userNameTextView);
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
         okButton = (Button)v.findViewById(R.id.okButton);
-        sexTextView = (TextView)v.findViewById(R.id.sexTextView);
-        ageTextView = (TextView)v.findViewById(R.id.ageTextView);
+        sexConfirmProfileTextView = (TextView)v.findViewById(R.id.sexConfirmProfileTextView);
+        ageConfirmProfileTextView = (TextView)v.findViewById(R.id.ageConfirmProfileTextView);
         followEditButton = (Button)v.findViewById(R.id.followEditButton);
+        evaluationConfirmProfileTextView = (TextView)v.findViewById(R.id.evaluationConfirmProfileTextView);
 
         messageButton = (Button)v.findViewById(R.id.messageButton);
 
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         viewPager = (ViewPager) v.findViewById(R.id.pager);
+        cToolbar = (Toolbar)v.findViewById(R.id.toolbar);
 
 
         return v;
     }
 
+
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainActivity.mToolbar.setVisibility(View.GONE);
+        cToolbar.setVisibility(View.GONE);
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
         userRef = mDataBaseReference.child(Const.UsersPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
-
 
         Bundle userBundle = getArguments();
         if (userBundle!=null){
@@ -254,7 +260,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             messageButton.setVisibility(View.GONE);
         }
 
-        final String[] pageTitle = {"HOME", "EVENT"};
+        final String[] pageTitle = {"投稿", "いいね"};
 
         adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
@@ -378,18 +384,19 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 messageRef.child(key).updateChildren(childUp);
 
 
-
-
-                MessageFragment fragmentMessage = new MessageFragment();
+                Bundle messageKeyBundle = new Bundle();
+                messageKeyBundle.putString("key",key);
+                ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                fragmentThisMessage.setArguments(messageKeyBundle);
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentMessage,MessageFragment.TAG)
+                        .replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG)
                         .commit();
+
+
             }
         });
-
-
-
     }
+
 
 
 
@@ -400,10 +407,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageSelected(int position) {
-//        if (position==0){
-//
-//        }
-        //contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
     }
 
     @Override
@@ -412,6 +415,20 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        cToolbar.setVisibility(View.VISIBLE);
     }
 
 
