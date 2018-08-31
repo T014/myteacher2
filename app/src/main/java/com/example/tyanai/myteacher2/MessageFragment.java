@@ -1,17 +1,13 @@
 package com.example.tyanai.myteacher2;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.flags.IFlagProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -20,11 +16,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -135,28 +131,40 @@ public class MessageFragment extends Fragment {
             MessageListData aaa = messageListDataArrayList.get(i);
             MessageListData newMessageListData = new MessageListData(aaa.getUid(),userName,iconBitmapString,aaa.getTime(),aaa.getContent(),aaa.getBitmapString(),keyArrayList.get(i),user.getUid());
 
-            n = newMessageListDataArrayList.size();
+            Calendar cal2 = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
 
-//            if (n==0){
-//                Collections.reverse(newMessageListDataArrayList);
-//                newMessageListDataArrayList.add(newMessageListData);
-//                Collections.reverse(newMessageListDataArrayList);
-//            }else{
-//                for (int i=0; i <= n-1;i++){
-//                    String strCld = newMessageListData.getTime();
-//                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-//                    Date d =df.parse(strCld);
-//
-//                }
-//            }
+            try{
+                cal2.setTime(sdf.parse(newMessageListData.getTime()));
 
+                if (newMessageListDataArrayList.size()==0){
+                    newMessageListDataArrayList.add(newMessageListData);
+                }else{
+                    int n = newMessageListDataArrayList.size();
+                    for (int m=n-1;m>-1;m--){
+                        int deff = newMessageListDataArrayList.get(m).getTime().compareTo(newMessageListData.getTime());
+                        if (deff==0){
 
+                        }else if (deff<0){
+                            Collections.reverse(newMessageListDataArrayList);
+                            newMessageListDataArrayList.add(m+1,newMessageListData);
+                            Collections.reverse(newMessageListDataArrayList);
+                            break;
+                        }else if (deff>0){
+                            if (m==0){
+                                Collections.reverse(newMessageListDataArrayList);
+                                newMessageListDataArrayList.add(0,newMessageListData);
+                                Collections.reverse(newMessageListDataArrayList);
+                                break;
+                            }
+                        }
+                    }
+                }
 
+            }catch (ParseException e){
 
+            }
 
-            Collections.reverse(newMessageListDataArrayList);
-            newMessageListDataArrayList.add(newMessageListData);
-            Collections.reverse(newMessageListDataArrayList);
             mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
             messageKeyListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -218,7 +226,7 @@ public class MessageFragment extends Fragment {
         uidArrayList.clear();
         keyArrayList.clear();
 
-        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagakey_item);
+        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
 
 
