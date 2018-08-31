@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ConfirmProfilePageFragment extends Fragment {
 
@@ -34,6 +36,7 @@ public class ConfirmProfilePageFragment extends Fragment {
     private ArrayList<PostData> timeLineArrayList;
     private ArrayList<String> favKeyArrayList;
     ListAdapter mAdapter;
+
     int page;
 
 
@@ -171,6 +174,7 @@ public class ConfirmProfilePageFragment extends Fragment {
 
         profileListView = (ListView) view.findViewById(R.id.profileListView);
 
+
         return view;
     }
 
@@ -187,10 +191,112 @@ public class ConfirmProfilePageFragment extends Fragment {
         page = getArguments().getInt(ARG_PARAM, 0);
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
         if (page==1){
-            contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(updEventListener);
+            contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
         }else if (page==2){
             contentsRef.addChildEventListener(updEventListener);
         }
+        MainActivity.mToolbar.setVisibility(View.GONE);
+
+
+
+
+
+
+        profileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (view.getId()==R.id.goodButton){
+                    //いいねの処理
+                    Map<String,Object> favKey = new HashMap<>();
+                    String key = favoriteRef.child(user.getUid()).push().getKey();
+
+
+                    favKey.put("postUid",timeLineArrayList.get(position).getUserId());
+                    favKey.put("userId",user.getUid());
+                    favKey.put("userName",ConfirmProfileFragment.myData.getName());
+                    favKey.put("iconBitmapString",ConfirmProfileFragment.myData.getIconBitmapString());
+                    favKey.put("time","0");
+                    favKey.put("favKey",timeLineArrayList.get(position).getKey());
+
+
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,favKey);
+                    favoriteRef.updateChildren(childUpdates);
+
+
+
+                    int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
+                    totalGoods =totalGoods+1;
+                    String totalGd =String.valueOf(totalGoods);
+
+
+
+                    Map<String,Object> postGoodKey = new HashMap<>();
+
+                    postGoodKey.put("goods",totalGd);
+
+                    contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
+
+
+                    if (page==1){
+                        contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
+                    }else if (page==2){
+                        contentsRef.addChildEventListener(updEventListener);
+                    }
+
+
+
+
+
+
+
+
+                }else if (view.getId()==R.id.userIconImageView){
+
+                    Bundle userBundle = new Bundle();
+                    userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
+
+                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                    fragmentProfileConfirm.setArguments(userBundle);
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                            .commit();
+
+                }else if (view.getId()==R.id.contentImageView) {
+                    //画像拡大表示
+                }else{
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("key",timeLineArrayList.get(position).getKey());
+
+
+                    DetailsFragment fragmentDetails = new DetailsFragment();
+                    fragmentDetails.setArguments(bundle);
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
+                            .commit();
+
+                }
+            }
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
