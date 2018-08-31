@@ -359,6 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
 
+        //bottomNavigationView.setSelectedItemId(-1);
 
 
         if (id == R.id.nav_profile) {
