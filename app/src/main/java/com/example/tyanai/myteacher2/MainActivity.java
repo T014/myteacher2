@@ -103,9 +103,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     transaction.commit();
                     return true;
                 case R.id.item_Community:
-                    fragmentCommunity = new CommunityFragment();
-                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
+                    ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                    transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
                     transaction.commit();
+//                    fragmentCommunity = new CommunityFragment();
+//                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
+//                    transaction.commit();
                     return true;
 
             }
@@ -122,26 +125,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
-            String comment = (String) map.get("comment");
             String follows = (String) map.get("follows");
             String followers = (String) map.get("followers");
-            String posts = (String) map.get("posts");
-            String favorites = (String) map.get("favorites");
-            String sex = (String) map.get("sex");
-            String age = (String) map.get("age");
-            String evaluations = (String) map.get("evaluations");
-            String taught = (String) map.get("taught");
-            String period = (String) map.get("period");
-            String groups = (String) map.get("groups");
-            String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
+
+
+
 
             if (userId.equals(user.getUid())){
+
+
+                if (iconBitmapString.length()<10){
+                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentInputProfile,InputProfileFragment.TAG);
+                    transaction.commit();
+                }
+
+
                 accountNameTextView.setText(userName);
                 //自分を引いておく
                 int f = Integer.parseInt(follows);
-                f-=1;
                 String strF = String.valueOf(f);
                 accountFollowTextView.setText(strF);
                 accountFollowerTextView.setText(followers);
@@ -189,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
 
 
+
+
         //BottomNavigationViewの定義して設置する
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         //リスナーのセット
@@ -201,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(user==null){
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
-        }else{
+        }else {
             //最初に表示させるフラグメントを指定
             TimelineFragment fragmentTimeline = new TimelineFragment();
             transaction.add(R.id.container, fragmentTimeline,TimelineFragment.TAG);
@@ -228,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
 
 
@@ -280,12 +287,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(Gravity.LEFT);
             }
         });
+        accountImageView.setClickable(true);
+        accountImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction confirmProfileTransaction = getSupportFragmentManager().beginTransaction();
+                ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                confirmProfileTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                confirmProfileTransaction.commit();
+                drawer.closeDrawer(Gravity.LEFT);
+            }
+        });
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-//        if (user !=null){
-//            userRef.addChildEventListener(aEventListener);
-//        }
+        if (user !=null){
+            userRef.addChildEventListener(aEventListener);
+        }
 
 
 
@@ -293,11 +311,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-    public void onDrawerOpened(View drawerView){
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
