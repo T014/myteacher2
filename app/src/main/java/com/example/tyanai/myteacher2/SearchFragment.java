@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -20,7 +21,10 @@ import java.util.HashMap;
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";
     Spinner postAreaSpinner;
-    Spinner postTypeSpinner;
+    Spinner sportsPostTypeSpinner;
+    Spinner musicPostTypeSpinner;
+    Spinner editPostTypeSpinner;
+    Spinner studyPostTypeSpinner;
     Spinner levelSpinner;
     Spinner userEvaluationSpinner;
     Spinner evaluationSpinner;
@@ -32,6 +36,7 @@ public class SearchFragment extends Fragment {
     Spinner sexSpinner;
     Spinner ageSpinner;
     Button searchButton;
+    String postType;
 
     String postLevel;
     String postUserEvaluation;
@@ -82,12 +87,14 @@ public class SearchFragment extends Fragment {
             String age = (String) map.get("age");
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
 
             //条件分岐
@@ -192,7 +199,10 @@ public class SearchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_search,container,false);
 
         postAreaSpinner = (Spinner)v.findViewById(R.id.postAreaSpinner);
-        postTypeSpinner = (Spinner)v.findViewById(R.id.postTypeSpinner);
+        sportsPostTypeSpinner = (Spinner)v.findViewById(R.id.sportsPostTypeSpinner);
+        musicPostTypeSpinner = (Spinner)v.findViewById(R.id.musicPostTypeSpinner);
+        editPostTypeSpinner = (Spinner)v.findViewById(R.id.editPostTypeSpinner);
+        studyPostTypeSpinner = (Spinner)v.findViewById(R.id.studyPostTypeSpinner);
         levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
         userEvaluationSpinner = (Spinner)v.findViewById(R.id.userEvaluationSpinner);
         evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
@@ -218,12 +228,66 @@ public class SearchFragment extends Fragment {
         MainActivity.mToolbar.setTitle("探す");
         searchArrayList = new ArrayList<PostData>();
 
+        musicPostTypeSpinner.setVisibility(View.GONE);
+        editPostTypeSpinner.setVisibility(View.GONE);
+        studyPostTypeSpinner.setVisibility(View.GONE);
+
+
+        postAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String postArea = (String)postAreaSpinner.getSelectedItem();
+        if (postArea.equals("スポーツ")){
+            sportsPostTypeSpinner.setVisibility(View.VISIBLE);
+            musicPostTypeSpinner.setVisibility(View.GONE);
+            editPostTypeSpinner.setVisibility(View.GONE);
+            studyPostTypeSpinner.setVisibility(View.GONE);
+        }else if (postArea.equals("音楽")){
+            sportsPostTypeSpinner.setVisibility(View.GONE);
+            musicPostTypeSpinner.setVisibility(View.VISIBLE);
+            editPostTypeSpinner.setVisibility(View.GONE);
+            studyPostTypeSpinner.setVisibility(View.GONE);
+        }else if (postArea.equals("動画")){
+            sportsPostTypeSpinner.setVisibility(View.GONE);
+            musicPostTypeSpinner.setVisibility(View.GONE);
+            editPostTypeSpinner.setVisibility(View.VISIBLE);
+            studyPostTypeSpinner.setVisibility(View.GONE);
+        }else if (postArea.equals("学習")){
+            sportsPostTypeSpinner.setVisibility(View.GONE);
+            musicPostTypeSpinner.setVisibility(View.GONE);
+            editPostTypeSpinner.setVisibility(View.GONE);
+            studyPostTypeSpinner.setVisibility(View.VISIBLE);
+        }else{
+            postType="その他";
+        }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String postArea = (String)postAreaSpinner.getSelectedItem();
-                String postType = (String)postTypeSpinner.getSelectedItem();
+                if (postArea.equals("スポーツ")){
+                    postType = (String)sportsPostTypeSpinner.getSelectedItem();
+                }else if (postArea.equals("音楽")){
+                    postType = (String)musicPostTypeSpinner.getSelectedItem();
+                }else if (postArea.equals("動画")){
+                    postType = (String)editPostTypeSpinner.getSelectedItem();
+                }else if (postArea.equals("学習")){
+                    postType = (String)studyPostTypeSpinner.getSelectedItem();
+                }
+
+
+
+
                 postLevel = (String)levelSpinner.getSelectedItem();
                 postUserEvaluation = (String)userEvaluationSpinner.getSelectedItem();
                 postEvaluation = (String)evaluationSpinner.getSelectedItem();
@@ -235,15 +299,6 @@ public class SearchFragment extends Fragment {
                 postSex = (String)sexSpinner.getSelectedItem();
                 postAge = (String)ageSpinner.getSelectedItem();
 
-//                String refArea="";
-//                String refType="";
-//
-//                if (postArea.equals("スポーツ")){
-//                    refArea = "sports";
-//                }
-//                if (postType.equals("テニス")){
-//                    refType = "tennis";
-//                }
                 mDataBaseReference = FirebaseDatabase.getInstance().getReference();
                 gridRef = mDataBaseReference.child(Const.ContentsPATH);
                 gridRef.orderByChild("postType").equalTo(postType).addChildEventListener(sEventListener);
