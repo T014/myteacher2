@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ public class DetailsFragment extends Fragment {
 
     String intentKey;
     ImageView postContentsImageView;
-    Button favButton;
+    ImageButton favButton;
     Button buyButton;
     private DatabaseReference favRef;
     private DatabaseReference tradeRef;
@@ -159,10 +160,12 @@ public class DetailsFragment extends Fragment {
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             thisPost=postData;
-
-            if (stock.equals("0")){
-                buyButton.setVisibility(View.GONE);
+            if (stock!=null){
+                if (stock.equals("0")){
+                    buyButton.setVisibility(View.GONE);
+                }
             }
+
             if (userId.equals(user.getUid())){
                 buyButton.setVisibility(View.GONE);
             }
@@ -187,10 +190,10 @@ public class DetailsFragment extends Fragment {
             contentsDetailTextView.setText(postData.getContents());
             areaDetailTextView.setText(postData.getPostArea());
             typeDetailTextView.setText(postData.getPostType());
-            levelDetailTextView.setText(postData.getLevel());
+            levelDetailTextView.setText("難易度："+postData.getLevel());
             dateDetailTextView.setText("日時："+postData.getDate());
             placeDetailTextView.setText("場所："+postData.getPlace());
-            howLongDetailTextView.setText("期間："+postData.getHowLong());
+            howLongDetailTextView.setText("所要時間："+postData.getHowLong());
             costDetailTextView.setText("時給："+postData.getCost());
             methodDetailTextView.setText("手段："+postData.getMethod());
 
@@ -227,7 +230,7 @@ public class DetailsFragment extends Fragment {
         evaluationDetailTextView  = (TextView)v.findViewById(R.id.evaluationDetailTextView);
         timeDetailTextView = (TextView)v.findViewById(R.id.timeDetailTextView);
         postContentsImageView = (ImageView)v.findViewById(R.id.postContentsImageView);
-        favButton = (Button)v.findViewById(R.id.favButton);
+        favButton = (ImageButton)v.findViewById(R.id.favButton);
         buyButton = (Button)v.findViewById(R.id.buyButton);
         evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
         saveButton = (Button)v.findViewById(R.id.saveButton);
@@ -250,14 +253,23 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MainActivity.mToolbar.setTitle("詳細");
+
 
 
         if (BusinessFragment.tradeKey==null){
             evaluationSpinner.setVisibility(View.GONE);
             evaluationTextView.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
+            MainActivity.mToolbar.setTitle("詳細");
+        }else {
+            favButton.setVisibility(View.GONE);
+            buyButton.setVisibility(View.GONE);
+            goodDetailTextView.setVisibility(View.GONE);
+            boughtDetailTextView.setVisibility(View.GONE);
+            MainActivity.mToolbar.setTitle("取引履歴詳細");
         }
+
+
 
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
@@ -274,7 +286,7 @@ public class DetailsFragment extends Fragment {
 
 
 
-        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
+        usersRef.addChildEventListener(cEventListener);
 
 
 
@@ -283,7 +295,7 @@ public class DetailsFragment extends Fragment {
 
 
 
-        postContentsImageView.setOnClickListener(new View.OnClickListener() {
+        iconDetailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
