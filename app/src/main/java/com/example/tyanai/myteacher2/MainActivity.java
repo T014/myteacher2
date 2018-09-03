@@ -14,6 +14,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
     public static BottomNavigationView bottomNavigationView;
+    public static CoordinatorLayout snack;
 
 
 
@@ -192,8 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-
-
+        snack = (CoordinatorLayout)findViewById(R.id.snack);
 
         //BottomNavigationViewの定義して設置する
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -257,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         followTextView = (TextView)navHeaderMain.findViewById(R.id.followTextView);
         followerTextView = (TextView)navHeaderMain.findViewById(R.id.followerTextView);
 
+
         followTextView.setClickable(true);
         followTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+                mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
         if (user !=null){
             userRef.addChildEventListener(aEventListener);
@@ -359,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
 
-        //bottomNavigationView.setSelectedItemId(-1);
+
 
 
         if (id == R.id.nav_profile) {
