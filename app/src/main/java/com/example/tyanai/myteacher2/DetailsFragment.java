@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -68,6 +70,7 @@ public class DetailsFragment extends Fragment {
     TextView howLongDetailTextView;
     TextView costDetailTextView;
     TextView methodDetailTextView;
+    Button removeButton;
 
 
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -162,12 +165,20 @@ public class DetailsFragment extends Fragment {
             thisPost=postData;
             if (stock!=null){
                 if (stock.equals("0")){
-                    buyButton.setVisibility(View.GONE);
+                    buyButton.setText("sold out");
                 }
             }
 
             if (userId.equals(user.getUid())){
+                boughtDetailTextView.setText(null);
+                goodDetailTextView.setText(null);
+                boughtDetailTextView.setText("購入者数：");
+                goodDetailTextView.setText("いいね：");
                 buyButton.setVisibility(View.GONE);
+            }else{
+                boughtDetailTextView.setText(null);
+                goodDetailTextView.setText(null);
+                removeButton.setVisibility(View.GONE);
             }
 
             byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
@@ -185,8 +196,8 @@ public class DetailsFragment extends Fragment {
             userNameDetailTextView.setText(postData.getName());
             evaluationDetailTextView.setText("評価："+postData.getEvaluation());
             timeDetailTextView.setText(postData.getTime());
-            goodDetailTextView.setText(postData.getGood());
-            boughtDetailTextView.setText(postData.getBought());
+            goodDetailTextView.append(postData.getGood());
+            boughtDetailTextView.append(postData.getBought());
             contentsDetailTextView.setText(postData.getContents());
             areaDetailTextView.setText(postData.getPostArea());
             typeDetailTextView.setText(postData.getPostType());
@@ -246,6 +257,7 @@ public class DetailsFragment extends Fragment {
         howLongDetailTextView = (TextView)v.findViewById(R.id.howLongDetailTextView);
         costDetailTextView = (TextView)v.findViewById(R.id.costDetailTextView);
         methodDetailTextView = (TextView)v.findViewById(R.id.methodDetailTextView);
+        removeButton = (Button)v.findViewById(R.id.removeButton);
 
         return v;
     }
@@ -314,6 +326,9 @@ public class DetailsFragment extends Fragment {
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 Map<String,Object> favKey = new HashMap<>();
                 String key = favRef.child(user.getUid()).push().getKey();
 
@@ -345,7 +360,10 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
 
-                favButton.setVisibility(View.GONE);
+
+
+                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
 
 
 
@@ -446,12 +464,27 @@ public class DetailsFragment extends Fragment {
             }
         });
 
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                //updateChildValue(nil)で削除できるデータの追加と同じ
+
+
+
+
+
+
+                
+            }
+        });
 
 
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
                 int stockCount = Integer.parseInt(thisPost.getStock());
@@ -494,22 +527,21 @@ public class DetailsFragment extends Fragment {
                     userDataKey.put("stock",stc);
                     contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
 
-                    buyButton.setVisibility(View.GONE);
+                    Snackbar.make(MainActivity.snack, "購入が完了しました。", Snackbar.LENGTH_LONG).show();
 
-//                    Map<String,Object> stockCountKey = new HashMap<>();
-//                    stockCountKey.put("stock",stockCount);
-//                    contentsRef.child(thisPost.getKey()).updateChildren(stockCountKey);
+
+
+                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
 
                 }else{
-                    //sold
+                    Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
                 }
 
 
             }
         });
-
 
     }
 
