@@ -9,13 +9,10 @@
         android:id="@+id/nav_business"
         android:title="取引履歴"/>
     <item
-        android:id="@+id/nav_schedule"
-        android:title="スケジュール"/>
-    <item
         android:id="@+id/nav_contract"
         android:title="利用規約"/>
     <item
-        android:id="@+id/nav_inquiry"
+        android:id="@+id/nav_agreement"
         android:title="お問い合わせ"/>
     <item
         android:id="@+id/nav_logout"
@@ -24,4 +21,5 @@
         android:id="@+id/nav"
         android:title="aboutus"/>
 </group>
+
 </menu>
