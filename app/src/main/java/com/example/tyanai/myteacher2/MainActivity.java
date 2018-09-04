@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -41,6 +43,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -374,14 +377,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             BusinessFragment fragmentBusiness = new BusinessFragment();
             drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
             drawerTransaction.commit();
-            } else if (id == R.id.nav_contract) {
+            } else if (id == R.id.nav_agreement) {
             mToolbar.setTitle("利用規約");
+            AgreementFragment fragmentAgreement = new AgreementFragment();
+            drawerTransaction.replace(R.id.container,fragmentAgreement,AgreementFragment.TAG);
+            drawerTransaction.commit();
+        }else if (id == R.id.nav_contract) {
+            mToolbar.setTitle("お問い合わせ");
             ContractFragment fragmentContract = new ContractFragment();
             drawerTransaction.replace(R.id.container, fragmentContract ,ContractFragment.TAG);
             drawerTransaction.commit();
-        } else if (id == R.id.nav_inquiry) {
-            mToolbar.setTitle("お問い合わせ");
-        } else if (id == R.id.nav_logout) {
+        }  else if (id == R.id.nav_logout) {
             mToolbar.setTitle("ログアウト");
             LogoutFragment fragmentLogout = new LogoutFragment();
             drawerTransaction.replace(R.id.container, fragmentLogout ,LogoutFragment.TAG);
@@ -452,34 +458,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 try {
                     //エラーが出なかった時にしたい処理
 
-
                     //サイズを取得する
-                    /*
-                    ClipData clipData = data.getClipData();
-                    ClipData.Item item = clipData.getItemAt(0);
-                    Uri uri = item.getUri();
+                    Uri uri = data.getData();
                     String abc = getPath(this,uri);
                     File fileSize = new File(abc);
                     long size = fileSize.length();
-                    Log.d("aaaaa","サイズ=" + size);*/
+                    Log.d("aaaaa","サイズ=" + size);
 
+                    if (size<3000000){
+                        Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        if(pFlag==1){
+                            //ヘッダー画像を表示
+                            InputProfileFragment.headerImageView.setImageBitmap(null);
+                            InputProfileFragment.headerImageView.setImageBitmap(img);
+                        }else if(pFlag==2){
+                            //アイコン画像を表示
+                            InputProfileFragment.iconImageView.setImageBitmap(null);
+                            InputProfileFragment.iconImageView.setImageBitmap(img);
+                        }else if(pFlag==3){
+                            MakePostFragment.postImageView.setImageBitmap(null);
+                            MakePostFragment.postImageView.setImageBitmap(img);
+                        }
+                    }else {
+                        if(pFlag==1){
+                            //ヘッダー画像を表示
+                            InputProfileFragment.headerImageView.setImageBitmap(null);
+                            InputProfileFragment.headerImageView.setImageResource(R.drawable.plusbutton);
+                        }else if(pFlag==2){
+                            //アイコン画像を表示
+                            InputProfileFragment.iconImageView.setImageBitmap(null);
+                            InputProfileFragment.iconImageView.setImageResource(R.drawable.plusbutton);
+                        }else if(pFlag==3){
+                            MakePostFragment.postImageView.setImageBitmap(null);
+                            MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
+                        }
 
-                    InputStream in = getContentResolver().openInputStream(data.getData());
-                    Bitmap img = BitmapFactory.decodeStream(in);
-                    //ファイルを開いたら閉じなければならない(書き込むときはtry-catch}のあとに書く)
-                    in.close();
-                    if(pFlag==1){
-                        //ヘッダー画像を表示
-                        InputProfileFragment.headerImageView.setImageBitmap(null);
-                        InputProfileFragment.headerImageView.setImageBitmap(img);
-                    }else if(pFlag==2){
-                        //アイコン画像を表示
-                        InputProfileFragment.iconImageView.setImageBitmap(null);
-                        InputProfileFragment.iconImageView.setImageBitmap(img);
-                    }else if(pFlag==3){
-                        MakePostFragment.postImageView.setImageBitmap(null);
-                        MakePostFragment.postImageView.setImageBitmap(img);
                     }
+
+
+
 
                     //エラー処理
                 } catch (FileNotFoundException e) {
