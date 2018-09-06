@@ -366,24 +366,6 @@ public class DetailsFragment extends Fragment {
 
 
 
-
-
-                //notification
-
-
-//                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "default");
-//                builder.setSmallIcon(R.drawable.noimage);
-//                builder.setContentText(myData.getName()+"さんがあなたの投稿にいいねしました。");
-//                NotificationManagerCompat manager = NotificationManagerCompat.from(getContext());
-//                manager.notify(123, builder.build());
-
-
-
-
-
-
-
-
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -425,13 +407,6 @@ public class DetailsFragment extends Fragment {
                     contentsRef.child(thisPost.getKey()).updateChildren(taughtKey);
 
 
-//                    Map<String,Object> userDataKey = new HashMap<>();
-//
-//                    userDataKey.put("evaluation",totalEv);
-//                    userDataKey.put("taught",totalTa);
-//
-//                    usersRef.child(user.getUid()).updateChildren(userDataKey);
-
                     int totalUserEvaluation = Integer.parseInt(postUserData.getEvaluations());
                     totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
                     String totalUserEv = String.valueOf(totalUserEvaluation);
@@ -449,16 +424,9 @@ public class DetailsFragment extends Fragment {
 
                     usersRef.child(user.getUid()).updateChildren(userDataKey);
 
-
-
-
-
-
                     evaluationSpinner.setVisibility(View.GONE);
                     evaluationTextView.setVisibility(View.GONE);
                     saveButton.setVisibility(View.GONE);
-
-
 
                 }
             }
@@ -468,14 +436,15 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                //updateChildValue(nil)で削除できるデータの追加と同じ
+                contentsRef.child(intentKey).removeValue();
 
+                //前に開いていたフラグメントに戻る
 
+//                ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+//                getFragmentManager().beginTransaction()
+//                        .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+//                        .commit();
 
-
-
-
-                
             }
         });
 
