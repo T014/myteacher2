@@ -59,6 +59,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     int followCount;
     int followerCount;
     Toolbar cToolbar;
+    public static UserData myData;
 
     String intentUserId;
     public static String uid;
@@ -98,7 +99,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
 
-
+            myData = userData;
 
 
 
@@ -112,9 +113,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
             userNameTextView.setText(userData.getName());
             commentTextView.setText(userData.getComment());
-            evaluationConfirmProfileTextView.setText(userData.getEvaluations());
-            sexConfirmProfileTextView.setText("性別"+userData.getSex());
-            ageConfirmProfileTextView.setText("年齢"+userData.getAge());
+            evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
+            sexConfirmProfileTextView.setText("性別："+userData.getSex());
+            ageConfirmProfileTextView.setText("年齢："+userData.getAge());
             byte[] headerBytes = Base64.decode(headerBitmapString,Base64.DEFAULT);
             if(headerBytes.length!=0){
                 Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes,0, headerBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -233,8 +234,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MainActivity.mToolbar.setVisibility(View.GONE);
-        cToolbar.setVisibility(View.GONE);
+
+        //cToolbar.setVisibility(View.GONE);
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
@@ -304,12 +305,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             @Override
             public void onClick(View view) {
 
+
                 if (followEditButton.getText().toString().equals("編集")){
                     InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG)
-                            .commit();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
                 }else{
+
                     //フォロー
                     Map<String,Object> followData = new HashMap<>();
                     String key = followRef.child(user.getUid()).push().getKey();
@@ -353,6 +358,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             public void onClick(View view) {
 
 
+
                 Map<String,Object> makeMessageKeyRef = new HashMap<>();
                 String key = messageRef.push().getKey();
                 makeMessageKeyRef.put("messageKey",key);
@@ -388,9 +394,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 messageKeyBundle.putString("key",key);
                 ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
                 fragmentThisMessage.setArguments(messageKeyBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG)
-                        .commit();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
 
 
             }
@@ -421,13 +430,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        cToolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        MainActivity.mToolbar.setVisibility(View.VISIBLE);
         cToolbar.setVisibility(View.VISIBLE);
     }
 
