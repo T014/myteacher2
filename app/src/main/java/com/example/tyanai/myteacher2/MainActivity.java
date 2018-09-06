@@ -18,6 +18,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,6 +30,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +51,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -222,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //最初に表示させるフラグメントを指定
             TimelineFragment fragmentTimeline = new TimelineFragment();
             transaction.add(R.id.container, fragmentTimeline,TimelineFragment.TAG);
+            transaction.addToBackStack(null);
             transaction.commit();
         }
 
@@ -540,7 +545,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンが押されたときの処理
 
+            //fragmentを取得してinputなら現在の画面を保存して終了
+            //Fragment currentFragment = getActivity().getFragmentManager().findFragmentById(R.id.fragment_container);
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 
 
