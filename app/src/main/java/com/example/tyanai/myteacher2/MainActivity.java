@@ -1,7 +1,6 @@
 package com.example.tyanai.myteacher2;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BaselineLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -87,29 +87,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.item_Timeline:
                     fragmentTimeline = new TimelineFragment();
                     transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Area:
                     fragmentArea = new AreaFragment();
                     transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Post:
                     fragmentMakePost = new MakePostFragment();
                     transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
 
                 case R.id.item_Message:
                     fragmentMessage = new MessageFragment();
                     transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
                     return true;
                 case R.id.item_Community:
                     ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
                     transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
 //                    fragmentCommunity = new CommunityFragment();
 //                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
@@ -144,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     InputProfileFragment fragmentInputProfile = new InputProfileFragment();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragmentInputProfile,InputProfileFragment.TAG);
+                    transaction.addToBackStack(null);
                     transaction.commit();
                 }
 
@@ -201,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //BottomNavigationViewの定義して設置する
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
         //リスナーのセット
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -273,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FFListFragment fragmentFFList = new FFListFragment();
                 fragmentFFList.setArguments(flagBundle);
                 ffListTransaction.replace(R.id.container, fragmentFFList,FFListFragment.TAG);
+                ffListTransaction.addToBackStack(null);
                 ffListTransaction.commit();
                 drawer.closeDrawer(Gravity.LEFT);
             }
@@ -288,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FFListFragment fragmentFFList = new FFListFragment();
                 fragmentFFList.setArguments(flagBundle);
                 ffListTransaction.replace(R.id.container, fragmentFFList,FFListFragment.TAG);
+                ffListTransaction.addToBackStack(null);
                 ffListTransaction.commit();
                 drawer.closeDrawer(Gravity.LEFT);
             }
@@ -299,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FragmentTransaction confirmProfileTransaction = getSupportFragmentManager().beginTransaction();
                 ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
                 confirmProfileTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                confirmProfileTransaction.addToBackStack(null);
                 confirmProfileTransaction.commit();
                 drawer.closeDrawer(Gravity.LEFT);
             }
@@ -336,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
                 NotificationFragment fragmentNotification = new NotificationFragment();
                 optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
+                optionTransaction.addToBackStack(null);
                 optionTransaction.commit();
 
                 break;
@@ -347,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //電話番号とか身分証を登録しているかの確認
                 SearchFragment fragmentSearch = new SearchFragment();
                 optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                optionsTransaction.addToBackStack(null);
                 optionsTransaction.commit();
 
                 break;
@@ -371,26 +383,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mToolbar.setTitle("プロフィール");
             ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
             drawerTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+            drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         }else if (id == R.id.nav_business) {
             mToolbar.setTitle("取引履歴");
             BusinessFragment fragmentBusiness = new BusinessFragment();
             drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+            drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
             } else if (id == R.id.nav_agreement) {
             mToolbar.setTitle("利用規約");
             AgreementFragment fragmentAgreement = new AgreementFragment();
             drawerTransaction.replace(R.id.container,fragmentAgreement,AgreementFragment.TAG);
+            drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         }else if (id == R.id.nav_contract) {
             mToolbar.setTitle("お問い合わせ");
             ContractFragment fragmentContract = new ContractFragment();
             drawerTransaction.replace(R.id.container, fragmentContract ,ContractFragment.TAG);
+            drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         }  else if (id == R.id.nav_logout) {
             mToolbar.setTitle("ログアウト");
             LogoutFragment fragmentLogout = new LogoutFragment();
             drawerTransaction.replace(R.id.container, fragmentLogout ,LogoutFragment.TAG);
+            drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         }
 
@@ -439,7 +456,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
         galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-        //galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
         galleryIntent.setAction(Intent.ACTION_PICK);
         startActivityForResult(Intent.createChooser(galleryIntent,"画像を選択"), CHOOSER_REQUEST_CODE);
 
