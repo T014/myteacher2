@@ -6,8 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,27 +36,28 @@ public class InputProfileFragment extends Fragment {
     public static final String TAG = "InputProfileFragment";
     public static ImageView headerImageView;
     public static ImageView iconImageView;
-    EditText userNameEditText;
-    EditText commentEditText;
+    public static EditText userNameEditText;
+    public static EditText commentEditText;
     Button okButton;
-    Spinner sexSpinner;
-    Spinner ageSpinner;
-    String startDate;
+    public static Spinner sexSpinner;
+    public static Spinner ageSpinner;
+    public static String startDate;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
     DatabaseReference usersContentsRef;
     DatabaseReference contentsRef;
-    String myFollows;
-    String myFollowers;
-    String myPosts;
-    String myEvaluation;
-    String myTaught;
-    String myPeriod;
-    String myGroup;
-    String myFavorite;
-    String newUserName;
-    String newIconBitmapString;
+    public static String myFollows;
+    public static String myFollowers;
+    public static String myPosts;
+    public static String myEvaluation;
+    public static String myTaught;
+    public static String myPeriod;
+    public static String myGroup;
+    public static String myFavorite;
+    public static String newUserName;
+    public static String newIconBitmapString;
+    public static int saveDataFrag = 0;
 
 
 
@@ -115,7 +119,10 @@ public class InputProfileFragment extends Fragment {
                 ageSpinner.setSelection(6);
             }
             startDate = userData.getDate();
-            userNameEditText.setText(userData.getName());
+            if (userName.length()!=0){
+
+                userNameEditText.setText(userData.getName());
+            }
             commentEditText.setText(userData.getComment());
             byte[] headerBytes = Base64.decode(headerBitmapString, Base64.DEFAULT);
             if (headerBytes.length != 0) {
@@ -233,6 +240,12 @@ public class InputProfileFragment extends Fragment {
     };
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+    }
 
 
 
@@ -260,17 +273,13 @@ public class InputProfileFragment extends Fragment {
         MainActivity.bottomNavigationView.setVisibility(View.GONE);
         MainActivity.mToolbar.setVisibility(View.GONE);
 
+
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(iEventListener);
-
-
-
-
-
 
 
 
@@ -316,11 +325,123 @@ public class InputProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                saveData();
+
+                if (newUserName.length()>0){
+                    ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
 
 
 
-                //画像とテキストをデータベースに送信
-                newUserName = userNameEditText.getText().toString();
+            }
+        });
+
+
+    }
+    public static void saveData(){
+
+        if (saveDataFrag == 1) {
+            //バックボタン押されたとき
+            newUserName = userNameEditText.getText().toString();
+            String comment = commentEditText.getText().toString();
+
+
+            //2回同じ処理をしてるから効率化できそう
+
+
+            //header画像の取得
+            BitmapDrawable headerDrawable = (BitmapDrawable) headerImageView.getDrawable();
+            //画像を取り出しエンコードする
+            Bitmap headerBitmap = headerDrawable.getBitmap();
+
+            int headerImageWidth = headerBitmap.getWidth();
+            int headerImageHeight = headerBitmap.getHeight();
+            float headerScale = Math.min((float)500 / headerImageWidth,(float)500 / headerImageHeight);
+
+            //resize
+            Matrix headerMatrix = new Matrix();
+            headerMatrix.postScale(headerScale,headerScale);
+            Bitmap headerResizedImage = Bitmap.createBitmap(headerBitmap,0,0,headerImageWidth,headerImageHeight,headerMatrix,true);
+
+            ByteArrayOutputStream headerBaos = new ByteArrayOutputStream();
+            headerResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, headerBaos);
+            String headerBitmapString = Base64.encodeToString(headerBaos.toByteArray(), Base64.DEFAULT);
+
+
+            //icon画像の取得
+            BitmapDrawable iconDrawable = (BitmapDrawable) iconImageView.getDrawable();
+            //画像を取り出しエンコードする
+            Bitmap iconBitmap = iconDrawable.getBitmap();
+            int iconImageWidth = iconBitmap.getWidth();
+            int iconImageHeight = iconBitmap.getHeight();
+            float iconScale = Math.min((float)500 / iconImageWidth,(float)500 / iconImageHeight);
+
+            //resize
+            Matrix iconMatrix = new Matrix();
+            iconMatrix.postScale(iconScale,iconScale);
+            Bitmap iconResizedImage = Bitmap.createBitmap(iconBitmap,0,0,iconImageWidth,iconImageHeight,iconMatrix,true);
+
+            ByteArrayOutputStream iconBaos = new ByteArrayOutputStream();
+            iconResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, iconBaos);
+            newIconBitmapString = Base64.encodeToString(iconBaos.toByteArray(), Base64.DEFAULT);
+
+
+            DatabaseReference mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH);
+
+            String userId = user.getUid();
+
+            String sex = (String)sexSpinner.getSelectedItem();
+            String age = (String)ageSpinner.getSelectedItem();
+
+            //Firebaseにデータ作成、データのkey取得
+            Map<String,Object> data = new HashMap<>();
+            //データベースへの書き方の確認
+
+            data.put("userName", newUserName);
+            data.put("userId", userId);
+            data.put("comment", comment);
+
+            data.put("follows", myFollows);
+            data.put("followers", myFollowers);
+            data.put("posts", myPosts);
+            data.put("favorites",myFavorite);
+            data.put("sex",sex);
+            data.put("age",age);
+            //評価
+            data.put("evaluations", myEvaluation);
+            //指導人数
+            data.put("taught", myTaught);
+            //アプリ使用期間
+            data.put("period", myPeriod);
+            //参加グループ数
+            data.put("groups", myGroup);
+            data.put("date",startDate);
+            data.put("iconBitmapString", newIconBitmapString);
+            data.put("headerBitmapString", headerBitmapString);
+
+            Map<String,Object> childUpdates = new HashMap<>();
+            childUpdates.put(userId,data);
+            userRef.updateChildren(childUpdates);
+
+
+
+            MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+            MainActivity.mToolbar.setVisibility(View.VISIBLE);
+
+
+
+        }else{
+            //バックボタンでないとき
+            //画像とテキストをデータベースに送信
+            newUserName = userNameEditText.getText().toString();
+
+            if (newUserName.length()>0){
                 String comment = commentEditText.getText().toString();
 
                 //2回同じ処理をしてるから効率化できそう
@@ -363,7 +484,9 @@ public class InputProfileFragment extends Fragment {
                 newIconBitmapString = Base64.encodeToString(iconBaos.toByteArray(), Base64.DEFAULT);
 
 
-                userRef = mDataBaseReference.child(Const.UsersPATH);
+                DatabaseReference mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH);
 
                 String userId = user.getUid();
 
@@ -402,23 +525,22 @@ public class InputProfileFragment extends Fragment {
 
 
 
-                contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(tEventListener);
-
-
                 MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                 MainActivity.mToolbar.setVisibility(View.VISIBLE);
 
 
-                ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                Activity activity = getActivity();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG)
-                        .commit();
 
 
+
+            }else {
+                //名前を入力して！
+                Snackbar.make(MainActivity.snack, "ユーザー名を入力してください", Snackbar.LENGTH_LONG).show();
 
             }
-        });
+
+        }
+
 
     }
+
 }
