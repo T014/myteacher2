@@ -1,21 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="150dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/noimage"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="60dp"
+                android:id="@+id/iconDetailImageView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:id="@+id/timeDetailTextView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginTop="70dp"
+                android:layout_toEndOf="@+id/iconDetailImageView"
+                android:id="@+id/userNameDetailTextView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@id/userNameDetailTextView"
+                android:id="@+id/evaluationDetailTextView"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userNameDetailTextView"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/areaDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/areaDetailTextView"
+                android:layout_below="@+id/evaluationDetailTextView"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/typeDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/evaluationDetailTextView"
+                android:layout_toEndOf="@+id/typeDetailTextView"
+                android:id="@+id/levelDetailTextView"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/iconDetailImageView"
+                android:id="@+id/widthView"
+                android:layout_marginTop="16dp"
+                android:background="#ff808080" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/widthView"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/contentsDetailTextView"/>
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="15dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/noimage"
+                android:layout_below="@+id/contentsDetailTextView"
+                android:layout_gravity="center"
+                android:id="@+id/postContentsImageView"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fav30"
+                android:layout_below="@+id/postContentsImageView"
+                android:id="@+id/favButton"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/favButton"
+                android:layout_marginLeft="15dp"
+                android:layout_below="@+id/postContentsImageView"
+                android:id="@+id/goodDetailTextView"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="購入リクエスト"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/postContentsImageView"
+                android:layout_toEndOf="@id/goodDetailTextView"
+                android:id="@+id/buyButton"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/buyButton"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/postContentsImageView"
+                android:id="@+id/boughtDetailTextView"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/removeButton"
+                android:text="削除"
+                android:layout_toEndOf="@id/boughtDetailTextView"
+                android:layout_below="@+id/postContentsImageView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/favButton"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/dateDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/dateDetailTextView"
+                android:layout_below="@+id/favButton"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/placeDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dateDetailTextView"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/howLongDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/dateDetailTextView"
+                android:layout_toRightOf="@id/howLongDetailTextView"
+                android:id="@+id/costDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/dateDetailTextView"
+                android:layout_toRightOf="@+id/costDetailTextView"
+                android:id="@+id/methodDetailTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/evaluationTextView"
+                android:layout_marginLeft="15dp"
+                android:layout_below="@+id/howLongDetailTextView"
+                android:text="受講済みの方"/>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/evaluationsList"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@id/evaluationTextView"
+                android:layout_below="@+id/howLongDetailTextView"
+                android:id="@+id/evaluationSpinner"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/saveButton"
+                android:layout_below="@+id/evaluationSpinner"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:text="完了"/>
 
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/noimage"
-        android:id="@+id/postContentsImageView"/>
+        </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:id="@+id/detailsTextView"/>
 
-</LinearLayout>
+
+
+</ScrollView>
