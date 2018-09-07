@@ -2,12 +2,14 @@ package com.example.tyanai.myteacher2;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +37,7 @@ public class SearchFragment extends Fragment {
     Spinner costSpinner;
     Spinner sexSpinner;
     Spinner ageSpinner;
+    Spinner costTypeSpinner;
     Button searchButton;
     String postType;
 
@@ -43,11 +46,14 @@ public class SearchFragment extends Fragment {
     String postEvaluation;
     String postTaught;
     String postMethod;
-    String date;
-    String place;
+    String postDate;
+    String postPlace;
     String postCost;
     String postSex;
     String postAge;
+    String postCostType;
+
+    TextView typeTextView;
 
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
@@ -70,6 +76,7 @@ public class SearchFragment extends Fragment {
             String date = (String) map.get("date");
             String imageBitmapString = (String) map.get("imageBitmapString");
             String contents = (String) map.get("contents");
+            String costType = (String) map.get("costType");
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
@@ -93,7 +100,7 @@ public class SearchFragment extends Fragment {
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
 
@@ -137,22 +144,21 @@ public class SearchFragment extends Fragment {
                             //受講方法
                             if (postMethod.equals("指定しない") || postMethod.equals(method)){
                                 //日時
-
-                                //場所
-
-                                //価格
-                                if(postCost.equals("指定しない") || iPostCost<=iSelectedPostCost){
-                                    //性別
-                                    if (postSex.equals("未設定") || sex.equals(postSex)){
-                                        //年齢
-                                        if (postAge.equals("未設定") || age.equals(postAge)){
-
-                                            searchArrayList.add(postData);
-
-
-
-
-
+                                if (postDate.equals("指定しない") || postDate.equals(date)){
+                                    //場所
+                                    if (postPlace.equals("指定しない") || postPlace.equals(place)){
+                                        //価格形式
+                                        if (postCostType.equals("指定しない") || postCostType.equals(costType)){
+                                            //価格
+                                            if(postCost.equals("指定しない") || iPostCost<=iSelectedPostCost){
+                                                //性別
+                                                if (postSex.equals("未設定") || sex.equals(postSex)){
+                                                    //年齢
+                                                    if (postAge.equals("未設定") || age.equals(postAge)){
+                                                        searchArrayList.add(postData);
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -169,9 +175,6 @@ public class SearchFragment extends Fragment {
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -182,10 +185,6 @@ public class SearchFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
-
-
-
     };
 
 
@@ -203,6 +202,7 @@ public class SearchFragment extends Fragment {
         musicPostTypeSpinner = (Spinner)v.findViewById(R.id.musicPostTypeSpinner);
         editPostTypeSpinner = (Spinner)v.findViewById(R.id.editPostTypeSpinner);
         studyPostTypeSpinner = (Spinner)v.findViewById(R.id.studyPostTypeSpinner);
+        costTypeSpinner = (Spinner)v.findViewById(R.id.costTypeSpinner);
         levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
         userEvaluationSpinner = (Spinner)v.findViewById(R.id.userEvaluationSpinner);
         evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
@@ -214,10 +214,7 @@ public class SearchFragment extends Fragment {
         sexSpinner = (Spinner)v.findViewById(R.id.sexSpinner);
         ageSpinner = (Spinner)v.findViewById(R.id.ageSpinner);
         searchButton = (Button)v.findViewById(R.id.searchButton);
-
-
-
-
+        typeTextView = (TextView)v.findViewById(R.id.typeTextView);
 
         return v;
     }
@@ -258,6 +255,11 @@ public class SearchFragment extends Fragment {
             editPostTypeSpinner.setVisibility(View.GONE);
             studyPostTypeSpinner.setVisibility(View.VISIBLE);
         }else{
+            sportsPostTypeSpinner.setVisibility(View.GONE);
+            musicPostTypeSpinner.setVisibility(View.GONE);
+            editPostTypeSpinner.setVisibility(View.GONE);
+            studyPostTypeSpinner.setVisibility(View.GONE);
+            typeTextView.setVisibility(View.GONE);
             postType="その他";
         }
             }
@@ -293,8 +295,9 @@ public class SearchFragment extends Fragment {
                 postEvaluation = (String)evaluationSpinner.getSelectedItem();
                 postTaught = (String)taughtSpinner.getSelectedItem();
                 postMethod = (String)methodSpinner.getSelectedItem();
-                date = (String)dateSpinner.getSelectedItem();
-                place = (String)placeSpinner.getSelectedItem();
+                postDate = (String)dateSpinner.getSelectedItem();
+                postPlace = (String)placeSpinner.getSelectedItem();
+                postCostType = (String) costTypeSpinner.getSelectedItem();
                 postCost = (String)costSpinner.getSelectedItem();
                 postSex = (String)sexSpinner.getSelectedItem();
                 postAge = (String)ageSpinner.getSelectedItem();
@@ -309,9 +312,10 @@ public class SearchFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
 
             }
         });
