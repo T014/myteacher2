@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,7 @@ public class MakePostFragment extends Fragment {
     private Spinner methodSpinner;
     private Spinner howLongSpinner;
     private Spinner careerSpinner;
+    private Spinner costTypeSpinner;
     private Spinner levelSpinner;
     private Spinner placeSpinner;
     private Spinner stockSpinner;
@@ -143,6 +146,7 @@ public class MakePostFragment extends Fragment {
         levelSpinner = (Spinner)v.findViewById(R.id.levelSpinner);
         placeSpinner = (Spinner)v.findViewById(R.id.placeSpinner);
         stockSpinner = (Spinner)v.findViewById(R.id.stockSpinner);
+        costTypeSpinner = (Spinner)v.findViewById(R.id.costSpinner);
         dateButton = (Button)v.findViewById(R.id.dateButton);
         dateTextView = (TextView)v.findViewById(R.id.dateTextView);
         clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
@@ -389,15 +393,15 @@ public class MakePostFragment extends Fragment {
                         type=selectedType;
                         makeTypeRef="athletics";
                     }else if(selectedType.equals("水泳")){
-                        type=selectedType;
-                        makeTypeRef="swim";
-                    }else if(selectedType.equals("ゴルフ")){
-                        type=selectedType;
-                        makeTypeRef="golf";
-                    }else if(selectedType.equals("卓球")){
-                        type=selectedType;
-                        makeTypeRef="tableTennis";
-                    }else if(selectedType.equals("その他のスポーツ")){
+//                        type=selectedType;
+//                        makeTypeRef="swim";
+//                    }else if(selectedType.equals("ゴルフ")){
+//                        type=selectedType;
+//                        makeTypeRef="golf";
+//                    }else if(selectedType.equals("卓球")){
+//                        type=selectedType;
+//                        makeTypeRef="tableTennis";
+                    }else{
                         type=selectedType;
                         makeTypeRef="otherSports";
                     }
@@ -420,16 +424,16 @@ public class MakePostFragment extends Fragment {
                         //スポーツの一覧を表示する
                         type=selectedType;
                         makeTypeRef="sing";
-                    }else if(selectedType.equals("ピアノ")){
+                    }else if(selectedType.equals("楽器")){
                         type=selectedType;
                         makeTypeRef="piano";
-                    }else if(selectedType.equals("ギター")){
+                    }else if(selectedType.equals("ボイスパーカッション")){
                         type=selectedType;
                         makeTypeRef="guitar";
-                    }else if(selectedType.equals("ドラム")){
+                    }else if(selectedType.equals("ラップ")){
                         type=selectedType;
                         makeTypeRef="drum";
-                    }else if(selectedType.equals("その他の音楽")){
+                    }else{
                         type=selectedType;
                         makeTypeRef="otherMusic";
                     }
@@ -454,7 +458,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("編集")){
                         type=selectedType;
                         makeTypeRef="edit";
-                    }else if(selectedType.equals("その他の動画")){
+                    }else{
                         type=selectedType;
                         makeTypeRef="otherMovie";
                     }
@@ -486,7 +490,7 @@ public class MakePostFragment extends Fragment {
                     }else if(selectedType.equals("理科")){
                         type=selectedType;
                         makeTypeRef="science";
-                    }else if(selectedType.equals("その他の教科")){
+                    }else{
                         type=selectedType;
                         makeTypeRef="otherStudy";
                     }
@@ -581,64 +585,165 @@ public class MakePostFragment extends Fragment {
                 String career = (String) careerSpinner.getSelectedItem();
                 String place=(String) placeSpinner.getSelectedItem();
                 String stock = (String) stockSpinner.getSelectedItem();
-
-                Map<String,Object> data = new HashMap<>();
-
-                String key = contentsRef.push().getKey();
-
-                data.put("userId", userId);
-                data.put("userName",myData.getName());
-                data.put("time", time);
-                data.put("key", key);
-                data.put("date", date);
-                data.put("imageBitmapString", imageBitmapString);
-                data.put("contents",contents );
-                data.put("cost",cost );
-                data.put("howLong", howLong);
-                data.put("goods",goods );
-                data.put("share",share );
-                data.put("bought",bought );
-                data.put("evaluation", evaluation);
-                data.put("cancel",cancel );
-                data.put("method", method);
-                data.put("postArea", area);
-                data.put("postType",type );
-                data.put("level",level );
-                data.put("career", career);
-                data.put("place",place);
-                data.put("sex",myData.getSex());
-                data.put("age",myData.getAge());
-                data.put("taught",myData.getTaught());
-                data.put("userEvaluation",myData.getEvaluations());
-                data.put("userIconBitmapString",myData.getIconBitmapString());
-                data.put("stock",stock);
+                String costType = (String) costTypeSpinner.getSelectedItem();
+                char firstCost = cost.charAt(0);
+                String cFirstCost = String.valueOf(firstCost);
 
 
 
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,data);
-                contentsRef.updateChildren(childUpdates);
+                if (area.length()!=0){
+                    if (type.length()!=0){
+                        if (contents.length()!=0){
+                            if (cost.length()!=0){
+                                if (!(cFirstCost.equals("0"))){
+                                    Map<String,Object> data = new HashMap<>();
+
+                                    String key = contentsRef.push().getKey();
+
+                                    data.put("userId", userId);
+                                    data.put("userName",myData.getName());
+                                    data.put("time", time);
+                                    data.put("key", key);
+                                    data.put("date", date);
+                                    data.put("imageBitmapString", imageBitmapString);
+                                    data.put("contents",contents);
+                                    data.put("costType",costType);
+                                    data.put("cost",cost );
+                                    data.put("howLong", howLong);
+                                    data.put("goods",goods );
+                                    data.put("share",share );
+                                    data.put("bought",bought );
+                                    data.put("evaluation", evaluation);
+                                    data.put("cancel",cancel );
+                                    data.put("method", method);
+                                    data.put("postArea", area);
+                                    data.put("postType",type );
+                                    data.put("level",level );
+                                    data.put("career", career);
+                                    data.put("place",place);
+                                    data.put("sex",myData.getSex());
+                                    data.put("age",myData.getAge());
+                                    data.put("taught",myData.getTaught());
+                                    data.put("userEvaluation",myData.getEvaluations());
+                                    data.put("userIconBitmapString",myData.getIconBitmapString());
+                                    data.put("stock",stock);
 
 
 
-
-                Map<String,Object> postKey = new HashMap<>();
-                String aaa = usersContentsRef.child(user.getUid()).push().getKey();
-
-                postKey.put("key",key);
-                postKey.put("userId",user.getUid());
-
-                Map<String,Object> postUpdates = new HashMap<>();
-                postUpdates.put(aaa,postKey);
-                usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+                                    Map<String,Object> childUpdates = new HashMap<>();
+                                    childUpdates.put(key,data);
+                                    contentsRef.updateChildren(childUpdates);
 
 
 
 
-                MakePostFragment fragmentMakePost = new MakePostFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentMakePost, MakePostFragment.TAG)
-                        .commit();
+                                    Map<String,Object> postKey = new HashMap<>();
+                                    String aaa = usersContentsRef.child(user.getUid()).push().getKey();
+
+                                    postKey.put("key",key);
+                                    postKey.put("userId",user.getUid());
+
+                                    Map<String,Object> postUpdates = new HashMap<>();
+                                    postUpdates.put(aaa,postKey);
+                                    usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+
+                                    MakePostFragment fragmentMakePost = new MakePostFragment();
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                }else{
+                                    Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
+                                }
+
+
+                            }else{
+                                if (costType.equals("応相談")){
+                                    Map<String,Object> data = new HashMap<>();
+
+                                    String key = contentsRef.push().getKey();
+
+                                    data.put("userId", userId);
+                                    data.put("userName",myData.getName());
+                                    data.put("time", time);
+                                    data.put("key", key);
+                                    data.put("date", date);
+                                    data.put("imageBitmapString", imageBitmapString);
+                                    data.put("contents",contents);
+                                    data.put("costType",costType);
+                                    data.put("cost",cost );
+                                    data.put("howLong", howLong);
+                                    data.put("goods",goods );
+                                    data.put("share",share );
+                                    data.put("bought",bought );
+                                    data.put("evaluation", evaluation);
+                                    data.put("cancel",cancel );
+                                    data.put("method", method);
+                                    data.put("postArea", area);
+                                    data.put("postType",type );
+                                    data.put("level",level );
+                                    data.put("career", career);
+                                    data.put("place",place);
+                                    data.put("sex",myData.getSex());
+                                    data.put("age",myData.getAge());
+                                    data.put("taught",myData.getTaught());
+                                    data.put("userEvaluation",myData.getEvaluations());
+                                    data.put("userIconBitmapString",myData.getIconBitmapString());
+                                    data.put("stock",stock);
+
+
+
+                                    Map<String,Object> childUpdates = new HashMap<>();
+                                    childUpdates.put(key,data);
+                                    contentsRef.updateChildren(childUpdates);
+
+
+
+
+                                    Map<String,Object> postKey = new HashMap<>();
+                                    String aaa = usersContentsRef.child(user.getUid()).push().getKey();
+
+                                    postKey.put("key",key);
+                                    postKey.put("userId",user.getUid());
+
+                                    Map<String,Object> postUpdates = new HashMap<>();
+                                    postUpdates.put(aaa,postKey);
+                                    usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+
+
+                                    MakePostFragment fragmentMakePost = new MakePostFragment();
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                }else{
+                                    Snackbar.make(MainActivity.snack, "価格を入力してください。", Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        }else{
+                            Snackbar.make(MainActivity.snack, "内容を入力してください。", Snackbar.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Snackbar.make(MainActivity.snack, "種目を選択してください。", Snackbar.LENGTH_LONG).show();
+                    }
+                }else{
+                    Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             }
         });
