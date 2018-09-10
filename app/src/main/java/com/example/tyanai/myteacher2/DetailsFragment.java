@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -577,20 +573,6 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-//                int stockCount = Integer.parseInt(thisPost.getStock());
-//                stockCount = stockCount+1;
-//                String stc = String.valueOf(stockCount);
-//
-//                int totalBought = Integer.parseInt(thisPost.getBought());
-//                totalBought =totalBought-1;
-//                String totalBg =String.valueOf(totalBought);
-//
-//                Map<String,Object> userDataKey = new HashMap<>();
-//                userDataKey.put("bought",totalBg);
-//                userDataKey.put("stock",stc);
-//                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
-
-
                 //消してstockに+1する
                 requestRef.child(BusinessFragment.tradeKey).removeValue();
 
@@ -610,20 +592,6 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-//                int stockCount = Integer.parseInt(thisPost.getStock());
-//                stockCount = stockCount+1;
-//                String stc = String.valueOf(stockCount);
-//
-//                int totalBought = Integer.parseInt(thisPost.getBought());
-//                totalBought =totalBought-1;
-//                String totalBg =String.valueOf(totalBought);
-//
-//                Map<String,Object> userDataKey = new HashMap<>();
-//                userDataKey.put("bought",totalBg);
-//                userDataKey.put("stock",stc);
-//                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
-
 
                 //消してstockに+1する
                 requestRef.child(BusinessFragment.tradeKey).removeValue();
@@ -658,9 +626,6 @@ public class DetailsFragment extends Fragment {
                     Map<String,Object> tradeKey = new HashMap<>();
                     String key = requestRef.child(user.getUid()).push().getKey();
 
-//                    stockCount = stockCount-1;
-//                    String stc = String.valueOf(stockCount);
-
                     tradeKey.put("tradeKey",key);
                     tradeKey.put("bought",user.getUid());
                     tradeKey.put("sold",thisPost.getUserId());
@@ -680,9 +645,6 @@ public class DetailsFragment extends Fragment {
                     childUpdates.put(key,tradeKey);
                     requestRef.updateChildren(childUpdates);
 
-//                    int totalBought = Integer.parseInt(thisPost.getBought());
-//                    totalBought =totalBought+1;
-//                    String totalBg =String.valueOf(totalBought);
 
                     Map<String,Object> userDataKey = new HashMap<>();
                     userDataKey.put("bought",thisPost.getBought());
