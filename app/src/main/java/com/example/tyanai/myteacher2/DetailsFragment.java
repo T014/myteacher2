@@ -76,6 +76,7 @@ public class DetailsFragment extends Fragment {
     Button permitButton;
     Button rejectButton;
     Button cancelButton;
+    String screenNum;
 
 
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -181,6 +182,9 @@ public class DetailsFragment extends Fragment {
                 boughtDetailTextView.setText("購入者数：");
                 goodDetailTextView.setText("いいね：");
                 buyButton.setVisibility(View.GONE);
+                evaluationSpinner.setVisibility(View.GONE);
+                evaluationTextView.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
             }else{
                 boughtDetailTextView.setText(null);
                 goodDetailTextView.setText(null);
@@ -273,6 +277,48 @@ public class DetailsFragment extends Fragment {
 
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        if (screenNum!=null){
+            if (screenNum.equals("business")){
+                //取引履歴
+                removeButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("apply")){
+                //取引申請
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+                evaluationSpinner.setVisibility(View.GONE);
+                evaluationTextView.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("request")){
+                //取引リクエスト
+                cancelButton.setVisibility(View.GONE);
+                removeButton.setVisibility(View.GONE);
+                evaluationSpinner.setVisibility(View.GONE);
+                evaluationTextView.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("timeLine")){
+                //タイムライン
+                cancelButton.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+                evaluationSpinner.setVisibility(View.GONE);
+                evaluationTextView.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("confirm")){
+                //プロフィール
+                cancelButton.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("grid")){
+                cancelButton.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }
+        }
 
 
 
@@ -672,6 +718,8 @@ public class DetailsFragment extends Fragment {
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         Bundle bundle = getArguments();
         intentKey = bundle.getString("key");
+        screenNum = bundle.getString("screenKey");
+
         contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
@@ -684,11 +732,11 @@ public class DetailsFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        BusinessFragment.tradeKey=null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        BusinessFragment.tradeKey=null;
+//    }
 
 
 
