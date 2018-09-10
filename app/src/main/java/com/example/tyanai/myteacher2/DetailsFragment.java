@@ -732,11 +732,6 @@ public class DetailsFragment extends Fragment {
     }
 
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        BusinessFragment.tradeKey=null;
-//    }
 
 
 
