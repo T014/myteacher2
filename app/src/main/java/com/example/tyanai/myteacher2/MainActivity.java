@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -357,7 +358,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.searchButton:
-                //user = FirebaseAuth.getInstance().getCurrentUser();
 
                 FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
                 //電話番号とか身分証を登録しているかの確認
@@ -392,11 +392,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerTransaction.commit();
         }else if (id == R.id.nav_business) {
             mToolbar.setTitle("取引履歴");
+            Bundle screenBundle = new Bundle();
+            screenBundle.putString("screenKey","business");
             BusinessFragment fragmentBusiness = new BusinessFragment();
+            fragmentBusiness.setArguments(screenBundle);
             drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
             drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
-            } else if (id == R.id.nav_agreement) {
+        }else if (id == R.id.nav_apply) {
+            mToolbar.setTitle("利用申請");
+            Bundle screenBundle = new Bundle();
+            screenBundle.putString("screenKey","apply");
+            BusinessFragment fragmentBusiness = new BusinessFragment();
+            fragmentBusiness.setArguments(screenBundle);
+            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+            drawerTransaction.addToBackStack(null);
+            drawerTransaction.commit();
+        } else if (id == R.id.nav_request) {
+            mToolbar.setTitle("利用リクエスト");
+            Bundle screenBundle = new Bundle();
+            screenBundle.putString("screenKey","request");
+            BusinessFragment fragmentBusiness = new BusinessFragment();
+            fragmentBusiness.setArguments(screenBundle);
+            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+            drawerTransaction.addToBackStack(null);
+            drawerTransaction.commit();
+        }  else if (id == R.id.nav_agreement) {
             mToolbar.setTitle("利用規約");
             AgreementFragment fragmentAgreement = new AgreementFragment();
             drawerTransaction.replace(R.id.container,fragmentAgreement,AgreementFragment.TAG);
@@ -454,6 +475,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //バックスタックの登録数をチェックして0であればPopUpは存在しない
+        if (1 == getSupportFragmentManager().getBackStackEntryCount()){
+            this.finish();
+            this.moveTaskToBack(true);
+        }
+     super.onBackPressed();
+}
 
 
     private void showChooser() {
@@ -548,11 +578,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             // 戻るボタンが押されたときの処理
-
             //fragmentを取得してinputなら現在の画面を保存して終了
-            //Fragment currentFragment = getActivity().getFragmentManager().findFragmentById(R.id.fragment_container);
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
 
+            if (currentFragment!=null){
+                String currentFragmentTag = currentFragment.getTag();
+                if (currentFragmentTag.equals("InputProfileFragment")){
+                    InputProfileFragment.saveDataFrag=1;
+                    InputProfileFragment.saveData();
+                }else if (currentFragmentTag.equals("MakePostFragment")){
+                    //別の領域を作って保存しておく
+                }
+            }
+//        }else{
+//            this.finish();
+//            this.moveTaskToBack(true);
+//            return false;
         }
         return super.onKeyDown(keyCode, event);
     }
