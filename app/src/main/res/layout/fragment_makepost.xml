@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:id="@+id/areaRadioGroup">
+                android:id="@+id/areaRadioGroup1">
 
 
                 <RadioButton
@@ -44,13 +44,26 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/cookRadioButton"
-                    android:text="料理"/>
+                    android:id="@+id/otherRadioButton"
+                    android:text="その他"/>
+
+
+
+            </RadioGroup>
+<!--
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/areaRadioGroup2">
+
+
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/handicraftRadioButton"
                     android:text="手芸"/>
+
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,17 +77,25 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/gameRadioButton"
+                    android:text="ゲーム"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/otherRadioButton"
                     android:text="その他"/>
 
 
             </RadioGroup>
 
+-->
+
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/sportsRadioGroup"
                 android:orientation="horizontal">
+
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -99,19 +120,101 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/golfRadioButton"
-                    android:text="ゴルフ"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tableTennisRadioButton"
-                    android:text="卓球"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/otherSportsRadioButton"
                     android:text="その他"/>
+            </RadioGroup>
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/musicRadioGroup"
+                android:orientation="horizontal">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/singRadioButton"
+                    android:text="歌"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/instrumentRadioButton"
+                    android:text="楽器"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vocalPercussionRadioButton"
+                    android:text="ボイパ"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rapRadioButton"
+                    android:text="ラップ"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/otherMusicRadioButton"
+                    android:text="その他"/>
+            </RadioGroup>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/movieRadioGroup"
+                android:orientation="horizontal">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/filmRadioButton"
+                    android:text="撮影"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editRadioButton"
+                    android:text="編集"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/otherMovieRadioButton"
+                    android:text="その他"/>
+            </RadioGroup>
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/studyRadioGroup"
+                android:orientation="horizontal">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/japaneseRadioButton"
+                    android:text="国語"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mathematicsRadioButton"
+                    android:text="数学"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/englishRadioButton"
+                    android:text="英語"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scienceRadioButton"
+                    android:text="理科"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/otherStudyRadioButton"
+                    android:text="その他"/>
             </RadioGroup>
 
 
@@ -123,8 +226,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:id="@+id/postImageView"
                     android:layout_gravity="center"
                     android:src="@drawable/noimage"/>
@@ -132,6 +235,8 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="120"
+                    android:maxLines="10"
                     android:id="@+id/contentsEditText"
                     android:hint="内容を入力"/>
                 <Button
@@ -167,12 +272,23 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/placeSpinner"
                     android:entries="@array/placeList"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="価格形式を選択"/>
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/postCost"
+                    android:id="@+id/costSpinner"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/costEditText"
+                    android:maxLines="1"
+                    android:maxLength="5"
                     android:inputType="number"
-                    android:hint="自給を入力(コイン)"/>
+                    android:hint="時給を入力(コイン)"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,6 +325,15 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/levelSpinner"
                     android:entries="@array/postLevelList"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="何人に教える？"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/stockSpinner"
+                    android:entries="@array/postStockList"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -224,10 +349,6 @@
 
         </LinearLayout>
 
-
     </ScrollView>
 
-
-
-
-</LinearLayout>
+    </LinearLayout>
