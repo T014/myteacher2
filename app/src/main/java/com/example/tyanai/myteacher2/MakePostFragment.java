@@ -66,12 +66,28 @@ public class MakePostFragment extends Fragment {
     private RadioButton musicRadioButton;
     private RadioButton movieRadioButton;
     private RadioButton studyRadioButton;
-    private RadioButton cookRadioButton;
-    private RadioButton handicraftRadioButton;
-    private RadioButton artRadioButton;
-    private RadioButton comicRadioButton;
-    private RadioButton gameRadioButton;
     private RadioButton otherRadioButton;
+    boolean flag = false;
+    private RadioButton tennisRadioButton;
+    private RadioButton soccerRadioButton;
+    private RadioButton athleticsRadioButton;
+    private RadioButton swimRadioButton;
+    private RadioButton otherSportsRadioButton;
+    private RadioButton singRadioButton;
+    private RadioButton instrumentRadioButton;
+    private RadioButton vocalPercussionRadioButton;
+    private RadioButton rapRadioButton;
+    private RadioButton otherMusicRadioButton;
+    private RadioButton filmRadioButton;
+    private RadioButton editRadioButton;
+    private RadioButton otherMovieRadioButton;
+    private RadioButton japaneseRadioButton;
+    private RadioButton mathematicsRadioButton;
+    private RadioButton englishRadioButton;
+    private RadioButton scienceRadioButton;
+    private RadioButton otherStudyRadioButton;
+
+
 
     public static TextView dateTextView;
     FirebaseUser user;
@@ -80,10 +96,171 @@ public class MakePostFragment extends Fragment {
     DatabaseReference areaRef;
     DatabaseReference contentsRef;
     DatabaseReference mDataBaseReference;
+    DatabaseReference savePostRef;
     UserData myData;
     String makeAreaRef;
     String makeTypeRef;
     private int mYear, mMonth, mDay, mHour, mMinute;
+
+
+
+
+
+    private ChildEventListener oEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String date = (String) map.get("date");
+            String imageBitmapString = (String) map.get("imageBitmapString");
+            String contents = (String) map.get("contents");
+            String costTypePosition = (String) map.get("costTypePosition");
+            String cost = (String) map.get("cost");
+            String howLongPosition = (String) map.get("howLongPosition");
+            String methodPosition = (String) map.get("methodPosition");
+            String postArea = (String) map.get("postArea");
+            String postType = (String) map.get("postType");
+            String levelPosition = (String) map.get("levelPosition");
+            String careerPosition = (String) map.get("careerPosition");
+            String stockPosition = (String) map.get("stockPosition");
+            String placePosition = (String) map.get("placePosition");
+
+            if (postArea!=null){
+                if (postArea.equals("sports")){
+                    sportsRadioButton.setChecked(true);
+                    sportsGroup.setVisibility(View.VISIBLE);
+
+                }else if (postArea.equals("music")){
+                    musicRadioButton.setChecked(true);
+                    musicGroup.setVisibility(View.VISIBLE);
+                }else if (postArea.equals("movie")){
+                    movieRadioButton.setChecked(true);
+                    movieGroup.setVisibility(View.VISIBLE);
+                }else if (postArea.equals("study")){
+                    studyRadioButton.setChecked(true);
+                    studyGroup.setVisibility(View.VISIBLE);
+                }else if (postArea.equals("other")){
+                    otherRadioButton.setChecked(true);
+                }
+            }else{
+                sportsRadioButton.setChecked(true);
+                sportsGroup.setVisibility(View.VISIBLE);
+            }
+            if (postType!=null){
+                if (postArea.equals("sports")){
+                    if (postType.equals("tennis")){
+                        tennisRadioButton.setChecked(true);
+                    }else if (postType.equals("soccer")){
+                        soccerRadioButton.setChecked(true);
+                    }else if (postType.equals("athletics")){
+                        athleticsRadioButton.setChecked(true);
+                    }else if (postType.equals("swim")){
+                        swimRadioButton.setChecked(true);
+                    }else if (postType.equals("otherSports")){
+                        otherSportsRadioButton.setChecked(true);
+                    }
+                }else if (postArea.equals("music")){
+                    if (postType.equals("sing")){
+                        singRadioButton.setChecked(true);
+                    }else if (postType.equals("instrument")){
+                        instrumentRadioButton.setChecked(true);
+                    }else if (postType.equals("vocalPercussion")){
+                        vocalPercussionRadioButton.setChecked(true);
+                    }else if (postType.equals("rap")){
+                        rapRadioButton.setChecked(true);
+                    }else if (postType.equals("otherMusic")){
+                        otherMusicRadioButton.setChecked(true);
+                    }
+                }else if (postArea.equals("movie")){
+                    if (postType.equals("film")){
+                        filmRadioButton.setChecked(true);
+                    }else if (postType.equals("edit")){
+                        editRadioButton.setChecked(true);
+                    }else if (postType.equals("otherMovie")){
+                        otherMovieRadioButton.setChecked(true);
+                    }
+                }else if (postArea.equals("study")){
+                    if (postType.equals("japanese")){
+                        japaneseRadioButton.setChecked(true);
+                    }else if (postType.equals("mathematics")){
+                        mathematicsRadioButton.setChecked(true);
+                    }else if (postType.equals("english")){
+                        englishRadioButton.setChecked(true);
+                    }else if (postType.equals("science")){
+                        scienceRadioButton.setChecked(true);
+                    }else if (postType.equals("otherStudy")){
+                        otherStudyRadioButton.setChecked(true);
+                    }
+                }
+            }else{
+                //tennis
+                tennisRadioButton.setChecked(true);
+            }
+
+
+            if (costTypePosition!=null){
+                int cp = Integer.valueOf(costTypePosition);
+                costTypeSpinner.setSelection(cp);
+            }
+            if (howLongPosition!=null){
+                int hp = Integer.valueOf(howLongPosition);
+                howLongSpinner.setSelection(hp);
+            }
+            if (methodPosition!=null){
+                int mp = Integer.valueOf(methodPosition);
+                methodSpinner.setSelection(mp);
+            }
+            if (levelPosition!=null){
+                int lp = Integer.valueOf(levelPosition);
+                levelSpinner.setSelection(lp);
+            }
+            if (careerPosition!=null){
+                int cp = Integer.valueOf(careerPosition);
+                careerSpinner.setSelection(cp);
+            }
+            if (stockPosition!=null){
+                int sp = Integer.valueOf(stockPosition);
+                stockSpinner.setSelection(sp);
+            }
+            if (contents!=null){
+                contentsEditText.setText(contents);
+            }
+            if (cost!=null){
+                costEditText.setText(cost);
+            }
+            if (date!=null){
+                dateTextView.setText(date);
+            }
+            byte[] contentsImageBytes = Base64.decode(imageBitmapString,Base64.DEFAULT);
+            if(contentsImageBytes.length!=0){
+                Bitmap contentsImageBitmap = BitmapFactory.decodeByteArray(contentsImageBytes,0, contentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                postImageView.setImageBitmap(contentsImageBitmap);
+            }
+            if (placePosition!=null){
+                int p = Integer.valueOf(placePosition);
+                placeSpinner.setSelection(p);
+            }
+
+
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+
+
 
 
     private ChildEventListener mEventListener = new ChildEventListener() {
@@ -172,10 +349,24 @@ public class MakePostFragment extends Fragment {
 //        gameRadioButton = (RadioButton)v.findViewById(R.id.gameRadioButton);
 //        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
 
-
-
-
-
+        tennisRadioButton = (RadioButton)v.findViewById(R.id.tennisRadioButton);
+        soccerRadioButton = (RadioButton)v.findViewById(R.id.soccerRadioButton);
+        athleticsRadioButton = (RadioButton)v.findViewById(R.id.athleticsRadioButton);
+        swimRadioButton = (RadioButton)v.findViewById(R.id.swimRadioButton);
+        otherSportsRadioButton = (RadioButton)v.findViewById(R.id.otherSportsRadioButton);
+        singRadioButton = (RadioButton)v.findViewById(R.id.singRadioButton);
+        instrumentRadioButton = (RadioButton)v.findViewById(R.id.instrumentRadioButton);
+        vocalPercussionRadioButton = (RadioButton)v.findViewById(R.id.vocalPercussionRadioButton);
+        rapRadioButton = (RadioButton)v.findViewById(R.id.rapRadioButton);
+        otherMusicRadioButton = (RadioButton)v.findViewById(R.id.otherMusicRadioButton);
+        filmRadioButton = (RadioButton)v.findViewById(R.id.filmRadioButton);
+        editRadioButton = (RadioButton)v.findViewById(R.id.editRadioButton);
+        otherMovieRadioButton = (RadioButton)v.findViewById(R.id.otherMovieRadioButton);
+        japaneseRadioButton = (RadioButton)v.findViewById(R.id.japaneseRadioButton);
+        mathematicsRadioButton = (RadioButton)v.findViewById(R.id.mathematicsRadioButton);
+        englishRadioButton = (RadioButton)v.findViewById(R.id.englishRadioButton);
+        scienceRadioButton = (RadioButton)v.findViewById(R.id.scienceRadioButton);
+        otherStudyRadioButton = (RadioButton)v.findViewById(R.id.otherStudyRadioButton);
 
         return v;
     }
@@ -198,6 +389,7 @@ public class MakePostFragment extends Fragment {
         userRef = mDataBaseReference.child(Const.UsersPATH);
         areaRef = mDataBaseReference.child(Const.AreaPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        savePostRef = mDataBaseReference.child(Const.SavePostPATH);
 
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
 
@@ -211,7 +403,6 @@ public class MakePostFragment extends Fragment {
         area = "";
         type = "";
         MainActivity.mToolbar.setTitle("投稿");
-        //areaGroup1.check(R.id.sportsRadiobutton);
 
 
 
@@ -268,108 +459,11 @@ public class MakePostFragment extends Fragment {
                         makeAreaRef="other";
                     }
 
-//                    areaGroup2.clearCheck();
-
 
                 }
-                //else{
-//                    //clearが呼ばれたとき
-//                    if (area.equals("スポーツ")){
-//                        sportsRadioButton.setChecked(true);
-//                    }else if (area.equals("音楽")){
-//                        musicRadioButton.setChecked(true);
-//                    }else if (area.equals("動画")){
-//                        movieRadioButton.setChecked(true);
-//                    }else if (area.equals("学習")){
-//                        studyRadioButton.setChecked(true);
-//                    }else if (area.equals("料理")){
-//                        cookRadioButton.setChecked(true);
-//                    }
-//
-//                    if (area.equals("手芸")){
-//                        handicraftRadioButton.setChecked(true);
-//                    }else if (area.equals("芸術")){
-//                        artRadioButton.setChecked(true);
-//                    }else if (area.equals("漫画")){
-//                        comicRadioButton.setChecked(true);
-//                    }else if (area.equals("ゲーム")){
-//                        gameRadioButton.setChecked(true);
-//                    }else if (area.equals("その他")){
-//                        otherRadioButton.setChecked(true);
-//                    }
-//
-//                }
-            }
-        });
-/*
-        areaGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedArea = selectedRadioButton.getText().toString();
-
-                    if(selectedArea.equals("手芸")){
-                        sportsGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="handicraft";
-                    }else if(selectedArea.equals("芸術")){
-                        sportsGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="art";
-                    }else if(selectedArea.equals("漫画")){
-                        sportsGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="comic";
-                    }else if(selectedArea.equals("ゲーム")){
-                        sportsGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="game";
-                    }else if(selectedArea.equals("その他")){
-                        sportsGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="other";
-                    }
-
-                    areaGroup1.clearCheck();
-
-                }else{
-                    //clearが呼ばれたとき
-
-                    if (area.equals("手芸")){
-                        handicraftRadioButton.setChecked(true);
-                    }else if (area.equals("芸術")){
-                        artRadioButton.setChecked(true);
-                    }else if (area.equals("漫画")){
-                        comicRadioButton.setChecked(true);
-                    }else if (area.equals("ゲーム")){
-                        gameRadioButton.setChecked(true);
-                    }else if (area.equals("その他")){
-                        otherRadioButton.setChecked(true);
-                    }
-
-                    if (area.equals("スポーツ")){
-                        sportsRadioButton.setChecked(true);
-                    }else if (area.equals("音楽")){
-                        musicRadioButton.setChecked(true);
-                    }else if (area.equals("動画")){
-                        movieRadioButton.setChecked(true);
-                    }else if (area.equals("学習")){
-                        studyRadioButton.setChecked(true);
-                    }else if (area.equals("料理")){
-                        cookRadioButton.setChecked(true);
-                    }
-
-
-
-                }
-
             }
         });
 
-*/
 
         sportsGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -393,14 +487,8 @@ public class MakePostFragment extends Fragment {
                         type=selectedType;
                         makeTypeRef="athletics";
                     }else if(selectedType.equals("水泳")){
-//                        type=selectedType;
-//                        makeTypeRef="swim";
-//                    }else if(selectedType.equals("ゴルフ")){
-//                        type=selectedType;
-//                        makeTypeRef="golf";
-//                    }else if(selectedType.equals("卓球")){
-//                        type=selectedType;
-//                        makeTypeRef="tableTennis";
+                        type=selectedType;
+                        makeTypeRef="swim";
                     }else{
                         type=selectedType;
                         makeTypeRef="otherSports";
@@ -426,13 +514,13 @@ public class MakePostFragment extends Fragment {
                         makeTypeRef="sing";
                     }else if(selectedType.equals("楽器")){
                         type=selectedType;
-                        makeTypeRef="piano";
+                        makeTypeRef="instrument";
                     }else if(selectedType.equals("ボイスパーカッション")){
                         type=selectedType;
-                        makeTypeRef="guitar";
+                        makeTypeRef="vocalPercussion";
                     }else if(selectedType.equals("ラップ")){
                         type=selectedType;
-                        makeTypeRef="drum";
+                        makeTypeRef="rap";
                     }else{
                         type=selectedType;
                         makeTypeRef="otherMusic";
@@ -647,6 +735,10 @@ public class MakePostFragment extends Fragment {
                                     postUpdates.put(aaa,postKey);
                                     usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
+                                    flag=true;
+
+                                    savePostRef.child(user.getUid()).removeValue();
+
                                     MakePostFragment fragmentMakePost = new MakePostFragment();
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                     transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
@@ -655,8 +747,6 @@ public class MakePostFragment extends Fragment {
                                 }else{
                                     Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
                                 }
-
-
                             }else{
                                 if (costType.equals("応相談")){
                                     Map<String,Object> data = new HashMap<>();
@@ -710,6 +800,10 @@ public class MakePostFragment extends Fragment {
                                     postUpdates.put(aaa,postKey);
                                     usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
+                                    flag = true;
+
+                                    savePostRef.child(user.getUid()).removeValue();
+
 
                                     MakePostFragment fragmentMakePost = new MakePostFragment();
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -729,30 +823,102 @@ public class MakePostFragment extends Fragment {
                 }else{
                     Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        savePostRef = mDataBaseReference.child(Const.SavePostPATH);
 
 
-
+        savePostRef.child(user.getUid()).addChildEventListener(oEventListener);
 
 
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (flag==false){
+            //ここで保存する
+
+
+            String date=dateTextView.getText().toString();
+
+            BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
+            Bitmap postImageBitmap = postImageDrawable.getBitmap();
+
+            int postImageWidth = postImageBitmap.getWidth();
+            int postImageHeight = postImageBitmap.getHeight();
+            float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
+
+            //resize
+            Matrix postImageMatrix = new Matrix();
+            postImageMatrix.postScale(postImageScale,postImageScale);
+            Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
+
+            ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+            postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+            String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
+
+
+            String contents=contentsEditText.getText().toString();
+            String cost = costEditText.getText().toString();
+
+            int howLongPosition1 = howLongSpinner.getSelectedItemPosition();
+            String howLongPosition = String.valueOf(howLongPosition1);
+            int methodPosition1 = methodSpinner.getSelectedItemPosition();
+            String methodPosition = String.valueOf(methodPosition1);
+            int levelPosition1 = levelSpinner.getSelectedItemPosition();
+            String levelPosition = String.valueOf(levelPosition1);
+            int careerPosition1 = careerSpinner.getSelectedItemPosition();
+            String careerPosition = String.valueOf(careerPosition1);
+            int stockPosition1 =stockSpinner.getSelectedItemPosition();
+            String stockPosition = String.valueOf(stockPosition1);
+            int costTypePosition1 = costTypeSpinner.getSelectedItemPosition();
+            String costTypePosition = String.valueOf(costTypePosition1);
+            int placePosition1 = placeSpinner.getSelectedItemPosition();
+            String placePosition = String.valueOf(placePosition1);
+
+
+
+
+            Map<String,Object> data = new HashMap<>();
+
+
+            data.put("date", date);
+            data.put("imageBitmapString", imageBitmapString);
+            data.put("contents",contents);
+            data.put("costTypePosition",costTypePosition);
+            data.put("cost",cost );
+            data.put("howLongPosition", howLongPosition);
+            data.put("methodPosition", methodPosition);
+            data.put("postArea", makeAreaRef);
+            data.put("postType",makeTypeRef );
+            data.put("levelPosition",levelPosition);
+            data.put("careerPosition", careerPosition);
+            data.put("placePosition",placePosition);
+            data.put("userIconBitmapString",myData.getIconBitmapString());
+            data.put("stockPosition",stockPosition);
+            data.put("placePosition",placePosition);
+
+
+
+            Map<String,Object> childUpdates = new HashMap<>();
+            childUpdates.put(user.getUid(),data);
+            savePostRef.child(user.getUid()).updateChildren(childUpdates);
+
+
+
+
+        }
+        flag=false;
+    }
 }
