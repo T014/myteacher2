@@ -185,9 +185,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onAttach(context);
 
         followArrayList = new ArrayList<String>();
-
-
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
@@ -201,6 +198,36 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        cToolbar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        cToolbar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        cToolbar.setVisibility(View.VISIBLE);
+    }
+
 
 
 
@@ -235,7 +262,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onViewCreated(view, savedInstanceState);
 
 
-        //cToolbar.setVisibility(View.GONE);
+        MainActivity.mToolbar.setVisibility(View.GONE);
+        cToolbar.setVisibility(View.GONE);
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
@@ -398,10 +426,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
-
-
-
             }
         });
     }
@@ -424,19 +448,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        cToolbar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        cToolbar.setVisibility(View.VISIBLE);
     }
 
 
