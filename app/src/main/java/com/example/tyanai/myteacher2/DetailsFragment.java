@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -73,6 +74,36 @@ public class DetailsFragment extends Fragment {
     Button rejectButton;
     Button cancelButton;
     String screenNum;
+
+    private ChildEventListener fvEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("userId");
+
+            if (userId.equals(user.getUid())){
+                //いいね済み
+            }else{
+                //未いいね
+            }
+
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -175,8 +206,6 @@ public class DetailsFragment extends Fragment {
             if (userId.equals(user.getUid())){
                 boughtDetailTextView.setText(null);
                 goodDetailTextView.setText(null);
-                boughtDetailTextView.setText("購入者数：");
-                goodDetailTextView.setText("いいね：");
                 buyButton.setVisibility(View.GONE);
                 evaluationSpinner.setVisibility(View.GONE);
                 evaluationTextView.setVisibility(View.GONE);
@@ -202,8 +231,8 @@ public class DetailsFragment extends Fragment {
             userNameDetailTextView.setText(postData.getName());
             evaluationDetailTextView.setText("評価："+postData.getEvaluation());
             timeDetailTextView.setText(postData.getTime());
-            goodDetailTextView.append(postData.getGood());
-            boughtDetailTextView.append(postData.getBought());
+            goodDetailTextView.append("いいね："+postData.getGood());
+            boughtDetailTextView.append("購入者数："+postData.getBought());
             contentsDetailTextView.setText(postData.getContents());
             areaDetailTextView.setText(postData.getPostArea());
             typeDetailTextView.setText(postData.getPostType());
@@ -381,41 +410,49 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
 
 
-
-                Map<String,Object> favKey = new HashMap<>();
-                String key = favRef.child(user.getUid()).push().getKey();
-
-
-                favKey.put("postUid",thisPost.getUserId());
-                favKey.put("userId",user.getUid());
-                favKey.put("userName",myData.getName());
-                favKey.put("iconBitmapString",myData.getIconBitmapString());
-                favKey.put("time","0");
-                favKey.put("favKey",thisPost.getKey());
+                //ボタンの色がどっちならどう的な感じで上と連携してる
+//                if (goodDetailTextView.getText().toString().equals("いいね")){
+//                    //いいね済み
+//                    favRef.child(intentKey).removeValue();
+//                }else{
+                    //未いいね
+                    Map<String,Object> favKey = new HashMap<>();
 
 
-
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,favKey);
-                favRef.updateChildren(childUpdates);
+                    favKey.put("postUid",thisPost.getUserId());
+                    favKey.put("userId",user.getUid());
+                    favKey.put("userName",myData.getName());
+                    favKey.put("iconBitmapString",myData.getIconBitmapString());
+                    favKey.put("time","0");
+                    favKey.put("favKey",thisPost.getKey());
 
 
 
-                int totalGoods = Integer.parseInt(thisPost.getGood());
-                totalGoods =totalGoods+1;
-                String totalGd =String.valueOf(totalGoods);
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(intentKey,favKey);
+                    favRef.updateChildren(childUpdates);
 
 
 
-                Map<String,Object> postGoodKey = new HashMap<>();
-
-                postGoodKey.put("goods",totalGd);
-
-                contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+                    int totalGoods = Integer.parseInt(thisPost.getGood());
+                    totalGoods =totalGoods+1;
+                    String totalGd =String.valueOf(totalGoods);
 
 
 
-                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+                    Map<String,Object> postGoodKey = new HashMap<>();
+
+                    postGoodKey.put("goods",totalGd);
+
+                    contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+
+
+
+                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+
+//                }
+
 
 
 
@@ -686,6 +723,13 @@ public class DetailsFragment extends Fragment {
 
 
     }
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        favRef.orderByChild("favKey").equalTo(intentKey).addChildEventListener(fvEventListener);
+    }
+
 
     @Override
     public void onDestroyView() {
