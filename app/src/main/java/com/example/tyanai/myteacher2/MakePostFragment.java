@@ -97,13 +97,128 @@ public class MakePostFragment extends Fragment {
     DatabaseReference contentsRef;
     DatabaseReference mDataBaseReference;
     DatabaseReference savePostRef;
+    DatabaseReference saveSearchRef;
+    DatabaseReference filterRef;
     UserData myData;
     String makeAreaRef;
     String makeTypeRef;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
 
+    String level;
+    String method;
+    String date;
+    String place;
+    String costType;
+    String cost;
 
+    String filterKey;
+
+
+
+    private ChildEventListener ssEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String ssArea = (String) map.get("area");
+            String ssType = (String) map.get("type");
+            String ssLevel = (String) map.get("level");
+            String ssUserEvaluation = (String) map.get("userEvaluation");
+            String ssTaught = (String) map.get("taught");
+            String ssMethod = (String) map.get("method");
+            String ssPlace = (String) map.get("place");
+            String ssCostType = (String) map.get("costType");
+            String ssCost = (String) map.get("cost");
+            String ssSex = (String) map.get("sex");
+            String ssAge = (String) map.get("age");
+            String uid = (String) map.get("uid");
+
+            int iUserEvaluation = Integer.valueOf(myData.getEvaluations());
+            int iTaught = Integer.valueOf(myData.getTaught());
+            int iCost = Integer.valueOf(cost);
+            int issUserEvaluation=0;
+            int issTaught=0;
+            int issCost=0;
+            try {
+                issUserEvaluation = Integer.valueOf(ssUserEvaluation);
+            } catch (NumberFormatException e) {
+            }
+            try {
+                issTaught = Integer.valueOf(ssTaught);
+            } catch (NumberFormatException e) {
+            }
+            try {
+                issCost = Integer.valueOf(ssCost);
+            } catch (NumberFormatException e) {
+            }
+
+            if (ssArea.equals(area)){
+                if (ssType.equals(type)){
+                    //難易度
+                    if (ssLevel.equals("指定しない") || ssLevel.equals(level)){
+                        //ユーザーの評価
+                        if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
+                            //指導人数
+                            if(ssTaught.equals("指定しない") || issTaught>iTaught) {
+                                //受講方法
+                                if (ssMethod.equals("指定しない") || ssMethod.equals(method)){
+                                    //日時
+                                    //if (ssDate.equals("指定しない") || postDate.equals(date)){
+                                    //場所
+                                    if (ssPlace.equals("指定しない") || ssPlace.equals(place)){
+                                        //価格形式
+                                        if (ssCostType.equals("指定しない") || ssCostType.equals(costType)){
+                                            //価格
+                                            if(ssCost.equals("指定しない") || issCost<=iCost){
+                                                //性別
+                                                if (ssSex.equals("未設定") || ssSex.equals(myData.getSex())){
+                                                    //年齢
+                                                    if (ssAge.equals("未設定") || ssAge.equals(myData.getAge())){
+                                                        //ここで通知
+
+
+                                                        Map<String,Object> mFilterKey = new HashMap<>();
+
+                                                        mFilterKey.put("filterUid",uid);
+                                                        mFilterKey.put("favKey",filterKey);
+
+                                                        Map<String,Object> childUpdates = new HashMap<>();
+                                                        childUpdates.put(filterKey,mFilterKey);
+                                                        filterRef.updateChildren(childUpdates);
+
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //}
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
     private ChildEventListener oEventListener = new ChildEventListener() {
@@ -390,6 +505,8 @@ public class MakePostFragment extends Fragment {
         areaRef = mDataBaseReference.child(Const.AreaPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         savePostRef = mDataBaseReference.child(Const.SavePostPATH);
+        saveSearchRef = mDataBaseReference.child(Const.SaveSearchPATH);
+        filterRef = mDataBaseReference.child(Const.FilterPATH);
 
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
 
@@ -640,8 +757,8 @@ public class MakePostFragment extends Fragment {
                 //必須事項が入力されているかの確認
 
                 String userId = user.getUid();
-                String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-                String date=dateTextView.getText().toString();
+                String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                date = dateTextView.getText().toString();
 
                 BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
                 Bitmap postImageBitmap = postImageDrawable.getBitmap();
@@ -661,89 +778,96 @@ public class MakePostFragment extends Fragment {
 
 
                 String contents=contentsEditText.getText().toString();
-                String cost = costEditText.getText().toString();
+                cost = costEditText.getText().toString();
                 String howLong = (String)  howLongSpinner.getSelectedItem();
                 String goods="0";
                 String share="0";
                 String bought="0";
                 String evaluation="0";
                 String cancel="0";
-                String method=(String) methodSpinner.getSelectedItem();
-                String level=(String) levelSpinner.getSelectedItem();
+                method=(String) methodSpinner.getSelectedItem();
+                level=(String) levelSpinner.getSelectedItem();
                 String career = (String) careerSpinner.getSelectedItem();
-                String place=(String) placeSpinner.getSelectedItem();
+                place =(String) placeSpinner.getSelectedItem();
                 String stock = (String) stockSpinner.getSelectedItem();
-                String costType = (String) costTypeSpinner.getSelectedItem();
-                char firstCost = cost.charAt(0);
-                String cFirstCost = String.valueOf(firstCost);
+                costType = (String) costTypeSpinner.getSelectedItem();
+                String cFirstCost="1";
+                if (cost.length()!=0){
+                    char firstCost = cost.charAt(0);
+                    cFirstCost = String.valueOf(firstCost);
+                }
 
 
+
+
+                String key = contentsRef.push().getKey();
+                filterKey = key;
 
                 if (area.length()!=0){
                     if (type.length()!=0){
                         if (contents.length()!=0){
                             if (cost.length()!=0){
-                                if (!(cFirstCost.equals("0"))){
-                                    Map<String,Object> data = new HashMap<>();
-
-                                    String key = contentsRef.push().getKey();
-
-                                    data.put("userId", userId);
-                                    data.put("userName",myData.getName());
-                                    data.put("time", time);
-                                    data.put("key", key);
-                                    data.put("date", date);
-                                    data.put("imageBitmapString", imageBitmapString);
-                                    data.put("contents",contents);
-                                    data.put("costType",costType);
-                                    data.put("cost",cost );
-                                    data.put("howLong", howLong);
-                                    data.put("goods",goods );
-                                    data.put("share",share );
-                                    data.put("bought",bought );
-                                    data.put("evaluation", evaluation);
-                                    data.put("cancel",cancel );
-                                    data.put("method", method);
-                                    data.put("postArea", area);
-                                    data.put("postType",type );
-                                    data.put("level",level );
-                                    data.put("career", career);
-                                    data.put("place",place);
-                                    data.put("sex",myData.getSex());
-                                    data.put("age",myData.getAge());
-                                    data.put("taught",myData.getTaught());
-                                    data.put("userEvaluation",myData.getEvaluations());
-                                    data.put("userIconBitmapString",myData.getIconBitmapString());
-                                    data.put("stock",stock);
+                                if (!(cFirstCost.equals("0")) || cost.equals("0")){
+                                        Map<String,Object> data = new HashMap<>();
 
 
-
-                                    Map<String,Object> childUpdates = new HashMap<>();
-                                    childUpdates.put(key,data);
-                                    contentsRef.updateChildren(childUpdates);
+                                        data.put("userId", userId);
+                                        data.put("userName",myData.getName());
+                                        data.put("time", time);
+                                        data.put("key", key);
+                                        data.put("date", date);
+                                        data.put("imageBitmapString", imageBitmapString);
+                                        data.put("contents",contents);
+                                        data.put("costType",costType);
+                                        data.put("cost",cost );
+                                        data.put("howLong", howLong);
+                                        data.put("goods",goods );
+                                        data.put("share",share );
+                                        data.put("bought",bought );
+                                        data.put("evaluation", evaluation);
+                                        data.put("cancel",cancel );
+                                        data.put("method", method);
+                                        data.put("postArea", area);
+                                        data.put("postType",type );
+                                        data.put("level",level );
+                                        data.put("career", career);
+                                        data.put("place",place);
+                                        data.put("sex",myData.getSex());
+                                        data.put("age",myData.getAge());
+                                        data.put("taught",myData.getTaught());
+                                        data.put("userEvaluation",myData.getEvaluations());
+                                        data.put("userIconBitmapString",myData.getIconBitmapString());
+                                        data.put("stock",stock);
 
 
 
+                                        Map<String,Object> childUpdates = new HashMap<>();
+                                        childUpdates.put(key,data);
+                                        contentsRef.updateChildren(childUpdates);
 
-                                    Map<String,Object> postKey = new HashMap<>();
-                                    String aaa = usersContentsRef.child(user.getUid()).push().getKey();
 
-                                    postKey.put("key",key);
-                                    postKey.put("userId",user.getUid());
 
-                                    Map<String,Object> postUpdates = new HashMap<>();
-                                    postUpdates.put(aaa,postKey);
-                                    usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
-                                    flag=true;
+                                        Map<String,Object> postKey = new HashMap<>();
+                                        String aaa = usersContentsRef.child(user.getUid()).push().getKey();
 
-                                    savePostRef.child(user.getUid()).removeValue();
+                                        postKey.put("key",key);
+                                        postKey.put("userId",user.getUid());
 
-                                    MakePostFragment fragmentMakePost = new MakePostFragment();
-                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
-                                    transaction.addToBackStack(null);
-                                    transaction.commit();
+                                        Map<String,Object> postUpdates = new HashMap<>();
+                                        postUpdates.put(aaa,postKey);
+                                        usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+
+                                        flag=true;
+
+                                        savePostRef.child(user.getUid()).removeValue();
+
+                                        MakePostFragment fragmentMakePost = new MakePostFragment();
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
+                                        transaction.addToBackStack(null);
+                                        transaction.commit();
+
                                 }else{
                                     Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
                                 }
@@ -751,7 +875,6 @@ public class MakePostFragment extends Fragment {
                                 if (costType.equals("応相談")){
                                     Map<String,Object> data = new HashMap<>();
 
-                                    String key = contentsRef.push().getKey();
 
                                     data.put("userId", userId);
                                     data.put("userName",myData.getName());
@@ -907,7 +1030,6 @@ public class MakePostFragment extends Fragment {
             data.put("placePosition",placePosition);
             data.put("userIconBitmapString",myData.getIconBitmapString());
             data.put("stockPosition",stockPosition);
-            data.put("placePosition",placePosition);
 
 
 
@@ -920,5 +1042,7 @@ public class MakePostFragment extends Fragment {
 
         }
         flag=false;
+
+        saveSearchRef.addChildEventListener(ssEventListener);
     }
 }
