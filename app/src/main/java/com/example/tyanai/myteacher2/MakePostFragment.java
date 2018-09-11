@@ -136,10 +136,14 @@ public class MakePostFragment extends Fragment {
 
             int iUserEvaluation = Integer.valueOf(myData.getEvaluations());
             int iTaught = Integer.valueOf(myData.getTaught());
-            int iCost = Integer.valueOf(cost);
+            int iCost=0;
             int issUserEvaluation=0;
             int issTaught=0;
             int issCost=0;
+            try {
+                iCost = Integer.valueOf(cost);
+            } catch (NumberFormatException e) {
+            }
             try {
                 issUserEvaluation = Integer.valueOf(ssUserEvaluation);
             } catch (NumberFormatException e) {
