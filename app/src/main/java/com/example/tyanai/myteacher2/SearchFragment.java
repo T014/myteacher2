@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";
@@ -53,18 +56,112 @@ public class SearchFragment extends Fragment {
     String postAge;
     String postCostType;
 
-    TextView typeTextView;
+    String postTypePosition;
 
+    TextView typeTextView;
+    FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
+    DatabaseReference saveSearchRef;
     public static ArrayList<PostData> searchArrayList;
 
 
+    private ChildEventListener ssEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String postAreaPosition = (String)map.get("postAreaPosition");
+            String postTypePosition = (String)map.get("postTypePosition");
+            String levelPosition = (String)map.get("levelPosition");
+            String userEvaluationPosition = (String)map.get("userEvaluationPosition");
+            String evaluationPosition = (String)map.get("evaluationPosition");
+            String taughtPosition = (String)map.get("taughtPosition");
+            String methodPosition = (String)map.get("methodPosition");
+            //date
+            String placePosition = (String)map.get("placePosition");
+            String costTypePosition = (String)map.get("costTypePosition");
+            String costPosition = (String)map.get("costPosition");
+            String sexPosition = (String)map.get("sexPosition");
+            String agePosition = (String)map.get("agePosition");
+
+            if (postAreaPosition!=null){
+                int postAreaNum = Integer.valueOf(postAreaPosition);
+                postAreaSpinner.setSelection(postAreaNum);
+
+                if (postTypePosition!=null){
+                    int postTypeNum = Integer.valueOf(postTypePosition);
+                    if (postAreaNum==0){
+                        sportsPostTypeSpinner.setSelection(postTypeNum);
+                    }else if (postAreaNum==1){
+                        musicPostTypeSpinner.setSelection(postTypeNum);
+                    }else if (postAreaNum==2){
+                        editPostTypeSpinner.setSelection(postTypeNum);
+                    }else if (postAreaNum==3){
+                        studyPostTypeSpinner.setSelection(postTypeNum);
+                    }
+                }
+            }
+            if (levelPosition!=null){
+                int levelNum = Integer.valueOf(levelPosition);
+                levelSpinner.setSelection(levelNum);
+            }
+            if (userEvaluationPosition!=null){
+                int userEvaluationNum = Integer.valueOf(userEvaluationPosition);
+                userEvaluationSpinner.setSelection(userEvaluationNum);
+            }
+            if (evaluationPosition!=null){
+                int evaluationNum = Integer.valueOf(evaluationPosition);
+                evaluationSpinner.setSelection(evaluationNum);
+            }
+            if (taughtPosition!=null){
+                int taughtNum = Integer.valueOf(taughtPosition);
+                taughtSpinner.setSelection(taughtNum);
+            }
+            if (methodPosition!=null){
+                int methodNum = Integer.valueOf(methodPosition);
+                methodSpinner.setSelection(methodNum);
+            }
+            if (placePosition!=null){
+                int placeNum = Integer.valueOf(placePosition);
+                placeSpinner.setSelection(placeNum);
+            }
+            if (costTypePosition!=null){
+                int costTypeNum = Integer.valueOf(costTypePosition);
+                costTypeSpinner.setSelection(costTypeNum);
+            }
+            if (costPosition!=null){
+                int costNum = Integer.valueOf(costPosition);
+                costSpinner.setSelection(costNum);
+            }
+            if (sexPosition!=null){
+                int sexNum = Integer.valueOf(sexPosition);
+                sexSpinner.setSelection(sexNum);
+            }
+            if (agePosition!=null){
+                int ageNum = Integer.valueOf(agePosition);
+                ageSpinner.setSelection(ageNum);
+            }
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
 
 
-    private ChildEventListener sEventListener = new ChildEventListener() {
+            private ChildEventListener sEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
@@ -229,6 +326,14 @@ public class SearchFragment extends Fragment {
         editPostTypeSpinner.setVisibility(View.GONE);
         studyPostTypeSpinner.setVisibility(View.GONE);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        saveSearchRef = mDataBaseReference.child(Const.SaveSearchRATH);
+
+        saveSearchRef.child(user.getUid()).addChildEventListener(ssEventListener);
+
+
+
 
         postAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -319,6 +424,97 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+
+        int postAreaPosition1 = postAreaSpinner.getSelectedItemPosition();
+        String postAreaPosition = String.valueOf(postAreaPosition1);
+
+        int sportsPostTypePosition1 = sportsPostTypeSpinner.getSelectedItemPosition();
+        int musicPostTypePosition1 = musicPostTypeSpinner.getSelectedItemPosition();
+        int editPostTypePosition1 = editPostTypeSpinner.getSelectedItemPosition();
+        int studyPostTypePosition1 = studyPostTypeSpinner.getSelectedItemPosition();
+
+        if (sportsPostTypePosition1 != -0){
+            postTypePosition = String.valueOf(sportsPostTypePosition1);
+        }else if (musicPostTypePosition1 != -0){
+            postTypePosition = String.valueOf(musicPostTypePosition1);
+        }else if (editPostTypePosition1 != 0){
+            postTypePosition = String.valueOf(editPostTypePosition1);
+        }else if (studyPostTypePosition1 != 0){
+            postTypePosition = String.valueOf(studyPostTypePosition1);
+        }
+
+
+
+        int levelPosition1 = levelSpinner.getSelectedItemPosition();
+        String levelPosition = String.valueOf(levelPosition1);
+
+        int userEvaluationPosition1 = userEvaluationSpinner.getSelectedItemPosition();
+        String userEvaluationPosition = String.valueOf(userEvaluationPosition1);
+
+        int evaluationPosition1 = evaluationSpinner.getSelectedItemPosition();
+        String evaluationPosition = String.valueOf(evaluationPosition1);
+
+        int taughtPosition1 = taughtSpinner.getSelectedItemPosition();
+        String taughtPosition = String.valueOf(taughtPosition1);
+
+        int methodPosition1 = methodSpinner.getSelectedItemPosition();
+        String methodPosition = String.valueOf(methodPosition1);
+
+        //日付は後回し
+
+        int placePosition1 = placeSpinner.getSelectedItemPosition();
+        String placePosition = String.valueOf(placePosition1);
+
+        int costTypePosition1 = costTypeSpinner.getSelectedItemPosition();
+        String costTypePosition = String.valueOf(costTypePosition1);
+
+        int costPosition1 = costSpinner.getSelectedItemPosition();
+        String costPosition = String.valueOf(costPosition1);
+
+        int sexPosition1 = sexSpinner.getSelectedItemPosition();
+        String sexPosition = String.valueOf(sexPosition1);
+
+        int agePosition1 = ageSpinner.getSelectedItemPosition();
+        String agePosition = String.valueOf(agePosition1);
+
+
+
+        Map<String,Object> data = new HashMap<>();
+
+
+        data.put("postAreaPosition", postAreaPosition);
+        data.put("postTypePosition",postTypePosition);
+        data.put("levelPosition",levelPosition);
+        data.put("userEvaluationPosition",userEvaluationPosition );
+        data.put("evaluationPosition",evaluationPosition );
+        data.put("taughtPosition",taughtPosition );
+        data.put("methodPosition", methodPosition);
+        //data.put("date", date);
+        data.put("placePosition",placePosition);
+        data.put("costTypePosition",costTypePosition);
+        data.put("costPosition",costPosition );
+        data.put("sexPosition",sexPosition );
+        data.put("agePosition",agePosition );
+
+
+
+        Map<String,Object> childUpdates = new HashMap<>();
+        childUpdates.put(user.getUid(),data);
+        saveSearchRef.child(user.getUid()).updateChildren(childUpdates);
+
+
+
+
+
+
 
     }
 }
