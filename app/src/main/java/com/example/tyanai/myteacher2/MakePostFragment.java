@@ -156,11 +156,11 @@ public class MakePostFragment extends Fragment {
             } catch (NumberFormatException e) {
             }
 
-            
+
 
             if (!(uid.equals(user.getUid()))){
                 //if (ssArea.equals(area)){
-                if (ssType.equals(type) || ssType.equals("")){
+                if (ssType.equals(type)){
                     //難易度
                     if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
                         //ユーザーの評価
@@ -879,11 +879,14 @@ public class MakePostFragment extends Fragment {
 
                                         savePostRef.child(user.getUid()).removeValue();
 
-                                        MakePostFragment fragmentMakePost = new MakePostFragment();
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
+                                    Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
+
+
+                                    TimelineFragment fragmentTimeline = new TimelineFragment();
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
 
                                 }else{
                                     Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
@@ -944,10 +947,12 @@ public class MakePostFragment extends Fragment {
 
                                     savePostRef.child(user.getUid()).removeValue();
 
+                                    Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
 
-                                    MakePostFragment fragmentMakePost = new MakePostFragment();
+
+                                    TimelineFragment fragmentTimeline = new TimelineFragment();
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.container, fragmentMakePost, MakePostFragment.TAG);
+                                    transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
                                     transaction.addToBackStack(null);
                                     transaction.commit();
                                 }else{
