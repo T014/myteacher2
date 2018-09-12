@@ -160,19 +160,19 @@ public class MakePostFragment extends Fragment {
             if (ssArea.equals(area)){
                 if (ssType.equals(type)){
                     //難易度
-                    if (ssLevel.equals("指定しない") || ssLevel.equals(level)){
+                    if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
                         //ユーザーの評価
                         if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
                             //指導人数
                             if(ssTaught.equals("指定しない") || issTaught>iTaught) {
                                 //受講方法
-                                if (ssMethod.equals("指定しない") || ssMethod.equals(method)){
+                                if (ssMethod.equals("指定しない") || ssMethod.equals(method) || method.equals("指定しない")){
                                     //日時
                                     //if (ssDate.equals("指定しない") || postDate.equals(date)){
                                     //場所
-                                    if (ssPlace.equals("指定しない") || ssPlace.equals(place)){
+                                    if (ssPlace.equals("指定しない") || ssPlace.equals(place) || place.equals("指定しない")){
                                         //価格形式
-                                        if (ssCostType.equals("指定しない") || ssCostType.equals(costType)){
+                                        if (ssCostType.equals("指定しない") || ssCostType.equals(costType) || costType.equals("応相談")){
                                             //価格
                                             if(ssCost.equals("指定しない") || issCost<=iCost){
                                                 //性別
@@ -185,7 +185,10 @@ public class MakePostFragment extends Fragment {
                                                         Map<String,Object> mFilterKey = new HashMap<>();
 
                                                         mFilterKey.put("filterUid",uid);
-                                                        mFilterKey.put("favKey",filterKey);
+                                                        mFilterKey.put("userName",myData.getName());
+                                                        mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
+                                                        mFilterKey.put("time","");
+                                                        mFilterKey.put("filterKey",filterKey);
 
                                                         Map<String,Object> childUpdates = new HashMap<>();
                                                         childUpdates.put(filterKey,mFilterKey);
