@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -157,8 +156,11 @@ public class MakePostFragment extends Fragment {
             } catch (NumberFormatException e) {
             }
 
-            if (ssArea.equals(area)){
-                if (ssType.equals(type)){
+            
+
+            if (!(uid.equals(user.getUid()))){
+                //if (ssArea.equals(area)){
+                if (ssType.equals(type) || ssType.equals("")){
                     //難易度
                     if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
                         //ユーザーの評価
@@ -189,6 +191,8 @@ public class MakePostFragment extends Fragment {
                                                         mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
                                                         mFilterKey.put("time","");
                                                         mFilterKey.put("filterKey",filterKey);
+                                                        mFilterKey.put("kind","その他");
+                                                        mFilterKey.put("kindDetail","検索履歴");
 
                                                         Map<String,Object> childUpdates = new HashMap<>();
                                                         childUpdates.put(filterKey,mFilterKey);
@@ -208,7 +212,13 @@ public class MakePostFragment extends Fragment {
                     }
                 }
 
+                //}
             }
+
+
+
+
+
 
 
 
