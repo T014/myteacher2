@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,13 +20,13 @@ class BusinessDataHolder{
     ImageView iconImageView;
     ImageView contentImageView;
     TextView userNameTextView;
-    TextView cancelTextView;
     TextView dateTextView;
     TextView receiveDateTextView;
     TextView payDayTextView;
     TextView evaluationTextView;
     TextView judgmentTextView;
-    LinearLayout businessLinearLayout;
+    TextView permittedDateTextView;
+    RelativeLayout businessLinearLayout;
 }
 public class BusinessDataListAdapter extends BaseAdapter{
     private LayoutInflater inflater;
@@ -43,12 +44,12 @@ public class BusinessDataListAdapter extends BaseAdapter{
         String iconImageBitmapString = businessDataArrayList.get(position).getUserIcon();
         String contentsImageBitmapString = businessDataArrayList.get(position).getContentImageBitmapString();
         String userName = businessDataArrayList.get(position).getUserName();
-        String cancel = businessDataArrayList.get(position).getCancel();
         String date = businessDataArrayList.get(position).getDate();
         String receiveDate = businessDataArrayList.get(position).getReceiveDate();
         String payDay = businessDataArrayList.get(position).getPayDay();
         String evaluation = businessDataArrayList.get(position).getEvaluation();
         String judgment = businessDataArrayList.get(position).getJudgment();
+        String permittedDate = businessDataArrayList.get(position).getPermittedDate();
 
 
         BusinessDataHolder businessDataHolder;
@@ -60,13 +61,13 @@ public class BusinessDataListAdapter extends BaseAdapter{
             businessDataHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
             businessDataHolder.contentImageView = (ImageView) convertView.findViewById(R.id.contentImageView);
             businessDataHolder.userNameTextView = (TextView) convertView.findViewById(R.id.userNameTextView);
-            businessDataHolder.cancelTextView = (TextView) convertView.findViewById(R.id.cancelTextView);
             businessDataHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
             businessDataHolder.receiveDateTextView = (TextView) convertView.findViewById(R.id.receiveDateTextView);
             businessDataHolder.payDayTextView = (TextView) convertView.findViewById(R.id.payDayTextView);
             businessDataHolder.evaluationTextView = (TextView)convertView.findViewById(R.id.evaluationTextView);
             businessDataHolder.judgmentTextView = (TextView)convertView.findViewById(R.id.judgmentTextView);
-            businessDataHolder.businessLinearLayout = (LinearLayout)convertView.findViewById(R.id.businessLinearLayout);
+            businessDataHolder.permittedDateTextView = (TextView)convertView.findViewById(R.id.permittedDateTextView);
+            businessDataHolder.businessLinearLayout = (RelativeLayout)convertView.findViewById(R.id.businessLinearLayout);
             convertView.setTag(businessDataHolder);
         }
         else {
@@ -75,23 +76,27 @@ public class BusinessDataListAdapter extends BaseAdapter{
         if (userName != null){
             businessDataHolder.userNameTextView.setText(userName);
         }
-        if (cancel!=null){
-            businessDataHolder.cancelTextView.setText(cancel);
-        }
         if (date != null){
             businessDataHolder.dateTextView.setText(date);
         }
         if (date != null){
-            businessDataHolder.receiveDateTextView.setText(receiveDate);
+            businessDataHolder.receiveDateTextView.setText("受講日："+receiveDate);
         }
         if (payDay != null){
-            businessDataHolder.payDayTextView.setText(payDay);
+            businessDataHolder.payDayTextView.setText("支払日："+payDay);
         }
         if (evaluation != null){
-            businessDataHolder.evaluationTextView.setText(evaluation);
+            businessDataHolder.evaluationTextView.setText("投稿の評価："+evaluation);
         }
         if(judgment != null){
-            businessDataHolder.judgmentTextView.setText(judgment);
+            businessDataHolder.judgmentTextView.setText("評価した？"+judgment);
+        }else{
+            businessDataHolder.judgmentTextView.setText("評価した？");
+        }
+        if (permittedDate != null){
+            businessDataHolder.permittedDateTextView.setText("許可された日" + permittedDate);
+        }else{
+            businessDataHolder.permittedDateTextView.setText(permittedDate);
         }
 
         byte[] iconImageBytes = Base64.decode(iconImageBitmapString,Base64.DEFAULT);
