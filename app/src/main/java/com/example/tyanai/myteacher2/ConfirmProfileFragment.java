@@ -2,12 +2,10 @@ package com.example.tyanai.myteacher2;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -39,7 +37,6 @@ import java.util.Map;
 public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
         ConfirmProfilePageFragment.OnFragmentInteractionListener {
     public static final String TAG = "ConfirmProfileFragment";
-    ImageView newHeaderImageView;
     ImageView newIconImageView;
     TextView userNameTextView;
     TextView commentTextView;
@@ -94,10 +91,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             myData = userData;
 
@@ -116,11 +112,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
             sexConfirmProfileTextView.setText("性別："+userData.getSex());
             ageConfirmProfileTextView.setText("年齢："+userData.getAge());
-            byte[] headerBytes = Base64.decode(headerBitmapString,Base64.DEFAULT);
-            if(headerBytes.length!=0){
-                Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes,0, headerBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                newHeaderImageView.setImageBitmap(headerBitmap);
-            }
             byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
             if(iconBytes.length!=0){
                 Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -194,6 +185,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
 
 
+
+
         followRef.addChildEventListener(followEventListener);
 
 
@@ -210,22 +203,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        MainActivity.mToolbar.setVisibility(View.VISIBLE);
-        cToolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MainActivity.mToolbar.setVisibility(View.VISIBLE);
-        cToolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        MainActivity.mToolbar.setVisibility(View.VISIBLE);
-        cToolbar.setVisibility(View.VISIBLE);
     }
 
 
@@ -237,7 +224,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_confirmprofile,container,false);
 
-        newHeaderImageView = (ImageView)v.findViewById(R.id.newHeaderImageView);
         newIconImageView = (ImageView)v.findViewById(R.id.newIconImageView);
         userNameTextView = (TextView)v.findViewById(R.id.userNameTextView);
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
@@ -251,7 +237,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         viewPager = (ViewPager) v.findViewById(R.id.pager);
-        cToolbar = (Toolbar)v.findViewById(R.id.toolbar);
+        //cToolbar = (Toolbar)v.findViewById(R.id.toolbar);
 
 
         return v;
@@ -261,9 +247,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        MainActivity.mToolbar.setVisibility(View.GONE);
-        cToolbar.setVisibility(View.GONE);
+        MainActivity.mToolbar.setTitle("プロフィール");
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
@@ -315,19 +299,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
 
-
-
-
-
-
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
 
 
 
 
-
-
-
+        
 
         followEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
