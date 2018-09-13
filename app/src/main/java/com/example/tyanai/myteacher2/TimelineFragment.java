@@ -58,7 +58,7 @@ public class TimelineFragment extends Fragment {
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
-            String share = (String) map.get("share");
+            String favFlag = (String) map.get("favFlag");
             String bought = (String) map.get("bought");
             String evaluation = (String) map.get("evaluation");
             String cancel = (String) map.get("cancel");
@@ -75,17 +75,17 @@ public class TimelineFragment extends Fragment {
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
 
-            //いいね済みの時shareをtrueにしてadapterでここをみて判断する
+            //いいね済みの時端末内でfavFragをtrueにしてadapterでここをみて判断する
             for (String fav : favKeyArrayList){
                 if (key.equals(fav)){
-                    share = "true";
+                    favFlag = "true";
                 }else{
-                    share = "false";
+                    favFlag = "false";
                 }
             }
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
 
@@ -114,7 +114,7 @@ public class TimelineFragment extends Fragment {
 //            String cost = (String) map.get("cost");
 //            String howLong = (String) map.get("howLong");
 //            String goods = (String) map.get("goods");
-//            String share = (String) map.get("share");
+//            String favFlag = (String) map.get("favFlag");
 //            String bought = (String) map.get("bought");
 //            String evaluation = (String) map.get("evaluation");
 //            String cancel = (String) map.get("cancel");
@@ -134,7 +134,7 @@ public class TimelineFragment extends Fragment {
 //
 //
 //            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-//                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+//                    , contents,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
 //                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 //
 //            Collections.reverse(timeLineArrayList);
@@ -170,10 +170,6 @@ public class TimelineFragment extends Fragment {
             if (userId.equals(user.getUid())){
                 //いいね済み
                 favKeyArrayList.add(favKey);
-                //favButton.setChecked(true);
-            }else{
-                //未いいね
-                //favButton.setChecked(false);
             }
         }
 
@@ -213,9 +209,10 @@ public class TimelineFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName, userId, comment, follows, followers, posts
-                    , favorites, sex, age, evaluations, taught, period, groups, date, iconBitmapString);
+                    , favorites, sex, age, evaluations, taught, period, groups, date, iconBitmapString,coin);
 
             myData = userData;
 
@@ -279,7 +276,7 @@ public class TimelineFragment extends Fragment {
                     y = timeLineListView.getChildAt(0).getTop();
 
                     //いいねの処理
-                    String favFlag = timeLineArrayList.get(position).getShare();
+                    String favFlag = timeLineArrayList.get(position).getFavFlag();
                     if (favFlag.equals("true")){
                         String removeKey = timeLineArrayList.get(position).getKey();
                         favRef.child(removeKey).removeValue();
@@ -326,12 +323,6 @@ public class TimelineFragment extends Fragment {
                         timeLineArrayList.clear();
                         contentsRef.limitToLast(30).addChildEventListener(tEventListener);
                     }
-
-
-
-
-
-
 
                 }else if (view.getId()==R.id.userIconImageView){
 
