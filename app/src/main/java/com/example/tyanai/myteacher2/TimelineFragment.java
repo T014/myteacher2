@@ -34,8 +34,8 @@ public class TimelineFragment extends Fragment {
     FirebaseUser user;
     private ListView timeLineListView;
     private ListAdapter mAdapter;
-    int goodPosition = 0;
-    int y = 0;
+    public static int goodPosition;
+    public static int y;
     UserData myData;
     private ArrayList<String> favKeyArrayList;
 
@@ -58,7 +58,6 @@ public class TimelineFragment extends Fragment {
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
-            String favFlag = (String) map.get("favFlag");
             String bought = (String) map.get("bought");
             String evaluation = (String) map.get("evaluation");
             String cancel = (String) map.get("cancel");
@@ -74,11 +73,13 @@ public class TimelineFragment extends Fragment {
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
+            String favFlag="";
 
             //いいね済みの時端末内でfavFragをtrueにしてadapterでここをみて判断する
             for (String fav : favKeyArrayList){
                 if (key.equals(fav)){
                     favFlag = "true";
+                    break;
                 }else{
                     favFlag = "false";
                 }
@@ -102,8 +103,8 @@ public class TimelineFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            HashMap map = (HashMap) dataSnapshot.getValue();
-//
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
 //            String userId = (String) map.get("userId");
 //            String userName = (String) map.get("userName");
 //            String time = (String) map.get("time");
@@ -111,6 +112,7 @@ public class TimelineFragment extends Fragment {
 //            String date = (String) map.get("date");
 //            String imageBitmapString = (String) map.get("imageBitmapString");
 //            String contents = (String) map.get("contents");
+//            String costType = (String) map.get("costType");
 //            String cost = (String) map.get("cost");
 //            String howLong = (String) map.get("howLong");
 //            String goods = (String) map.get("goods");
@@ -134,7 +136,7 @@ public class TimelineFragment extends Fragment {
 //
 //
 //            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-//                    , contents,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
+//                    , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
 //                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 //
 //            Collections.reverse(timeLineArrayList);
@@ -144,6 +146,8 @@ public class TimelineFragment extends Fragment {
 //            mAdapter.setTimeLineArrayList(timeLineArrayList);
 //            timeLineListView.setAdapter(mAdapter);
 //            mAdapter.notifyDataSetChanged();
+//
+//            timeLineListView.setSelectionFromTop(goodPosition,y);
 
         }
         @Override
@@ -270,7 +274,7 @@ public class TimelineFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (view.getId()==R.id.goodButton){
-                    favKeyArrayList.clear();
+
 
                     goodPosition = timeLineListView.getFirstVisiblePosition();
                     y = timeLineListView.getChildAt(0).getTop();
@@ -290,10 +294,10 @@ public class TimelineFragment extends Fragment {
                         postGoodKey.put("goods",totalGd);
                         contentsRef.child(removeKey).updateChildren(postGoodKey);
 
-
+                        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
                         timeLineArrayList.clear();
                         contentsRef.limitToLast(30).addChildEventListener(tEventListener);
-                        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
+
                     }else{
                         int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                         totalGoods =totalGoods+1;
@@ -316,9 +320,8 @@ public class TimelineFragment extends Fragment {
                         favKey.put("kind","いいね");
                         favKey.put("kindDetail","いいね");
 
-                        Map<String,Object> childUpdates = new HashMap<>();
-                        childUpdates.put(key,favKey);
-                        favRef.updateChildren(childUpdates);
+
+                        favRef.child(key).updateChildren(favKey);
                         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
                         timeLineArrayList.clear();
                         contentsRef.limitToLast(30).addChildEventListener(tEventListener);
@@ -350,8 +353,10 @@ public class TimelineFragment extends Fragment {
                     transaction.commit();
 
 
-                    }
                 }
+                favKeyArrayList.clear();
+            }
+
 
 
         });
@@ -378,6 +383,21 @@ public class TimelineFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
 
         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        timeLineListView.setSelectionFromTop(goodPosition,y);
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+
+        goodPosition = timeLineListView.getFirstVisiblePosition();
+        y = timeLineListView.getChildAt(0).getTop();
+
     }
 
 
