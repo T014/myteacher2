@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,9 @@ public class ConfirmProfilePageFragment extends Fragment {
     private ArrayList<PostData> timeLineArrayList;
     private ArrayList<String> favKeyArrayList;
     ListAdapter mAdapter;
+
+    int goodPosition;
+    int y;
 
     int page;
 
@@ -79,6 +83,7 @@ public class ConfirmProfilePageFragment extends Fragment {
             String date = (String) map.get("date");
             String imageBitmapString = (String) map.get("imageBitmapString");
             String contents = (String) map.get("contents");
+            String costType = (String) map.get("costType");
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
@@ -102,28 +107,31 @@ public class ConfirmProfilePageFragment extends Fragment {
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             if (page==2){
                 if (favKeyArrayList.size()!=0){
                     for (String aaa:favKeyArrayList){
                         if (aaa.equals(postData.getKey())){
+                            Collections.reverse(timeLineArrayList);
                             timeLineArrayList.add(postData);
+                            Collections.reverse(timeLineArrayList);
                             mAdapter.setTimeLineArrayList(timeLineArrayList);
                             profileListView.setAdapter(mAdapter);
                             mAdapter.notifyDataSetChanged();
+                            profileListView.setSelectionFromTop(goodPosition,y);
                         }
                     }
                 }
             }else if (page==1){
+                Collections.reverse(timeLineArrayList);
                 timeLineArrayList.add(postData);
+                Collections.reverse(timeLineArrayList);
                 mAdapter.setTimeLineArrayList(timeLineArrayList);
                 profileListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-
-
-
+                profileListView.setSelectionFromTop(goodPosition,y);
             }
         }
         @Override
@@ -191,8 +199,10 @@ public class ConfirmProfilePageFragment extends Fragment {
         page = getArguments().getInt(ARG_PARAM, 0);
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
         if (page==1){
+            timeLineArrayList.clear();
             contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
         }else if (page==2){
+            timeLineArrayList.clear();
             contentsRef.addChildEventListener(updEventListener);
         }
         MainActivity.mToolbar.setVisibility(View.GONE);
@@ -207,6 +217,13 @@ public class ConfirmProfilePageFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (view.getId()==R.id.goodButton){
+
+
+
+
+                    goodPosition = profileListView.getFirstVisiblePosition();
+                    y = profileListView.getChildAt(0).getTop();
+
                     //いいねの処理
                     Map<String,Object> favKey = new HashMap<>();
                     String key = favoriteRef.child(user.getUid()).push().getKey();
@@ -239,14 +256,11 @@ public class ConfirmProfilePageFragment extends Fragment {
 
                     contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
-
                     if (page==1){
                         contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
                     }else if (page==2){
                         contentsRef.addChildEventListener(updEventListener);
                     }
-
-
 
 
 
@@ -271,6 +285,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                     Bundle bundle = new Bundle();
 
                     bundle.putString("key",timeLineArrayList.get(position).getKey());
+                    bundle.putString("screenKey","confirm");
 
 
                     DetailsFragment fragmentDetails = new DetailsFragment();
