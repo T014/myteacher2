@@ -205,7 +205,6 @@ public class ConfirmProfilePageFragment extends Fragment {
             timeLineArrayList.clear();
             contentsRef.addChildEventListener(updEventListener);
         }
-        MainActivity.mToolbar.setVisibility(View.GONE);
 
 
 
@@ -236,35 +235,25 @@ public class ConfirmProfilePageFragment extends Fragment {
                     favKey.put("time","0");
                     favKey.put("favKey",timeLineArrayList.get(position).getKey());
 
-
-
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,favKey);
                     favoriteRef.updateChildren(childUpdates);
-
-
 
                     int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                     totalGoods =totalGoods+1;
                     String totalGd =String.valueOf(totalGoods);
 
-
-
                     Map<String,Object> postGoodKey = new HashMap<>();
-
                     postGoodKey.put("goods",totalGd);
-
                     contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
+
+                    timeLineArrayList.clear();
 
                     if (page==1){
                         contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
                     }else if (page==2){
                         contentsRef.addChildEventListener(updEventListener);
                     }
-
-
-
-
 
 
                 }else if (view.getId()==R.id.userIconImageView){
