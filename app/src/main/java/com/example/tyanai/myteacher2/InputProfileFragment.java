@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InputProfileFragment extends Fragment {
     public static final String TAG = "InputProfileFragment";
-    public static ImageView headerImageView;
     public static ImageView iconImageView;
     public static EditText userNameEditText;
     public static EditText commentEditText;
@@ -81,10 +77,10 @@ public class InputProfileFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
+            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
             myFollows=follows;
             myFollowers=followers;
@@ -124,11 +120,6 @@ public class InputProfileFragment extends Fragment {
                 userNameEditText.setText(userData.getName());
             }
             commentEditText.setText(userData.getComment());
-            byte[] headerBytes = Base64.decode(headerBitmapString, Base64.DEFAULT);
-            if (headerBytes.length != 0) {
-                Bitmap headerBitmap = BitmapFactory.decodeByteArray(headerBytes, 0, headerBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                headerImageView.setImageBitmap(headerBitmap);
-            }
             byte[] iconBytes = Base64.decode(iconBitmapString, Base64.DEFAULT);
             if (iconBytes.length != 0) {
                 Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
@@ -156,73 +147,19 @@ public class InputProfileFragment extends Fragment {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String userId = (String) map.get("userId");
-            String userName = (String) map.get("userName");
-            String time = (String) map.get("time");
             String key = (String) map.get("key");
-            String date = (String) map.get("date");
-            String imageBitmapString = (String) map.get("imageBitmapString");
-            String contents = (String) map.get("contents");
-            String cost = (String) map.get("cost");
-            String howLong = (String) map.get("howLong");
-            String goods = (String) map.get("goods");
-            String share = (String) map.get("share");
-            String bought = (String) map.get("bought");
-            String evaluation = (String) map.get("evaluation");
-            String cancel = (String) map.get("cancel");
-            String method = (String) map.get("method");
-            String postArea = (String) map.get("postArea");
-            String postType = (String) map.get("postType");
-            String level = (String) map.get("level");
-            String career = (String) map.get("career");
-            String place = (String) map.get("place");
             String sex = (String) map.get("sex");
             String age = (String) map.get("age");
-            String taught = (String) map.get("taught");
-            String userEvaluation = (String) map.get("userEvaluation");
-            String userIconBitmapString = (String) map.get("userIconBitmapString");
-
-
 
             Map<String,Object> data = new HashMap<>();
 
-
-            data.put("userId", userId);
             data.put("userName",newUserName);
-            data.put("time", time);
-            data.put("key", key);
-            data.put("date", date);
-            data.put("imageBitmapString", imageBitmapString);
-            data.put("contents",contents );
-            data.put("cost",cost );
-            data.put("howLong", howLong);
-            data.put("goods",goods );
-            data.put("share",share );
-            data.put("bought",bought );
-            data.put("evaluation", evaluation);
-            data.put("cancel",cancel );
-            data.put("method", method);
-            data.put("postArea", postArea);
-            data.put("postType",postType );
-            data.put("level",level );
-            data.put("career", career);
-            data.put("place",place);
             data.put("sex",sex);
             data.put("age",age);
-            data.put("taught",taught);
-            data.put("userEvaluation",userEvaluation);
             data.put("userIconBitmapString",newIconBitmapString);
 
 
-
-            Map<String,Object> childUpdates = new HashMap<>();
-            childUpdates.put(key,data);
-            contentsRef.updateChildren(childUpdates);
-
-
-
-
-
+            contentsRef.child(key).updateChildren(data);
 
         }
         @Override
@@ -256,7 +193,6 @@ public class InputProfileFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_inputprofile,container,false);
 
-        headerImageView = (ImageView)v.findViewById(R.id.headerImageView);
         iconImageView = (ImageView)v.findViewById(R.id.iconImageView);
         userNameEditText = (EditText)v.findViewById(R.id.userNameEditText);
         commentEditText = (EditText)v.findViewById(R.id.commentEditText);
@@ -282,24 +218,6 @@ public class InputProfileFragment extends Fragment {
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(iEventListener);
 
 
-
-
-        headerImageView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-
-                //pFragを変更
-                MainActivity.pFlag=1;
-
-                //header画像選択に移動
-                MainActivity mainActivity = (MainActivity)getActivity();
-                mainActivity.onSelfCheck();
-
-
-
-
-            }
-        });
 
 
 
@@ -328,6 +246,9 @@ public class InputProfileFragment extends Fragment {
                 saveData();
 
                 if (newUserName.length()>0){
+                    contentsRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(tEventListener);
+
+
                     ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
@@ -352,24 +273,6 @@ public class InputProfileFragment extends Fragment {
 
             //2回同じ処理をしてるから効率化できそう
 
-
-            //header画像の取得
-            BitmapDrawable headerDrawable = (BitmapDrawable) headerImageView.getDrawable();
-            //画像を取り出しエンコードする
-            Bitmap headerBitmap = headerDrawable.getBitmap();
-
-            int headerImageWidth = headerBitmap.getWidth();
-            int headerImageHeight = headerBitmap.getHeight();
-            float headerScale = Math.min((float)500 / headerImageWidth,(float)500 / headerImageHeight);
-
-            //resize
-            Matrix headerMatrix = new Matrix();
-            headerMatrix.postScale(headerScale,headerScale);
-            Bitmap headerResizedImage = Bitmap.createBitmap(headerBitmap,0,0,headerImageWidth,headerImageHeight,headerMatrix,true);
-
-            ByteArrayOutputStream headerBaos = new ByteArrayOutputStream();
-            headerResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, headerBaos);
-            String headerBitmapString = Base64.encodeToString(headerBaos.toByteArray(), Base64.DEFAULT);
 
 
             //icon画像の取得
@@ -423,7 +326,6 @@ public class InputProfileFragment extends Fragment {
             data.put("groups", myGroup);
             data.put("date",startDate);
             data.put("iconBitmapString", newIconBitmapString);
-            data.put("headerBitmapString", headerBitmapString);
 
             Map<String,Object> childUpdates = new HashMap<>();
             childUpdates.put(userId,data);
@@ -443,27 +345,6 @@ public class InputProfileFragment extends Fragment {
 
             if (newUserName.length()>0){
                 String comment = commentEditText.getText().toString();
-
-                //2回同じ処理をしてるから効率化できそう
-
-
-                //header画像の取得
-                BitmapDrawable headerDrawable = (BitmapDrawable) headerImageView.getDrawable();
-                //画像を取り出しエンコードする
-                Bitmap headerBitmap = headerDrawable.getBitmap();
-
-                int headerImageWidth = headerBitmap.getWidth();
-                int headerImageHeight = headerBitmap.getHeight();
-                float headerScale = Math.min((float)500 / headerImageWidth,(float)500 / headerImageHeight);
-
-                //resize
-                Matrix headerMatrix = new Matrix();
-                headerMatrix.postScale(headerScale,headerScale);
-                Bitmap headerResizedImage = Bitmap.createBitmap(headerBitmap,0,0,headerImageWidth,headerImageHeight,headerMatrix,true);
-
-                ByteArrayOutputStream headerBaos = new ByteArrayOutputStream();
-                headerResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, headerBaos);
-                String headerBitmapString = Base64.encodeToString(headerBaos.toByteArray(), Base64.DEFAULT);
 
 
                 //icon画像の取得
@@ -517,7 +398,6 @@ public class InputProfileFragment extends Fragment {
                 data.put("groups", myGroup);
                 data.put("date",startDate);
                 data.put("iconBitmapString", newIconBitmapString);
-                data.put("headerBitmapString", headerBitmapString);
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(userId,data);
@@ -527,7 +407,6 @@ public class InputProfileFragment extends Fragment {
 
                 MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                 MainActivity.mToolbar.setVisibility(View.VISIBLE);
-
 
 
 
