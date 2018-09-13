@@ -3,7 +3,6 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,8 +35,8 @@ public class DetailsFragment extends Fragment {
 
     String intentKey;
     ImageView postContentsImageView;
-    ImageButton favButton;
-    Button buyButton;
+    ToggleButton favButton;
+    ToggleButton buyButton;
     private DatabaseReference favRef;
     private DatabaseReference requestRef;
     private DatabaseReference usersRef;
@@ -74,6 +73,49 @@ public class DetailsFragment extends Fragment {
     Button rejectButton;
     Button cancelButton;
     String screenNum;
+    Boolean goodFlag = false;
+    Boolean buyFlag = false;
+
+
+    private ChildEventListener bfEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("bought");
+            String kindDetail = (String) map.get("kindDetail");
+
+            if (userId.equals(user.getUid())){
+                if (kindDetail.equals("リクエスト")){
+                    //購入リクエスト済み
+                    buyFlag = true;
+                    buyButton.setChecked(true);
+                }else{
+                    buyFlag = false;
+                    buyButton.setChecked(false);
+                }
+            }else{
+                //未購入
+                buyFlag = false;
+                buyButton.setChecked(false);
+            }
+        }
+        
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
 
     private ChildEventListener fvEventListener = new ChildEventListener() {
         @Override
@@ -81,14 +123,15 @@ public class DetailsFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userId = (String) map.get("userId");
-
             if (userId.equals(user.getUid())){
                 //いいね済み
+                goodFlag = true;
+                favButton.setChecked(true);
             }else{
                 //未いいね
+                goodFlag = false;
+                favButton.setChecked(false);
             }
-
-
         }
 
         @Override
@@ -126,10 +169,9 @@ public class DetailsFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             if (userData.getUid().equals(user.getUid())){
                 myData = userData;
@@ -276,8 +318,8 @@ public class DetailsFragment extends Fragment {
         evaluationDetailTextView  = (TextView)v.findViewById(R.id.evaluationDetailTextView);
         timeDetailTextView = (TextView)v.findViewById(R.id.timeDetailTextView);
         postContentsImageView = (ImageView)v.findViewById(R.id.postContentsImageView);
-        favButton = (ImageButton)v.findViewById(R.id.favButton);
-        buyButton = (Button)v.findViewById(R.id.buyButton);
+        favButton = (ToggleButton)v.findViewById(R.id.favButton);
+        buyButton = (ToggleButton)v.findViewById(R.id.buyButton);
         evaluationSpinner = (Spinner)v.findViewById(R.id.evaluationSpinner);
         saveButton = (Button)v.findViewById(R.id.saveButton);
         evaluationTextView = (TextView)v.findViewById(R.id.evaluationTextView);
@@ -411,13 +453,24 @@ public class DetailsFragment extends Fragment {
 
 
                 //ボタンの色がどっちならどう的な感じで上と連携してる
-//                if (goodDetailTextView.getText().toString().equals("いいね")){
-//                    //いいね済み
-//                    favRef.child(intentKey).removeValue();
-//                }else{
+                if (goodFlag == true){
+                    //いいね済み
+                    favRef.child(intentKey).removeValue();
+                    int totalGoods = Integer.parseInt(thisPost.getGood());
+                    totalGoods =totalGoods-1;
+                    String totalGd =String.valueOf(totalGoods);
+
+                    favRef.child(intentKey).removeValue();
+
+                    Map<String,Object> postGoodKey = new HashMap<>();
+                    postGoodKey.put("goods",totalGd);
+                    contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+                    goodFlag = false;
+                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+                }else{
                     //未いいね
                     Map<String,Object> favKey = new HashMap<>();
-
 
                     favKey.put("postUid",thisPost.getUserId());
                     favKey.put("userId",user.getUid());
@@ -425,33 +478,23 @@ public class DetailsFragment extends Fragment {
                     favKey.put("iconBitmapString",myData.getIconBitmapString());
                     favKey.put("time","0");
                     favKey.put("favKey",thisPost.getKey());
-
-
+                    favKey.put("kind","いいね");
+                    favKey.put("kindDetail","いいね");
 
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(intentKey,favKey);
                     favRef.updateChildren(childUpdates);
 
-
-
                     int totalGoods = Integer.parseInt(thisPost.getGood());
                     totalGoods =totalGoods+1;
                     String totalGd =String.valueOf(totalGoods);
 
-
-
                     Map<String,Object> postGoodKey = new HashMap<>();
-
                     postGoodKey.put("goods",totalGd);
-
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
-
-
-
+                    goodFlag = true;
                     contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-
-//                }
+                }
 
 
 
@@ -547,8 +590,10 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-                requestRef.child(BusinessFragment.tradeKey).removeValue();
 
+                Map<String,Object> newTradeKey = new HashMap<>();
+                newTradeKey.put("kindDetail","許可");
+                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
 
 
                 int stockCount = Integer.parseInt(thisPost.getStock());
@@ -573,19 +618,23 @@ public class DetailsFragment extends Fragment {
                 String key = tradeRef.child(user.getUid()).push().getKey();
 
                 tradeKey.put("tradeKey",key);
-                tradeKey.put("bought",user.getUid());
+                tradeKey.put("bought",BusinessFragment.boughtUid);
                 tradeKey.put("sold",thisPost.getUserId());
-                tradeKey.put("cancel","false");
                 tradeKey.put("receiveDate","0");
-                tradeKey.put("date",time);
+                tradeKey.put("date",BusinessFragment.buyDate);
                 tradeKey.put("payDay","0");
                 tradeKey.put("userName",thisPost.getName());
                 tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
                 tradeKey.put("evaluation","0");
-                tradeKey.put("case","0");
                 tradeKey.put("postKey",intentKey);
                 tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
                 tradeKey.put("stock",stc);
+                tradeKey.put("kind","購入");
+                tradeKey.put("kindDetail","許可済み");
+                tradeKey.put("buyName",myData.getName());
+                tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                tradeKey.put("permittedDate",time);
+
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,tradeKey);
@@ -610,8 +659,11 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-                //消してstockに+1する
-                requestRef.child(BusinessFragment.tradeKey).removeValue();
+                Map<String,Object> newTradeKey = new HashMap<>();
+                newTradeKey.put("kindDetail","拒否");
+                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
+
+                Snackbar.make(MainActivity.snack, "購入リクエストを拒否しました。", Snackbar.LENGTH_LONG).show();
 
                 Bundle screenBundle = new Bundle();
                 screenBundle.putString("screenKey","2");
@@ -630,8 +682,11 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-                //消してstockに+1する
-                requestRef.child(BusinessFragment.tradeKey).removeValue();
+                Map<String,Object> newTradeKey = new HashMap<>();
+                newTradeKey.put("kindDetail","キャンセル");
+                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
+
+                Snackbar.make(MainActivity.snack, "購入申請をキャンセルしました。", Snackbar.LENGTH_LONG).show();
 
                 //前に開いていたフラグメントに戻る
                 Bundle screenBundle = new Bundle();
@@ -653,52 +708,61 @@ public class DetailsFragment extends Fragment {
 
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-
-                int stockCount = Integer.parseInt(thisPost.getStock());
-                if (stockCount!=0){
-
-
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
-                    Map<String,Object> tradeKey = new HashMap<>();
-                    String key = requestRef.child(user.getUid()).push().getKey();
-
-                    tradeKey.put("tradeKey",key);
-                    tradeKey.put("bought",user.getUid());
-                    tradeKey.put("sold",thisPost.getUserId());
-                    tradeKey.put("cancel","false");
-                    tradeKey.put("receiveDate","0");
-                    tradeKey.put("date",time);
-                    tradeKey.put("payDay","0");
-                    tradeKey.put("userName",thisPost.getName());
-                    tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
-                    tradeKey.put("evaluation","0");
-                    tradeKey.put("case","0");
-                    tradeKey.put("postKey",intentKey);
-                    tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
-                    tradeKey.put("stock",thisPost.getStock());
-
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(key,tradeKey);
-                    requestRef.updateChildren(childUpdates);
-
-
-                    Map<String,Object> userDataKey = new HashMap<>();
-                    userDataKey.put("bought",thisPost.getBought());
-                    userDataKey.put("stock",thisPost.getStock());
-                    contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
-
-                    Snackbar.make(MainActivity.snack, "購入リクエストを送信しました。", Snackbar.LENGTH_LONG).show();
-
-
-
+                if (buyFlag==true){
+                    requestRef.child(intentKey).removeValue();
+                    Snackbar.make(MainActivity.snack, "購入リクエストをキャンセルしました。", Snackbar.LENGTH_LONG).show();
+                    buyFlag = false;
                     contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-
-
                 }else{
-                    Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                    int stockCount = Integer.parseInt(thisPost.getStock());
+                    if (stockCount!=0){
+
+
+                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+                        Map<String,Object> tradeKey = new HashMap<>();
+
+                        tradeKey.put("tradeKey",intentKey);
+                        tradeKey.put("bought",user.getUid());
+                        tradeKey.put("sold",thisPost.getUserId());
+                        tradeKey.put("receiveDate","0");
+                        tradeKey.put("date",time);
+                        tradeKey.put("payDay","0");
+                        tradeKey.put("userName",thisPost.getName());
+                        tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
+                        tradeKey.put("evaluation","0");
+                        tradeKey.put("postKey",intentKey);
+                        tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                        tradeKey.put("stock",thisPost.getStock());
+                        tradeKey.put("kind","購入");
+                        tradeKey.put("kindDetail","リクエスト");
+                        tradeKey.put("buyName",myData.getName());
+                        tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                        tradeKey.put("permittedDate","");
+
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put(intentKey,tradeKey);
+                        requestRef.updateChildren(childUpdates);
+
+
+                        Map<String,Object> userDataKey = new HashMap<>();
+                        userDataKey.put("bought",thisPost.getBought());
+                        userDataKey.put("stock",thisPost.getStock());
+                        contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+                        Snackbar.make(MainActivity.snack, "購入リクエストを送信しました。", Snackbar.LENGTH_LONG).show();
+
+                        contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+                    }else{
+                        Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                    }
+
+                    buyFlag = true;
                 }
+
+
+
 
 
             }
@@ -726,8 +790,13 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        favRef = mDataBaseReference.child(Const.FavoritePATH);
+        requestRef = mDataBaseReference.child(Const.RequestPATH);
 
         favRef.orderByChild("favKey").equalTo(intentKey).addChildEventListener(fvEventListener);
+        requestRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(bfEventListener);
     }
 
 
@@ -735,6 +804,8 @@ public class DetailsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         BusinessFragment.tradeKey=null;
+        BusinessFragment.boughtUid=null;
+        BusinessFragment.buyDate=null;
     }
 
 
