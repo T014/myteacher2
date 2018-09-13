@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,9 @@ class ListViewHolder {
     ImageView contentsImageView;
     TextView userNameTextVew;
     TextView contentsTextView;
+    TextView contentsTimeTextView;
+    ToggleButton goodButton;
+    TextView goodCountTextView;
     LinearLayout listLinearLayout;
 }
 
@@ -35,12 +41,15 @@ public class ListAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         //ファイル名
         String postImageBitmapString = timeLineArrayList.get(position).getImageBitmapString();
         String userIconImageBitmapString = timeLineArrayList.get(position).getUserIconBitmapString();
         String userName = timeLineArrayList.get(position).getName();
         String contents = timeLineArrayList.get(position).getContents();
+        String contentsTime = timeLineArrayList.get(position).getTime();
+        String goodCount = timeLineArrayList.get(position).getGood();
+        String favFlag = timeLineArrayList.get(position).getFavFlag();
 
         ListViewHolder listViewHolder;
         if (convertView == null) {
@@ -52,18 +61,57 @@ public class ListAdapter extends BaseAdapter{
             listViewHolder.contentsImageView = (ImageView) convertView.findViewById(R.id.contentsImageView);
             listViewHolder.userNameTextVew = (TextView) convertView.findViewById(R.id.postUserNameTextView);
             listViewHolder.contentsTextView = (TextView) convertView.findViewById(R.id.postContentsTextView);
+            listViewHolder.contentsTimeTextView = (TextView) convertView.findViewById(R.id.contentsTimeTextView);
+            listViewHolder.goodButton = (ToggleButton) convertView.findViewById(R.id.goodButton);
+            listViewHolder.goodCountTextView = (TextView) convertView.findViewById(R.id.goodCountTextView);
             listViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
             convertView.setTag(listViewHolder);
-        }
-        else {
+        } else {
             listViewHolder = (ListViewHolder) convertView.getTag();
         }
         if (userName != null){
             listViewHolder.userNameTextVew.setText(userName);
         }
         if (contents != null){
-            listViewHolder.contentsTextView.setText(contents);
+            int aaa = contents.length();
+            if (aaa>80){
+                String bbb = contents.substring(0,79);
+                String ccc = bbb+"...";
+                listViewHolder.contentsTextView.setText(ccc);
+            }else{
+                listViewHolder.contentsTextView.setText(contents);
+            }
+
         }
+        if (contentsTime!=null){
+            listViewHolder.contentsTimeTextView.setText(contentsTime);
+        }
+        if (goodCount!=null){
+            listViewHolder.goodCountTextView.setText(goodCount);
+        }
+        if (favFlag.equals("true")){
+            listViewHolder.goodButton.setChecked(true);
+        }else {
+            listViewHolder.goodButton.setChecked(false);
+        }
+        listViewHolder.goodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.goodButton);
+            }
+        });
+        listViewHolder.userIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.userIconImageView);
+            }
+        });
+        listViewHolder.contentsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.contentsImageView);
+            }
+        });
 
 
 
