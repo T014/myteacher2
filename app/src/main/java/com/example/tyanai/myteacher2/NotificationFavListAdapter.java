@@ -56,23 +56,24 @@ public class NotificationFavListAdapter extends BaseAdapter{
         } else {
             favListViewHolder = (FavListViewHolder) convertView.getTag();
         }
-        if (kind.equals("いいね")){
-            if (userName != null){
+        if (userName != null){
+            if (kind.equals("いいね")){
                 favListViewHolder.favListTextView.setText(userName+"さんがあなたの投稿にいいねしました。");
+            }else if (kind.equals("購入")){
+                if (kindDetail.equals("許可")){
+                    favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を許可しました。");
+                }else if (kindDetail.equals("拒否")) {
+                    favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を拒否しました。");
+                }else if (kindDetail.equals("リクエスト")){
+                    favListViewHolder.favListTextView.setText(userName+"さんがあなたの投稿に購入リクエストを送りました。");
+                }else if (kindDetail.equals("キャンセル")){
+                    favListViewHolder.favListTextView.setText(userName+"さんが購入リクエストをキャンセルしました。");
+                }
+            }else if (kind.equals("その他")){
+                favListViewHolder.favListTextView.setText(userName+"さんがあなたの検索履歴に近い投稿をしました。");
             }
-        }else if (kind.equals("購入")){
-            if (kind.equals("許可")){
-                favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を許可しました。");
-            }else if (kindDetail.equals("拒否")) {
-                favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を拒否しました。");
-            }else if (kindDetail.equals("リクエスト")){
-                favListViewHolder.favListTextView.setText(userName+"さんがあなたの投稿に購入リクエストを送りました。");
-            }else if (kindDetail.equals("キャンセル")){
-                favListViewHolder.favListTextView.setText(userName+"さんが購入リクエストをキャンセルしました。");
-            }
-        }else if (kind.equals("その他")){
-            favListViewHolder.favListTextView.setText(userName+"さんがあなたの検索履歴に近い投稿をしました。");
         }
+
 
 
 
