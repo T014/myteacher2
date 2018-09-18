@@ -33,8 +33,7 @@ public class NotificationFavListAdapter extends BaseAdapter{
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.layoutId = layoutId;
     }
-
-
+    
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         //ファイル名
