@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +52,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference messageKeyRef;
     int followCount;
     int followerCount;
-    Toolbar cToolbar;
-    public static UserData myData;
+    public static UserData accountData;
 
     String intentUserId;
     public static String uid;
@@ -67,6 +63,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     TabLayout tabLayout;
     ViewPager viewPager;
     FragmentStatePagerAdapter adapter;
+
+    private ArrayList<MessageListData> messageUidArrayList;
 
 
 
@@ -91,11 +89,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
-            myData = userData;
+             accountData = userData;
 
 
 
@@ -153,9 +152,42 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 }
             }
 
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
+
+
+    private ChildEventListener mkEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String messageKey = (String) map.get("messageKey");
+            String uid = (String) map.get("uid");
+            String userName = "";
+            String iconBitmapString = "";
+            String time="";
+            String contents = "";
+            String bitmapString = "";
+
+
+            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid());
+            messageUidArrayList.add(messageListData);
 
         }
+
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -176,6 +208,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onAttach(context);
 
         followArrayList = new ArrayList<String>();
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
@@ -183,9 +216,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         messageRef = mDataBaseReference.child(Const.MessagePATH);
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
-
-
-
 
         followRef.addChildEventListener(followEventListener);
 
@@ -196,13 +226,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onStart(){
         super.onStart();
 
-
-
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
+        messageUidArrayList = new ArrayList<MessageListData>();
+        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -237,7 +270,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         viewPager = (ViewPager) v.findViewById(R.id.pager);
-        //cToolbar = (Toolbar)v.findViewById(R.id.toolbar);
 
 
         return v;
@@ -247,6 +279,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         MainActivity.mToolbar.setTitle("プロフィール");
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
@@ -254,7 +287,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userRef = mDataBaseReference.child(Const.UsersPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
 
-        Bundle userBundle = getArguments();
+        final Bundle userBundle = getArguments();
         if (userBundle!=null){
             intentUserId = userBundle.getString("userId");
         }
@@ -299,12 +332,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
 
+
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
 
 
 
 
-        
+
 
         followEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -351,9 +385,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     plusFollowerCount.put("followers",strFollowerCount);
                     userRef.child(intentUserId).updateChildren(plusFollowerCount);
                 }
-
-
-
+                
 
             }
         });
@@ -363,46 +395,71 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             public void onClick(View view) {
 
 
+                ArrayList<String> uidArrayList = new ArrayList<String>();
+                int n = messageUidArrayList.size();
+                for (int i=0;i<n;i++){
+                    uidArrayList.add(messageUidArrayList.get(i).getUid());
+                }
 
-                Map<String,Object> makeMessageKeyRef = new HashMap<>();
-                String key = messageRef.push().getKey();
-                makeMessageKeyRef.put("messageKey",key);
-                makeMessageKeyRef.put("uid",user.getUid());
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,makeMessageKeyRef);
-                messageKeyRef.child(intentUserId).updateChildren(childUpdates);
+                if (uidArrayList.contains(accountData.getUid())){
+                    for (MessageListData bbb:messageUidArrayList){
+                        if (bbb.getUid().equals(accountData.getUid())){
+                            Bundle messageKeyBundle = new Bundle();
+                            messageKeyBundle.putString("key",bbb.getKey());
+                            ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                            fragmentThisMessage.setArguments(messageKeyBundle);
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
 
-
-
-                Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
-                makeMessageKeyRef2.put("messageKey",key);
-                makeMessageKeyRef2.put("uid",intentUserId);
-                Map<String,Object> childUpdates2 = new HashMap<>();
-                childUpdates2.put(key,makeMessageKeyRef2);
-                messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
-
-
-
-                Map<String,Object> makeMessageRef = new HashMap<>();
-                makeMessageRef.put("uid","");
-                makeMessageRef.put("userName","");
-                makeMessageRef.put("iconBitmapString","");
-                makeMessageRef.put("bitmapString","");
-                makeMessageRef.put("contents","");
-                makeMessageRef.put("time","");
-                Map<String,Object> childUp = new HashMap<>();
-                childUp.put(key,makeMessageRef);
-                messageRef.child(key).updateChildren(childUp);
+                }else{
+                    Map<String,Object> makeMessageKeyRef = new HashMap<>();
+                    String key = messageRef.push().getKey();
+                    makeMessageKeyRef.put("messageKey",key);
+                    makeMessageKeyRef.put("uid",user.getUid());
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,makeMessageKeyRef);
+                    messageKeyRef.child(intentUserId).updateChildren(childUpdates);
 
 
-                Bundle messageKeyBundle = new Bundle();
-                messageKeyBundle.putString("key",key);
-                ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
-                fragmentThisMessage.setArguments(messageKeyBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+
+                    Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
+                    makeMessageKeyRef2.put("messageKey",key);
+                    makeMessageKeyRef2.put("uid",intentUserId);
+                    Map<String,Object> childUpdates2 = new HashMap<>();
+                    childUpdates2.put(key,makeMessageKeyRef2);
+                    messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
+
+
+
+                    Map<String,Object> makeMessageRef = new HashMap<>();
+                    makeMessageRef.put("uid","");
+                    makeMessageRef.put("userName","");
+                    makeMessageRef.put("iconBitmapString","");
+                    makeMessageRef.put("bitmapString","");
+                    makeMessageRef.put("contents","");
+                    makeMessageRef.put("time","");
+                    Map<String,Object> childUp = new HashMap<>();
+                    childUp.put(key,makeMessageRef);
+                    messageRef.child(key).updateChildren(childUp);
+
+
+                    Bundle messageKeyBundle = new Bundle();
+                    messageKeyBundle.putString("key",key);
+                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                    fragmentThisMessage.setArguments(messageKeyBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
+
+
+
             }
         });
     }
