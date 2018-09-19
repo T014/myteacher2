@@ -87,7 +87,6 @@ public class ConfirmProfilePageFragment extends Fragment {
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
-            String share = (String) map.get("share");
             String bought = (String) map.get("bought");
             String evaluation = (String) map.get("evaluation");
             String cancel = (String) map.get("cancel");
@@ -103,11 +102,21 @@ public class ConfirmProfilePageFragment extends Fragment {
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
+            String favFlag="";
+
+            for (String fav : favKeyArrayList) {
+                if (key.equals(fav)) {
+                    favFlag = "true";
+                    break;
+                } else {
+                    favFlag = "false";
+                }
+            }
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             if (page==2){
@@ -198,11 +207,10 @@ public class ConfirmProfilePageFragment extends Fragment {
 
         page = getArguments().getInt(ARG_PARAM, 0);
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
+        timeLineArrayList.clear();
         if (page==1){
-            timeLineArrayList.clear();
             contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
         }else if (page==2){
-            timeLineArrayList.clear();
             contentsRef.addChildEventListener(updEventListener);
         }
 
@@ -223,37 +231,57 @@ public class ConfirmProfilePageFragment extends Fragment {
                     goodPosition = profileListView.getFirstVisiblePosition();
                     y = profileListView.getChildAt(0).getTop();
 
-                    //いいねの処理
-                    Map<String,Object> favKey = new HashMap<>();
-                    String key = favoriteRef.child(user.getUid()).push().getKey();
 
 
-                    favKey.put("postUid",timeLineArrayList.get(position).getUserId());
-                    favKey.put("userId",user.getUid());
-                    favKey.put("userName",ConfirmProfileFragment.myData.getName());
-                    favKey.put("iconBitmapString",ConfirmProfileFragment.myData.getIconBitmapString());
-                    favKey.put("time","0");
-                    favKey.put("favKey",timeLineArrayList.get(position).getKey());
+                    String favFlag = timeLineArrayList.get(position).getFavFlag();
+                    if (favFlag.equals("true")){
+                        String removeKey = timeLineArrayList.get(position).getKey();
+                        favoriteRef.child(removeKey).removeValue();
 
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(key,favKey);
-                    favoriteRef.updateChildren(childUpdates);
+                        int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
+                        totalGoods =totalGoods-1;
+                        String totalGd =String.valueOf(totalGoods);
 
-                    int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
-                    totalGoods =totalGoods+1;
-                    String totalGd =String.valueOf(totalGoods);
 
-                    Map<String,Object> postGoodKey = new HashMap<>();
-                    postGoodKey.put("goods",totalGd);
-                    contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
+                        Map<String,Object> postGoodKey = new HashMap<>();
+                        postGoodKey.put("goods",totalGd);
+                        contentsRef.child(removeKey).updateChildren(postGoodKey);
+
+                        favKeyArrayList.clear();
+                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+
+                    }else {
+                        int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
+                        totalGoods =totalGoods+1;
+                        String totalGd =String.valueOf(totalGoods);
+
+                        Map<String,Object> postGoodKey = new HashMap<>();
+                        postGoodKey.put("goods",totalGd);
+                        contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
+
+                        //いいねの処理
+                        String key = timeLineArrayList.get(position).getKey();
+                        Map<String,Object> favKey = new HashMap<>();
+
+                        favKey.put("postUid",timeLineArrayList.get(position).getUserId());
+                        favKey.put("userId",user.getUid());
+                        favKey.put("userName",ConfirmProfileFragment.accountData.getName());
+                        favKey.put("iconBitmapString",ConfirmProfileFragment.accountData.getIconBitmapString());
+                        favKey.put("time","0");
+                        favKey.put("favKey",timeLineArrayList.get(position).getKey());
+                        favKey.put("kind","いいね");
+                        favKey.put("kindDetail","いいね");
+
+                        favoriteRef.child(key).updateChildren(favKey);
+                        favKeyArrayList.clear();
+                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+
+                    }
 
                     timeLineArrayList.clear();
 
-                    if (page==1){
-                        contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
-                    }else if (page==2){
-                        contentsRef.addChildEventListener(updEventListener);
-                    }
+                    contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
+                    contentsRef.addChildEventListener(updEventListener);
 
 
                 }else if (view.getId()==R.id.userIconImageView){
@@ -290,19 +318,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public void onButtonPressed(Uri uri) {
@@ -330,10 +345,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         favKeyArrayList = new ArrayList<String>();
 
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
-
-
-
-
 
 
     }
