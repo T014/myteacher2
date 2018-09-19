@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -91,7 +90,11 @@ public class AuthenticationFragment extends Fragment {
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     phoneNumberEditText.setError("Invalid phone number.");
                 } else if (e instanceof FirebaseTooManyRequestsException) {
+                    Snackbar.make(MainActivity.snack, "Quota exceeded.",
+                            Snackbar.LENGTH_SHORT).show();
                 }
+
+
             }
 
             @Override
@@ -128,9 +131,9 @@ public class AuthenticationFragment extends Fragment {
         resendButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //resendVerificationCode(phoneNumberEditText.getText().toString(), mResendToken);
-                Intent intent = new Intent(getActivity().getApplicationContext(), PhoneAuthActivity.class);
-                startActivity(intent);
+                resendVerificationCode(phoneNumberEditText.getText().toString(), mResendToken);
+//                Intent intent = new Intent(getActivity().getApplicationContext(), PhoneAuthActivity.class);
+//                startActivity(intent);
             }
         });
 
