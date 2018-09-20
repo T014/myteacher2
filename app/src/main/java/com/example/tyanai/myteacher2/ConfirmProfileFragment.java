@@ -64,6 +64,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     ViewPager viewPager;
     FragmentStatePagerAdapter adapter;
 
+    int pos = 0;
+
     private ArrayList<MessageListData> messageUidArrayList;
 
 
@@ -385,7 +387,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     plusFollowerCount.put("followers",strFollowerCount);
                     userRef.child(intentUserId).updateChildren(plusFollowerCount);
                 }
-                
+
 
             }
         });
@@ -470,6 +472,20 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+        if (position==0){
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(this);
+            viewPager.setCurrentItem(0);
+            tabLayout.setupWithViewPager(viewPager);
+        }else if (position==1){
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(this);
+            viewPager.setCurrentItem(1);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+
     }
 
     @Override
