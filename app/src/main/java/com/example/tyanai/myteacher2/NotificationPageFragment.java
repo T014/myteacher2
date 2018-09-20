@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,8 +34,128 @@ public class NotificationPageFragment  extends Fragment {
     DatabaseReference mDataBaseReference;
     DatabaseReference usersRef;
     DatabaseReference favoriteRef;
+    DatabaseReference filterRef;
+    DatabaseReference requestRef;
     NotificationFavListAdapter mAdapter;
     private ArrayList<NotificationFavData> favUserArrayList;
+    private int page;
+
+
+
+    private ChildEventListener bEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("bought");
+            String userName = (String) map.get("userName");
+            String iconBitmapString = (String) map.get("userIcon");
+            String time = (String) map.get("date");
+            String buyKey = (String) map.get("postKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
+
+            if (!(kindDetail.equals("キャンセル"))){
+                if (!(kindDetail.equals("リクエスト"))){
+                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail);
+
+                    favUserArrayList.add(notificationFavData);
+                    mAdapter.setFavUserArrayList(favUserArrayList);
+                    notificationListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+
+                }
+            }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+    private ChildEventListener sEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("sold");
+            String userName = (String) map.get("buyName");
+            String iconBitmapString = (String) map.get("buyIconBitmapString");
+            String time = (String) map.get("date");
+            String buyKey = (String) map.get("postKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
+
+            if (!(kindDetail.equals("キャンセル"))) {
+                if (!(kindDetail.equals("許可"))){
+                    if (!(kindDetail.equals("拒否"))){
+                        NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail);
+                        favUserArrayList.add(notificationFavData);
+                        mAdapter.setFavUserArrayList(favUserArrayList);
+                        notificationListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+    private ChildEventListener fEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("filterUid");
+            String userName = (String) map.get("userName");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String time="";
+            String filterKey = (String) map.get("filterKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
+
+
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail);
+
+            favUserArrayList.add(notificationFavData);
+            mAdapter.setFavUserArrayList(favUserArrayList);
+            notificationListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
 
@@ -49,10 +171,13 @@ public class NotificationPageFragment  extends Fragment {
             String iconBitmapString = (String) map.get("iconBitmapString");
             String time="";
             String favPostKey = (String) map.get("favKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
 
-            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey);
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail);
 
-            //favUidArrayList.add(notificationFavData);
+
+
             if (!(notificationFavData.getUid().equals(user.getUid()))){
                 favUserArrayList.add(notificationFavData);
                 mAdapter.setFavUserArrayList(favUserArrayList);
@@ -75,10 +200,6 @@ public class NotificationPageFragment  extends Fragment {
         }
     };
 
-
-    // コンストラクタ
-    public NotificationPageFragment() {
-    }
 
     public static NotificationPageFragment newInstance(int page) {
         NotificationPageFragment fragment = new NotificationPageFragment();
@@ -109,7 +230,8 @@ public class NotificationPageFragment  extends Fragment {
 
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int page = getArguments().getInt(ARG_PARAM, 0);
+
+        page = getArguments().getInt(ARG_PARAM, 0);
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -121,6 +243,8 @@ public class NotificationPageFragment  extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
+        filterRef = mDataBaseReference.child(Const.FilterPATH);
+        requestRef = mDataBaseReference.child(Const.RequestPATH);
 
 
 
@@ -128,10 +252,96 @@ public class NotificationPageFragment  extends Fragment {
         if (page==1){
             favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
         }else if (page==2){
-            favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+            requestRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(bEventListener);
+            requestRef.orderByChild("sold").equalTo(user.getUid()).addChildEventListener(sEventListener);
         }else if (page==3){
-            favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+            filterRef.orderByChild("filterUid").equalTo(user.getUid()).addChildEventListener(fEventListener);
         }
+
+
+        notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+
+
+                if (page==1){
+                    if (view.getId()==R.id.favImageView) {
+                        //いいねのときアカウント
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("userId",favUserArrayList.get(position).getUid());
+
+                        ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                        fragmentProfileConfirm.setArguments(userBundle);
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                                .commit();
+                    }else{
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key",favUserArrayList.get(position).getFavPostKey());
+                        bundle.putString("screenKey","timeLine");
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(bundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }else if (page==2){
+                    if (view.getId()==R.id.favImageView) {
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("userId",favUserArrayList.get(position).getUid());
+
+                        ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                        fragmentProfileConfirm.setArguments(userBundle);
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                                .commit();
+                    }else{
+                        String screenNumKey = favUserArrayList.get(position).getKindDetail();
+                        String screenNum="";
+                        if (screenNumKey.equals("リクエスト")){
+                            screenNum="request";
+                        }else if (screenNumKey.equals("許可")){
+                            screenNum="business";
+                        }else if (screenNumKey.equals("拒否")){
+                            screenNum="timeLine";
+                        }
+
+                        //購入の時アカウント
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("key",favUserArrayList.get(position).getFavPostKey());
+                        userBundle.putString("screenKey",screenNum);
+
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(userBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                    }
+
+                }else if (page==3){
+                    //検索履歴一致のとき投稿
+                    Bundle bundle = new Bundle();
+                    bundle.putString("key",favUserArrayList.get(position).getFavPostKey());
+                    bundle.putString("screenKey","timeLine");
+                    DetailsFragment fragmentDetails = new DetailsFragment();
+                    fragmentDetails.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
+
+
+
+                }
+
+            }
+        });
 
     }
 
