@@ -389,14 +389,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        bottomNavigationView.setVisibility(View.INVISIBLE);
+        bottomNavigationView.setEnabled(false);
         switch (item.getItemId()){
             case R.id.notificationButton:
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        bottomNavigationView.setVisibility(View.VISIBLE);
-                    }
-                }, 3000L);
+//                new Handler().postDelayed(new Runnable() {
+//                    public void run() {
+//                        bottomNavigationView.setEnabled(true);
+//                    }
+//                }, 3000L);
+                
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
                     if (currentFragmentTag!=null){
