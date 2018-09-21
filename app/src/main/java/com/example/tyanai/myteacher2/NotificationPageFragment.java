@@ -54,10 +54,12 @@ public class NotificationPageFragment  extends Fragment {
             String buyKey = (String) map.get("postKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
+            String soldUid = (String) map.get("sold");
+            String tradeKey = (String) map.get("tradeKey");
 
             if (!(kindDetail.equals("キャンセル"))){
                 if (!(kindDetail.equals("リクエスト"))){
-                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail);
+                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey);
 
                     favUserArrayList.add(notificationFavData);
                     mAdapter.setFavUserArrayList(favUserArrayList);
@@ -93,11 +95,13 @@ public class NotificationPageFragment  extends Fragment {
             String buyKey = (String) map.get("postKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
+            String soldUid = (String) map.get("sold");
+            String tradeKey = (String) map.get("tradeKey");
 
             if (!(kindDetail.equals("キャンセル"))) {
                 if (!(kindDetail.equals("許可"))){
                     if (!(kindDetail.equals("拒否"))){
-                        NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail);
+                        NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey);
                         favUserArrayList.add(notificationFavData);
                         mAdapter.setFavUserArrayList(favUserArrayList);
                         notificationListView.setAdapter(mAdapter);
@@ -133,9 +137,11 @@ public class NotificationPageFragment  extends Fragment {
             String filterKey = (String) map.get("filterKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
+            String soldUid ="";
+            String tradeKey ="";
 
 
-            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail);
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail,soldUid,tradeKey);
 
             favUserArrayList.add(notificationFavData);
             mAdapter.setFavUserArrayList(favUserArrayList);
@@ -173,8 +179,10 @@ public class NotificationPageFragment  extends Fragment {
             String favPostKey = (String) map.get("favKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
+            String soldUid="";
+            String tradeKey ="";
 
-            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail);
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail,soldUid,tradeKey);
 
 
 
@@ -291,7 +299,7 @@ public class NotificationPageFragment  extends Fragment {
                 }else if (page==2){
                     if (view.getId()==R.id.favImageView) {
                         Bundle userBundle = new Bundle();
-                        userBundle.putString("userId",favUserArrayList.get(position).getUid());
+                        userBundle.putString("userId",favUserArrayList.get(position).getSoldUid());
 
                         ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
                         fragmentProfileConfirm.setArguments(userBundle);
@@ -334,9 +342,6 @@ public class NotificationPageFragment  extends Fragment {
                     transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
                     transaction.addToBackStack(null);
                     transaction.commit();
-
-
-
 
                 }
 
