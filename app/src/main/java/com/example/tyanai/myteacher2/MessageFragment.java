@@ -2,6 +2,7 @@ package com.example.tyanai.myteacher2;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +100,6 @@ public class MessageFragment extends Fragment {
                 if (i < uidArrayList.size())
                 userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
             }
-
-
-
 
         }
 
@@ -246,12 +244,43 @@ public class MessageFragment extends Fragment {
 
                 ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
                 fragmentThisMessage.setArguments(messageKeyBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG)
-                        .commit();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        messageRef = mDataBaseReference.child(Const.MessagePATH);
+        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+
+        messageListDataArrayList = new ArrayList<MessageListData>();
+        newMessageListDataArrayList = new ArrayList<MessageListData>();
+        uidArrayList = new ArrayList<String>();
+        keyArrayList = new ArrayList<String>();
+        messageListDataArrayList.clear();
+        newMessageListDataArrayList.clear();
+        uidArrayList.clear();
+        keyArrayList.clear();
+
+        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
+        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        
+        i=0;
     }
 }
