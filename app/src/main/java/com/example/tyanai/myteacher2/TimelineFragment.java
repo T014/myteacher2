@@ -41,7 +41,6 @@ public class TimelineFragment extends Fragment {
 
 
 
-
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -103,7 +102,7 @@ public class TimelineFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
+//            HashMap map = (HashMap) dataSnapshot.getValue();
 
 //            String userId = (String) map.get("userId");
 //            String userName = (String) map.get("userName");
@@ -169,12 +168,8 @@ public class TimelineFragment extends Fragment {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String userId = (String) map.get("userId");
             String favKey = (String) map.get("favKey");
-            if (userId.equals(user.getUid())){
-                //いいね済み
-                favKeyArrayList.add(favKey);
-            }
+            favKeyArrayList.add(favKey);
         }
 
         @Override
@@ -190,6 +185,7 @@ public class TimelineFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
+
 
 
 
@@ -272,10 +268,8 @@ public class TimelineFragment extends Fragment {
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                favKeyArrayList.clear();
                 if (view.getId()==R.id.goodButton){
-
-
                     goodPosition = timeLineListView.getFirstVisiblePosition();
                     y = timeLineListView.getChildAt(0).getTop();
 
@@ -320,7 +314,6 @@ public class TimelineFragment extends Fragment {
                         favKey.put("kind","いいね");
                         favKey.put("kindDetail","いいね");
 
-
                         favRef.child(key).updateChildren(favKey);
                         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
                         timeLineArrayList.clear();
@@ -354,7 +347,6 @@ public class TimelineFragment extends Fragment {
 
 
                 }
-                favKeyArrayList.clear();
             }
 
 
@@ -365,11 +357,12 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        favKeyArrayList = new ArrayList<String>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        usersRef = mDataBaseReference.child(Const.UsersPATH);
-        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
-
+        favRef = mDataBaseReference.child(Const.FavoritePATH);
+        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
     }
 
 
@@ -377,12 +370,11 @@ public class TimelineFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        favKeyArrayList = new ArrayList<String>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        favRef = mDataBaseReference.child(Const.FavoritePATH);
+        usersRef = mDataBaseReference.child(Const.UsersPATH);
+        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
 
-        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
     }
 
     @Override
@@ -395,8 +387,15 @@ public class TimelineFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
 
-        goodPosition = timeLineListView.getFirstVisiblePosition();
-        y = timeLineListView.getChildAt(0).getTop();
+        if (timeLineArrayList.size()!=0){
+            if (getView().getTop()!=0){
+                goodPosition = timeLineListView.getFirstVisiblePosition();
+                if (goodPosition!=0){
+                    y = timeLineListView.getChildAt(0).getTop();
+                }
+            }
+        }
+
 
     }
 
