@@ -280,7 +280,7 @@ public class MessageFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        
+
         i=0;
     }
 }
