@@ -1,17 +1,14 @@
 package com.example.tyanai.myteacher2;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,15 +28,6 @@ public class GridFragment extends Fragment {
     DatabaseReference gridRef;
     String flag;
 
-
-
-
-
-
-
-
-
-
     //mEventListenerの設定と初期化
     private ChildEventListener gEventListener = new ChildEventListener() {
         @Override
@@ -53,6 +41,7 @@ public class GridFragment extends Fragment {
             String date = (String) map.get("date");
             String imageBitmapString = (String) map.get("imageBitmapString");
             String contents = (String) map.get("contents");
+            String costType = (String) map.get("costType");
             String cost = (String) map.get("cost");
             String howLong = (String) map.get("howLong");
             String goods = (String) map.get("goods");
@@ -70,12 +59,14 @@ public class GridFragment extends Fragment {
             String age = (String) map.get("age");
             String taught = (String) map.get("taught");
             String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
 
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-                    , contents,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation);
+                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
 
 
@@ -87,9 +78,6 @@ public class GridFragment extends Fragment {
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -100,9 +88,6 @@ public class GridFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
-
-
 
     };
 
@@ -141,41 +126,28 @@ public class GridFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
                 flagBundle=null;
             }else {
-                //gridRef = mDataBaseReference.child(Const.AreaPATH).child("sports").child("tennis");
                 gridRef = mDataBaseReference.child(Const.ContentsPATH);
                 gridRef.orderByChild("postType").equalTo(flag).addChildEventListener(gEventListener);
             }
-
         }
-
-
-
-
-
-
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
 
                 Bundle bundle = new Bundle();
                 if (flag.equals("search")){
-
                     bundle.putString("key",SearchFragment.searchArrayList.get(position).getKey());
-
                 }else{
-
                     bundle.putString("key",postDataArrayList.get(position).getKey());
-
                 }
-
+                bundle.putString("screenKey","grid");
 
                 DetailsFragment fragmentDetails = new DetailsFragment();
                 fragmentDetails.setArguments(bundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
-                        .commit();
-
-
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }
