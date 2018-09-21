@@ -91,11 +91,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.item_Timeline:
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
-                        if (!(currentFragmentTag.equals("TimelineFragment"))){
-                            fragmentTimeline = new TimelineFragment();
-                            transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                        if (currentFragmentTag!=null){
+                            if (currentFragmentTag.equals("DetailsFragment")){
+                                fragmentTimeline = new TimelineFragment();
+                                transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
+                                transaction.commit();
+                            }else if (!(currentFragmentTag.equals("TimelineFragment"))){
+                                fragmentTimeline = new TimelineFragment();
+                                transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
                         }
                     }
                     return true;
@@ -103,11 +109,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.item_Area:
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
-                        if (!(currentFragmentTag.equals("AreaFragment"))){
-                            fragmentArea = new AreaFragment();
-                            transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                        if (currentFragmentTag!=null){
+                            if (currentFragmentTag.equals("DetailsFragment")){
+                                fragmentArea = new AreaFragment();
+                                transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
+                                transaction.commit();
+                            }else if (!(currentFragmentTag.equals("AreaFragment"))){
+                                fragmentArea = new AreaFragment();
+                                transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
                         }
                     }
                     return true;
@@ -115,11 +127,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.item_Post:
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
-                        if (!(currentFragmentTag.equals("MakePostFragment"))){
-                            fragmentMakePost = new MakePostFragment();
-                            transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                        if (currentFragmentTag!=null){
+                            if (currentFragmentTag.equals("DetailsFragment")){
+                                fragmentMakePost = new MakePostFragment();
+                                transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                                transaction.commit();
+                            }else if (!(currentFragmentTag.equals("MakePostFragment"))){
+                                fragmentMakePost = new MakePostFragment();
+                                transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
                         }
                     }
                     return true;
@@ -127,24 +145,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.item_Message:
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
-                        if (!(currentFragmentTag.equals("MessageFragment"))){
-                            fragmentMessage = new MessageFragment();
-                            transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                        if (currentFragmentTag!=null){
+                            if (currentFragmentTag.equals("DetailsFragment")){
+                                fragmentMessage = new MessageFragment();
+                                transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
+                                transaction.commit();
+                            }else if (!(currentFragmentTag.equals("MessageFragment"))){
+                                fragmentMessage = new MessageFragment();
+                                transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
                         }
+
                     }
                     return true;
 
                 case R.id.item_Community:
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
-                        if (!(currentFragmentTag.equals("ConfirmProfileFragment"))){
-                            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                            transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                        if (currentFragmentTag!=null){
+                            if (currentFragmentTag.equals("DetailsFragment")){
+                                ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                                transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                                transaction.commit();
+                            }else if (!(currentFragmentTag.equals("ConfirmProfileFragment"))){
+                                ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                                transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
                         }
+
                     }
 
 //                    fragmentCommunity = new CommunityFragment();
@@ -369,13 +401,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.notificationButton:
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
-                    if (!(currentFragmentTag.equals("NotificationFragment"))){
-                        //電話番号とか身分証を登録しているかの確認
-                        FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
-                        NotificationFragment fragmentNotification = new NotificationFragment();
-                        optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
-                        optionTransaction.addToBackStack(null);
-                        optionTransaction.commit();
+                    if (currentFragmentTag!=null){
+                        if (currentFragmentTag.equals("DetailFragment")){
+                            //電話番号とか身分証を登録しているかの確認
+                            FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
+                            NotificationFragment fragmentNotification = new NotificationFragment();
+                            optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
+                            optionTransaction.commit();
+                        }else if (!(currentFragmentTag.equals("NotificationFragment"))){
+                            FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
+                            NotificationFragment fragmentNotification = new NotificationFragment();
+                            optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
+                            optionTransaction.addToBackStack(null);
+                            optionTransaction.commit();
+                        }
                     }
                 }
                 break;
@@ -383,13 +422,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.searchButton:
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
-                    if (!(currentFragmentTag.equals("SearchFragment"))){
-                        FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
-                        //電話番号とか身分証を登録しているかの確認
-                        SearchFragment fragmentSearch = new SearchFragment();
-                        optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
-                        optionsTransaction.addToBackStack(null);
-                        optionsTransaction.commit();
+                    if (currentFragmentTag!=null){
+                        if (currentFragmentTag.equals("DetailFragment")){
+                            FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
+                            //電話番号とか身分証を登録しているかの確認
+                            SearchFragment fragmentSearch = new SearchFragment();
+                            optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                            optionsTransaction.commit();
+                        }else if (!(currentFragmentTag.equals("SearchFragment"))){
+                            FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
+                            SearchFragment fragmentSearch = new SearchFragment();
+                            optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                            optionsTransaction.addToBackStack(null);
+                            optionsTransaction.commit();
+                        }
                     }
                 }
                 break;
@@ -409,64 +455,142 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (currentFragment!=null) {
+            String currentFragmentTag = currentFragment.getTag();
+            if (currentFragmentTag!=null){
 
-        if (id == R.id.nav_profile) {
-            mToolbar.setTitle("プロフィール");
-            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-            drawerTransaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        }else if (id == R.id.nav_business) {
-            mToolbar.setTitle("取引履歴");
-            Bundle screenBundle = new Bundle();
-            screenBundle.putString("screenKey","business");
-            BusinessFragment fragmentBusiness = new BusinessFragment();
-            fragmentBusiness.setArguments(screenBundle);
-            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        }else if (id == R.id.nav_apply) {
-            mToolbar.setTitle("購入申請");
-            Bundle screenBundle = new Bundle();
-            screenBundle.putString("screenKey","apply");
-            BusinessFragment fragmentBusiness = new BusinessFragment();
-            fragmentBusiness.setArguments(screenBundle);
-            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        } else if (id == R.id.nav_request) {
-            mToolbar.setTitle("購入リクエスト");
-            Bundle screenBundle = new Bundle();
-            screenBundle.putString("screenKey","request");
-            BusinessFragment fragmentBusiness = new BusinessFragment();
-            fragmentBusiness.setArguments(screenBundle);
-            drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        } else if (id == R.id.nav_authentication){
-            mToolbar.setTitle("ユーザー認証");
-            AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
-            drawerTransaction.replace(R.id.container,fragmentAuthentication,AuthenticationFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        } else if (id == R.id.nav_agreement) {
-            mToolbar.setTitle("利用規約");
-            AgreementFragment fragmentAgreement = new AgreementFragment();
-            drawerTransaction.replace(R.id.container,fragmentAgreement,AgreementFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        }else if (id == R.id.nav_contract) {
-            mToolbar.setTitle("お問い合わせ");
-            ContractFragment fragmentContract = new ContractFragment();
-            drawerTransaction.replace(R.id.container, fragmentContract ,ContractFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
-        }  else if (id == R.id.nav_logout) {
-            mToolbar.setTitle("ログアウト");
-            LogoutFragment fragmentLogout = new LogoutFragment();
-            drawerTransaction.replace(R.id.container, fragmentLogout ,LogoutFragment.TAG);
-            drawerTransaction.addToBackStack(null);
-            drawerTransaction.commit();
+            }
+            if (id == R.id.nav_profile) {
+                mToolbar.setTitle("プロフィール");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                    drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                    drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_business) {
+                mToolbar.setTitle("取引履歴");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "business");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "business");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+            } else if (id == R.id.nav_apply) {
+                mToolbar.setTitle("購入申請");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "apply");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "apply");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_request) {
+                mToolbar.setTitle("購入リクエスト");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "request");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }else {
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey", "request");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_authentication) {
+                mToolbar.setTitle("ユーザー認証");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
+                    drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
+                    drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_agreement) {
+                mToolbar.setTitle("利用規約");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    AgreementFragment fragmentAgreement = new AgreementFragment();
+                    drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    AgreementFragment fragmentAgreement = new AgreementFragment();
+                    drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_contract) {
+                mToolbar.setTitle("お問い合わせ");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    ContractFragment fragmentContract = new ContractFragment();
+                    drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    ContractFragment fragmentContract = new ContractFragment();
+                    drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            } else if (id == R.id.nav_logout) {
+                mToolbar.setTitle("ログアウト");
+                if (currentFragmentTag.equals("DetailsFragment")) {
+                    LogoutFragment fragmentLogout = new LogoutFragment();
+                    drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
+                    drawerTransaction.commit();
+                }else {
+                    LogoutFragment fragmentLogout = new LogoutFragment();
+                    drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
+                    drawerTransaction.addToBackStack(null);
+                    drawerTransaction.commit();
+                }
+
+
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -603,6 +727,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // 戻るボタンが押されたときの処理
             //fragmentを取得してinputなら現在の画面を保存して終了
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+            FragmentTransaction backStackTransaction = getSupportFragmentManager().beginTransaction();
 
             if (currentFragment!=null){
                 String currentFragmentTag = currentFragment.getTag();
@@ -610,11 +735,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     InputProfileFragment.saveDataFrag=1;
                     InputProfileFragment.saveData();
                 }
+
+                backStackTransaction.remove(currentFragment);
+                backStackTransaction.commit();
+
+
             }
-//        }else{
-//            this.finish();
-//            this.moveTaskToBack(true);
-//            return false;
         }
         return super.onKeyDown(keyCode, event);
     }
