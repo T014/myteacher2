@@ -17,9 +17,7 @@ public class UserData {
     private String mGroups;
     private String mDate;
     private String mIconBitmapString;
-    private String mHeaderBitmapString;
-
-
+    private String mCoin;
 
     public String getName(){
         return mName;
@@ -42,15 +40,12 @@ public class UserData {
     public String getFavorites(){
         return mFavorites;
     }
-
     public String getSex() {
         return mSex;
     }
-
     public String getAge() {
         return mAge;
     }
-
     public String getEvaluations(){
         return mEvaluations;
     }
@@ -69,13 +64,13 @@ public class UserData {
     public String getIconBitmapString(){
         return mIconBitmapString;
     }
-    public String getHeaderBitmapString(){
-        return mHeaderBitmapString;
+    public String getCoin(){
+        return mCoin;
     }
 
     public UserData(String name, String userId, String comment, String follows, String followers
             , String posts, String favorites,String sex,String age, String evaluations, String taught
-            , String period, String group,String date, String iconBitmapString, String headerBitmapString) {
+            , String period, String group,String date, String iconBitmapString,String coin) {
         mName = name;
         mUserId = userId;
         mComment = comment;
@@ -91,8 +86,6 @@ public class UserData {
         mGroups = group;
         mDate = date;
         mIconBitmapString = iconBitmapString;
-        mHeaderBitmapString = headerBitmapString;
-
-
+        mCoin = coin;
     }
 }
