@@ -37,19 +37,15 @@ public class ConfirmProfilePageFragment extends Fragment {
     private ArrayList<PostData> timeLineArrayList;
     private ArrayList<String> favKeyArrayList;
     ListAdapter mAdapter;
-
     int goodPosition;
     int y;
-
     int page;
-
 
 
     private ChildEventListener fvdEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
-
 
             String key = (String) map.get("favKey");
             favKeyArrayList.add(key);
@@ -114,7 +110,6 @@ public class ConfirmProfilePageFragment extends Fragment {
             }
 
 
-
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
@@ -158,19 +153,12 @@ public class ConfirmProfilePageFragment extends Fragment {
     };
 
 
-
-
-    // コンストラクタ
-    public ConfirmProfilePageFragment() {
-
-
-    }
-
     public static ConfirmProfilePageFragment newInstance(int page) {
             ConfirmProfilePageFragment fragment = new ConfirmProfilePageFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_PARAM, page);
             fragment.setArguments(args);
+
             return fragment;
     }
 
@@ -186,11 +174,8 @@ public class ConfirmProfilePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_confirmprofile_page, container, false);
-
         profileListView = (ListView) view.findViewById(R.id.profileListView);
-
 
         return view;
     }
@@ -215,23 +200,14 @@ public class ConfirmProfilePageFragment extends Fragment {
         }
 
 
-
-
-
-
         profileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (view.getId()==R.id.goodButton){
 
-
-
-
                     goodPosition = profileListView.getFirstVisiblePosition();
                     y = profileListView.getChildAt(0).getTop();
-
-
 
                     String favFlag = timeLineArrayList.get(position).getFavFlag();
                     if (favFlag.equals("true")){
@@ -249,6 +225,7 @@ public class ConfirmProfilePageFragment extends Fragment {
 
                         favKeyArrayList.clear();
                         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+                        timeLineArrayList.clear();
 
                     }else {
                         int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
@@ -279,9 +256,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                     }
 
                     timeLineArrayList.clear();
-
                     contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
-                    contentsRef.addChildEventListener(updEventListener);
 
 
                 }else if (view.getId()==R.id.userIconImageView){
@@ -297,27 +272,24 @@ public class ConfirmProfilePageFragment extends Fragment {
 
                 }else if (view.getId()==R.id.contentImageView) {
                     //画像拡大表示
-                }else{
+                }else {
 
                     Bundle bundle = new Bundle();
 
-                    bundle.putString("key",timeLineArrayList.get(position).getKey());
-                    bundle.putString("screenKey","confirm");
+                    bundle.putString("key", timeLineArrayList.get(position).getKey());
+                    bundle.putString("screenKey", "confirm");
 
 
                     DetailsFragment fragmentDetails = new DetailsFragment();
                     fragmentDetails.setArguments(bundle);
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
+                            .replace(R.id.container, fragmentDetails, DetailsFragment.TAG)
                             .commit();
-
                 }
             }
 
 
         });
-
-
     }
 
     public void onButtonPressed(Uri uri) {
@@ -345,8 +317,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         favKeyArrayList = new ArrayList<String>();
 
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
-
-
     }
 
     @Override
@@ -357,13 +327,5 @@ public class ConfirmProfilePageFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
-
-
-
-
-
     }
-
-
-
 }
