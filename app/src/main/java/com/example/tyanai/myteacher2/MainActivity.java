@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser user;
     public AreaFragment fragmentArea;
     public TimelineFragment fragmentTimeline;
-    public NotificationFragment fragmentNotification;
-    public CommunityFragment fragmentCommunity;
     public MessageFragment fragmentMessage;
     public MakePostFragment fragmentMakePost;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -88,39 +86,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
             switch (item.getItemId()) {
                 case R.id.item_Timeline:
-                    fragmentTimeline = new TimelineFragment();
-                    transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    if (currentFragment!=null){
+                        String currentFragmentTag = currentFragment.getTag();
+                        if (!(currentFragmentTag.equals("TimelineFragment"))){
+                            fragmentTimeline = new TimelineFragment();
+                            transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
                     return true;
 
                 case R.id.item_Area:
-                    fragmentArea = new AreaFragment();
-                    transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    if (currentFragment!=null){
+                        String currentFragmentTag = currentFragment.getTag();
+                        if (!(currentFragmentTag.equals("AreaFragment"))){
+                            fragmentArea = new AreaFragment();
+                            transaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
                     return true;
 
                 case R.id.item_Post:
-                    fragmentMakePost = new MakePostFragment();
-                    transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    if (currentFragment!=null){
+                        String currentFragmentTag = currentFragment.getTag();
+                        if (!(currentFragmentTag.equals("MakePostFragment"))){
+                            fragmentMakePost = new MakePostFragment();
+                            transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
                     return true;
 
                 case R.id.item_Message:
-                    fragmentMessage = new MessageFragment();
-                    transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    if (currentFragment!=null){
+                        String currentFragmentTag = currentFragment.getTag();
+                        if (!(currentFragmentTag.equals("MessageFragment"))){
+                            fragmentMessage = new MessageFragment();
+                            transaction.replace(R.id.container, fragmentMessage,MessageFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
                     return true;
+
                 case R.id.item_Community:
-                    ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                    transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    if (currentFragment!=null){
+                        String currentFragmentTag = currentFragment.getTag();
+                        if (!(currentFragmentTag.equals("ConfirmProfileFragment"))){
+                            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                            transaction.replace(R.id.container, fragmentConfirmProfile,ConfirmProfileFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
+
 //                    fragmentCommunity = new CommunityFragment();
 //                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
 //                    transaction.commit();
@@ -238,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // 閉じた時のイベント
             public void onDrawerClosed(View view) {
                 invalidateOptionsMenu();
-                String a = "aaa";
             }
             // 開いた時のイベント
             public void onDrawerOpened(View drawerView) {
@@ -251,11 +276,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-
-
-
-
 
 
 
@@ -343,29 +363,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
         switch (item.getItemId()){
 
             case R.id.notificationButton:
-
-
-                //電話番号とか身分証を登録しているかの確認
-                FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
-                NotificationFragment fragmentNotification = new NotificationFragment();
-                optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
-                optionTransaction.addToBackStack(null);
-                optionTransaction.commit();
-
+                if (currentFragment!=null){
+                    String currentFragmentTag = currentFragment.getTag();
+                    if (!(currentFragmentTag.equals("NotificationFragment"))){
+                        //電話番号とか身分証を登録しているかの確認
+                        FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
+                        NotificationFragment fragmentNotification = new NotificationFragment();
+                        optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
+                        optionTransaction.addToBackStack(null);
+                        optionTransaction.commit();
+                    }
+                }
                 break;
 
             case R.id.searchButton:
-
-                FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
-                //電話番号とか身分証を登録しているかの確認
-                SearchFragment fragmentSearch = new SearchFragment();
-                optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
-                optionsTransaction.addToBackStack(null);
-                optionsTransaction.commit();
-
+                if (currentFragment!=null){
+                    String currentFragmentTag = currentFragment.getTag();
+                    if (!(currentFragmentTag.equals("SearchFragment"))){
+                        FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
+                        //電話番号とか身分証を登録しているかの確認
+                        SearchFragment fragmentSearch = new SearchFragment();
+                        optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                        optionsTransaction.addToBackStack(null);
+                        optionsTransaction.commit();
+                    }
+                }
                 break;
         }
         return false;
@@ -400,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         }else if (id == R.id.nav_apply) {
-            mToolbar.setTitle("利用申請");
+            mToolbar.setTitle("購入申請");
             Bundle screenBundle = new Bundle();
             screenBundle.putString("screenKey","apply");
             BusinessFragment fragmentBusiness = new BusinessFragment();
@@ -409,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
         } else if (id == R.id.nav_request) {
-            mToolbar.setTitle("利用リクエスト");
+            mToolbar.setTitle("購入リクエスト");
             Bundle screenBundle = new Bundle();
             screenBundle.putString("screenKey","request");
             BusinessFragment fragmentBusiness = new BusinessFragment();
@@ -417,7 +443,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerTransaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
             drawerTransaction.addToBackStack(null);
             drawerTransaction.commit();
-        }  else if (id == R.id.nav_agreement) {
+        } else if (id == R.id.nav_authentication){
+            mToolbar.setTitle("ユーザー認証");
+            AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
+            drawerTransaction.replace(R.id.container,fragmentAuthentication,AuthenticationFragment.TAG);
+            drawerTransaction.addToBackStack(null);
+            drawerTransaction.commit();
+        } else if (id == R.id.nav_agreement) {
             mToolbar.setTitle("利用規約");
             AgreementFragment fragmentAgreement = new AgreementFragment();
             drawerTransaction.replace(R.id.container,fragmentAgreement,AgreementFragment.TAG);
@@ -518,11 +550,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     if (size<3000000){
                         Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        if(pFlag==1){
-                            //ヘッダー画像を表示
-                            InputProfileFragment.headerImageView.setImageBitmap(null);
-                            InputProfileFragment.headerImageView.setImageBitmap(img);
-                        }else if(pFlag==2){
+                        if(pFlag==2){
                             //アイコン画像を表示
                             InputProfileFragment.iconImageView.setImageBitmap(null);
                             InputProfileFragment.iconImageView.setImageBitmap(img);
@@ -531,11 +559,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             MakePostFragment.postImageView.setImageBitmap(img);
                         }
                     }else {
-                        if(pFlag==1){
-                            //ヘッダー画像を表示
-                            InputProfileFragment.headerImageView.setImageBitmap(null);
-                            InputProfileFragment.headerImageView.setImageResource(R.drawable.plusbutton);
-                        }else if(pFlag==2){
+                        if(pFlag==2){
                             //アイコン画像を表示
                             InputProfileFragment.iconImageView.setImageBitmap(null);
                             InputProfileFragment.iconImageView.setImageResource(R.drawable.plusbutton);
@@ -543,7 +567,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             MakePostFragment.postImageView.setImageBitmap(null);
                             MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
                         }
-
                     }
 
 
@@ -586,8 +609,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (currentFragmentTag.equals("InputProfileFragment")){
                     InputProfileFragment.saveDataFrag=1;
                     InputProfileFragment.saveData();
-                }else if (currentFragmentTag.equals("MakePostFragment")){
-                    //別の領域を作って保存しておく
                 }
             }
 //        }else{
