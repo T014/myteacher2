@@ -108,7 +108,6 @@ public class ThisMessageFragment extends Fragment {
                 int last = messageListDataArrayList.size()-1;
                 messageListView.setSelection(last);
             }
-
         }
 
         @Override
