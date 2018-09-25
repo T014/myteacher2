@@ -109,7 +109,6 @@ public class ThisMessageFragment extends Fragment {
                 messageListView.setSelection(last);
             }
 
-
         }
 
         @Override
@@ -168,7 +167,6 @@ public class ThisMessageFragment extends Fragment {
                 userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mcEventListener);
             }
         });
-        
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
