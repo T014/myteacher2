@@ -39,8 +39,6 @@ public class TimelineFragment extends Fragment {
     UserData myData;
     private ArrayList<String> favKeyArrayList;
 
-
-
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -83,11 +81,9 @@ public class TimelineFragment extends Fragment {
                     favFlag = "false";
                 }
             }
-
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
-
 
             Collections.reverse(timeLineArrayList);
             timeLineArrayList.add(postData);
@@ -96,58 +92,10 @@ public class TimelineFragment extends Fragment {
             mAdapter.setTimeLineArrayList(timeLineArrayList);
             timeLineListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-
             timeLineListView.setSelectionFromTop(goodPosition,y);
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            HashMap map = (HashMap) dataSnapshot.getValue();
-
-//            String userId = (String) map.get("userId");
-//            String userName = (String) map.get("userName");
-//            String time = (String) map.get("time");
-//            String key = (String) map.get("key");
-//            String date = (String) map.get("date");
-//            String imageBitmapString = (String) map.get("imageBitmapString");
-//            String contents = (String) map.get("contents");
-//            String costType = (String) map.get("costType");
-//            String cost = (String) map.get("cost");
-//            String howLong = (String) map.get("howLong");
-//            String goods = (String) map.get("goods");
-//            String favFlag = (String) map.get("favFlag");
-//            String bought = (String) map.get("bought");
-//            String evaluation = (String) map.get("evaluation");
-//            String cancel = (String) map.get("cancel");
-//            String method = (String) map.get("method");
-//            String postArea = (String) map.get("postArea");
-//            String postType = (String) map.get("postType");
-//            String level = (String) map.get("level");
-//            String career = (String) map.get("career");
-//            String place = (String) map.get("place");
-//            String sex = (String) map.get("sex");
-//            String age = (String) map.get("age");
-//            String taught = (String) map.get("taught");
-//            String userEvaluation = (String) map.get("userEvaluation");
-//            String userIconBitmapString = (String) map.get("userIconBitmapString");
-//            String stock = (String) map.get("stock");
-//
-//
-//
-//            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
-//                    , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
-//                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
-//
-//            Collections.reverse(timeLineArrayList);
-//            timeLineArrayList.add(goodPosition,postData);
-//            Collections.reverse(timeLineArrayList);
-//
-//            mAdapter.setTimeLineArrayList(timeLineArrayList);
-//            timeLineListView.setAdapter(mAdapter);
-//            mAdapter.notifyDataSetChanged();
-//
-//            timeLineListView.setSelectionFromTop(goodPosition,y);
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -159,9 +107,6 @@ public class TimelineFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
 
     private ChildEventListener fvEventListener = new ChildEventListener() {
         @Override
@@ -171,7 +116,6 @@ public class TimelineFragment extends Fragment {
             String favKey = (String) map.get("favKey");
             favKeyArrayList.add(favKey);
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -185,9 +129,6 @@ public class TimelineFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
 
     private ChildEventListener cEventListener = new ChildEventListener() {
         @Override
@@ -213,30 +154,21 @@ public class TimelineFragment extends Fragment {
 
             UserData userData = new UserData(userName, userId, comment, follows, followers, posts
                     , favorites, sex, age, evaluations, taught, period, groups, date, iconBitmapString,coin);
-
             myData = userData;
-
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
-
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
         }
-
         @Override
         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
         }
-
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -252,18 +184,16 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("タイムライン");
-
+        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Timeline);
 
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
+        favKeyArrayList = new ArrayList<String>();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
-        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         favRef = mDataBaseReference.child(Const.FavoritePATH);
-
-
-
-        contentsRef.addChildEventListener(tEventListener);
-
+        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -282,7 +212,6 @@ public class TimelineFragment extends Fragment {
                         int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                         totalGoods =totalGoods-1;
                         String totalGd =String.valueOf(totalGoods);
-
 
                         Map<String,Object> postGoodKey = new HashMap<>();
                         postGoodKey.put("goods",totalGd);
@@ -321,7 +250,6 @@ public class TimelineFragment extends Fragment {
                     }
 
                 }else if (view.getId()==R.id.userIconImageView){
-
                     Bundle userBundle = new Bundle();
                     userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
 
@@ -334,7 +262,6 @@ public class TimelineFragment extends Fragment {
                 }else if (view.getId()==R.id.contentImageView) {
                     //画像拡大表示
                 }else{
-
                     Bundle bundle = new Bundle();
                     bundle.putString("key",timeLineArrayList.get(position).getKey());
                     bundle.putString("screenKey","timeLine");
@@ -344,42 +271,31 @@ public class TimelineFragment extends Fragment {
                     transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
                     transaction.addToBackStack(null);
                     transaction.commit();
-
-
                 }
             }
 
 
 
         });
-
     }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        favKeyArrayList = new ArrayList<String>();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        favRef = mDataBaseReference.child(Const.FavoritePATH);
-        favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
-    }
-
 
     @Override
     public void onStart(){
         super.onStart();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        usersRef = mDataBaseReference.child(Const.UsersPATH);
-        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
-
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        contentsRef.addChildEventListener(tEventListener);
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        usersRef = mDataBaseReference.child(Const.UsersPATH);
+        usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
         timeLineListView.setSelectionFromTop(goodPosition,y);
     }
 
@@ -395,11 +311,5 @@ public class TimelineFragment extends Fragment {
                 }
             }
         }
-
-
     }
-
-
-
-
 }
