@@ -36,6 +36,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,6 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
             bottomNavigationView.setEnabled(false);
+
+            if (!(NetworkManager.isConnected(getApplicationContext()))){
+                Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+
+            }
+
             switch (item.getItemId()) {
                 case R.id.item_Timeline:
 
@@ -381,7 +388,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-
         getMenuInflater().inflate(R.menu.menu_options,menu);
         return true;
     }
@@ -390,6 +396,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
         bottomNavigationView.setEnabled(false);
+
+        if (!(NetworkManager.isConnected(this))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+
+        }
         switch (item.getItemId()){
             case R.id.notificationButton:
 //                new Handler().postDelayed(new Runnable() {
@@ -397,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        bottomNavigationView.setEnabled(true);
 //                    }
 //                }, 3000L);
-                
+
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
                     if (currentFragmentTag!=null){
@@ -448,6 +459,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+
+        if (!(NetworkManager.isConnected(this))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+
+        }
         if (currentFragment!=null) {
             String currentFragmentTag = currentFragment.getTag();
 
@@ -716,6 +732,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         backStackTransaction.commit();
                         return true;
                     }
+                }else if (currentFragmentTag.equals("ThisMessageFragment")){
+                    bottomNavigationView.setVisibility(View.VISIBLE);
                 }
                 backStackTransaction.remove(currentFragment);
                 backStackTransaction.commit();
