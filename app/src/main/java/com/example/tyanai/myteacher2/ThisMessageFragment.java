@@ -1,5 +1,6 @@
 package com.example.tyanai.myteacher2;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class ThisMessageFragment extends Fragment {
     String msKey;
     Button backButton;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    UserData myData;
 
     private ChildEventListener mcEventListener = new ChildEventListener() {
         @Override
@@ -50,27 +52,24 @@ public class ThisMessageFragment extends Fragment {
             String userId = (String) map.get("userId");
             String iconBitmapString = (String) map.get("iconBitmapString");
 
-            String contents = editMessageEditText.getText().toString();
-            Calendar cal1 = Calendar.getInstance();
+            String comment ="";
+            String follows = "";
+            String followers="";
+            String posts ="";
+            String favorites ="";
+            String sex ="";
+            String age="";
+            String evaluations="";
+            String taught ="";
+            String period ="";
+            String groups="";
+            String date ="";
+            String coin="";
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-            String time = sdf.format(cal1.getTime());
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
-            editMessageEditText.getEditableText().clear();
-
-            Map<String,Object> messageData = new HashMap<>();
-            String key = messageRef.child(msKey).push().getKey();
-
-            messageData.put("bitmapString","");
-            messageData.put("contents",contents);
-            messageData.put("iconBitmapString",iconBitmapString);
-            messageData.put("time",time);
-            messageData.put("userId",userId);
-            messageData.put("userName",userName);
-
-            Map<String,Object> childUpdates = new HashMap<>();
-            childUpdates.put(key,messageData);
-            messageRef.child(msKey).updateChildren(childUpdates);
+            myData = userData;
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -150,7 +149,7 @@ public class ThisMessageFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         messageRef = mDataBaseReference.child(Const.MessagePATH);
-        userRef = mDataBaseReference.child(Const.UsersPATH);
+
         messageListDataArrayList = new ArrayList<MessageListData>();
         mAdapter = new MessageListAdapter(this.getActivity(),R.layout.message_item);
 
@@ -160,10 +159,33 @@ public class ThisMessageFragment extends Fragment {
             msKey = bundle.getString("key");
             messageRef.child(msKey).addChildEventListener(umEventListener);
         }
+
+
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mcEventListener);
+
+                String contents = editMessageEditText.getText().toString();
+                Calendar cal1 = Calendar.getInstance();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                String time = sdf.format(cal1.getTime());
+
+                editMessageEditText.getEditableText().clear();
+
+                Map<String,Object> messageData = new HashMap<>();
+                String key = messageRef.child(msKey).push().getKey();
+
+                messageData.put("bitmapString","");
+                messageData.put("contents",contents);
+                messageData.put("iconBitmapString",myData.getIconBitmapString());
+                messageData.put("time",time);
+                messageData.put("userId",user.getUid());
+                messageData.put("userName",myData.getName());
+
+                Map<String,Object> childUpdates = new HashMap<>();
+                childUpdates.put(key,messageData);
+                messageRef.child(msKey).updateChildren(childUpdates);
             }
         });
 
@@ -178,5 +200,21 @@ public class ThisMessageFragment extends Fragment {
                 transaction.commit();
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mcEventListener);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
     }
 }
