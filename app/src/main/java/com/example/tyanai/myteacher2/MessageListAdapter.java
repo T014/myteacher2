@@ -59,7 +59,7 @@ public class MessageListAdapter extends BaseAdapter {
         String myUid = messageArrayList.get(position).getMyUid();
 
         com.example.tyanai.myteacher2.MessageListViewHolder messageListViewHolder;
-        if (convertView == null) {
+//        if (convertView == null) {
             // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
             convertView = inflater.inflate(layoutId, parent, false);
             // ViewHolder を生成
@@ -84,9 +84,9 @@ public class MessageListAdapter extends BaseAdapter {
             messageListViewHolder.otherMessageLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageLayout);
             messageListViewHolder.otherMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageImageLinearLayout);
             convertView.setTag(messageListViewHolder);
-        } else {
-            messageListViewHolder = (com.example.tyanai.myteacher2.MessageListViewHolder) convertView.getTag();
-        }
+//        } else {
+//            messageListViewHolder = (com.example.tyanai.myteacher2.MessageListViewHolder) convertView.getTag();
+//        }
         if (uid!=null){
             String n = time.substring(0,16);
             if (uid.equals(myUid)){
@@ -98,8 +98,6 @@ public class MessageListAdapter extends BaseAdapter {
                     messageListViewHolder.myMessageImageView.setImageBitmap(myContentsImageBitmap);
                     if (time!=null){
                         messageListViewHolder.myMessageImageTimeTextView.setText(n);
-                    }else{
-                        String a ="";
                     }
                     byte[] myMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(myMessageIconImageBytes.length!=0) {
@@ -130,8 +128,6 @@ public class MessageListAdapter extends BaseAdapter {
                     messageListViewHolder.otherMessageImageView.setImageBitmap(otherContentsImageBitmap);
                     if (time!=null){
                         messageListViewHolder.otherMessageImageTimeTextView.setText(n);
-                    }else{
-                        String a ="";
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(otherMessageIconImageBytes.length!=0) {
@@ -159,6 +155,8 @@ public class MessageListAdapter extends BaseAdapter {
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
                 }
             }
+
+
         }
         return convertView;
     }
@@ -168,12 +166,10 @@ public class MessageListAdapter extends BaseAdapter {
         // List<String> imgList の全要素数を返す
         return messageArrayList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return null;
     }
-
     @Override
     public long getItemId(int position) {
         return 0;
