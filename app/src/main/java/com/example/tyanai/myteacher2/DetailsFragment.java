@@ -448,7 +448,6 @@ public class DetailsFragment extends Fragment {
                 fragmentProfileConfirm.setArguments(userBundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
-                transaction.addToBackStack(null);
                 transaction.commit();
 
             }
@@ -511,63 +510,63 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                if (NetworkManager.isConnected(getContext())){
+                    ev = (String) evaluationSpinner.getSelectedItem();
+                    if (!(ev.equals("評価する"))){
 
-                ev = (String) evaluationSpinner.getSelectedItem();
+                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                        Map<String,Object> tradeKey = new HashMap<>();
 
+                        tradeKey.put("evaluation",ev);
+                        tradeKey.put("case","評価済み");
+                        tradeKey.put("receiveDate",time);
 
+                        requestRef.child(BusinessFragment.tradeKey).updateChildren(tradeKey);
+                        //評価済みはtradeにしよう
 
+                        int totalEvaluation = Integer.parseInt(thisPost.getEvaluation());
+                        totalEvaluation = totalEvaluation+ Integer.parseInt(ev);
+                        String totalEv = String.valueOf(totalEvaluation);
 
-                if (!(ev.equals("評価する"))){
-
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-                    Map<String,Object> tradeKey = new HashMap<>();
-
-                    tradeKey.put("evaluation",ev);
-                    tradeKey.put("case","評価済み");
-                    tradeKey.put("receiveDate",time);
-
-                    requestRef.child(BusinessFragment.tradeKey).updateChildren(tradeKey);
-                    //評価済みはtradeにしよう
-
-                    int totalEvaluation = Integer.parseInt(thisPost.getEvaluation());
-                    totalEvaluation = totalEvaluation+ Integer.parseInt(ev);
-                    String totalEv = String.valueOf(totalEvaluation);
-
-                    int totalTaught = Integer.parseInt(thisPost.getTaught());
-                    totalTaught =totalTaught+1;
-                    String totalTa =String.valueOf(totalTaught);
+                        int totalTaught = Integer.parseInt(thisPost.getTaught());
+                        totalTaught =totalTaught+1;
+                        String totalTa =String.valueOf(totalTaught);
 
 
 
-                    Map<String,Object> taughtKey = new HashMap<>();
+                        Map<String,Object> taughtKey = new HashMap<>();
 
-                    taughtKey.put("evaluation",totalEv);
-                    taughtKey.put("taught",totalTa);
+                        taughtKey.put("evaluation",totalEv);
+                        taughtKey.put("taught",totalTa);
 
-                    contentsRef.child(thisPost.getKey()).updateChildren(taughtKey);
-
-
-                    int totalUserEvaluation = Integer.parseInt(postUserData.getEvaluations());
-                    totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
-                    String totalUserEv = String.valueOf(totalUserEvaluation);
-
-                    int totalUserTaught = Integer.parseInt(postUserData.getTaught());
-                    totalUserTaught =totalUserTaught+1;
-                    String totalUserTa =String.valueOf(totalUserTaught);
+                        contentsRef.child(thisPost.getKey()).updateChildren(taughtKey);
 
 
+                        int totalUserEvaluation = Integer.parseInt(postUserData.getEvaluations());
+                        totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
+                        String totalUserEv = String.valueOf(totalUserEvaluation);
 
-                    Map<String,Object> userDataKey = new HashMap<>();
+                        int totalUserTaught = Integer.parseInt(postUserData.getTaught());
+                        totalUserTaught =totalUserTaught+1;
+                        String totalUserTa =String.valueOf(totalUserTaught);
 
-                    userDataKey.put("evaluations",totalUserEv);
-                    userDataKey.put("taught",totalUserTa);
 
-                    usersRef.child(user.getUid()).updateChildren(userDataKey);
 
-                    evaluationSpinner.setVisibility(View.GONE);
-                    evaluationTextView.setVisibility(View.GONE);
-                    saveButton.setVisibility(View.GONE);
+                        Map<String,Object> userDataKey = new HashMap<>();
 
+                        userDataKey.put("evaluations",totalUserEv);
+                        userDataKey.put("taught",totalUserTa);
+
+                        usersRef.child(user.getUid()).updateChildren(userDataKey);
+
+                        evaluationSpinner.setVisibility(View.GONE);
+                        evaluationTextView.setVisibility(View.GONE);
+                        saveButton.setVisibility(View.GONE);
+
+                    }
+                    Snackbar.make(view,"評価完了しました。",Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Snackbar.make(view,"評価できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -576,15 +575,26 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                contentsRef.child(intentKey).removeValue();
+                if (NetworkManager.isConnected(getContext())){
+                    contentsRef.child(intentKey).removeValue();
 
-                //前に開いていたフラグメントに戻る
+                    //前に開いていたフラグメントに戻る
 
-                ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
+                    transaction.commit();
+
+                    Snackbar.make(view,"削除しました。",Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Snackbar.make(view,"削除できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
+
+                if (NetworkManager.isConnected(getContext())){
+                    Snackbar.make(view,"削除しました。",Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Snackbar.make(view,"削除できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -594,92 +604,95 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                if (NetworkManager.isConnected(getContext())){
+                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-
-                Map<String,Object> newTradeKey = new HashMap<>();
-                newTradeKey.put("kindDetail","許可");
-                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
-
-
-                int stockCount = Integer.parseInt(thisPost.getStock());
-                stockCount = stockCount-1;
-                String stc = String.valueOf(stockCount);
-
-                int totalBought = Integer.parseInt(thisPost.getBought());
-                totalBought =totalBought+1;
-                String totalBg =String.valueOf(totalBought);
-
-                Map<String,Object> userDataKey = new HashMap<>();
-                userDataKey.put("bought",totalBg);
-                userDataKey.put("stock",stc);
-                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+                    Map<String,Object> newTradeKey = new HashMap<>();
+                    newTradeKey.put("kindDetail","許可");
+                    requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
 
 
+                    int stockCount = Integer.parseInt(thisPost.getStock());
+                    stockCount = stockCount-1;
+                    String stc = String.valueOf(stockCount);
 
-                //tradeに移動する
-                String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    int totalBought = Integer.parseInt(thisPost.getBought());
+                    totalBought =totalBought+1;
+                    String totalBg =String.valueOf(totalBought);
 
-                Map<String,Object> tradeKey = new HashMap<>();
-                String key = tradeRef.child(user.getUid()).push().getKey();
-
-                tradeKey.put("tradeKey",key);
-                tradeKey.put("bought",BusinessFragment.boughtUid);
-                tradeKey.put("sold",thisPost.getUserId());
-                tradeKey.put("receiveDate","0");
-                tradeKey.put("date",BusinessFragment.buyDate);
-                tradeKey.put("payDay","0");
-                tradeKey.put("userName",thisPost.getName());
-                tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
-                tradeKey.put("evaluation","0");
-                tradeKey.put("postKey",intentKey);
-                tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
-                tradeKey.put("stock",stc);
-                tradeKey.put("kind","購入");
-                tradeKey.put("kindDetail","許可済み");
-                tradeKey.put("buyName",myData.getName());
-                tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
-                tradeKey.put("permittedDate",time);
+                    Map<String,Object> userDataKey = new HashMap<>();
+                    userDataKey.put("bought",totalBg);
+                    userDataKey.put("stock",stc);
+                    contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
 
 
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,tradeKey);
-                tradeRef.updateChildren(childUpdates);
 
-                Snackbar.make(MainActivity.snack, "購入リクエストを許可しました。", Snackbar.LENGTH_LONG).show();
+                    //tradeに移動する
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
 
-                Bundle screenBundle = new Bundle();
-                screenBundle.putString("screenKey","2");
-                BusinessFragment fragmentBusiness = new BusinessFragment();
-                fragmentBusiness.setArguments(screenBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    Map<String,Object> tradeKey = new HashMap<>();
+                    String key = tradeRef.child(user.getUid()).push().getKey();
+
+                    tradeKey.put("tradeKey",key);
+                    tradeKey.put("bought",BusinessFragment.boughtUid);
+                    tradeKey.put("sold",thisPost.getUserId());
+                    tradeKey.put("receiveDate","0");
+                    tradeKey.put("date",BusinessFragment.buyDate);
+                    tradeKey.put("payDay","0");
+                    tradeKey.put("userName",thisPost.getName());
+                    tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
+                    tradeKey.put("evaluation","0");
+                    tradeKey.put("postKey",intentKey);
+                    tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                    tradeKey.put("stock",stc);
+                    tradeKey.put("kind","購入");
+                    tradeKey.put("kindDetail","許可済み");
+                    tradeKey.put("buyName",myData.getName());
+                    tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                    tradeKey.put("permittedDate",time);
+
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,tradeKey);
+                    tradeRef.updateChildren(childUpdates);
+
+
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey","2");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+                    transaction.commit();
+                    Snackbar.make(view,"購入リクエストを許可しました。",Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Snackbar.make(view,"購入リクエストを許可できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (NetworkManager.isConnected(getContext())){
+                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
-                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+                    Map<String,Object> newTradeKey = new HashMap<>();
+                    newTradeKey.put("kindDetail","拒否");
+                    requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
 
-                Map<String,Object> newTradeKey = new HashMap<>();
-                newTradeKey.put("kindDetail","拒否");
-                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
 
-                Snackbar.make(MainActivity.snack, "購入リクエストを拒否しました。", Snackbar.LENGTH_LONG).show();
-
-                Bundle screenBundle = new Bundle();
-                screenBundle.putString("screenKey","2");
-                BusinessFragment fragmentBusiness = new BusinessFragment();
-                fragmentBusiness.setArguments(screenBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    Bundle screenBundle = new Bundle();
+                    screenBundle.putString("screenKey","2");
+                    BusinessFragment fragmentBusiness = new BusinessFragment();
+                    fragmentBusiness.setArguments(screenBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+                    transaction.commit();
+                    Snackbar.make(view,"購入リクエストを拒否しました。",Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Snackbar.make(view,"購入リクエストを拒否できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -702,7 +715,6 @@ public class DetailsFragment extends Fragment {
 //                fragmentBusiness.setArguments(screenBundle);
 //                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 //                transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-//                transaction.addToBackStack(null);
 //                transaction.commit();
 //            }
 //        });
@@ -716,67 +728,69 @@ public class DetailsFragment extends Fragment {
                 contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
                 if (buyFlag==true){
-                    requestRef.child(thisTradeKey).removeValue();
-                    Snackbar.make(MainActivity.snack, "購入リクエストをキャンセルしました。", Snackbar.LENGTH_LONG).show();
-                    buyFlag = false;
-                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-                }else{
-                    int stockCount = Integer.parseInt(thisPost.getStock());
-                    if (stockCount!=0){
-
-
-                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
-                        Map<String,Object> requestKey = new HashMap<>();
-
-                        String tradeKey = requestRef.push().getKey();
-
-                        requestKey.put("tradeKey",tradeKey);
-                        requestKey.put("bought",user.getUid());
-                        requestKey.put("sold",thisPost.getUserId());
-                        requestKey.put("receiveDate","0");
-                        requestKey.put("date",time);
-                        requestKey.put("payDay","0");
-                        requestKey.put("userName",thisPost.getName());
-                        requestKey.put("userIcon",thisPost.getUserIconBitmapString());
-                        requestKey.put("evaluation","0");
-                        requestKey.put("postKey",intentKey);
-                        requestKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
-                        requestKey.put("stock",thisPost.getStock());
-                        requestKey.put("kind","購入");
-                        requestKey.put("kindDetail","リクエスト");
-                        requestKey.put("buyName",myData.getName());
-                        requestKey.put("buyIconBitmapString",myData.getIconBitmapString());
-                        requestKey.put("permittedDate","");
-
-                        Map<String,Object> childUpdates = new HashMap<>();
-                        childUpdates.put(tradeKey,requestKey);
-                        requestRef.updateChildren(childUpdates);
-
-
-                        Map<String,Object> userDataKey = new HashMap<>();
-                        userDataKey.put("bought",thisPost.getBought());
-                        userDataKey.put("stock",thisPost.getStock());
-                        contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
-
-                        Snackbar.make(MainActivity.snack, "購入リクエストを送信しました。", Snackbar.LENGTH_LONG).show();
-
+                    if (NetworkManager.isConnected(getContext())){
+                        requestRef.child(thisTradeKey).removeValue();
+                        buyFlag = false;
                         contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
-                    }else{
-                        Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
+                    }else {
+                        Snackbar.make(view,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                     }
+                }else{
+                    if (NetworkManager.isConnected(getContext())){
+                        int stockCount = Integer.parseInt(thisPost.getStock());
+                        if (stockCount!=0){
 
-                    buyFlag = true;
+
+                            String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+                            Map<String,Object> requestKey = new HashMap<>();
+
+                            String tradeKey = requestRef.push().getKey();
+
+                            requestKey.put("tradeKey",tradeKey);
+                            requestKey.put("bought",user.getUid());
+                            requestKey.put("sold",thisPost.getUserId());
+                            requestKey.put("receiveDate","0");
+                            requestKey.put("date",time);
+                            requestKey.put("payDay","0");
+                            requestKey.put("userName",thisPost.getName());
+                            requestKey.put("userIcon",thisPost.getUserIconBitmapString());
+                            requestKey.put("evaluation","0");
+                            requestKey.put("postKey",intentKey);
+                            requestKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                            requestKey.put("stock",thisPost.getStock());
+                            requestKey.put("kind","購入");
+                            requestKey.put("kindDetail","リクエスト");
+                            requestKey.put("buyName",myData.getName());
+                            requestKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                            requestKey.put("permittedDate","");
+
+                            Map<String,Object> childUpdates = new HashMap<>();
+                            childUpdates.put(tradeKey,requestKey);
+                            requestRef.updateChildren(childUpdates);
+
+
+                            Map<String,Object> userDataKey = new HashMap<>();
+                            userDataKey.put("bought",thisPost.getBought());
+                            userDataKey.put("stock",thisPost.getStock());
+                            contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+
+                            contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+                        }else{
+                            Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                        }
+                        buyFlag = true;
+
+                        Snackbar.make(view,"購入リクエストを送信しました。",Snackbar.LENGTH_SHORT).show();
+                    }else {
+                        Snackbar.make(view,"購入リクエストを送信できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                    }
                 }
-
-
-
-
-
             }
         });
-
     }
 
 
