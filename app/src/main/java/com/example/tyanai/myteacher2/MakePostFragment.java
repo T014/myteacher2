@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,7 +39,6 @@ import java.util.Map;
 
 public class MakePostFragment extends Fragment {
     public static final String TAG = "MakePostFragment";
-
 
     public static ImageView postImageView;
     private EditText contentsEditText;
@@ -86,8 +86,6 @@ public class MakePostFragment extends Fragment {
     private RadioButton scienceRadioButton;
     private RadioButton otherStudyRadioButton;
 
-
-
     public static TextView dateTextView;
     FirebaseUser user;
     DatabaseReference usersContentsRef;
@@ -102,18 +100,13 @@ public class MakePostFragment extends Fragment {
     String makeAreaRef;
     String makeTypeRef;
     private int mYear, mMonth, mDay, mHour, mMinute;
-
-
     String level;
     String method;
     String date;
     String place;
     String costType;
     String cost;
-
     String filterKey;
-
-
 
     private ChildEventListener ssEventListener = new ChildEventListener() {
         @Override
@@ -156,8 +149,6 @@ public class MakePostFragment extends Fragment {
             } catch (NumberFormatException e) {
             }
 
-
-
             if (!(uid.equals(user.getUid()))){
                 //if (ssArea.equals(area)){
                 if (ssType.equals(type)){
@@ -182,22 +173,22 @@ public class MakePostFragment extends Fragment {
                                                     //年齢
                                                     if (ssAge.equals("未設定") || ssAge.equals(myData.getAge())){
                                                         //ここで通知
+                                                        if (filterKey!=null){
+                                                            Map<String,Object> mFilterKey = new HashMap<>();
 
+                                                            mFilterKey.put("filterUid",uid);
+                                                            mFilterKey.put("userName",myData.getName());
+                                                            mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
+                                                            mFilterKey.put("time","");
+                                                            mFilterKey.put("filterKey",filterKey);
+                                                            mFilterKey.put("kind","その他");
+                                                            mFilterKey.put("kindDetail","検索履歴");
 
-                                                        Map<String,Object> mFilterKey = new HashMap<>();
+                                                            Map<String,Object> childUpdates = new HashMap<>();
+                                                            childUpdates.put(filterKey,mFilterKey);
+                                                            filterRef.updateChildren(childUpdates);
 
-                                                        mFilterKey.put("filterUid",uid);
-                                                        mFilterKey.put("userName",myData.getName());
-                                                        mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
-                                                        mFilterKey.put("time","");
-                                                        mFilterKey.put("filterKey",filterKey);
-                                                        mFilterKey.put("kind","その他");
-                                                        mFilterKey.put("kindDetail","検索履歴");
-
-                                                        Map<String,Object> childUpdates = new HashMap<>();
-                                                        childUpdates.put(filterKey,mFilterKey);
-                                                        filterRef.updateChildren(childUpdates);
-
+                                                        }
 
                                                     }
                                                 }
@@ -211,17 +202,8 @@ public class MakePostFragment extends Fragment {
                         }
                     }
                 }
-
                 //}
             }
-
-
-
-
-
-
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -236,7 +218,6 @@ public class MakePostFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
     private ChildEventListener oEventListener = new ChildEventListener() {
         @Override
@@ -328,8 +309,6 @@ public class MakePostFragment extends Fragment {
                 //tennis
                 tennisRadioButton.setChecked(true);
             }
-
-
             if (costTypePosition!=null){
                 int cp = Integer.valueOf(costTypePosition);
                 costTypeSpinner.setSelection(cp);
@@ -372,9 +351,6 @@ public class MakePostFragment extends Fragment {
                 int p = Integer.valueOf(placePosition);
                 placeSpinner.setSelection(p);
             }
-
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -389,11 +365,6 @@ public class MakePostFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
-
-
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -415,15 +386,13 @@ public class MakePostFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
+            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
             myData = userData;
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -437,9 +406,6 @@ public class MakePostFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -459,7 +425,6 @@ public class MakePostFragment extends Fragment {
         dateButton = (Button)v.findViewById(R.id.dateButton);
         dateTextView = (TextView)v.findViewById(R.id.dateTextView);
         clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
-
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
         areaGroup1 = (RadioGroup)v.findViewById(R.id.areaRadioGroup1);
@@ -468,7 +433,6 @@ public class MakePostFragment extends Fragment {
         musicGroup = (RadioGroup)v.findViewById(R.id.musicRadioGroup);
         movieGroup = (RadioGroup)v.findViewById(R.id.movieRadioGroup);
         studyGroup = (RadioGroup)v.findViewById(R.id.studyRadioGroup);
-
 
         sportsRadioButton = (RadioButton)v.findViewById(R.id.sportsRadiobutton);
         musicRadioButton = (RadioButton)v.findViewById(R.id.musicRadioButton);
@@ -480,7 +444,6 @@ public class MakePostFragment extends Fragment {
 //        comicRadioButton = (RadioButton)v.findViewById(R.id.comicRadioButton);
 //        gameRadioButton = (RadioButton)v.findViewById(R.id.gameRadioButton);
 //        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
-
         tennisRadioButton = (RadioButton)v.findViewById(R.id.tennisRadioButton);
         soccerRadioButton = (RadioButton)v.findViewById(R.id.soccerRadioButton);
         athleticsRadioButton = (RadioButton)v.findViewById(R.id.athleticsRadioButton);
@@ -506,6 +469,8 @@ public class MakePostFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainActivity.mToolbar.setTitle("投稿");
+        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Post);
 
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
@@ -513,7 +478,6 @@ public class MakePostFragment extends Fragment {
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
-
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -532,29 +496,17 @@ public class MakePostFragment extends Fragment {
         movieGroup.setVisibility(View.GONE);
         studyGroup.setVisibility(View.GONE);
 
-
-
         area = "";
         type = "";
-        MainActivity.mToolbar.setTitle("投稿");
-
-
-
 
         areaGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
 
-
                 if (checkedId != -1){
-
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedArea = selectedRadioButton.getText().toString();
-
-
-
-
                     if (selectedArea.equals("スポーツ")){
                         //スポーツの一覧を表示する
                         sportsGroup.setVisibility(View.VISIBLE);
@@ -592,8 +544,6 @@ public class MakePostFragment extends Fragment {
                         area=selectedArea;
                         makeAreaRef="other";
                     }
-
-
                 }
             }
         });
@@ -607,8 +557,6 @@ public class MakePostFragment extends Fragment {
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedType = selectedRadioButton.getText().toString();
-
-
 
                     if (selectedType.equals("テニス")){
                         //スポーツの一覧を表示する
@@ -627,9 +575,7 @@ public class MakePostFragment extends Fragment {
                         type=selectedType;
                         makeTypeRef="otherSports";
                     }
-
                 }
-
             }
         });
 
@@ -663,7 +609,6 @@ public class MakePostFragment extends Fragment {
             }
         });
 
-
         movieGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
@@ -672,7 +617,6 @@ public class MakePostFragment extends Fragment {
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedType = selectedRadioButton.getText().toString();
-
                     if (selectedType.equals("撮影")){
                         //スポーツの一覧を表示する
                         type=selectedType;
@@ -688,8 +632,6 @@ public class MakePostFragment extends Fragment {
             }
         });
 
-
-
         studyGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
@@ -698,7 +640,6 @@ public class MakePostFragment extends Fragment {
                     //選択されているボタンの取得
                     RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
                     String selectedType = selectedRadioButton.getText().toString();
-
                     if (selectedType.equals("国語")){
                         //スポーツの一覧を表示する
                         type=selectedType;
@@ -720,33 +661,17 @@ public class MakePostFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-
-
         postImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
-
                 //pFragを変更
                 MainActivity.pFlag=3;
-
                 //icon画像選択に移動
                 MainActivity mainActivity = (MainActivity)getActivity();
                 mainActivity.onSelfCheck();
 
-
             }
         });
-
-
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -762,15 +687,15 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dateTextView.setText("指定しない");
-
             }
         });
-
-
 
         sendButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+
+                InputMethodManager im = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 //必須事項が入力されているかの確認
 
                 String userId = user.getUid();
@@ -793,12 +718,11 @@ public class MakePostFragment extends Fragment {
                 postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
                 String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
 
-
                 String contents=contentsEditText.getText().toString();
                 cost = costEditText.getText().toString();
                 String howLong = (String)  howLongSpinner.getSelectedItem();
                 String goods="0";
-                String share="0";
+                String favFlag="false";
                 String bought="0";
                 String evaluation="0";
                 String cancel="0";
@@ -814,19 +738,14 @@ public class MakePostFragment extends Fragment {
                     cFirstCost = String.valueOf(firstCost);
                 }
 
-
-
-
                 String key = contentsRef.push().getKey();
                 filterKey = key;
-
                 if (area.length()!=0){
                     if (type.length()!=0){
                         if (contents.length()!=0){
                             if (cost.length()!=0){
                                 if (!(cFirstCost.equals("0")) || cost.equals("0")){
                                         Map<String,Object> data = new HashMap<>();
-
 
                                         data.put("userId", userId);
                                         data.put("userName",myData.getName());
@@ -839,7 +758,7 @@ public class MakePostFragment extends Fragment {
                                         data.put("cost",cost );
                                         data.put("howLong", howLong);
                                         data.put("goods",goods );
-                                        data.put("share",share );
+                                        data.put("favFlag",favFlag );
                                         data.put("bought",bought );
                                         data.put("evaluation", evaluation);
                                         data.put("cancel",cancel );
@@ -856,14 +775,9 @@ public class MakePostFragment extends Fragment {
                                         data.put("userIconBitmapString",myData.getIconBitmapString());
                                         data.put("stock",stock);
 
-
-
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(key,data);
                                         contentsRef.updateChildren(childUpdates);
-
-
-
 
                                         Map<String,Object> postKey = new HashMap<>();
                                         String aaa = usersContentsRef.child(user.getUid()).push().getKey();
@@ -876,25 +790,19 @@ public class MakePostFragment extends Fragment {
                                         usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
                                         flag=true;
-
                                         savePostRef.child(user.getUid()).removeValue();
-
                                     Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-
-
                                     TimelineFragment fragmentTimeline = new TimelineFragment();
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                     transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
                                     transaction.addToBackStack(null);
                                     transaction.commit();
-
                                 }else{
                                     Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
                                 }
                             }else{
                                 if (costType.equals("応相談")){
                                     Map<String,Object> data = new HashMap<>();
-
 
                                     data.put("userId", userId);
                                     data.put("userName",myData.getName());
@@ -907,7 +815,7 @@ public class MakePostFragment extends Fragment {
                                     data.put("cost",cost );
                                     data.put("howLong", howLong);
                                     data.put("goods",goods );
-                                    data.put("share",share );
+                                    data.put("favFlag",favFlag);
                                     data.put("bought",bought );
                                     data.put("evaluation", evaluation);
                                     data.put("cancel",cancel );
@@ -924,14 +832,9 @@ public class MakePostFragment extends Fragment {
                                     data.put("userIconBitmapString",myData.getIconBitmapString());
                                     data.put("stock",stock);
 
-
-
                                     Map<String,Object> childUpdates = new HashMap<>();
                                     childUpdates.put(key,data);
                                     contentsRef.updateChildren(childUpdates);
-
-
-
 
                                     Map<String,Object> postKey = new HashMap<>();
                                     String aaa = usersContentsRef.child(user.getUid()).push().getKey();
@@ -944,11 +847,8 @@ public class MakePostFragment extends Fragment {
                                     usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
                                     flag = true;
-
                                     savePostRef.child(user.getUid()).removeValue();
-
                                     Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-
 
                                     TimelineFragment fragmentTimeline = new TimelineFragment();
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -979,41 +879,29 @@ public class MakePostFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         savePostRef = mDataBaseReference.child(Const.SavePostPATH);
-
-
         savePostRef.child(user.getUid()).addChildEventListener(oEventListener);
-
-
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         if (flag==false){
             //ここで保存する
-
-
             String date=dateTextView.getText().toString();
-
             BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
             Bitmap postImageBitmap = postImageDrawable.getBitmap();
 
             int postImageWidth = postImageBitmap.getWidth();
             int postImageHeight = postImageBitmap.getHeight();
             float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
-
             //resize
             Matrix postImageMatrix = new Matrix();
             postImageMatrix.postScale(postImageScale,postImageScale);
             Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
-
             ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
             postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
             String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
-
-
             String contents=contentsEditText.getText().toString();
             String cost = costEditText.getText().toString();
 
@@ -1032,11 +920,7 @@ public class MakePostFragment extends Fragment {
             int placePosition1 = placeSpinner.getSelectedItemPosition();
             String placePosition = String.valueOf(placePosition1);
 
-
-
-
             Map<String,Object> data = new HashMap<>();
-
 
             data.put("date", date);
             data.put("imageBitmapString", imageBitmapString);
@@ -1050,21 +934,19 @@ public class MakePostFragment extends Fragment {
             data.put("levelPosition",levelPosition);
             data.put("careerPosition", careerPosition);
             data.put("placePosition",placePosition);
-            data.put("userIconBitmapString",myData.getIconBitmapString());
+//            if (myData.getIconBitmapString()!=null){
+//                data.put("userIconBitmapString",myData.getIconBitmapString());
+//            }else {
+//                data.put("userIconBitmapString","");
+//            }
+            data.put("userIconBitmapString","");
             data.put("stockPosition",stockPosition);
-
-
 
             Map<String,Object> childUpdates = new HashMap<>();
             childUpdates.put(user.getUid(),data);
             savePostRef.child(user.getUid()).updateChildren(childUpdates);
-
-
-
-
         }
         flag=false;
-
         saveSearchRef.addChildEventListener(ssEventListener);
     }
 }
