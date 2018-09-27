@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -36,13 +37,13 @@ public class MessageFragment extends Fragment {
     ListView messageKeyListView;
     MessageKeyListAdapter mAdapter;
     private ArrayList<MessageListData> messageListDataArrayList;
+    private ArrayList<MessageListData> newMessageListDataArrayList;
     private ArrayList<String> uidArrayList;
     private ArrayList<String> keyArrayList;
-    private ArrayList<MessageListData> newMessageListDataArrayList;
     int i = 0;
-    int n;
-
-
+    int ii =0;
+    private int mYear, mMonth, mDay;
+    String today;
 
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
@@ -52,14 +53,10 @@ public class MessageFragment extends Fragment {
             String messageKey = (String) map.get("messageKey");
             String uid = (String) map.get("uid");
 
-
             uidArrayList.add(uid);
             keyArrayList.add(messageKey);
             messageRef.child(messageKey).limitToLast(1).addChildEventListener(fmEventListener);
-
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -73,36 +70,97 @@ public class MessageFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
     private ChildEventListener fmEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-
             String userId = (String) map.get("userId");
             String content = (String) map.get("contents");
             String time = (String) map.get("time");
             String bitmapString=(String) map.get("bitmapString");
-
-            String userName = "";
-            String iconBitmapString = "";
+            String userName = (String) map.get("userName");
+            String iconBitmapString = (String)map.get("iconBitmapString");
             String key = "";
 
+            //投稿日
+            Calendar calDay = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
-            MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid());
+            //今日
+            Calendar calDay2 = Calendar.getInstance();
+            int lag =0;
+            try{
+                calDay.setTime(sdf.parse(time));
+                long diffTime = calDay2.getTimeInMillis() - calDay.getTimeInMillis();//[3]
+                int diffDayMillis = 1000 * 60 * 60 * 24;//[4]
+                int diffDays = (int) (diffTime / diffDayMillis);
+                //lag = String.valueOf(diffDayMillis);
+                lag = diffDayMillis;
+
+                String day = time.substring(0,10);
+                int deff = day.compareTo(today);
+                if (deff==0){
+                    String nn = time.substring(11,16);
+                    time = nn;
+                }else if (deff<0){
+                    //日付差
+
+                    if (diffDays==1){
+                        //1日前
+                        time = "1日前";
+                    }else if (diffDays==2){
+                        //2日前
+                        time = "2日前";
+                    }else if (diffDays==3){
+                        //3日前
+                        time = "3日前";
+                    }else{
+                        //日付
+                        String date = time.substring(0,10);
+                        time = date;
+                    }
+                }
 
 
-            messageListDataArrayList.add(messageListData);
+            }catch (ParseException e){
+            }
+            if (keyArrayList.size()>i){
+                if (time.length()>1){
+                    MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,keyArrayList.get(i),user.getUid(),lag);
+                    if (messageListDataArrayList.size()!=0){
+                        for(MessageListData abc : messageListDataArrayList){
+                            if (abc.getKey().equals(messageListData.getKey())){
+                                messageListDataArrayList.remove(abc);
+                                break;
+                            }
+                        }
+                    }
+                    if (newMessageListDataArrayList.size()!=0){
+                        for (MessageListData bcd : newMessageListDataArrayList){
+                            if (bcd.getKey().equals(messageListData.getKey())){
+                                newMessageListDataArrayList.remove(bcd);
+                                break;
+                            }
+                        }
+                    }
 
-            if (uidArrayList.size()!=0){
-                if (i < uidArrayList.size())
-                userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
+                    messageListDataArrayList.add(messageListData);
+
+//                    mAdapter.setNewMessageKeyArrayList(messageListDataArrayList);
+//                    messageKeyListView.setAdapter(mAdapter);
+//                    mAdapter.notifyDataSetChanged();
+                }
             }
 
-        }
+            userRef.addChildEventListener(cEventListener);
 
+            i=i+1;
+            if (keyArrayList.size()==i){
+                i=0;
+            }
+        }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -116,7 +174,6 @@ public class MessageFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
     private ChildEventListener cEventListener = new ChildEventListener() {
         @Override
@@ -124,55 +181,53 @@ public class MessageFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userName = (String) map.get("userName");
+            String uid = (String) map.get("userId");
             String iconBitmapString = (String) map.get("iconBitmapString");
 
-            MessageListData aaa = messageListDataArrayList.get(i);
-            MessageListData newMessageListData = new MessageListData(aaa.getUid(),userName,iconBitmapString,aaa.getTime(),aaa.getContent(),aaa.getBitmapString(),keyArrayList.get(i),user.getUid());
-
-            Calendar cal2 = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-
-            try{
-                cal2.setTime(sdf.parse(newMessageListData.getTime()));
-
-                if (newMessageListDataArrayList.size()==0){
-                    newMessageListDataArrayList.add(newMessageListData);
-                }else{
-                    int n = newMessageListDataArrayList.size();
-                    for (int m=n-1;m>-1;m--){
-                        int deff = newMessageListDataArrayList.get(m).getTime().compareTo(newMessageListData.getTime());
-                        if (deff==0){
-
-                        }else if (deff<0){
-                            Collections.reverse(newMessageListDataArrayList);
-                            newMessageListDataArrayList.add(m+1,newMessageListData);
-                            Collections.reverse(newMessageListDataArrayList);
-                            break;
-                        }else if (deff>0){
-                            if (m==0){
-                                Collections.reverse(newMessageListDataArrayList);
-                                newMessageListDataArrayList.add(0,newMessageListData);
-                                Collections.reverse(newMessageListDataArrayList);
-                                break;
+            if (messageListDataArrayList.size()>ii){
+                for (MessageListData x :messageListDataArrayList){
+                    if (x.getUid().equals(uid)){
+                        MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
+                        for (MessageListData rr : newMessageListDataArrayList){
+                            if (rr.getKey().equals(newMessageListData.getKey())){
+                                newMessageListDataArrayList.remove(rr);
                             }
                         }
+
+//                    for (MessageListData bb : messageListDataArrayList){
+//                        if (bb.getUid().equals(uid)){
+//                            //MessageListData newMessageListData = new MessageListData(bb.getUid(),userName,iconBitmapString,bb.getTime(),bb.getContent(),bb.getBitmapString(),bb.getKey(),user.getUid(),bb.getLag());
+//
+//                            for (MessageListData ss : newMessageListDataArrayList){
+//                                if (ss.getKey().equals(newMessageListData.getKey())){
+//                                    newMessageListDataArrayList.remove(ss);
+//                                }
+//                            }
+                        newMessageListDataArrayList.add(newMessageListData);
+                        mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+                        messageKeyListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+
+                        ii=ii+1;
+                        if (keyArrayList.size()==ii){
+                            ii=0;
+                        }
+//                        }
+//                    }
+                        if (newMessageListDataArrayList.size()!=0){
+                            Collections.sort(newMessageListDataArrayList,new TimeLagComparator());
+                        }
                     }
+
+
                 }
-
-            }catch (ParseException e){
-
             }
 
-            mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
-            messageKeyListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
 
-            i=i+1;
 
 
 
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -197,8 +252,6 @@ public class MessageFragment extends Fragment {
 
         messageKeyListView = (ListView)v.findViewById(R.id.messageKeyListView);
 
-
-
         return v;
     }
 
@@ -206,15 +259,28 @@ public class MessageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("メッセージ");
+        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Message);
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
+        Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
+        Calendar cal1 = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        today = sdf.format(cal1.getTime());
+
+        i=0;
+        ii=0;
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         messageRef = mDataBaseReference.child(Const.MessagePATH);
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
         userRef = mDataBaseReference.child(Const.UsersPATH);
-
         messageListDataArrayList = new ArrayList<MessageListData>();
         newMessageListDataArrayList = new ArrayList<MessageListData>();
         uidArrayList = new ArrayList<String>();
@@ -227,21 +293,18 @@ public class MessageFragment extends Fragment {
         mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
 
-
-
         messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Bundle messageKeyBundle = new Bundle();
                 messageKeyBundle.putString("key",newMessageListDataArrayList.get(position).getKey());
-
                 i=0;
+                ii=0;
                 messageListDataArrayList.clear();
                 newMessageListDataArrayList.clear();
                 uidArrayList.clear();
                 keyArrayList.clear();
-
                 ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
                 fragmentThisMessage.setArguments(messageKeyBundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -250,37 +313,34 @@ public class MessageFragment extends Fragment {
                 transaction.commit();
             }
         });
-
-
     }
 
     @Override
     public void onResume(){
         super.onResume();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        messageRef = mDataBaseReference.child(Const.MessagePATH);
-        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-        userRef = mDataBaseReference.child(Const.UsersPATH);
 
-        messageListDataArrayList = new ArrayList<MessageListData>();
-        newMessageListDataArrayList = new ArrayList<MessageListData>();
-        uidArrayList = new ArrayList<String>();
-        keyArrayList = new ArrayList<String>();
-        messageListDataArrayList.clear();
-        newMessageListDataArrayList.clear();
-        uidArrayList.clear();
-        keyArrayList.clear();
-
-        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
-        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        messageRef = mDataBaseReference.child(Const.MessagePATH);
+//        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
+//        userRef = mDataBaseReference.child(Const.UsersPATH);
+//        messageListDataArrayList = new ArrayList<MessageListData>();
+//        newMessageListDataArrayList = new ArrayList<MessageListData>();
+//        uidArrayList = new ArrayList<String>();
+//        keyArrayList = new ArrayList<String>();
+//        messageListDataArrayList.clear();
+//        newMessageListDataArrayList.clear();
+//        uidArrayList.clear();
+//        keyArrayList.clear();
+//        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
+//        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         i=0;
+        ii=0;
     }
 }
