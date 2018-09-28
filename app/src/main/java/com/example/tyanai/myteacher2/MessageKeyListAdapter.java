@@ -4,16 +4,13 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -58,33 +55,29 @@ public class MessageKeyListAdapter extends BaseAdapter {
             messageKeyListViewHolder.timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             messageKeyListViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
             convertView.setTag(messageKeyListViewHolder);
-            
+
         } else {
             messageKeyListViewHolder = (MessageKeyListViewHolder) convertView.getTag();
         }
         if (userName != null){
             messageKeyListViewHolder.userNameTextVew.setText(userName);
         }
-
         if (time!=null){
             messageKeyListViewHolder.timeTextView.setText(time);
         }
-
         byte[] postImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+
+        if (contents != null){
+            messageKeyListViewHolder.contentsTextView.setText(contents);
+        }
         if(postImageBytes.length!=0){
             messageKeyListViewHolder.contentsTextView.setText("画像が送信されました。");
-        }else{
-            if (contents != null){
-                messageKeyListViewHolder.contentsTextView.setText(contents);
-            }
         }
-
         byte[] iconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             messageKeyListViewHolder.userIconImageView.setImageBitmap(iconImageBitmap);
         }
-
         return convertView;
     }
 
@@ -106,8 +99,4 @@ public class MessageKeyListAdapter extends BaseAdapter {
     public void setNewMessageKeyArrayList(ArrayList<MessageListData> list){
         newMessageKeyArrayList = list;
     }
-
-
-
-
 }
