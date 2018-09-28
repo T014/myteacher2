@@ -44,6 +44,8 @@ public class MessageFragment extends Fragment {
     int ii =0;
     private int mYear, mMonth, mDay;
     String today;
+    Calendar calDay2;
+    Calendar calNow;
 
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
@@ -55,7 +57,9 @@ public class MessageFragment extends Fragment {
 
             uidArrayList.add(uid);
             keyArrayList.add(messageKey);
+
             messageRef.child(messageKey).limitToLast(1).addChildEventListener(fmEventListener);
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -88,16 +92,20 @@ public class MessageFragment extends Fragment {
             Calendar calDay = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
-            //今日
-            Calendar calDay2 = Calendar.getInstance();
+            Calendar calThen = Calendar.getInstance();
+            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+
             int lag =0;
             try{
                 calDay.setTime(sdf.parse(time));
-                long diffTime = calDay2.getTimeInMillis() - calDay.getTimeInMillis();//[3]
-                int diffDayMillis = 1000 * 60 * 60 * 24;//[4]
+                calThen.setTime(sdfThen.parse(time));
+                long diffTime = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
+                int diffDayMillis = 1000 * 60 * 60 * 24;
                 int diffDays = (int) (diffTime / diffDayMillis);
-                //lag = String.valueOf(diffDayMillis);
-                lag = diffDayMillis;
+
+
+                long diffMillis = calNow.getTimeInMillis() - calThen.getTimeInMillis();
+                lag = (int)diffMillis;
 
                 String day = time.substring(0,10);
                 int deff = day.compareTo(today);
@@ -127,35 +135,10 @@ public class MessageFragment extends Fragment {
             }catch (ParseException e){
             }
             if (keyArrayList.size()>i){
-                if (time.length()>1){
-                    MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,keyArrayList.get(i),user.getUid(),lag);
-                    if (messageListDataArrayList.size()!=0){
-                        for(MessageListData abc : messageListDataArrayList){
-                            if (abc.getKey().equals(messageListData.getKey())){
-                                messageListDataArrayList.remove(abc);
-                                break;
-                            }
-                        }
-                    }
-                    if (newMessageListDataArrayList.size()!=0){
-                        for (MessageListData bcd : newMessageListDataArrayList){
-                            if (bcd.getKey().equals(messageListData.getKey())){
-                                newMessageListDataArrayList.remove(bcd);
-                                break;
-                            }
-                        }
-                    }
-
-                    messageListDataArrayList.add(messageListData);
-
-//                    mAdapter.setNewMessageKeyArrayList(messageListDataArrayList);
-//                    messageKeyListView.setAdapter(mAdapter);
-//                    mAdapter.notifyDataSetChanged();
-                }
+                MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,keyArrayList.get(i),user.getUid(),lag);
+                messageListDataArrayList.add(messageListData);
+                userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
             }
-
-            userRef.addChildEventListener(cEventListener);
-
             i=i+1;
             if (keyArrayList.size()==i){
                 i=0;
@@ -181,52 +164,23 @@ public class MessageFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userName = (String) map.get("userName");
-            String uid = (String) map.get("userId");
             String iconBitmapString = (String) map.get("iconBitmapString");
 
-            if (messageListDataArrayList.size()>ii){
-                for (MessageListData x :messageListDataArrayList){
-                    if (x.getUid().equals(uid)){
-                        MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
-                        for (MessageListData rr : newMessageListDataArrayList){
-                            if (rr.getKey().equals(newMessageListData.getKey())){
-                                newMessageListDataArrayList.remove(rr);
-                            }
-                        }
+            MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
 
-//                    for (MessageListData bb : messageListDataArrayList){
-//                        if (bb.getUid().equals(uid)){
-//                            //MessageListData newMessageListData = new MessageListData(bb.getUid(),userName,iconBitmapString,bb.getTime(),bb.getContent(),bb.getBitmapString(),bb.getKey(),user.getUid(),bb.getLag());
-//
-//                            for (MessageListData ss : newMessageListDataArrayList){
-//                                if (ss.getKey().equals(newMessageListData.getKey())){
-//                                    newMessageListDataArrayList.remove(ss);
-//                                }
-//                            }
-                        newMessageListDataArrayList.add(newMessageListData);
-                        mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
-                        messageKeyListView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
+            newMessageListDataArrayList.add(newMessageListData);
+            mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+            messageKeyListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
 
-                        ii=ii+1;
-                        if (keyArrayList.size()==ii){
-                            ii=0;
-                        }
-//                        }
-//                    }
-                        if (newMessageListDataArrayList.size()!=0){
-                            Collections.sort(newMessageListDataArrayList,new TimeLagComparator());
-                        }
-                    }
-
-
+            ii=ii+1;
+            if (keyArrayList.size()==ii) {
+                ii = 0;
+                if (newMessageListDataArrayList.size() != 0) {
+                    Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    //Collections.reverse(newMessageListDataArrayList);
                 }
             }
-
-
-
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -273,8 +227,15 @@ public class MessageFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         today = sdf.format(cal1.getTime());
 
+        calNow = Calendar.getInstance();
+
+
+
         i=0;
         ii=0;
+
+        //今日
+        calDay2 = Calendar.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
@@ -313,6 +274,13 @@ public class MessageFragment extends Fragment {
                 transaction.commit();
             }
         });
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
     }
 
     @Override
