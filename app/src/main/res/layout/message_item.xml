@@ -17,6 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="9sp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="5dp"
             android:id="@+id/messageTimeTextView"/>
 
         <TextView
@@ -52,6 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="9sp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="5dp"
             android:id="@+id/myMessageImageTimeTextView"/>
 
         <ImageView
@@ -73,8 +79,8 @@
         android:id="@+id/otherMessageLayout">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/otherMessageIconImageView"/>
 
         <!-- `■`を45度回転させて`◆`にしている -->
@@ -102,6 +108,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="9sp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="1dp"
             android:id="@+id/otherMessageTimeTextView"/>
 
     </LinearLayout>
@@ -117,11 +126,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="9sp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="5dp"
             android:id="@+id/otherMessageImageTimeTextView"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/otherMessageImageView"/>
 
         <ImageView
@@ -134,12 +146,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:id="@+id/newDateLinearLayout">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:id="@+id/newDateTextView"
             android:textSize="12sp"/>
     </LinearLayout>
