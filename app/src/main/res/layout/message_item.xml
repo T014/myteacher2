@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_gravity="right"
         android:orientation="horizontal"
         android:id="@+id/myMessageLayout">
@@ -15,22 +16,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="9sp"
             android:id="@+id/messageTimeTextView"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="-5dp"
             android:background="@drawable/bg_balloon2"
             android:lineSpacingExtra="4sp"
-            android:padding="8dp"
+            android:textSize="14sp"
+            android:padding="5dp"
             android:id="@+id/messageContentsTextView"/>
 
         <!-- marginLeft="-6dp"することで角丸のTextViewに`◆`を重ねている。 -->
         <View
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:layout_marginLeft="-6dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="8dp"
             android:background="@android:color/holo_green_light"
             android:rotation="45" />
 
@@ -40,11 +45,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         android:id="@+id/myMessageImageLinearLayout">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="9sp"
             android:id="@+id/myMessageImageTimeTextView"/>
 
         <ImageView
@@ -59,9 +66,10 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         android:id="@+id/otherMessageLayout">
 
         <ImageView
@@ -74,16 +82,18 @@
         <View
             android:layout_width="8dp"
             android:layout_height="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
             android:background="@android:color/white"
             android:rotation="45" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-6dp"
+            android:layout_marginStart="-5dp"
             android:layout_weight="1"
             android:background="@drawable/bg_balloon"
-            android:padding="8dp"
+            android:padding="5dp"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:id="@+id/otherMessageContentsTextView"/>
@@ -91,6 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="9sp"
             android:id="@+id/otherMessageTimeTextView"/>
 
     </LinearLayout>
@@ -99,11 +110,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         android:id="@+id/otherMessageImageLinearLayout">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="9sp"
             android:id="@+id/otherMessageImageTimeTextView"/>
 
         <ImageView
@@ -116,6 +129,19 @@
             android:layout_height="50dp"
             android:id="@+id/otherMessageImageIconImageView"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/newDateLinearLayout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newDateTextView"
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </LinearLayout>
