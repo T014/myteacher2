@@ -2,6 +2,7 @@ package com.example.tyanai.myteacher2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ public class ThisMessageFragment extends Fragment {
     Button backButton;
     private int mYear, mMonth, mDay, mHour, mMinute;
     UserData myData;
+    String icon;
 
     private ChildEventListener mcEventListener = new ChildEventListener() {
         @Override
@@ -50,7 +52,8 @@ public class ThisMessageFragment extends Fragment {
 
             String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
-            String iconBitmapString = (String) map.get("iconBitmapString");
+            //String iconBitmapString = (String) map.get("iconBitmapString");
+            String iconBitmapString ="";
 
             String comment ="";
             String follows = "";
@@ -95,11 +98,11 @@ public class ThisMessageFragment extends Fragment {
             String time = (String) map.get("time");
             String bitmapString=(String) map.get("bitmapString");
             String userName = (String) map.get("userName");
-            String iconBitmapString = (String) map.get("iconBitmapString");
             String key = "";
+            long lag =0;
 
-            MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid());
-            if (messageListData.getUid()!=null){
+            MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag);
+            if (messageListData.getUid()!=null && messageListData.getTime()!=null){
                 messageListDataArrayList.add(messageListData);
                 mAdapter.setMessageArrayList(messageListDataArrayList);
                 messageListView.setAdapter(mAdapter);
@@ -108,7 +111,6 @@ public class ThisMessageFragment extends Fragment {
                 messageListView.setSelection(last);
             }
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -139,6 +141,10 @@ public class ThisMessageFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
+
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH);
@@ -157,6 +163,9 @@ public class ThisMessageFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle!=null){
             msKey = bundle.getString("key");
+            String roomName = bundle.getString("name");
+            MainActivity.mToolbar.setTitle(roomName);
+            icon = bundle.getString("icon");
             messageRef.child(msKey).addChildEventListener(umEventListener);
         }
 
@@ -165,13 +174,55 @@ public class ThisMessageFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String contents = editMessageEditText.getText().toString();
-                Calendar cal1 = Calendar.getInstance();
+                //最新のメッセージの日付と比較して違かったら日付を送信
 
+                //投稿時間
+                Calendar cal1 = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                 String time = sdf.format(cal1.getTime());
+                //投稿日
+                String nowDay = time.substring(0,10);
+                if (messageListDataArrayList.size()!=0){
+                    String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
+                    String lastDay = lastDate.substring(0,10);
 
-                editMessageEditText.getEditableText().clear();
+                    int deff = nowDay.compareTo(lastDay);
+                    if (deff!=0){
+                        //日付送信
+                        Map<String,Object> messageData = new HashMap<>();
+                        String key = messageRef.child(msKey).push().getKey();
+
+                        messageData.put("bitmapString","");
+                        messageData.put("contents","");
+                        messageData.put("iconBitmapString","");
+                        messageData.put("time",nowDay);
+                        messageData.put("userId","");
+                        messageData.put("userName","");
+
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put(key,messageData);
+                        messageRef.child(msKey).updateChildren(childUpdates);
+                    }
+                }else {
+                    //日付送信
+                    Map<String,Object> messageData = new HashMap<>();
+                    String key = messageRef.child(msKey).push().getKey();
+
+                    messageData.put("bitmapString","");
+                    messageData.put("contents","");
+                    messageData.put("iconBitmapString","");
+                    messageData.put("time",nowDay);
+                    messageData.put("userId","");
+                    messageData.put("userName","");
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,messageData);
+                    messageRef.child(msKey).updateChildren(childUpdates);
+
+                }
+
+
+                String contents = editMessageEditText.getText().toString();
 
                 Map<String,Object> messageData = new HashMap<>();
                 String key = messageRef.child(msKey).push().getKey();
@@ -186,6 +237,8 @@ public class ThisMessageFragment extends Fragment {
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,messageData);
                 messageRef.child(msKey).updateChildren(childUpdates);
+                editMessageEditText.getEditableText().clear();
+
             }
         });
 
