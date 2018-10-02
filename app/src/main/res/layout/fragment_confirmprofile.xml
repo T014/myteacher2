@@ -80,26 +80,10 @@
                     android:layout_centerHorizontal="true"
                     android:id="@+id/commentTextView"/>
 
-
             </RelativeLayout>
-
-
-
         </ScrollView>
-
-
-
-
-
-
-
-        <include layout="@layout/confirmprofile_content_main" />
-
+    <include layout="@layout/confirmprofile_content_main" />
     </android.support.design.widget.CoordinatorLayout>
-
-
-
-
 
 
 
