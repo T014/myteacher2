@@ -43,7 +43,6 @@ public class SearchFragment extends Fragment {
     Spinner costTypeSpinner;
     Button searchButton;
     String postType;
-
     String postLevel;
     String postUserEvaluation;
     String postEvaluation;
@@ -55,16 +54,14 @@ public class SearchFragment extends Fragment {
     String postSex;
     String postAge;
     String postCostType;
-
     String postTypePosition;
-
+    String type;
     TextView typeTextView;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference gridRef;
     DatabaseReference saveSearchRef;
     public static ArrayList<PostData> searchArrayList;
-
 
     private ChildEventListener ssEventListener = new ChildEventListener() {
         @Override
@@ -142,7 +139,6 @@ public class SearchFragment extends Fragment {
                 int ageNum = Integer.valueOf(agePosition);
                 ageSpinner.setSelection(ageNum);
             }
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -157,9 +153,6 @@ public class SearchFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
 
             private ChildEventListener sEventListener = new ChildEventListener() {
         @Override
@@ -194,12 +187,9 @@ public class SearchFragment extends Fragment {
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
 
-
-
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
-
 
             //条件分岐
             int iUserEvaluation = Integer.parseInt(userEvaluation);
@@ -214,22 +204,12 @@ public class SearchFragment extends Fragment {
                 String aaa[] = postTaught.split("人",0);
                 iSelectedPostTaught = Integer.parseInt(aaa[0]);
             }
-
-
-
-
-
             int iPostCost = Integer.parseInt(taught);
             int iSelectedPostCost=0;
             if (!(postCost.equals("指定しない"))){
                 String bbb[] = postCost.split("コイン",0);
                 iSelectedPostCost = Integer.parseInt(bbb[0]);
             }
-
-
-
-
-
             //難易度
             if (postLevel.equals("指定しない") || level.equals(postLevel)){
                 //ユーザーの評価
@@ -264,12 +244,7 @@ public class SearchFragment extends Fragment {
                     }
                 }
             }
-
-
-
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -283,11 +258,6 @@ public class SearchFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -328,12 +298,9 @@ public class SearchFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        saveSearchRef = mDataBaseReference.child(Const.SaveSearchRATH);
+        saveSearchRef = mDataBaseReference.child(Const.SaveSearchPATH);
 
-        saveSearchRef.child(user.getUid()).addChildEventListener(ssEventListener);
-
-
-
+        saveSearchRef.orderByChild("uid").equalTo(user.getUid()).addChildEventListener(ssEventListener);
 
         postAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -368,15 +335,11 @@ public class SearchFragment extends Fragment {
             postType="その他";
         }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
-
-
-
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,10 +354,6 @@ public class SearchFragment extends Fragment {
                 }else if (postArea.equals("学習")){
                     postType = (String)studyPostTypeSpinner.getSelectedItem();
                 }
-
-
-
-
                 postLevel = (String)levelSpinner.getSelectedItem();
                 postUserEvaluation = (String)userEvaluationSpinner.getSelectedItem();
                 postEvaluation = (String)evaluationSpinner.getSelectedItem();
@@ -411,9 +370,9 @@ public class SearchFragment extends Fragment {
                 gridRef = mDataBaseReference.child(Const.ContentsPATH);
                 gridRef.orderByChild("postType").equalTo(postType).addChildEventListener(sEventListener);
 
-
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","search");
+                flagBundle.putString("area",postType);
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -421,17 +380,14 @@ public class SearchFragment extends Fragment {
                 transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
             }
         });
-
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
 
         int postAreaPosition1 = postAreaSpinner.getSelectedItemPosition();
         String postAreaPosition = String.valueOf(postAreaPosition1);
@@ -441,17 +397,19 @@ public class SearchFragment extends Fragment {
         int editPostTypePosition1 = editPostTypeSpinner.getSelectedItemPosition();
         int studyPostTypePosition1 = studyPostTypeSpinner.getSelectedItemPosition();
 
-        if (sportsPostTypePosition1 != -0){
+        if (postAreaPosition1 == 0){
             postTypePosition = String.valueOf(sportsPostTypePosition1);
-        }else if (musicPostTypePosition1 != -0){
+            type = (String) sportsPostTypeSpinner.getSelectedItem();
+        }else if (postAreaPosition1 == 1){
             postTypePosition = String.valueOf(musicPostTypePosition1);
-        }else if (editPostTypePosition1 != 0){
+            type = (String) musicPostTypeSpinner.getSelectedItem();
+        }else if (postAreaPosition1 == 2){
             postTypePosition = String.valueOf(editPostTypePosition1);
-        }else if (studyPostTypePosition1 != 0){
+            type = (String) editPostTypeSpinner.getSelectedItem();
+        }else if (postAreaPosition1 == 3){
             postTypePosition = String.valueOf(studyPostTypePosition1);
+            type = (String) studyPostTypeSpinner.getSelectedItem();
         }
-
-
 
         int levelPosition1 = levelSpinner.getSelectedItemPosition();
         String levelPosition = String.valueOf(levelPosition1);
@@ -485,10 +443,18 @@ public class SearchFragment extends Fragment {
         int agePosition1 = ageSpinner.getSelectedItemPosition();
         String agePosition = String.valueOf(agePosition1);
 
-
+        String area = (String) postAreaSpinner.getSelectedItem();
+        String level = (String) levelSpinner.getSelectedItem();
+        String userEvaluation = (String) userEvaluationSpinner.getSelectedItem();
+        String taught = (String) taughtSpinner.getSelectedItem();
+        String method = (String) methodSpinner.getSelectedItem();
+        String place = (String) placeSpinner.getSelectedItem();
+        String costType = (String) costTypeSpinner.getSelectedItem();
+        String cost = (String) costSpinner.getSelectedItem();
+        String sex = (String) sexSpinner.getSelectedItem();
+        String age = (String) ageSpinner.getSelectedItem();
 
         Map<String,Object> data = new HashMap<>();
-
 
         data.put("postAreaPosition", postAreaPosition);
         data.put("postTypePosition",postTypePosition);
@@ -503,18 +469,21 @@ public class SearchFragment extends Fragment {
         data.put("costPosition",costPosition );
         data.put("sexPosition",sexPosition );
         data.put("agePosition",agePosition );
-
-
+        data.put("uid",user.getUid());
+        data.put("area" ,area );
+        data.put("type" ,type );
+        data.put("level" ,level );
+        data.put("userEvaluation" , userEvaluation);
+        data.put("taught" , taught);
+        data.put("method" , method);
+        data.put("place" , place);
+        data.put("costType" , costType);
+        data.put("cost" , cost);
+        data.put("sex" , sex);
+        data.put("age" , age);
 
         Map<String,Object> childUpdates = new HashMap<>();
         childUpdates.put(user.getUid(),data);
-        saveSearchRef.child(user.getUid()).updateChildren(childUpdates);
-
-
-
-
-
-
-
+        saveSearchRef.updateChildren(childUpdates);
     }
 }
