@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,14 +61,11 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     ListAdapter mAdapter;
 
     TabLayout tabLayout;
-    ViewPager viewPager;
+    //ViewPager viewPager;
+    CustomViewPager viewPager;
     FragmentStatePagerAdapter adapter;
 
-    int pos = 0;
-
     private ArrayList<MessageListData> messageUidArrayList;
-
-
 
     //mEventListenerの設定と初期化
     private ChildEventListener cEventListener = new ChildEventListener() {
@@ -98,8 +95,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
              accountData = userData;
 
-
-
             if (intentUserId!=null){
                 if (user.getUid().equals(userData.getUid())){
                     followCount = Integer.parseInt(userData.getFollows());
@@ -118,10 +113,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                 newIconImageView.setImageBitmap(iconBitmap);
             }
-
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -153,7 +145,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     }
                 }
             }
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -183,13 +174,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String time="";
             String contents = "";
             String bitmapString = "";
-
-
-            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid());
+            long lag=0;
+            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid(),lag);
             messageUidArrayList.add(messageListData);
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -210,7 +198,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onAttach(context);
 
         followArrayList = new ArrayList<String>();
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
@@ -220,8 +207,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
 
         followRef.addChildEventListener(followEventListener);
-
-
     }
 
     @Override
@@ -267,12 +252,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         ageConfirmProfileTextView = (TextView)v.findViewById(R.id.ageConfirmProfileTextView);
         followEditButton = (Button)v.findViewById(R.id.followEditButton);
         evaluationConfirmProfileTextView = (TextView)v.findViewById(R.id.evaluationConfirmProfileTextView);
-
         messageButton = (Button)v.findViewById(R.id.messageButton);
-
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
-        viewPager = (ViewPager) v.findViewById(R.id.pager);
-
+        //viewPager = (ViewPager) v.findViewById(R.id.pager);
+        viewPager = (CustomViewPager) v.findViewById(R.id.pager);
 
         return v;
     }
@@ -281,14 +264,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         MainActivity.mToolbar.setTitle("プロフィール");
+        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         //画像とテキストを引っ張ってくる
         userRef = mDataBaseReference.child(Const.UsersPATH);
         followerRef  = mDataBaseReference.child(Const.FollowerPATH);
-
         final Bundle userBundle = getArguments();
         if (userBundle!=null){
             intentUserId = userBundle.getString("userId");
@@ -307,102 +292,85 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             followEditButton.setText("編集");
             messageButton.setVisibility(View.GONE);
         }
-
         final String[] pageTitle = {"投稿", "いいね"};
-
         adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return ConfirmProfilePageFragment.newInstance(position + 1);
             }
-
             @Override
             public CharSequence getPageTitle(int position) {
                 return pageTitle[position];
             }
-
             @Override
             public int getCount() {
                 return pageTitle.length;
             }
         };
-
         // ViewPagerにページを設定
         viewPager.setAdapter(adapter);
+        viewPager.beginFakeDrag();
         viewPager.addOnPageChangeListener(this);
-
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
-
-
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
-
-
-
-
-
 
         followEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+//                if (followEditButton.getText().toString().equals("編集")){
+//                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+//                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
+//                    transaction.addToBackStack(null);
+//                    transaction.commit();
+//                }else{
+//                    //フォロー
+//                    Map<String,Object> followData = new HashMap<>();
+//                    String key = followRef.child(user.getUid()).push().getKey();
+//                    followData.put("followUid",intentUserId);
+//                    Map<String,Object> childUpdates = new HashMap<>();
+//                    childUpdates.put(key,followData);
+//                    followRef.updateChildren(childUpdates);
+//
+//                    //フォロー数追加
+//                    Map<String,Object> plusFollowCount = new HashMap<>();
+//                    followCount += 1;
+//                    String strFollowCount = String.valueOf(followCount);
+//                    plusFollowCount.put("follows",strFollowCount);
+//                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+//
+//                    //フォロワー
+//                    Map<String,Object> followerData = new HashMap<>();
+//                    String key2 = followerRef.child(intentUserId).push().getKey();
+//                    followerData.put("followerUid",user.getUid());
+//                    Map<String,Object> childUpdate = new HashMap<>();
+//                    childUpdate.put(key2,followerData);
+//                    followerRef.child(intentUserId).updateChildren(childUpdate);
+//
+//                    //フォロワー数追加
+//                    Map<String,Object> plusFollowerCount = new HashMap<>();
+//                    followerCount += 1;
+//                    String strFollowerCount = String.valueOf(followerCount);
+//                    plusFollowerCount.put("followers",strFollowerCount);
+//                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+//                }
 
-
-                if (followEditButton.getText().toString().equals("編集")){
-                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-
-                }else{
-
-                    //フォロー
-                    Map<String,Object> followData = new HashMap<>();
-                    String key = followRef.child(user.getUid()).push().getKey();
-                    followData.put("followUid",intentUserId);
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(key,followData);
-                    followRef.updateChildren(childUpdates);
-
-                    //フォロー数追加
-                    Map<String,Object> plusFollowCount = new HashMap<>();
-                    followCount += 1;
-                    String strFollowCount = String.valueOf(followCount);
-                    plusFollowCount.put("follows",strFollowCount);
-                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
-
-
-                    //フォロワー
-                    Map<String,Object> followerData = new HashMap<>();
-                    String key2 = followerRef.child(intentUserId).push().getKey();
-                    followerData.put("followerUid",user.getUid());
-                    Map<String,Object> childUpdate = new HashMap<>();
-                    childUpdate.put(key2,followerData);
-                    followerRef.child(intentUserId).updateChildren(childUpdate);
-
-                    //フォロワー数追加
-                    Map<String,Object> plusFollowerCount = new HashMap<>();
-                    followerCount += 1;
-                    String strFollowerCount = String.valueOf(followerCount);
-                    plusFollowerCount.put("followers",strFollowerCount);
-                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
-                }
-
-
+                SimpleCropViewFragment fragmentSimpleCropView = new SimpleCropViewFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
+                transaction.commit();
             }
         });
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 ArrayList<String> uidArrayList = new ArrayList<String>();
                 int n = messageUidArrayList.size();
                 for (int i=0;i<n;i++){
                     uidArrayList.add(messageUidArrayList.get(i).getUid());
                 }
-
                 if (uidArrayList.contains(accountData.getUid())){
                     for (MessageListData bbb:messageUidArrayList){
                         if (bbb.getUid().equals(accountData.getUid())){
@@ -416,7 +384,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                             transaction.commit();
                         }
                     }
-
                 }else{
                     Map<String,Object> makeMessageKeyRef = new HashMap<>();
                     String key = messageRef.push().getKey();
@@ -426,16 +393,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     childUpdates.put(key,makeMessageKeyRef);
                     messageKeyRef.child(intentUserId).updateChildren(childUpdates);
 
-
-
                     Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
                     makeMessageKeyRef2.put("messageKey",key);
                     makeMessageKeyRef2.put("uid",intentUserId);
                     Map<String,Object> childUpdates2 = new HashMap<>();
                     childUpdates2.put(key,makeMessageKeyRef2);
                     messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
-
-
 
                     Map<String,Object> makeMessageRef = new HashMap<>();
                     makeMessageRef.put("uid","");
@@ -448,7 +411,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     childUp.put(key,makeMessageRef);
                     messageRef.child(key).updateChildren(childUp);
 
-
                     Bundle messageKeyBundle = new Bundle();
                     messageKeyBundle.putString("key",key);
                     ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
@@ -458,22 +420,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
-
-
-
-
             }
         });
     }
 
-
-
-
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
         if (position==0){
             viewPager.setAdapter(adapter);
             viewPager.addOnPageChangeListener(this);
@@ -485,22 +437,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             viewPager.setCurrentItem(1);
             tabLayout.setupWithViewPager(viewPager);
         }
-
     }
-
     @Override
     public void onPageSelected(int position) {
     }
-
     @Override
     public void onPageScrollStateChanged(int state) {
     }
-
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
-
-
-
-
 }
