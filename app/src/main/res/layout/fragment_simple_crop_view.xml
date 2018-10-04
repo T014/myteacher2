@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="70dp"
+        android:orientation="vertical">
+
+        <com.isseiaoki.simplecropview.CropImageView
+            android:id="@+id/cropImageView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:padding="16dp" />
+
+        <Button
+            android:id="@+id/crop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:text="トリミング" />
+
+        <ImageView
+            android:id="@+id/croppedImageView"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/noimage"
+            android:layout_width="250dp"
+            android:layout_height="250dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:text="(トリミング後)"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="確認"
+            android:id="@+id/trimmingOKButton"/>
+
+    </LinearLayout>
+
+
+
+</ScrollView>

@@ -3,19 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/fragment_notification">
-
+    tools:showIn="@layout/fragment_confirmprofile">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"/>
-
+        android:layout_marginTop="200dp"/>
+<!--
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tabs" />
+        android:layout_below="@+id/tabs" />-->
+    <com.example.tyanai.myteacher2.CustomViewPager
+        android:layout_below="@+id/tabs"
+        android:id="@+id/pager"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
 </RelativeLayout>

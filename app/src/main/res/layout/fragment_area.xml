@@ -3,14 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    
-
-
-
-
-
-
-
 
 
     <LinearLayout
@@ -31,41 +23,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/noimage"
+                        android:src="@drawable/sports"
+                        android:layout_margin="20dp"
                         android:id="@+id/sportsImageButton"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="スポーツ"/>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/noimage"
+                        android:src="@drawable/music"
+                        android:layout_marginTop="20dp"
                         android:id="@+id/musicImageButton"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="音楽"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
 
@@ -73,42 +43,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/noimage"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/camera"
                         android:id="@+id/movieImageButton"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="動画"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/noimage"
+                        android:src="@drawable/study"
+                        android:layout_marginTop="20dp"
                         android:id="@+id/studyImageButton"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="学習"/>
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -262,7 +208,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="歌う"/>
+                        android:text="歌"/>
 
                 </LinearLayout>
 

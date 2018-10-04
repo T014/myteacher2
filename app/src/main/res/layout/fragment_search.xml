@@ -21,12 +21,28 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/typeTextView"
             android:text="種目を選択"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/sportsTypeList"
-            android:id="@+id/postTypeSpinner"/>
+            android:id="@+id/sportsPostTypeSpinner"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/musicTypeList"
+            android:id="@+id/musicPostTypeSpinner"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/movieTypeList"
+            android:id="@+id/editPostTypeSpinner"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/studyTypeList"
+            android:id="@+id/studyPostTypeSpinner"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,6 +106,15 @@
             android:layout_height="wrap_content"
             android:entries="@array/placeList"
             android:id="@+id/placeSpinner"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="価格形式を選択"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/postCostType"
+            android:id="@+id/costTypeSpinner"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

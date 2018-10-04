@@ -214,7 +214,6 @@ public class AuthenticationFragment extends Fragment {
             phoneNumberEditText.setError("Invalid phone number.");
             return false;
         }
-
         return true;
     }
 }

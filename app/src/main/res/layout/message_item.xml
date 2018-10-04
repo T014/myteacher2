@@ -144,13 +144,20 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:id="@+id/newDateLinearLayout">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingEnd="7dp"
+            android:paddingStart="7dp"
+            android:paddingBottom="1dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/bg_balloon3"
             android:gravity="center_horizontal"
             android:id="@+id/newDateTextView"
             android:textSize="12sp"/>

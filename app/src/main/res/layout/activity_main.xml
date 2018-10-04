@@ -15,6 +15,14 @@
         android:layout_height="wrap_content"/>
 
 
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_below="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/snack">
+
+    </android.support.design.widget.CoordinatorLayout>
+
 
 
     <android.support.design.widget.NavigationView
@@ -23,7 +31,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"/>
+    <!--MainActivityで別に読み込んだ
+        app:headerLayout="@layout/nav_header_main"
+        -->
+
 
 </android.support.v4.widget.DrawerLayout>

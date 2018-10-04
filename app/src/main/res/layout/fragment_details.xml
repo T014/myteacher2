@@ -92,10 +92,12 @@
                 android:layout_gravity="center"
                 android:id="@+id/postContentsImageView"/>
 
-            <ImageButton
+            <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/fav30"
+                android:textOn=""
+                android:textOff=""
+                android:background="@drawable/good_togglebutton"
                 android:layout_below="@+id/postContentsImageView"
                 android:id="@+id/favButton"/>
 
@@ -106,10 +108,11 @@
                 android:layout_marginLeft="15dp"
                 android:layout_below="@+id/postContentsImageView"
                 android:id="@+id/goodDetailTextView"/>
-            <Button
+            <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="購入リクエスト"
+                android:textOn="申請中"
+                android:textOff="購入申請"
                 android:layout_marginLeft="10dp"
                 android:layout_below="@+id/postContentsImageView"
                 android:layout_toEndOf="@id/goodDetailTextView"
@@ -157,16 +160,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@+id/dateDetailTextView"
-                android:layout_toRightOf="@+id/costDetailTextView"
+                android:layout_marginLeft="15dp"
+                android:layout_below="@+id/howLongDetailTextView"
                 android:id="@+id/methodDetailTextView"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/evaluationTextView"
                 android:layout_marginLeft="15dp"
-                android:layout_below="@+id/howLongDetailTextView"
+                android:layout_below="@+id/methodDetailTextView"
                 android:text="受講済みの方"/>
             <Spinner
                 android:layout_width="wrap_content"
@@ -174,7 +176,7 @@
                 android:entries="@array/evaluationsList"
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@id/evaluationTextView"
-                android:layout_below="@+id/howLongDetailTextView"
+                android:layout_below="@+id/methodDetailTextView"
                 android:id="@+id/evaluationSpinner"/>
 
             <Button
@@ -185,6 +187,30 @@
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
                 android:text="完了"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/saveButton"
+                android:layout_marginLeft="30dp"
+                android:text="申請を許可する"
+                android:id="@+id/permitButton"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/saveButton"
+                android:layout_toEndOf="@+id/permitButton"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/rejectButton"
+                android:text="申請を拒否する"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/permitButton"
+                android:layout_marginLeft="30dp"
+                android:text="リクエストをキャンセルする"
+                android:layout_marginBottom="100dp"
+                android:id="@+id/cancelButton"/>
 
 
 

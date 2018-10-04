@@ -5,10 +5,12 @@
 
 
     <ListView
-        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
+        android:paddingTop="60dp"
+        android:paddingBottom="60dp"
+        android:divider="@null"
+        android:background="@color/colorAccent"
         android:id="@+id/messageListView">
 
     </ListView>
@@ -31,6 +33,7 @@
             android:layout_weight="9"
             android:layout_height="wrap_content"
             android:hint="メッセージを入力"
+            android:inputType="textMultiLine"
             android:maxLength="120"
             android:maxLines="10"
             android:id="@+id/editMessageEditText"/>
