@@ -22,6 +22,7 @@ public class SimpleCropViewFragment extends Fragment {
     ImageView croppedImageView;
     Button cropButton;
     Button trimmingOkButton;
+    String cropFlag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +41,14 @@ public class SimpleCropViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //cropImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.sample5));
+
+        Bundle cropFlagBundle  = getArguments();
+        if (cropFlagBundle!=null){
+            cropFlag = cropFlagBundle.getString("croppedBitmapString");
+            if (cropFlag.equals("input")){
+
+            }
+        }
         MainActivity.pFlag=2;
         //icon画像選択に移動
         MainActivity mainActivity = (MainActivity)getActivity();
@@ -50,6 +59,7 @@ public class SimpleCropViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // フレームに合わせてトリミング
+                croppedImageView.setImageBitmap(null);
                 croppedImageView.setImageBitmap(cropImageView.getCroppedBitmap());
             }
         });
@@ -61,19 +71,37 @@ public class SimpleCropViewFragment extends Fragment {
                 ByteArrayOutputStream croppedBaos = new ByteArrayOutputStream();
                 croppedBitmap.compress(Bitmap.CompressFormat.JPEG,80,croppedBaos);
                 String croppedBitmapString = Base64.encodeToString(croppedBaos.toByteArray(), Base64.DEFAULT);
-
-                //inputに画像を飛ばして切り替える
-                Bundle croppedBitmapBundle = new Bundle();
-                croppedBitmapBundle.putString("croppedBitmapString",croppedBitmapString);
-                InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                fragmentInputProfile.setArguments(croppedBitmapBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (cropFlag.equals("input")){
+                    //inputProfileに画像を飛ばして切り替える
+                    Bundle croppedBitmapBundle = new Bundle();
+                    croppedBitmapBundle.putString("croppedBitmapString",croppedBitmapString);
+                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                    fragmentInputProfile.setArguments(croppedBitmapBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else if (cropFlag.equals("make")){
+                    //makePostに画像を飛ばして切り替える
+                    Bundle croppedBitmapBundle = new Bundle();
+                    croppedBitmapBundle.putString("croppedBitmapString",croppedBitmapString);
+                    MakePostFragment fragmentMakePost = new MakePostFragment();
+                    fragmentMakePost.setArguments(croppedBitmapBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         });
 
+    }
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+
+        cropImageView.setImageBitmap(null);
+        croppedImageView.setImageBitmap(null);
     }
 }
 

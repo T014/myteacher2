@@ -9,11 +9,20 @@
         android:id="@+id/nav_business"
         android:title="取引履歴"/>
     <item
+        android:id="@+id/nav_apply"
+        android:title="取引申請"/>
+    <item
+        android:id="@+id/nav_request"
+        android:title="取引リクエスト"/>
+    <item
+        android:id="@+id/nav_authentication"
+        android:title="ユーザー認証"/>
+    <item
         android:id="@+id/nav_contract"
-        android:title="利用規約"/>
+        android:title="お問い合わせ"/>
     <item
         android:id="@+id/nav_agreement"
-        android:title="お問い合わせ"/>
+        android:title="利用規約"/>
     <item
         android:id="@+id/nav_logout"
         android:title="ログアウト"/>

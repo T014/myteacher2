@@ -205,7 +205,10 @@ public class InputProfileFragment extends Fragment {
 //                Bundle cropBundle = new Bundle();
 //                cropBundle.putString("key",key);
                 croppedFlag = false;
+                Bundle cropFlagBundle = new Bundle();
+                cropFlagBundle.putString("flag","input");
                 SimpleCropViewFragment fragmentSimpleCropView = new SimpleCropViewFragment();
+                fragmentSimpleCropView.setArguments(cropFlagBundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
                 transaction.addToBackStack(null);

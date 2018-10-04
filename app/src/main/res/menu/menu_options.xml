@@ -7,14 +7,14 @@
 
     <item
         android:id="@+id/notificationButton"
-        android:icon="@drawable/noimage"
+        android:icon="@drawable/notification"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
         android:title="action_notification"/>
 
     <item
         android:id="@+id/searchButton"
-        android:icon="@drawable/noimage"
+        android:icon="@drawable/search"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
         android:title="action_search"/>

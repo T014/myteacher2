@@ -681,7 +681,6 @@ public class MakePostFragment extends Fragment {
                 //icon画像選択に移動
                 MainActivity mainActivity = (MainActivity)getActivity();
                 mainActivity.onSelfCheck();
-
             }
         });
 
