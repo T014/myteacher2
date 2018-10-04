@@ -170,11 +170,14 @@ public class MessageListAdapter extends BaseAdapter {
                     if (contents!=null){
                         messageListViewHolder.otherMessageContentsTextView.setText(contents);
                     }
-                    byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
-                    if(otherMessageIconImageBytes.length!=0) {
-                        Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                        messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
+                    if (otherContentsImageBytes.length>5){
+                        byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
+                        if(otherMessageIconImageBytes.length!=0) {
+                            Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                            messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
+                        }
                     }
+
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);

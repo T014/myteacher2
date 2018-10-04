@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,13 +51,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference contentsRef;
     DatabaseReference messageRef;
     DatabaseReference messageKeyRef;
+    Button editButton;
     int followCount;
     int followerCount;
     public static UserData accountData;
 
     String intentUserId;
     public static String uid;
-    private Button followEditButton;
+    private ToggleButton followFollowerButton;
     private ArrayList<String> followArrayList;
     ListAdapter mAdapter;
 
@@ -139,9 +141,9 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             if (intentUserId!=null){
                 if (!(intentUserId.equals(user.getUid()))){
                     if (followArrayList.contains(uid)){
-                        followEditButton.setText("フォロー中");
+                        followFollowerButton.setChecked(true);
                     }else{
-                        followEditButton.setText("フォロー");
+                        followFollowerButton.setChecked(false);
                     }
                 }
             }
@@ -250,12 +252,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         okButton = (Button)v.findViewById(R.id.okButton);
         sexConfirmProfileTextView = (TextView)v.findViewById(R.id.sexConfirmProfileTextView);
         ageConfirmProfileTextView = (TextView)v.findViewById(R.id.ageConfirmProfileTextView);
-        followEditButton = (Button)v.findViewById(R.id.followEditButton);
+        followFollowerButton = (ToggleButton) v.findViewById(R.id.followFollowerButton);
         evaluationConfirmProfileTextView = (TextView)v.findViewById(R.id.evaluationConfirmProfileTextView);
         messageButton = (Button)v.findViewById(R.id.messageButton);
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         //viewPager = (ViewPager) v.findViewById(R.id.pager);
         viewPager = (CustomViewPager) v.findViewById(R.id.pager);
+        editButton = (Button)v.findViewById(R.id.editButton);
 
         return v;
     }
@@ -265,7 +268,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("プロフィール");
-        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
 
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
@@ -283,14 +285,18 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             uid=intentUserId;
             if (uid.equals(user.getUid())){
                 //自分-
-                followEditButton.setText("編集");
+                followFollowerButton.setVisibility(View.GONE);
                 messageButton.setVisibility(View.GONE);
+                MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
+            }else {
+                editButton.setVisibility(View.GONE);
             }
         }else{
             //ない自分-
             uid=user.getUid();
-            followEditButton.setText("編集");
+            followFollowerButton.setVisibility(View.GONE);
             messageButton.setVisibility(View.GONE);
+            MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
         }
         final String[] pageTitle = {"投稿", "いいね"};
         adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
@@ -315,15 +321,12 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         tabLayout.setupWithViewPager(viewPager);
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
 
-        followEditButton.setOnClickListener(new View.OnClickListener(){
+        followFollowerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if (followEditButton.getText().toString().equals("編集")){
-                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                if (followFollowerButton.isChecked()==true){
+                    //フォロー外す
+
                 }else{
                     //フォロー
                     Map<String,Object> followData = new HashMap<>();
@@ -355,6 +358,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     plusFollowerCount.put("followers",strFollowerCount);
                     userRef.child(intentUserId).updateChildren(plusFollowerCount);
                 }
+            }
+        });
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
