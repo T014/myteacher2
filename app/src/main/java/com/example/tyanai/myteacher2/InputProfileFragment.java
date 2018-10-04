@@ -39,19 +39,11 @@ public class InputProfileFragment extends Fragment {
     Button okButton;
     public static Spinner sexSpinner;
     public static Spinner ageSpinner;
-    public static String startDate;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
     DatabaseReference usersContentsRef;
     DatabaseReference contentsRef;
-    public static String myFollows;
-    public static String myFollowers;
-    public static String myPosts;
-    public static String myEvaluation;
-    public static String myTaught;
-    public static String myPeriod;
-    public static String myGroup;
     public static String myFavorite;
     public static String newUserName;
     public static String newIconBitmapString;
@@ -214,7 +206,6 @@ public class InputProfileFragment extends Fragment {
 //                cropBundle.putString("key",key);
                 croppedFlag = false;
                 SimpleCropViewFragment fragmentSimpleCropView = new SimpleCropViewFragment();
-                //fragmentSimpleCropView.setArguments(cropBundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
                 transaction.addToBackStack(null);
@@ -346,11 +337,6 @@ public class InputProfileFragment extends Fragment {
                 Snackbar.make(MainActivity.snack, "ユーザー名を入力してください", Snackbar.LENGTH_LONG).show();
             }
         }
-    }
-    @Override
-    public void onPause() {
-        iconImageView.setImageBitmap(null); // 画像が空欄になります
-        super.onPause();
     }
     @Override
     public void onDestroyView() {
