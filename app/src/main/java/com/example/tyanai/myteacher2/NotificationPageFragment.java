@@ -24,8 +24,6 @@ import java.util.HashMap;
 
 public class NotificationPageFragment  extends Fragment {
 
-
-
     private static final String ARG_PARAM = "page";
     private String mParam;
     private OnFragmentInteractionListener mListener;
@@ -39,8 +37,6 @@ public class NotificationPageFragment  extends Fragment {
     NotificationFavListAdapter mAdapter;
     private ArrayList<NotificationFavData> favUserArrayList;
     private int page;
-
-
 
     private ChildEventListener bEventListener = new ChildEventListener() {
         @Override
@@ -60,12 +56,10 @@ public class NotificationPageFragment  extends Fragment {
             if (!(kindDetail.equals("キャンセル"))){
                 if (!(kindDetail.equals("リクエスト"))){
                     NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey);
-
                     favUserArrayList.add(notificationFavData);
                     mAdapter.setFavUserArrayList(favUserArrayList);
                     notificationListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-
                 }
             }
         }
@@ -124,7 +118,6 @@ public class NotificationPageFragment  extends Fragment {
         }
     };
 
-
     private ChildEventListener fEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -140,14 +133,11 @@ public class NotificationPageFragment  extends Fragment {
             String soldUid ="";
             String tradeKey ="";
 
-
             NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail,soldUid,tradeKey);
-
             favUserArrayList.add(notificationFavData);
             mAdapter.setFavUserArrayList(favUserArrayList);
             notificationListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -162,10 +152,6 @@ public class NotificationPageFragment  extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
-
 
     private ChildEventListener fvdEventListener = new ChildEventListener() {
         @Override
@@ -183,16 +169,12 @@ public class NotificationPageFragment  extends Fragment {
             String tradeKey ="";
 
             NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail,soldUid,tradeKey);
-
-
-
             if (!(notificationFavData.getUid().equals(user.getUid()))){
                 favUserArrayList.add(notificationFavData);
                 mAdapter.setFavUserArrayList(favUserArrayList);
                 notificationListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -207,7 +189,6 @@ public class NotificationPageFragment  extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
     public static NotificationPageFragment newInstance(int page) {
         NotificationPageFragment fragment = new NotificationPageFragment();
@@ -229,7 +210,6 @@ public class NotificationPageFragment  extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_notification_page, container, false);
         notificationListView = (ListView)view.findViewById(R.id.notificationListView);
 
@@ -240,8 +220,6 @@ public class NotificationPageFragment  extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         page = getArguments().getInt(ARG_PARAM, 0);
-
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         usersRef = mDataBaseReference.child(Const.UsersPATH);
@@ -254,9 +232,6 @@ public class NotificationPageFragment  extends Fragment {
         filterRef = mDataBaseReference.child(Const.FilterPATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
 
-
-
-
         if (page==1){
             favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
         }else if (page==2){
@@ -266,14 +241,9 @@ public class NotificationPageFragment  extends Fragment {
             filterRef.orderByChild("filterUid").equalTo(user.getUid()).addChildEventListener(fEventListener);
         }
 
-
         notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-
-
-
                 if (page==1){
                     if (view.getId()==R.id.favImageView) {
                         //いいねのときアカウント
@@ -316,7 +286,6 @@ public class NotificationPageFragment  extends Fragment {
                         }else if (screenNumKey.equals("拒否")){
                             screenNum="timeLine";
                         }
-
                         //購入の時アカウント
                         Bundle userBundle = new Bundle();
                         userBundle.putString("key",favUserArrayList.get(position).getFavPostKey());
@@ -328,9 +297,7 @@ public class NotificationPageFragment  extends Fragment {
                         transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
                         transaction.addToBackStack(null);
                         transaction.commit();
-
                     }
-
                 }else if (page==3){
                     //検索履歴一致のとき投稿
                     Bundle bundle = new Bundle();
@@ -342,12 +309,9 @@ public class NotificationPageFragment  extends Fragment {
                     transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
                     transaction.addToBackStack(null);
                     transaction.commit();
-
                 }
-
             }
         });
-
     }
 
     public void onButtonPressed(Uri uri) {
@@ -365,11 +329,6 @@ public class NotificationPageFragment  extends Fragment {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
         }
-
-
-
-
-
     }
 
     @Override
@@ -381,7 +340,4 @@ public class NotificationPageFragment  extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
-
-
 }

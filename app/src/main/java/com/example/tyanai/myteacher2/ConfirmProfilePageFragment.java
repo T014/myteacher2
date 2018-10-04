@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,13 +163,13 @@ public class ConfirmProfilePageFragment extends Fragment {
             return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam = getArguments().getString(ARG_PARAM);
-        }
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mParam = getArguments().getString(ARG_PARAM);
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -194,9 +195,9 @@ public class ConfirmProfilePageFragment extends Fragment {
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
         timeLineArrayList.clear();
         if (page==1){
-            contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
+            contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).limitToLast(30).addChildEventListener(updEventListener);
         }else if (page==2){
-            contentsRef.addChildEventListener(updEventListener);
+            contentsRef.limitToLast(30).addChildEventListener(updEventListener);
         }
 
 

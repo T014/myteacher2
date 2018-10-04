@@ -16,6 +16,7 @@ public class LogoutFragment extends Fragment{
     public static final String TAG = "LogoutFragment";
     Button logoutButton;
     Button loginButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -24,9 +25,9 @@ public class LogoutFragment extends Fragment{
         loginButton = (Button)v.findViewById(R.id.loginButton);
         return v;
     }
+
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -38,8 +39,5 @@ public class LogoutFragment extends Fragment{
                 startActivity(intent);
             }
         });
-
-        
     }
-
 }

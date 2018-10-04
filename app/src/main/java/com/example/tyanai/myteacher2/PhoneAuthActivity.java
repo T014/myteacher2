@@ -158,14 +158,17 @@ public class PhoneAuthActivity extends AppCompatActivity implements
                 // by combining the code with a verification ID.
                 Log.d(TAG, "onCodeSent:" + verificationId);
 
-                // Save verification ID and resending token so we can use them later
+                // Save verification ID and resending token so we can use them
+
                 mVerificationId = verificationId;
+                //mVerificationId = verificationId;
                 mResendToken = token;
 
                 // [START_EXCLUDE]
                 // Update UI
                 updateUI(STATE_CODE_SENT);
                 // [END_EXCLUDE]
+
             }
         };
         // [END phone_auth_callbacks]
@@ -394,8 +397,7 @@ public class PhoneAuthActivity extends AppCompatActivity implements
                     mVerificationField.setError("Cannot be empty.");
                     return;
                 }
-
-                verifyPhoneNumberWithCode(mVerificationId, code);
+                                verifyPhoneNumberWithCode(mVerificationId, code);
                 break;
             case R.id.button_resend:
                 resendVerificationCode(mPhoneNumberField.getText().toString(), mResendToken);

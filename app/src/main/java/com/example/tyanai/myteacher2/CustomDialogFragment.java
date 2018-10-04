@@ -25,7 +25,6 @@ public class CustomDialogFragment extends DialogFragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // 選択された年・月・日を整形 ※月は0-1なので+1している
 
-
                         if (month+1<10 && dayOfMonth<10){
                             dateStr = year + "/" + ("0"+(month + 1)) + "/" + ("0"+dayOfMonth);
                         }else if (month+1<10 && dayOfMonth>9){
@@ -35,7 +34,6 @@ public class CustomDialogFragment extends DialogFragment {
                         }else if(month+1>9 && dayOfMonth>9){
                             dateStr = year + "/" + (month + 1) + "/" + (dayOfMonth);
                         }
-
 
                         MakePostFragment.dateTextView.setText(dateStr);
                     }

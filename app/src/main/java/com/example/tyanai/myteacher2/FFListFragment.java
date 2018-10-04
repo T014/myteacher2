@@ -3,7 +3,6 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,60 +34,10 @@ public class FFListFragment extends Fragment {
     String ffFlag;
     private FFListAdapter mAdapter;
 
-    private ChildEventListener fEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String followUid = (String) map.get("followUid");
-            ffArrayList.add(followUid);
-
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-
-    private ChildEventListener ffEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String followUid = (String) map.get("followerUid");
-            ffArrayList.add(followUid);
-
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-
-
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
-
 
             String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
@@ -105,23 +54,67 @@ public class FFListFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String headerBitmapString = (String) map.get("headerBitmapString");
+            String coin = (String) map.get("coin");
 
             UserData ffUsersData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,headerBitmapString);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
-            for (String aaa:ffArrayList){
-                if (aaa.equals(ffUsersData.getUid())){
-                    if (!(aaa.equals(user.getUid()))){
-                        ffUsersArrayList.add(ffUsersData);
-                        mAdapter.setFFUsersArrayList(ffUsersArrayList);
-                        ffListView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
+            if (ffArrayList.size()!=0){
+                for (String aaa:ffArrayList){
+                    if (aaa.equals(ffUsersData.getUid())){
+                        if (!(aaa.equals(user.getUid()))){
+                            ffUsersArrayList.add(ffUsersData);
+                            mAdapter.setFFUsersArrayList(ffUsersArrayList);
+                            ffListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
+    private ChildEventListener fEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
 
+            String followUid = (String) map.get("followUid");
+            ffArrayList.add(followUid);
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+    private ChildEventListener ffEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String followUid = (String) map.get("followerUid");
+            ffArrayList.add(followUid);
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -138,19 +131,19 @@ public class FFListFragment extends Fragment {
     };
 
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         ffArrayList = new ArrayList<String>();
-        Log.d("sss", "onAttach");
-        Bundle flagBundle = getArguments();
-        if (flagBundle != null){
-            ffFlag = flagBundle.getString("flagBundle");
-        }
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
-        followerRef = mDataBaseReference.child(Const.FollowerPATH);
+        followerRef = mDataBaseReference.child(Const.FollowerPATH).child(user.getUid());
+        Bundle flagBundle = getArguments();
+        ffFlag = flagBundle.getString("flagBundle");
         if (ffFlag.equals("follow")){
             MainActivity.mToolbar.setTitle("follow");
             followRef.addChildEventListener(fEventListener);
@@ -158,70 +151,6 @@ public class FFListFragment extends Fragment {
             MainActivity.mToolbar.setTitle("follower");
             followerRef.addChildEventListener(ffEventListener);
         }
-    }
-
-    //Fragmentの初期化処理を行う
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("sss", "onCreate");
-    }
-
-
-    // 親となるActivityの「onCreate」の終了を知らせる
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("sss", "onActivityCreated");
-    }
-    //Activityの「onStart」に基づき開始される
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("sss", "onStart");
-
-    }
-    //Activityの「onResume」に基づき開始される
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("sss", "onResume");
-    }
-
-    //Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("sss", "onPause");
-    }
-
-    //フォアグラウンドでなくなった場合に呼び出される
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("sss", "onStop");
-    }
-
-    //Fragmentの内部のViewリソースの整理を行う
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("sss", "onDestroyView");
-    }
-
-    //Fragmentが破棄される時、最後に呼び出される
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("sss", "onDestroy");
-    }
-
-    //Activityの関連付けから外された時に呼び出される
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("sss", "onDetach");
     }
 
 
@@ -239,16 +168,9 @@ public class FFListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ffUsersArrayList = new ArrayList<UserData>();
-
-
-
         mAdapter = new FFListAdapter(this.getActivity(),R.layout.ff_list_item);
-
         usersRef = mDataBaseReference.child(Const.UsersPATH);
-
-
         usersRef.addChildEventListener(tEventListener);
-
 
         ffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -263,9 +185,5 @@ public class FFListFragment extends Fragment {
                         .commit();
             }
         });
-
-
-
     }
-
 }

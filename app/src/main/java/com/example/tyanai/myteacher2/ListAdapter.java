@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,8 +49,8 @@ public class ListAdapter extends BaseAdapter{
         String contentsTime = timeLineArrayList.get(position).getTime();
         String goodCount = timeLineArrayList.get(position).getGood();
         String favFlag = timeLineArrayList.get(position).getFavFlag();
+        final ListViewHolder listViewHolder;
 
-        ListViewHolder listViewHolder;
         if (convertView == null) {
             // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
             convertView = inflater.inflate(layoutId, parent, false);
@@ -81,7 +80,6 @@ public class ListAdapter extends BaseAdapter{
             }else{
                 listViewHolder.contentsTextView.setText(contents);
             }
-
         }
         if (contentsTime!=null){
             listViewHolder.contentsTimeTextView.setText(contentsTime);
@@ -89,10 +87,12 @@ public class ListAdapter extends BaseAdapter{
         if (goodCount!=null){
             listViewHolder.goodCountTextView.setText(goodCount);
         }
-        if (favFlag.equals("true")){
-            listViewHolder.goodButton.setChecked(true);
-        }else {
-            listViewHolder.goodButton.setChecked(false);
+        if (favFlag!=null){
+            if (favFlag.equals("true")){
+                listViewHolder.goodButton.setChecked(true);
+            }else {
+                listViewHolder.goodButton.setChecked(false);
+            }
         }
         listViewHolder.goodButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,18 +113,12 @@ public class ListAdapter extends BaseAdapter{
             }
         });
 
-
-
         //ここで色指定できる評価の高さによって
         if (contents != null){
             if (contents.equals("あああ")){
                 listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(127,127,255));
             }
         }
-
-
-
-
         byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
         if(postImageBytes.length!=0){
             Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -136,15 +130,8 @@ public class ListAdapter extends BaseAdapter{
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             listViewHolder.userIconImageView.setImageBitmap(iconImageBitmap);
         }
-
-
-
-
-
-
         return convertView;
     }
-
     @Override
     public int getCount() {
         // List<String> imgList の全要素数を返す
@@ -163,7 +150,4 @@ public class ListAdapter extends BaseAdapter{
     public void setTimeLineArrayList(ArrayList<PostData> list){
         timeLineArrayList = list;
     }
-
-
-
 }

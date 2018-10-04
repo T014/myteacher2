@@ -8,7 +8,13 @@ public class Const {
     public static final String FollowerPATH = "follower";
     public static final String FavoritePATH = "favorite";
     public static final String TradePATH = "trade";
+    public static final String RequestPATH = "request";
+    public static final String ContentsPATH = "contents";
+    public static final String SavePostPATH = "savePost";
+    public static final String LetterPATH = "letter";
+    public static final String MessagePATH = "message";
+    public static final String MessageKeyPATH = "messageKey";
+    public static final String SaveSearchPATH = "saveSearch";
+    public static final String FilterPATH = "filter";
 
-
-    //public static final String NameKEY = "name"; // Preferenceに表示名を保存する時のキー
 }

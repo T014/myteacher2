@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -62,13 +63,9 @@ public class GridFragment extends Fragment {
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
 
-
-
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
-
-
 
             postDataArrayList.add(postData);
             mAdapter.setPostDataArrayList(postDataArrayList);
@@ -88,12 +85,7 @@ public class GridFragment extends Fragment {
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
-
     };
-
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,8 +93,6 @@ public class GridFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_grid,container,false);
 
         gridView = (GridView)v.findViewById(R.id.gridView);
-
-
 
         return v;
     }
@@ -112,28 +102,30 @@ public class GridFragment extends Fragment {
 
         MainActivity.mToolbar.setTitle("???");
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+
+        }
         mAdapter = new GridListAdapter(this.getActivity(),R.layout.grid_items);
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-
         Bundle flagBundle = getArguments();
-
         if (flagBundle!=null){
             flag = flagBundle.getString("flag");
+            String postType = flagBundle.getString("postType");
             if (flag.equals("search")){
+                MainActivity.mToolbar.setTitle(postType);
                 mAdapter.setPostDataArrayList(SearchFragment.searchArrayList);
                 gridView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-                flagBundle=null;
             }else {
+                MainActivity.mToolbar.setTitle(flag);
                 gridRef = mDataBaseReference.child(Const.ContentsPATH);
-                gridRef.orderByChild("postType").equalTo(flag).addChildEventListener(gEventListener);
+                gridRef.orderByChild("postType").equalTo(flag).limitToLast(30).addChildEventListener(gEventListener);
             }
         }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-
                 Bundle bundle = new Bundle();
                 if (flag.equals("search")){
                     bundle.putString("key",SearchFragment.searchArrayList.get(position).getKey());
@@ -151,7 +143,4 @@ public class GridFragment extends Fragment {
             }
         });
     }
-
-
-
 }

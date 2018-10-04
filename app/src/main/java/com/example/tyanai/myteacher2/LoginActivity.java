@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -31,16 +32,15 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String TAG = "LoginActivity";
+
     EditText mEmailEditText;
     EditText mPasswordEditText;
     private int mYear, mMonth, mDay;
-
     FirebaseAuth mAuth;
     OnCompleteListener<AuthResult> mCreateAccountListener;
     OnCompleteListener<AuthResult> mLoginListener;
     DatabaseReference mDataBaseReference;
-    DatabaseReference followRef;
-
     // アカウント作成時にフラグを立て、ログイン処理後に名前をFirebaseに保存する
     boolean mIsCreateAccount = false;
 
@@ -49,24 +49,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-
-
-
-
-
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-
         // FirebaseAuthのオブジェクトを取得する
         mAuth = FirebaseAuth.getInstance();
-
         // アカウント作成処理のリスナー
         mCreateAccountListener = new OnCompleteListener<AuthResult>() {
             @Override
@@ -78,13 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                     String password = mPasswordEditText.getText().toString();
                     login(email, password);
 
-
-
                     // 成功した場合
                     FirebaseUser user = mAuth.getCurrentUser();
                     DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH).child(user.getUid());
-                    followRef = mDataBaseReference.child(Const.FollowPATH);
-
                     // アカウント作成の時は表示名をFirebaseに保存する
                     String uName = "";
                     String uId = user.getUid();
@@ -99,19 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                     String favorites = "未設定";
                     String sex="未設定";
                     String age ="未設定";
-
                     String date = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay);
                     //ここで指定
-
                     //初期アイコンとヘッダーを読み込みたい
                     String iconBitmapString = "";
-                    String headerBitmapString = "";
-
-
-
-
-
-
                     Map<String, String> data = new HashMap<String, String>();
                     data.put("userName", uName);
                     data.put("userId", uId);
@@ -135,34 +112,12 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("date",date);
                     //アイコン画像bitmapstring
                     data.put("iconBitmapString", iconBitmapString);
-                    //ヘッダー画像bitmapstring
-                    data.put("headerBitmapString", headerBitmapString);
                     userRef.setValue(data);
-
-
-
-
-
-                    //自分をfollowrefに入れておく
-                    Map<String,Object> followData = new HashMap<>();
-
-                    String key = followRef.child(user.getUid()).push().getKey();
-
-                    followData.put("followUid",uId);
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(key,followData);
-                    Map<String,Object> childUpdate = new HashMap<>();
-                    childUpdate.put(key,followData);
-                    followRef.child(user.getUid()).updateChildren(childUpdate);
-
-
                 } else {
-
                     // 失敗した場合
                     // エラーを表示する
                     View view = findViewById(android.R.id.content);
                     Snackbar.make(view, "アカウント作成に失敗しました", Snackbar.LENGTH_LONG).show();
-
                 }
             }
         };
@@ -171,12 +126,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginListener = new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(Task<AuthResult> task) {
-
                 if (task.isSuccessful()) {
-
                     intentMainActivity();
-
-
                 } else {
                     // 失敗した場合
 // エラーを表示する
@@ -188,10 +139,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // UIの準備
         setTitle("ログイン");
-
         mEmailEditText = (EditText) findViewById(R.id.emailText);
         mPasswordEditText = (EditText) findViewById(R.id.passwordText);
-
         Button createButton = (Button) findViewById(R.id.createButton);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,11 +151,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String email = mEmailEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
-
                 if (email.length() != 0 && password.length() >= 6) {
                     // ログイン時に表示名を保存するようにフラグを立てる
                     mIsCreateAccount = true;
-
                     createAccount(email, password);
                 } else {
                     // エラーを表示する
@@ -225,11 +172,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String email = mEmailEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
-
                 if (email.length() != 0 && password.length() >= 6) {
                     // フラグを落としておく
                     mIsCreateAccount = false;
-
                     login(email, password);
                 } else {
                     // エラーを表示する
@@ -240,27 +185,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void createAccount(String email, String password) {
-
         // アカウントを作成する
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(mCreateAccountListener);
-
-
     }
-
     private void login(String email, String password) {
-
         // ログインする
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(mLoginListener);
-
-
-
     }
-
     public void intentMainActivity() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンが押されたときの処理
+            //fragmentを取得してinputなら現在の画面を保存して終了
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
 
 

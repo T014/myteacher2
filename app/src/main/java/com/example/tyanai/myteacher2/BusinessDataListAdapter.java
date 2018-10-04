@@ -109,7 +109,6 @@ public class BusinessDataListAdapter extends BaseAdapter{
             Bitmap contentsImageBitmap = BitmapFactory.decodeByteArray(contentsImageBytes,0, contentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             businessDataHolder.contentImageView.setImageBitmap(contentsImageBitmap);
         }
-
         return convertView;
     }
 
@@ -118,12 +117,10 @@ public class BusinessDataListAdapter extends BaseAdapter{
         // List<String> imgList の全要素数を返す
         return businessDataArrayList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return null;
     }
-
     @Override
     public long getItemId(int position) {
         return 0;

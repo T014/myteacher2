@@ -86,14 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
             bottomNavigationView.setEnabled(false);
 
-            if (!(NetworkManager.isConnected(getApplicationContext()))){
-                Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-
-            }
-
             switch (item.getItemId()) {
                 case R.id.item_Timeline:
-
                     if (currentFragment!=null){
                         String currentFragmentTag = currentFragment.getTag();
                         if (currentFragmentTag!=null){
@@ -676,8 +670,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         if(pFlag==2){
                             //アイコン画像を表示
-                            InputProfileFragment.iconImageView.setImageBitmap(null);
-                            InputProfileFragment.iconImageView.setImageBitmap(img);
+                            //InputProfileFragment.iconImageView.setImageBitmap(null);
+                            //InputProfileFragment.iconImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(img);
                         }else if(pFlag==3){
                             MakePostFragment.postImageView.setImageBitmap(null);
                             MakePostFragment.postImageView.setImageBitmap(img);

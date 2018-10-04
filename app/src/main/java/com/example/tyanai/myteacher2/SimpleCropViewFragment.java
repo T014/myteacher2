@@ -23,7 +23,6 @@ public class SimpleCropViewFragment extends Fragment {
     Button cropButton;
     Button trimmingOkButton;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);

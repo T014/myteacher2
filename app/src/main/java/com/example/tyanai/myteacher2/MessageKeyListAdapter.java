@@ -65,11 +65,11 @@ public class MessageKeyListAdapter extends BaseAdapter {
         if (time!=null){
             messageKeyListViewHolder.timeTextView.setText(time);
         }
-        byte[] postImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
-
         if (contents != null){
             messageKeyListViewHolder.contentsTextView.setText(contents);
         }
+        byte[] postImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+
         if(postImageBytes.length!=0){
             messageKeyListViewHolder.contentsTextView.setText("画像が送信されました。");
         }

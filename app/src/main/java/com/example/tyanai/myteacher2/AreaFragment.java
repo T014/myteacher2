@@ -1,7 +1,9 @@
 package com.example.tyanai.myteacher2;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ import android.widget.LinearLayout;
 public class AreaFragment extends Fragment {
     public static final String TAG = "AreaFragment";
 
-    private LinearLayout areaGroup;
+    public static LinearLayout areaGroup;
     private LinearLayout sportsGroup;
     private LinearLayout musicGroup;
     private LinearLayout movieGroup;
@@ -51,11 +53,12 @@ public class AreaFragment extends Fragment {
     private ImageButton scienceImageButton;
     private ImageButton otherStudyImageButton;
 
+    int showNum=0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_area,container,false);
-
 
         areaGroup = (LinearLayout)v.findViewById(R.id.areaGroup);
         sportsGroup = (LinearLayout)v.findViewById(R.id.sportsGroup);
@@ -98,19 +101,24 @@ public class AreaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("探す");
+        MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Area);
+
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
         sportsGroup.setVisibility(View.GONE);
         musicGroup.setVisibility(View.GONE);
         movieGroup.setVisibility(View.GONE);
         studyGroup.setVisibility(View.GONE);
 
-
-
+        final FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         sportsImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 areaGroup.setVisibility(View.GONE);
                 sportsGroup.setVisibility(View.VISIBLE);
+                showNum=1;
             }
         });
         musicImageButton.setOnClickListener(new View.OnClickListener(){
@@ -118,6 +126,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 areaGroup.setVisibility(View.GONE);
                 musicGroup.setVisibility(View.VISIBLE);
+                showNum=2;
 
             }
         });
@@ -126,6 +135,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 areaGroup.setVisibility(View.GONE);
                 movieGroup.setVisibility(View.VISIBLE);
+                showNum=3;
             }
         });
         studyImageButton.setOnClickListener(new View.OnClickListener(){
@@ -133,6 +143,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 areaGroup.setVisibility(View.GONE);
                 studyGroup.setVisibility(View.VISIBLE);
+                showNum=4;
             }
         });
 
@@ -144,9 +155,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         soccerImageButton.setOnClickListener(new View.OnClickListener(){
@@ -157,9 +168,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         athleticsImageButton.setOnClickListener(new View.OnClickListener(){
@@ -170,9 +181,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         swimImageButton.setOnClickListener(new View.OnClickListener(){
@@ -183,9 +194,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -197,9 +208,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -211,9 +222,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         instrumentImageButton.setOnClickListener(new View.OnClickListener(){
@@ -224,9 +235,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         vocalPercussionImageButton.setOnClickListener(new View.OnClickListener(){
@@ -237,9 +248,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         rapImageButton.setOnClickListener(new View.OnClickListener(){
@@ -250,9 +261,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -264,9 +275,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -279,9 +290,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         editImageButton.setOnClickListener(new View.OnClickListener(){
@@ -292,9 +303,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         otherMovieImageButton.setOnClickListener(new View.OnClickListener() {
@@ -305,9 +316,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -319,9 +330,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         mathematicsImageButton.setOnClickListener(new View.OnClickListener(){
@@ -332,9 +343,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         englishImageButton.setOnClickListener(new View.OnClickListener(){
@@ -345,9 +356,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         scienceImageButton.setOnClickListener(new View.OnClickListener(){
@@ -358,9 +369,9 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         otherStudyImageButton.setOnClickListener(new View.OnClickListener(){
@@ -371,13 +382,34 @@ public class AreaFragment extends Fragment {
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentGrid,GridFragment.TAG)
-                        .commit();
+                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        if (showNum!=0){
+            if (showNum==1){
+                areaGroup.setVisibility(View.GONE);
+                sportsGroup.setVisibility(View.VISIBLE);
+            }else if (showNum==2){
+                areaGroup.setVisibility(View.GONE);
+                musicGroup.setVisibility(View.VISIBLE);
+            }else if (showNum==3){
+                areaGroup.setVisibility(View.GONE);
+                movieGroup.setVisibility(View.VISIBLE);
+            }else if (showNum==4){
+                areaGroup.setVisibility(View.GONE);
+                studyGroup.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
+
+
 }

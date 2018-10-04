@@ -318,48 +318,43 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         followEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                if (followEditButton.getText().toString().equals("編集")){
-//                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-//                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
-//                    transaction.addToBackStack(null);
-//                    transaction.commit();
-//                }else{
-//                    //フォロー
-//                    Map<String,Object> followData = new HashMap<>();
-//                    String key = followRef.child(user.getUid()).push().getKey();
-//                    followData.put("followUid",intentUserId);
-//                    Map<String,Object> childUpdates = new HashMap<>();
-//                    childUpdates.put(key,followData);
-//                    followRef.updateChildren(childUpdates);
-//
-//                    //フォロー数追加
-//                    Map<String,Object> plusFollowCount = new HashMap<>();
-//                    followCount += 1;
-//                    String strFollowCount = String.valueOf(followCount);
-//                    plusFollowCount.put("follows",strFollowCount);
-//                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
-//
-//                    //フォロワー
-//                    Map<String,Object> followerData = new HashMap<>();
-//                    String key2 = followerRef.child(intentUserId).push().getKey();
-//                    followerData.put("followerUid",user.getUid());
-//                    Map<String,Object> childUpdate = new HashMap<>();
-//                    childUpdate.put(key2,followerData);
-//                    followerRef.child(intentUserId).updateChildren(childUpdate);
-//
-//                    //フォロワー数追加
-//                    Map<String,Object> plusFollowerCount = new HashMap<>();
-//                    followerCount += 1;
-//                    String strFollowerCount = String.valueOf(followerCount);
-//                    plusFollowerCount.put("followers",strFollowerCount);
-//                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
-//                }
+                if (followEditButton.getText().toString().equals("編集")){
+                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentInputProfile, InputProfileFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else{
+                    //フォロー
+                    Map<String,Object> followData = new HashMap<>();
+                    String key = followRef.child(user.getUid()).push().getKey();
+                    followData.put("followUid",intentUserId);
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,followData);
+                    followRef.updateChildren(childUpdates);
 
-                SimpleCropViewFragment fragmentSimpleCropView = new SimpleCropViewFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
-                transaction.commit();
+                    //フォロー数追加
+                    Map<String,Object> plusFollowCount = new HashMap<>();
+                    followCount += 1;
+                    String strFollowCount = String.valueOf(followCount);
+                    plusFollowCount.put("follows",strFollowCount);
+                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+
+                    //フォロワー
+                    Map<String,Object> followerData = new HashMap<>();
+                    String key2 = followerRef.child(intentUserId).push().getKey();
+                    followerData.put("followerUid",user.getUid());
+                    Map<String,Object> childUpdate = new HashMap<>();
+                    childUpdate.put(key2,followerData);
+                    followerRef.child(intentUserId).updateChildren(childUpdate);
+
+                    //フォロワー数追加
+                    Map<String,Object> plusFollowerCount = new HashMap<>();
+                    followerCount += 1;
+                    String strFollowerCount = String.valueOf(followerCount);
+                    plusFollowerCount.put("followers",strFollowerCount);
+                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+                }
             }
         });
 

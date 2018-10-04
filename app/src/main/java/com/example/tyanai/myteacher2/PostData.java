@@ -2,7 +2,6 @@ package com.example.tyanai.myteacher2;
 
 public class PostData {
 
-
     private String mUserId;
     private String mName;
     private String mTime;
@@ -10,10 +9,11 @@ public class PostData {
     private String mDate;
     private String mImageBitmapString;
     private String mContents;
+    private String mCostType;
     private String mCost;
     private String mHowLong;
     private String mGood;
-    private String mShare;
+    private String mFavFlrag;
     private String mBought;
     private String mEvaluation;
     private String mCancel;
@@ -27,8 +27,8 @@ public class PostData {
     private String mAge;
     private String mTaught;
     private String mUserEvaluation;
-
-
+    private String mUserIconBitmapString;
+    private String mStock;
 
     public String getUserId(){
         return mUserId;
@@ -51,6 +51,9 @@ public class PostData {
     public String getContents(){
         return mContents;
     }
+    public String getCostType() {
+        return mCostType;
+    }
     public String getCost(){
         return mCost;
     }
@@ -60,8 +63,8 @@ public class PostData {
     public String getGood(){
         return mGood;
     }
-    public String getShare(){
-        return mShare;
+    public String getFavFlag(){
+        return mFavFlrag;
     }
     public String getBought(){
         return mBought;
@@ -102,13 +105,18 @@ public class PostData {
     public String getUserEvaluation(){
         return  mUserEvaluation;
     }
-
+    public String getStock() {
+        return mStock;
+    }
+    public String getUserIconBitmapString() {
+        return mUserIconBitmapString;
+    }
 
     public PostData(String userId, String name, String time, String key, String date
-            , String imageBitmapString, String contents, String cost, String howLong, String good
-            , String share, String bought, String evaluation, String cancel, String method
-            , String postArea, String postType, String level, String career,String place
-            , String sex, String age, String taught, String userEvaluation){
+            , String imageBitmapString, String contents,String costType, String cost, String howLong, String good
+            , String favFrag, String bought, String evaluation, String cancel, String method
+            , String postArea, String postType, String level, String career, String place
+            , String sex, String age, String taught, String userEvaluation,String userIconBitmapString,String stock){
         mUserId = userId;
         mName = name;
         mTime = time;
@@ -116,10 +124,11 @@ public class PostData {
         mDate = date;
         mImageBitmapString = imageBitmapString;
         mContents = contents;
+        mCostType = costType;
         mCost = cost;
         mHowLong = howLong;
         mGood = good;
-        mShare = share;
+        mFavFlrag = favFrag;
         mBought = bought;
         mEvaluation = evaluation;
         mCancel = cancel;
@@ -133,6 +142,8 @@ public class PostData {
         mAge = age;
         mTaught = taught;
         mUserEvaluation = userEvaluation;
+        mUserIconBitmapString = userIconBitmapString;
+        mStock = stock;
     }
 }
 

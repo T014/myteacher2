@@ -16,10 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 class FavListViewHolder {
-
     TextView favListTextView;
     ImageView favImageView;
-
     LinearLayout favListLinearLayout;
 }
 
@@ -33,7 +31,7 @@ public class NotificationFavListAdapter extends BaseAdapter{
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.layoutId = layoutId;
     }
-    
+
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         //ファイル名
@@ -73,16 +71,12 @@ public class NotificationFavListAdapter extends BaseAdapter{
             }
         }
 
-
-
-
         favListViewHolder.favImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((ListView)parent).performItemClick(view,position,R.id.favImageView);
             }
         });
-
         if (userIconImageBitmapString!=null){
             byte[] iconImageBytes = Base64.decode(userIconImageBitmapString,Base64.DEFAULT);
             if(iconImageBytes.length!=0){
@@ -90,8 +84,6 @@ public class NotificationFavListAdapter extends BaseAdapter{
                 favListViewHolder.favImageView.setImageBitmap(iconImageBitmap);
             }
         }
-
-
         return convertView;
     }
 
@@ -113,11 +105,4 @@ public class NotificationFavListAdapter extends BaseAdapter{
     public void setFavUserArrayList(ArrayList<NotificationFavData> list){
         favUserArrayList = list;
     }
-
-
-
-
-
-
-
 }

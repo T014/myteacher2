@@ -57,7 +57,6 @@ public class BusinessFragment extends Fragment {
             String buyIconBitmapString = (String) map.get("buyIconBitmapString");
             String permittedDate = (String) map.get("permittedDate");
 
-
             BusinessData businessData = new BusinessData(bought, date,receiveDate,sold,payDay,tradeKey, userName,userIcon,evaluation,
                     judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,permittedDate);
 
@@ -81,8 +80,6 @@ public class BusinessFragment extends Fragment {
                 businessListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -97,7 +94,6 @@ public class BusinessFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,44 +120,31 @@ public class BusinessFragment extends Fragment {
         Bundle screenBundle = getArguments();
         if (screenBundle!=null){
             screenNum = screenBundle.getString("screenKey");
-
             if (screenNum.equals("business")){
-                MainActivity.mToolbar.setTitle("取引履歴");
                 tradeRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
                 tradeRef.orderByChild("sold").equalTo(user.getUid()).addChildEventListener(tEventListener);
             }else if (screenNum.equals("apply")){
-                MainActivity.mToolbar.setTitle("取引申請");
                 requestRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
             }else if (screenNum.equals("request")){
-                MainActivity.mToolbar.setTitle("取引リクエスト");
                 requestRef.orderByChild("sold").equalTo(user.getUid()).addChildEventListener(tEventListener);
             }
         }else{
             tradeRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
         }
 
-
-
-
-
         businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public  void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String judge = businessDataArrayList.get(position).getEvaluation();
-
                 if (judge.equals("0")){
-                    tradeKey=businessDataArrayList.get(position).getTradeKey();
+                    tradeKey=businessDataArrayList.get(position).getRequestKey();
                 }
-
                 boughtUid = businessDataArrayList.get(position).getBought();
                 buyDate = businessDataArrayList.get(position).getDate();
 
-
                 Bundle businessBundle = new Bundle();
-
                 businessBundle.putString("key",businessDataArrayList.get(position).getPostKey());
                 businessBundle.putString("screenKey",screenNum);
-
 
                 DetailsFragment fragmentDetails = new DetailsFragment();
                 fragmentDetails.setArguments(businessBundle);
@@ -170,8 +153,5 @@ public class BusinessFragment extends Fragment {
                         .commit();
             }
         });
-
     }
-
-
 }

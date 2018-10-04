@@ -2,6 +2,8 @@ package com.example.tyanai.myteacher2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -186,6 +189,9 @@ public class TimelineFragment extends Fragment {
         MainActivity.mToolbar.setTitle("タイムライン");
         MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Timeline);
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         favKeyArrayList = new ArrayList<String>();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -197,8 +203,13 @@ public class TimelineFragment extends Fragment {
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 favKeyArrayList.clear();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                    }
+                }, 3000L);
+
                 if (view.getId()==R.id.goodButton){
                     goodPosition = timeLineListView.getFirstVisiblePosition();
                     y = timeLineListView.getChildAt(0).getTop();

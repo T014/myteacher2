@@ -1,5 +1,6 @@
 package com.example.tyanai.myteacher2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -195,6 +196,8 @@ public class AuthenticationFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //successful
+                            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
                             Snackbar.make(MainActivity.snack, "アカウント作成に成功しました", Snackbar.LENGTH_LONG).show();
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {

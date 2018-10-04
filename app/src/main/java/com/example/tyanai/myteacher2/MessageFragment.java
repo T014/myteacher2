@@ -95,7 +95,7 @@ public class MessageFragment extends Fragment {
             Calendar calThen = Calendar.getInstance();
             SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
 
-            int lag =0;
+            long lag =0;
             try{
                 calDay.setTime(sdf.parse(time));
                 calThen.setTime(sdfThen.parse(time));
@@ -114,7 +114,6 @@ public class MessageFragment extends Fragment {
                     time = nn;
                 }else if (deff<0){
                     //日付差
-
                     if (diffDays==1){
                         //1日前
                         time = "1日前";
@@ -167,7 +166,6 @@ public class MessageFragment extends Fragment {
             String iconBitmapString = (String) map.get("iconBitmapString");
 
             MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
-
             newMessageListDataArrayList.add(newMessageListData);
             mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
             messageKeyListView.setAdapter(mAdapter);
@@ -178,7 +176,6 @@ public class MessageFragment extends Fragment {
                 ii = 0;
                 if (newMessageListDataArrayList.size() != 0) {
                     Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
-                    //Collections.reverse(newMessageListDataArrayList);
                 }
             }
         }
@@ -260,6 +257,8 @@ public class MessageFragment extends Fragment {
 
                 Bundle messageKeyBundle = new Bundle();
                 messageKeyBundle.putString("key",newMessageListDataArrayList.get(position).getKey());
+                messageKeyBundle.putString("name",newMessageListDataArrayList.get(position).getUserName());
+                messageKeyBundle.putString("icon",newMessageListDataArrayList.get(position).getIconBitmapString());
                 i=0;
                 ii=0;
                 messageListDataArrayList.clear();

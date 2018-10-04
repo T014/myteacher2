@@ -15,19 +15,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-class ViewHolder {
+class Holder {
     ImageView imageview;
     TextView textview;
     LinearLayout linearLayout;
 }
 
-public class GridListAdapter extends BaseAdapter{
+public class AreaGridAdapter extends BaseAdapter{
 
     private LayoutInflater inflater;
     private int layoutId;
     private ArrayList<PostData> gridList = new ArrayList<PostData>();
 
-    public GridListAdapter(Context context, int layoutId) {
+    public AreaGridAdapter(Context context, int layoutId) {
         super();
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.layoutId = layoutId;
@@ -40,31 +40,36 @@ public class GridListAdapter extends BaseAdapter{
         String userName = gridList.get(position).getName();
         String contents = gridList.get(position).getContents();
 
-        ViewHolder holder;
+        Holder holder;
         if (convertView == null) {
             // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
             convertView = inflater.inflate(layoutId, parent, false);
             // ViewHolder を生成
-            holder = new ViewHolder();
+            holder = new Holder();
             holder.imageview = (ImageView) convertView.findViewById(R.id.imageview);
             holder.textview = (TextView) convertView.findViewById(R.id.textview);
             holder.linearLayout = (LinearLayout)convertView.findViewById(R.id.linearLayout);
             convertView.setTag(holder);
         }
         else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (Holder) convertView.getTag();
         }
         holder.textview.setText(userName);
+
 
         //ここで色指定できる評価の高さによって
         if (contents.equals("あああ")){
             holder.linearLayout.setBackgroundColor(Color.rgb(127,127,255));
         }
+
+
+
         byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
         if(postImageBytes.length!=0){
             Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             holder.imageview.setImageBitmap(postImageBitmap);
         }
+
         return convertView;
     }
 

@@ -108,6 +108,15 @@ public class MakePostFragment extends Fragment {
     String cost;
     String filterKey;
 
+    // ネットワーク状態のチェック
+//    private boolean isConnected() {
+//        if (!NetworkManager.isConnected(getContext())) {
+//            return false;
+//        }
+//        return true;
+//    }
+
+
     private ChildEventListener ssEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -472,6 +481,9 @@ public class MakePostFragment extends Fragment {
         MainActivity.mToolbar.setTitle("投稿");
         MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Post);
 
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH);
@@ -694,57 +706,56 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onClick(View view){
 
-                InputMethodManager im = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                //必須事項が入力されているかの確認
+                if (NetworkManager.isConnected(getContext())){
+                    //必須事項が入力されているかの確認
 
-                String userId = user.getUid();
-                String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-                date = dateTextView.getText().toString();
+                    String userId = user.getUid();
+                    String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    date = dateTextView.getText().toString();
 
-                BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
-                Bitmap postImageBitmap = postImageDrawable.getBitmap();
+                    BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
+                    Bitmap postImageBitmap = postImageDrawable.getBitmap();
 
-                int postImageWidth = postImageBitmap.getWidth();
-                int postImageHeight = postImageBitmap.getHeight();
-                float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
+                    int postImageWidth = postImageBitmap.getWidth();
+                    int postImageHeight = postImageBitmap.getHeight();
+                    float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
 
-                //resize
-                Matrix postImageMatrix = new Matrix();
-                postImageMatrix.postScale(postImageScale,postImageScale);
-                Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
+                    //resize
+                    Matrix postImageMatrix = new Matrix();
+                    postImageMatrix.postScale(postImageScale,postImageScale);
+                    Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
 
-                ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-                postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
-                String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
+                    ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+                    postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                    String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
 
-                String contents=contentsEditText.getText().toString();
-                cost = costEditText.getText().toString();
-                String howLong = (String)  howLongSpinner.getSelectedItem();
-                String goods="0";
-                String favFlag="false";
-                String bought="0";
-                String evaluation="0";
-                String cancel="0";
-                method=(String) methodSpinner.getSelectedItem();
-                level=(String) levelSpinner.getSelectedItem();
-                String career = (String) careerSpinner.getSelectedItem();
-                place =(String) placeSpinner.getSelectedItem();
-                String stock = (String) stockSpinner.getSelectedItem();
-                costType = (String) costTypeSpinner.getSelectedItem();
-                String cFirstCost="1";
-                if (cost.length()!=0){
-                    char firstCost = cost.charAt(0);
-                    cFirstCost = String.valueOf(firstCost);
-                }
+                    String contents=contentsEditText.getText().toString();
+                    cost = costEditText.getText().toString();
+                    String howLong = (String)  howLongSpinner.getSelectedItem();
+                    String goods="0";
+                    String favFlag="false";
+                    String bought="0";
+                    String evaluation="0";
+                    String cancel="0";
+                    method=(String) methodSpinner.getSelectedItem();
+                    level=(String) levelSpinner.getSelectedItem();
+                    String career = (String) careerSpinner.getSelectedItem();
+                    place =(String) placeSpinner.getSelectedItem();
+                    String stock = (String) stockSpinner.getSelectedItem();
+                    costType = (String) costTypeSpinner.getSelectedItem();
+                    String cFirstCost="1";
+                    if (cost.length()!=0){
+                        char firstCost = cost.charAt(0);
+                        cFirstCost = String.valueOf(firstCost);
+                    }
 
-                String key = contentsRef.push().getKey();
-                filterKey = key;
-                if (area.length()!=0){
-                    if (type.length()!=0){
-                        if (contents.length()!=0){
-                            if (cost.length()!=0){
-                                if (!(cFirstCost.equals("0")) || cost.equals("0")){
+                    String key = contentsRef.push().getKey();
+                    filterKey = key;
+                    if (area.length()!=0){
+                        if (type.length()!=0){
+                            if (contents.length()!=0){
+                                if (cost.length()!=0){
+                                    if (!(cFirstCost.equals("0")) || cost.equals("0")){
                                         Map<String,Object> data = new HashMap<>();
 
                                         data.put("userId", userId);
@@ -791,84 +802,89 @@ public class MakePostFragment extends Fragment {
 
                                         flag=true;
                                         savePostRef.child(user.getUid()).removeValue();
-                                    Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-                                    TimelineFragment fragmentTimeline = new TimelineFragment();
-                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
-                                    transaction.addToBackStack(null);
-                                    transaction.commit();
+                                        Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
+                                        TimelineFragment fragmentTimeline = new TimelineFragment();
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
+                                        transaction.addToBackStack(null);
+                                        transaction.commit();
+                                    }else{
+                                        Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
+                                    }
                                 }else{
-                                    Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
+                                    if (costType.equals("応相談")){
+                                        Map<String,Object> data = new HashMap<>();
+
+                                        data.put("userId", userId);
+                                        data.put("userName",myData.getName());
+                                        data.put("time", time);
+                                        data.put("key", key);
+                                        data.put("date", date);
+                                        data.put("imageBitmapString", imageBitmapString);
+                                        data.put("contents",contents);
+                                        data.put("costType",costType);
+                                        data.put("cost",cost );
+                                        data.put("howLong", howLong);
+                                        data.put("goods",goods );
+                                        data.put("favFlag",favFlag);
+                                        data.put("bought",bought );
+                                        data.put("evaluation", evaluation);
+                                        data.put("cancel",cancel );
+                                        data.put("method", method);
+                                        data.put("postArea", area);
+                                        data.put("postType",type );
+                                        data.put("level",level );
+                                        data.put("career", career);
+                                        data.put("place",place);
+                                        data.put("sex",myData.getSex());
+                                        data.put("age",myData.getAge());
+                                        data.put("taught",myData.getTaught());
+                                        data.put("userEvaluation",myData.getEvaluations());
+                                        data.put("userIconBitmapString",myData.getIconBitmapString());
+                                        data.put("stock",stock);
+
+                                        Map<String,Object> childUpdates = new HashMap<>();
+                                        childUpdates.put(key,data);
+                                        contentsRef.updateChildren(childUpdates);
+
+                                        Map<String,Object> postKey = new HashMap<>();
+                                        String aaa = usersContentsRef.child(user.getUid()).push().getKey();
+
+                                        postKey.put("key",key);
+                                        postKey.put("userId",user.getUid());
+
+                                        Map<String,Object> postUpdates = new HashMap<>();
+                                        postUpdates.put(aaa,postKey);
+                                        usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+
+                                        flag = true;
+                                        savePostRef.child(user.getUid()).removeValue();
+                                        Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
+
+                                        TimelineFragment fragmentTimeline = new TimelineFragment();
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
+                                        transaction.addToBackStack(null);
+                                        transaction.commit();
+                                    }else{
+                                        Snackbar.make(MainActivity.snack, "価格を入力してください。", Snackbar.LENGTH_LONG).show();
+                                    }
                                 }
                             }else{
-                                if (costType.equals("応相談")){
-                                    Map<String,Object> data = new HashMap<>();
-
-                                    data.put("userId", userId);
-                                    data.put("userName",myData.getName());
-                                    data.put("time", time);
-                                    data.put("key", key);
-                                    data.put("date", date);
-                                    data.put("imageBitmapString", imageBitmapString);
-                                    data.put("contents",contents);
-                                    data.put("costType",costType);
-                                    data.put("cost",cost );
-                                    data.put("howLong", howLong);
-                                    data.put("goods",goods );
-                                    data.put("favFlag",favFlag);
-                                    data.put("bought",bought );
-                                    data.put("evaluation", evaluation);
-                                    data.put("cancel",cancel );
-                                    data.put("method", method);
-                                    data.put("postArea", area);
-                                    data.put("postType",type );
-                                    data.put("level",level );
-                                    data.put("career", career);
-                                    data.put("place",place);
-                                    data.put("sex",myData.getSex());
-                                    data.put("age",myData.getAge());
-                                    data.put("taught",myData.getTaught());
-                                    data.put("userEvaluation",myData.getEvaluations());
-                                    data.put("userIconBitmapString",myData.getIconBitmapString());
-                                    data.put("stock",stock);
-
-                                    Map<String,Object> childUpdates = new HashMap<>();
-                                    childUpdates.put(key,data);
-                                    contentsRef.updateChildren(childUpdates);
-
-                                    Map<String,Object> postKey = new HashMap<>();
-                                    String aaa = usersContentsRef.child(user.getUid()).push().getKey();
-
-                                    postKey.put("key",key);
-                                    postKey.put("userId",user.getUid());
-
-                                    Map<String,Object> postUpdates = new HashMap<>();
-                                    postUpdates.put(aaa,postKey);
-                                    usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
-
-                                    flag = true;
-                                    savePostRef.child(user.getUid()).removeValue();
-                                    Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-
-                                    TimelineFragment fragmentTimeline = new TimelineFragment();
-                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
-                                    transaction.addToBackStack(null);
-                                    transaction.commit();
-                                }else{
-                                    Snackbar.make(MainActivity.snack, "価格を入力してください。", Snackbar.LENGTH_LONG).show();
-                                }
+                                Snackbar.make(MainActivity.snack, "内容を入力してください。", Snackbar.LENGTH_LONG).show();
                             }
                         }else{
-                            Snackbar.make(MainActivity.snack, "内容を入力してください。", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(MainActivity.snack, "種目を選択してください。", Snackbar.LENGTH_LONG).show();
                         }
                     }else{
-                        Snackbar.make(MainActivity.snack, "種目を選択してください。", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                     }
-                }else{
-                    Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
+                }else {
+                    Snackbar.make(MainActivity.snack,"オフラインです",Snackbar.LENGTH_LONG).show();
                 }
             }
+
+
         });
     }
 
@@ -886,6 +902,10 @@ public class MakePostFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        View view = getView();
+        InputMethodManager im = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         if (flag==false){
             //ここで保存する
             String date=dateTextView.getText().toString();
