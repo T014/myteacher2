@@ -93,12 +93,13 @@ public class MessageListAdapter extends BaseAdapter {
         messageListViewHolder.otherMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageImageLinearLayout);
         messageListViewHolder.newDateLinearLayout = (LinearLayout)convertView.findViewById(R.id.newDateLinearLayout);
 
-        convertView.setTag(messageListViewHolder);
+        //convertView.setTag(messageListViewHolder);
 
 //        } else {
 //            messageListViewHolder = (com.example.tyanai.myteacher2.MessageListViewHolder) convertView.getTag();
 //        }
-        if (uid.equals("")){
+
+         if (uid.equals("")){
             if (time!=null){
                 messageListViewHolder.newDateTextView.setText(time);
                 //時間送信　全部非表示　コンテンツをmatchで表示
@@ -109,8 +110,6 @@ public class MessageListAdapter extends BaseAdapter {
             }
         }else if (uid!=null){
             String n = time.substring(11,16);
-//            String caseToday = time.substring(11,16);
-//            String caseOther = time.substring(0,10);
             if (uid.equals(myUid)){
                 //自分の時の処理
                 byte[] myContentsImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
@@ -121,11 +120,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.myMessageImageTimeTextView.setText(n);
                     }
-                    byte[] myMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
-                    if(myMessageIconImageBytes.length!=0) {
-                        Bitmap myMessageIconImageBitmap = BitmapFactory.decodeByteArray(myMessageIconImageBytes, 0, myMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                        messageListViewHolder.myMessageImageIconImageView.setImageBitmap(myMessageIconImageBitmap);
-                    }
+
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
@@ -170,12 +165,10 @@ public class MessageListAdapter extends BaseAdapter {
                     if (contents!=null){
                         messageListViewHolder.otherMessageContentsTextView.setText(contents);
                     }
-                    if (otherContentsImageBytes.length>5){
-                        byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
-                        if(otherMessageIconImageBytes.length!=0) {
-                            Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                            messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
-                        }
+                    byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
+                    if(otherMessageIconImageBytes.length>5) {
+                        Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                        messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
                     }
 
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
