@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     android:layout_marginTop="100dp"
     android:orientation="vertical">
-
-
-
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -26,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/commentEditText"
-        android:inputType="textMultiLine"
+        android:inputType="text"
         android:maxLines="2"
         android:maxLength="40"
         android:hint="自己紹介を入力"/>

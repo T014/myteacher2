@@ -84,8 +84,8 @@ public class MessageFragment extends Fragment {
             String content = (String) map.get("contents");
             String time = (String) map.get("time");
             String bitmapString=(String) map.get("bitmapString");
-            String userName = (String) map.get("userName");
-            String iconBitmapString = (String)map.get("iconBitmapString");
+            String userName = "";
+            String iconBitmapString = "";
             String key = "";
 
             //投稿日
@@ -223,10 +223,7 @@ public class MessageFragment extends Fragment {
         Calendar cal1 = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         today = sdf.format(cal1.getTime());
-
         calNow = Calendar.getInstance();
-
-
 
         i=0;
         ii=0;

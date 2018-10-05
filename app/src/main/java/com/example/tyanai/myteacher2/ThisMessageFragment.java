@@ -46,48 +46,7 @@ public class ThisMessageFragment extends Fragment {
     UserData myData;
     String icon;
 
-    private ChildEventListener mcEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String userName = (String) map.get("userName");
-            String userId = (String) map.get("userId");
-            //String iconBitmapString = (String) map.get("iconBitmapString");
-            String iconBitmapString ="";
-
-            String comment ="";
-            String follows = "";
-            String followers="";
-            String posts ="";
-            String favorites ="";
-            String sex ="";
-            String age="";
-            String evaluations="";
-            String taught ="";
-            String period ="";
-            String groups="";
-            String date ="";
-            String coin="";
-
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
-
-            myData = userData;
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
 
     private ChildEventListener umEventListener = new ChildEventListener() {
         @Override
@@ -98,7 +57,7 @@ public class ThisMessageFragment extends Fragment {
             String content = (String) map.get("contents");
             String time = (String) map.get("time");
             String bitmapString=(String) map.get("bitmapString");
-            String userName = (String) map.get("userName");
+            String userName = "";
             String key = "";
             long lag =0;
 
@@ -194,10 +153,8 @@ public class ThisMessageFragment extends Fragment {
 
                         messageData.put("bitmapString","");
                         messageData.put("contents","");
-                        messageData.put("iconBitmapString","");
                         messageData.put("time",nowDay);
                         messageData.put("userId","");
-                        messageData.put("userName","");
 
                         Map<String,Object> childUpdates = new HashMap<>();
                         childUpdates.put(key,messageData);
@@ -210,17 +167,13 @@ public class ThisMessageFragment extends Fragment {
 
                     messageData.put("bitmapString","");
                     messageData.put("contents","");
-                    messageData.put("iconBitmapString","");
                     messageData.put("time",nowDay);
                     messageData.put("userId","");
-                    messageData.put("userName","");
 
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,messageData);
                     messageRef.child(msKey).updateChildren(childUpdates);
-
                 }
-
 
                 String contents = editMessageEditText.getText().toString();
 
@@ -229,16 +182,13 @@ public class ThisMessageFragment extends Fragment {
 
                 messageData.put("bitmapString","");
                 messageData.put("contents",contents);
-                messageData.put("iconBitmapString",myData.getIconBitmapString());
                 messageData.put("time",time);
                 messageData.put("userId",user.getUid());
-                messageData.put("userName",myData.getName());
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,messageData);
                 messageRef.child(msKey).updateChildren(childUpdates);
                 editMessageEditText.getEditableText().clear();
-
             }
         });
 
@@ -258,16 +208,10 @@ public class ThisMessageFragment extends Fragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        userRef = mDataBaseReference.child(Const.UsersPATH);
-        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mcEventListener);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-
     }
 }

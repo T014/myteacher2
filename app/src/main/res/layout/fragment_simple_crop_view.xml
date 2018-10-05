@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="70dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="70dp"
-        android:layout_marginBottom="70dp"
         android:orientation="vertical">
 
         <com.isseiaoki.simplecropview.CropImageView
@@ -23,6 +23,14 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:text="トリミング" />
+
+        <Button
+            android:id="@+id/selectImage_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:text="画像を選択する" />
 
         <ImageView
             android:id="@+id/croppedImageView"
@@ -43,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="70dp"
             android:layout_marginTop="15dp"
             android:text="確認"
             android:id="@+id/trimmingOKButton"/>

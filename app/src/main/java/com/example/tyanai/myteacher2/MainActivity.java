@@ -681,8 +681,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }else {
                         if(pFlag==2){
                             //アイコン画像を表示
-                            InputProfileFragment.iconImageView.setImageBitmap(null);
-                            InputProfileFragment.iconImageView.setImageResource(R.drawable.plusbutton);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                         }else if(pFlag==3){
                             MakePostFragment.postImageView.setImageBitmap(null);
                             MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
