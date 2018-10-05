@@ -51,9 +51,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     DatabaseReference contentsRef;
     DatabaseReference messageRef;
     DatabaseReference messageKeyRef;
+    String ffKey="";
     Button editButton;
-    int followCount;
-    int followerCount;
     public static UserData accountData;
 
     String intentUserId;
@@ -94,26 +93,80 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
-
-             accountData = userData;
-
-            if (intentUserId!=null){
-                if (user.getUid().equals(userData.getUid())){
-                    followCount = Integer.parseInt(userData.getFollows());
-                }else if (intentUserId.equals(userData.getUid())){
-                    followerCount = Integer.parseInt(userData.getFollowers());
-                }
-            }
+            accountData = userData;
 
             userNameTextView.setText(userData.getName());
             commentTextView.setText(userData.getComment());
             evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
             sexConfirmProfileTextView.setText("性別："+userData.getSex());
             ageConfirmProfileTextView.setText("年齢："+userData.getAge());
-            byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+            byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
             if(iconBytes.length!=0){
                 Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                 newIconImageView.setImageBitmap(iconBitmap);
+            }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+    private ChildEventListener gEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("userId");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+
+            if (followFollowerButton.isChecked()){
+                //フォローのとき押した
+                if (userId.equals(uid)){
+                    //相手のフォロワーを増やす
+                    Map<String,Object> plusFollowerCount = new HashMap<>();
+                    int frc = Integer.valueOf(followers);
+                    frc += 1;
+                    String strFollowerCount = String.valueOf(frc);
+                    plusFollowerCount.put("followers",strFollowerCount);
+                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+                }else if (userId.equals(user.getUid())) {
+                    //自分のフォローを増やす
+                    Map<String, Object> plusFollowCount = new HashMap<>();
+                    int fc = Integer.valueOf(follows);
+                    fc += 1;
+                    String strFollowCount = String.valueOf(fc);
+                    plusFollowCount.put("follows", strFollowCount);
+                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+                }
+            }else{
+                //フォロー中に押した
+                if (userId.equals(uid)){
+                    //相手のフォロワーを減らす
+                    Map<String,Object> minusFollowerCount = new HashMap<>();
+                    int frc = Integer.valueOf(followers);
+                    frc -= 1;
+                    String strFollowerCount = String.valueOf(frc);
+                    minusFollowerCount.put("followers",strFollowerCount);
+                    userRef.child(intentUserId).updateChildren(minusFollowerCount);
+                }else if (userId.equals(user.getUid())){
+                    //自分のフォローを減らす
+                    Map<String,Object> minusFollowCount = new HashMap<>();
+                    int fc = Integer.valueOf(follows);
+                    fc -= 1;
+                    String strFollowCount = String.valueOf(fc);
+                    minusFollowCount.put("follows",strFollowCount);
+                    userRef.child(user.getUid()).updateChildren(minusFollowCount);
+                }
             }
         }
         @Override
@@ -136,10 +189,14 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String followUid = (String) map.get("followUid");
+            String followKey = (String) map.get("followKey");
             followArrayList.add(followUid);
 
             if (intentUserId!=null){
                 if (!(intentUserId.equals(user.getUid()))){
+                    if (followUid.equals(uid)){
+                        ffKey = followKey;
+                    }
                     if (followArrayList.contains(uid)){
                         followFollowerButton.setChecked(true);
                     }else{
@@ -162,7 +219,32 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         }
     };
 
-
+//    private ChildEventListener removeFollowEventListener = new ChildEventListener() {
+//        @Override
+//        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//            HashMap map = (HashMap) dataSnapshot.getValue();
+//
+//            String followUid = (String) map.get("followUid");
+//            String followKey = (String) map.get("followKey");
+//
+//            if (followUid.equals(accountData.getUid())){
+//                followRef.child(user.getUid()).child(followKey).removeValue();
+//                followerRef.child(accountData.getUid()).child(followKey).removeValue();
+//            }
+//        }
+//        @Override
+//        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//        }
+//        @Override
+//        public void onChildRemoved(DataSnapshot dataSnapshot) {
+//        }
+//        @Override
+//        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//        }
+//        @Override
+//        public void onCancelled(DatabaseError databaseError) {
+//        }
+//    };
 
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
@@ -202,13 +284,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         followArrayList = new ArrayList<String>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
+        followRef = mDataBaseReference.child(Const.FollowPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         messageRef = mDataBaseReference.child(Const.MessagePATH);
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
 
-        followRef.addChildEventListener(followEventListener);
+        followRef.child(user.getUid()).addChildEventListener(followEventListener);
     }
 
     @Override
@@ -225,6 +307,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
+        ffKey=null;
     }
 
     @Override
@@ -320,44 +403,55 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
         userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
+        //userRef.addChildEventListener(cEventListener);
 
         followFollowerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if (followFollowerButton.isChecked()==true){
-                    //フォロー外す
-
-                }else{
+                if (followFollowerButton.isChecked()){
                     //フォロー
                     Map<String,Object> followData = new HashMap<>();
                     String key = followRef.child(user.getUid()).push().getKey();
                     followData.put("followUid",intentUserId);
+                    followData.put("followKey",key);
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,followData);
-                    followRef.updateChildren(childUpdates);
+                    //followRef.child(user.getUid()).updateChildren(childUpdates);
+                    followRef.child(user.getUid()).setValue(childUpdates);
 
                     //フォロー数追加
-                    Map<String,Object> plusFollowCount = new HashMap<>();
-                    followCount += 1;
-                    String strFollowCount = String.valueOf(followCount);
-                    plusFollowCount.put("follows",strFollowCount);
-                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+//                    Map<String,Object> plusFollowCount = new HashMap<>();
+//                    followCount += 1;
+//                    String strFollowCount = String.valueOf(followCount);
+//                    plusFollowCount.put("follows",strFollowCount);
+//                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
 
                     //フォロワー
                     Map<String,Object> followerData = new HashMap<>();
-                    String key2 = followerRef.child(intentUserId).push().getKey();
                     followerData.put("followerUid",user.getUid());
+                    followerData.put("followerKey",key);
                     Map<String,Object> childUpdate = new HashMap<>();
-                    childUpdate.put(key2,followerData);
+                    childUpdate.put(key,followerData);
                     followerRef.child(intentUserId).updateChildren(childUpdate);
 
                     //フォロワー数追加
-                    Map<String,Object> plusFollowerCount = new HashMap<>();
-                    followerCount += 1;
-                    String strFollowerCount = String.valueOf(followerCount);
-                    plusFollowerCount.put("followers",strFollowerCount);
-                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+//                    Map<String,Object> plusFollowerCount = new HashMap<>();
+//                    followerCount += 1;
+//                    String strFollowerCount = String.valueOf(followerCount);
+//                    plusFollowerCount.put("followers",strFollowerCount);
+//                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+
+                    ffKey=key;
+                }else{
+                    //自分のフォロー外す//相手のフォロワーから外す
+                    //followRef.child(user.getUid()).addChildEventListener(removeFollowEventListener);
+                    if(ffKey!=null){
+                        followRef.child(user.getUid()).child(ffKey).removeValue();
+                        followerRef.child(accountData.getUid()).child(ffKey).removeValue();
+                    }
+                    ffKey = "";
                 }
+                userRef.addChildEventListener(gEventListener);
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {
