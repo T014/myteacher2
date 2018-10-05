@@ -107,6 +107,8 @@ public class MakePostFragment extends Fragment {
     String costType;
     String cost;
     String filterKey;
+    String croppedBitmapString;
+    Boolean croppedFlag = false;
 
     // ネットワーク状態のチェック
 //    private boolean isConnected() {
@@ -247,6 +249,24 @@ public class MakePostFragment extends Fragment {
             String stockPosition = (String) map.get("stockPosition");
             String placePosition = (String) map.get("placePosition");
 
+            if (croppedFlag==true){
+                if (croppedBitmapString!=null){
+                    byte[] croppedBytes = Base64.decode(croppedBitmapString, Base64.DEFAULT);
+                    if (croppedBytes.length != 0) {
+                        Bitmap croppedBitmap = BitmapFactory.decodeByteArray(croppedBytes, 0, croppedBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                        postImageView.setImageBitmap(croppedBitmap);
+                    }
+                }
+            }else{
+                if (imageBitmapString!=null){
+                    byte[] contentsImageBytes = Base64.decode(imageBitmapString,Base64.DEFAULT);
+                    if(contentsImageBytes.length!=0){
+                        Bitmap contentsImageBitmap = BitmapFactory.decodeByteArray(contentsImageBytes,0, contentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                        postImageView.setImageBitmap(contentsImageBitmap);
+                    }
+                }
+            }
+
             if (postArea!=null){
                 if (postArea.equals("sports")){
                     sportsRadioButton.setChecked(true);
@@ -351,11 +371,7 @@ public class MakePostFragment extends Fragment {
             if (date!=null){
                 dateTextView.setText(date);
             }
-            byte[] contentsImageBytes = Base64.decode(imageBitmapString,Base64.DEFAULT);
-            if(contentsImageBytes.length!=0){
-                Bitmap contentsImageBitmap = BitmapFactory.decodeByteArray(contentsImageBytes,0, contentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                postImageView.setImageBitmap(contentsImageBitmap);
-            }
+
             if (placePosition!=null){
                 int p = Integer.valueOf(placePosition);
                 placeSpinner.setSelection(p);
@@ -480,6 +496,12 @@ public class MakePostFragment extends Fragment {
 
         MainActivity.mToolbar.setTitle("投稿");
         MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Post);
+
+        Bundle croppedBitmapBundle  = getArguments();
+        if (croppedBitmapBundle!=null){
+            croppedBitmapString = croppedBitmapBundle.getString("croppedBitmapString");
+            croppedFlag = true;
+        }
 
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
@@ -677,10 +699,19 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onClick(View v){
                 //pFragを変更
-                MainActivity.pFlag=3;
-                //icon画像選択に移動
-                MainActivity mainActivity = (MainActivity)getActivity();
-                mainActivity.onSelfCheck();
+//                MainActivity.pFlag=3;
+//                //icon画像選択に移動
+//                MainActivity mainActivity = (MainActivity)getActivity();
+//                mainActivity.onSelfCheck();
+                croppedFlag = false;
+                Bundle cropFlagBundle = new Bundle();
+                cropFlagBundle.putString("flag","make");
+                SimpleCropViewFragment fragmentSimpleCropView = new SimpleCropViewFragment();
+                fragmentSimpleCropView.setArguments(cropFlagBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -901,6 +932,7 @@ public class MakePostFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        croppedFlag = false;
 
         View view = getView();
         InputMethodManager im = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

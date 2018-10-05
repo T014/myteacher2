@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 public class SimpleCropViewFragment extends Fragment {
     public static final String TAG = "SimpleCropViewFragment";
     public static CropImageView cropImageView;
-    ImageView croppedImageView;
+    public static ImageView croppedImageView;
     Button cropButton;
     Button trimmingOkButton;
     String cropFlag;
@@ -55,7 +55,10 @@ public class SimpleCropViewFragment extends Fragment {
                 MainActivity mainActivity = (MainActivity)getActivity();
                 mainActivity.onSelfCheck();
             }else if (cropFlag.equals("make")){
-
+                MainActivity.pFlag=3;
+                //icon画像選択に移動
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.onSelfCheck();
             }
         }
 
@@ -68,9 +71,11 @@ public class SimpleCropViewFragment extends Fragment {
                     MainActivity mainActivity = (MainActivity)getActivity();
                     mainActivity.onSelfCheck();
                 }else if (cropFlag.equals("make")){
-
+                    MainActivity.pFlag=3;
+                    //icon画像選択に移動
+                    MainActivity mainActivity = (MainActivity)getActivity();
+                    mainActivity.onSelfCheck();
                 }
-
             }
         });
 

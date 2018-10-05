@@ -674,9 +674,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             //InputProfileFragment.iconImageView.setImageBitmap(img);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(img);
                         }else if(pFlag==3){
-                            MakePostFragment.postImageView.setImageBitmap(null);
-                            MakePostFragment.postImageView.setImageBitmap(img);
+//                            MakePostFragment.postImageView.setImageBitmap(null);
+//                            MakePostFragment.postImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(img);
                         }
                     }else {
                         if(pFlag==2){
@@ -684,8 +690,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                             SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                         }else if(pFlag==3){
-                            MakePostFragment.postImageView.setImageBitmap(null);
-                            MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
+//                            MakePostFragment.postImageView.setImageBitmap(null);
+//                            MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                         }
                     }
                     //エラー処理
