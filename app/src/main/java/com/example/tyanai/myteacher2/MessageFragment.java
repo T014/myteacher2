@@ -46,6 +46,7 @@ public class MessageFragment extends Fragment {
     String today;
     Calendar calDay2;
     Calendar calNow;
+    int r=0;
 
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
@@ -84,9 +85,9 @@ public class MessageFragment extends Fragment {
             String content = (String) map.get("contents");
             String time = (String) map.get("time");
             String bitmapString=(String) map.get("bitmapString");
+            String key = (String) map.get("roomKey");
             String userName = "";
             String iconBitmapString = "";
-            String key = "";
 
             //投稿日
             Calendar calDay = Calendar.getInstance();
@@ -133,11 +134,61 @@ public class MessageFragment extends Fragment {
 
             }catch (ParseException e){
             }
+//            if (i == 0 && newMessageListDataArrayList.size() > 0) {
+//                if (content.length()>0){
+//                    MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid(),lag);
+//                    newMessageListDataArrayList.add(newMessageListDataArrayList.size(),messageListData);
+//                }
+//            }else{
+//                if (keyArrayList.size()>i){
+//                    MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid(),lag);
+//                    if (keyArrayList.size()!=messageListDataArrayList.size()){
+//                        messageListDataArrayList.add(messageListData);
+//                        userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
+//                    }else{
+//                        //newMessageArrayListを更新して反映させる
+//                        for (int r=0; r<newMessageListDataArrayList.size();r++ ){
+//                            //roomKeyで比較の方がよい
+//                            if (newMessageListDataArrayList.get(r).getKey().equals(messageListData.getKey())){
+//                                //contentとかをmessageListDataからひっぱてくる
+//                                MessageListData newMessageListData = new MessageListData(newMessageListDataArrayList.get(r).getUid(),newMessageListDataArrayList.get(r).getUserName(),newMessageListDataArrayList.get(r).getIconBitmapString(),messageListData.getTime(),messageListData.getContent(),messageListData.getBitmapString(),newMessageListDataArrayList.get(r).getKey(),newMessageListDataArrayList.get(r).getUid(),messageListData.getLag());
+//                                newMessageListDataArrayList.remove(r);
+//                                newMessageListDataArrayList.add(r,newMessageListData);
+//                                Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+//                                mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+//                                messageKeyListView.setAdapter(mAdapter);
+//                                mAdapter.notifyDataSetChanged();
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
             if (keyArrayList.size()>i){
-                MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,keyArrayList.get(i),user.getUid(),lag);
-                messageListDataArrayList.add(messageListData);
-                userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
+                MessageListData messageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,key,user.getUid(),lag);
+                if (keyArrayList.size()!=messageListDataArrayList.size()){
+                    messageListDataArrayList.add(messageListData);
+                    userRef.orderByChild("userId").equalTo(uidArrayList.get(i)).addChildEventListener(cEventListener);
+                }else{
+                    //newMessageArrayListを更新して反映させる
+                    for (int r=0; r<newMessageListDataArrayList.size();r++ ){
+                        //roomKeyで比較の方がよい
+                        if (newMessageListDataArrayList.get(r).getKey().equals(messageListData.getKey())){
+                            //contentとかをmessageListDataからひっぱてくる
+                            MessageListData newMessageListData = new MessageListData(newMessageListDataArrayList.get(r).getUid(),newMessageListDataArrayList.get(r).getUserName(),newMessageListDataArrayList.get(r).getIconBitmapString(),messageListData.getTime(),messageListData.getContent(),messageListData.getBitmapString(),newMessageListDataArrayList.get(r).getKey(),newMessageListDataArrayList.get(r).getUid(),messageListData.getLag());
+                            newMessageListDataArrayList.remove(r);
+                            newMessageListDataArrayList.add(r,newMessageListData);
+                            Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                            mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+                            messageKeyListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
             }
+
             i=i+1;
             if (keyArrayList.size()==i){
                 i=0;
@@ -165,12 +216,24 @@ public class MessageFragment extends Fragment {
             String userName = (String) map.get("userName");
             String iconBitmapString = (String) map.get("iconBitmapString");
 
-            MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
-            newMessageListDataArrayList.add(newMessageListData);
-            mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
-            messageKeyListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-
+            if (ii == 0 && newMessageListDataArrayList.size() > 0) {
+                int m = newMessageListDataArrayList.size();
+                MessageListData newMessageListData = new MessageListData(newMessageListDataArrayList.get(m-1).getUid(),userName,iconBitmapString,newMessageListDataArrayList.get(m-1).getTime(),newMessageListDataArrayList.get(m-1).getContent(),newMessageListDataArrayList.get(m-1).getBitmapString(),newMessageListDataArrayList.get(m-1).getKey(),user.getUid(),newMessageListDataArrayList.get(m-1).getLag());
+                if (newMessageListData.getContent().length()>0){
+                    newMessageListDataArrayList.remove(m-1);
+                    newMessageListDataArrayList.add(m-1,newMessageListData);
+                    Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+                    messageKeyListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }else {
+                MessageListData newMessageListData = new MessageListData(messageListDataArrayList.get(ii).getUid(),userName,iconBitmapString,messageListDataArrayList.get(ii).getTime(),messageListDataArrayList.get(ii).getContent(),messageListDataArrayList.get(ii).getBitmapString(),messageListDataArrayList.get(ii).getKey(),user.getUid(),messageListDataArrayList.get(ii).getLag());
+                newMessageListDataArrayList.add(newMessageListData);
+                mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
+                messageKeyListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+            }
             ii=ii+1;
             if (keyArrayList.size()==ii) {
                 ii = 0;
@@ -306,5 +369,6 @@ public class MessageFragment extends Fragment {
         super.onDestroyView();
         i=0;
         ii=0;
+        r=0;
     }
 }
