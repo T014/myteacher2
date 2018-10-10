@@ -670,19 +670,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         if(pFlag==2){
                             //アイコン画像を表示
-                            //InputProfileFragment.iconImageView.setImageBitmap(null);
-                            //InputProfileFragment.iconImageView.setImageBitmap(img);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(img);
                             SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
                         }else if(pFlag==3){
-//                            MakePostFragment.postImageView.setImageBitmap(null);
-//                            MakePostFragment.postImageView.setImageBitmap(img);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(img);
                             SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
                         }
                     }else {
                         if(pFlag==2){
@@ -696,6 +692,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                         }
                     }
+
                     //エラー処理
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
