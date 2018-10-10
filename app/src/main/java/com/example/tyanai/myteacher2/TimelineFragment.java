@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ToggleButton;
@@ -28,7 +29,9 @@ import java.util.Map;
 
 public class TimelineFragment extends Fragment {
     public static  final String TAG = "TimelineFragment";
-    private ArrayList<PostData> timeLineArrayList = new ArrayList<PostData>();
+    private ArrayList<PostData> timeLineArrayList;
+    private ArrayList<PostData> addTimeLineArrayList;
+    private ArrayList<PostData> oldTimeLineArrayList;
     DatabaseReference mDataBaseReference;
     DatabaseReference favRef;
     DatabaseReference followRef;
@@ -88,14 +91,24 @@ public class TimelineFragment extends Fragment {
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
-            Collections.reverse(timeLineArrayList);
-            timeLineArrayList.add(postData);
-            Collections.reverse(timeLineArrayList);
+            //30以上の時はためておく！！
 
-            mAdapter.setTimeLineArrayList(timeLineArrayList);
-            timeLineListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-            timeLineListView.setSelectionFromTop(goodPosition,y);
+            if (timeLineArrayList.size()>9){
+                Collections.reverse(timeLineArrayList);
+                addTimeLineArrayList.add(postData);
+                Collections.reverse(timeLineArrayList);
+            }else {
+                Collections.reverse(timeLineArrayList);
+                timeLineArrayList.add(postData);
+                Collections.reverse(timeLineArrayList);
+
+                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                timeLineListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                timeLineListView.setSelectionFromTop(goodPosition,y);
+            }
+
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -173,6 +186,67 @@ public class TimelineFragment extends Fragment {
         }
     };
 
+    private ChildEventListener oldAddEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("userId");
+            String userName = (String) map.get("userName");
+            String time = (String) map.get("time");
+            String key = (String) map.get("key");
+            String date = (String) map.get("date");
+            String imageBitmapString = (String) map.get("imageBitmapString");
+            String contents = (String) map.get("contents");
+            String costType = (String) map.get("costType");
+            String cost = (String) map.get("cost");
+            String howLong = (String) map.get("howLong");
+            String goods = (String) map.get("goods");
+            String bought = (String) map.get("bought");
+            String evaluation = (String) map.get("evaluation");
+            String cancel = (String) map.get("cancel");
+            String method = (String) map.get("method");
+            String postArea = (String) map.get("postArea");
+            String postType = (String) map.get("postType");
+            String level = (String) map.get("level");
+            String career = (String) map.get("career");
+            String place = (String) map.get("place");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String taught = (String) map.get("taught");
+            String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
+            String favFlag="";
+
+            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
+                    , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+
+            Collections.reverse(oldTimeLineArrayList);
+            oldTimeLineArrayList.add(postData);
+            Collections.reverse(oldTimeLineArrayList);
+
+            mAdapter.setTimeLineArrayList(oldTimeLineArrayList);
+            timeLineListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+            timeLineListView.setSelectionFromTop(goodPosition,y);
+            最初のn個は追加しない
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -195,11 +269,77 @@ public class TimelineFragment extends Fragment {
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         favKeyArrayList = new ArrayList<String>();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
+
+        timeLineListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // 一番上までスクロールしたときの処理
+                if (getView().getTop()!=0){
+                    goodPosition = timeLineListView.getFirstVisiblePosition();
+                    if (goodPosition!=0){
+                        y = timeLineListView.getChildAt(0).getTop();
+                    }
+                }
+                if(firstVisibleItem == 0){
+                    if (timeLineArrayList!=null){
+                        if (addTimeLineArrayList.size()!=0){
+                            if (timeLineArrayList.size()>100){
+                                //消して追加
+                                timeLineArrayList.clear();
+                                timeLineArrayList = addTimeLineArrayList;
+                                addTimeLineArrayList.clear();
+                            }else {
+                                //そのまま追加
+                                addTimeLineArrayList.addAll(timeLineArrayList);
+                                timeLineArrayList.clear();
+                                timeLineArrayList.addAll(addTimeLineArrayList);
+                                addTimeLineArrayList.clear();
+                            }
+                            mAdapter.setTimeLineArrayList(timeLineArrayList);
+                            timeLineListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                            timeLineListView.setSelectionFromTop(goodPosition,y);
+                        }
+                    }
+                }else if (firstVisibleItem + visibleItemCount == totalItemCount){
+                    //時間でソートしたいタイムラグ作った方がいいかな
+                    int n = timeLineArrayList.size() + addTimeLineArrayList.size();
+                    int m = n + 20;
+
+                    contentsRef.limitToLast(m).addChildEventListener(oldAddEventListener);
+                    最初のn個は追加しない！
+
+
+                    //一番下までスクロールしたときの処理
+//                    if (oldTimeLineArrayList.size()!=0){
+//                        if (timeLineArrayList.size()>100){
+//                            //消して追加
+////                            timeLineArrayList.clear();
+////                            timeLineArrayList = oldTimeLineArrayList;
+////                            oldTimeLineArrayList.clear();
+//                            //イベントリスナーを呼ぶ
+//                        }else {
+//                            //そのまま追加
+////                            timeLineArrayList.addAll(oldTimeLineArrayList);
+////                            oldTimeLineArrayList.clear();
+//                        }
+//                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+//                        timeLineListView.setAdapter(mAdapter);
+//                        mAdapter.notifyDataSetChanged();
+//                        timeLineListView.setSelectionFromTop(goodPosition,y);
+//                    }
+                }
+            }
+        });
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -294,9 +434,12 @@ public class TimelineFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        addTimeLineArrayList = new ArrayList<PostData>();
+        oldTimeLineArrayList = new ArrayList<PostData>();
+        timeLineArrayList = new ArrayList<PostData>();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.addChildEventListener(tEventListener);
+        contentsRef.limitToLast(10).addChildEventListener(tEventListener);
     }
 
     @Override
