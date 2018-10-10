@@ -155,6 +155,7 @@ public class ThisMessageFragment extends Fragment {
                         messageData.put("contents","");
                         messageData.put("time",nowDay);
                         messageData.put("userId","");
+                        messageData.put("roomKey",msKey);
 
                         Map<String,Object> childUpdates = new HashMap<>();
                         childUpdates.put(key,messageData);
@@ -169,6 +170,7 @@ public class ThisMessageFragment extends Fragment {
                     messageData.put("contents","");
                     messageData.put("time",nowDay);
                     messageData.put("userId","");
+                    messageData.put("roomKey",msKey);
 
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,messageData);
@@ -184,6 +186,7 @@ public class ThisMessageFragment extends Fragment {
                 messageData.put("contents",contents);
                 messageData.put("time",time);
                 messageData.put("userId",user.getUid());
+                messageData.put("roomKey",msKey);
 
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,messageData);

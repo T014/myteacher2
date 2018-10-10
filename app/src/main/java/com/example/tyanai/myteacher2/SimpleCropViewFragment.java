@@ -61,6 +61,7 @@ public class SimpleCropViewFragment extends Fragment {
                 mainActivity.onSelfCheck();
             }
         }
+        croppedImageView.setImageBitmap(cropImageView.getCroppedBitmap());
 
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override

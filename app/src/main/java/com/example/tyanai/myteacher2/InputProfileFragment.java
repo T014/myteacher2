@@ -213,8 +213,6 @@ public class InputProfileFragment extends Fragment {
                 transaction.replace(R.id.container,fragmentSimpleCropView,SimpleCropViewFragment.TAG);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
-
             }
         });
 

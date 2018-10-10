@@ -504,11 +504,10 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
                     Map<String,Object> makeMessageRef = new HashMap<>();
                     makeMessageRef.put("uid","");
-                    makeMessageRef.put("userName","");
-                    makeMessageRef.put("iconBitmapString","");
                     makeMessageRef.put("bitmapString","");
                     makeMessageRef.put("contents","");
                     makeMessageRef.put("time","");
+                    makeMessageRef.put("roomKey",key);
                     Map<String,Object> childUp = new HashMap<>();
                     childUp.put(key,makeMessageRef);
                     messageRef.child(key).updateChildren(childUp);

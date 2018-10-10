@@ -137,84 +137,88 @@ public class MakePostFragment extends Fragment {
             String ssAge = (String) map.get("age");
             String uid = (String) map.get("uid");
 
-            int iUserEvaluation = Integer.valueOf(myData.getEvaluations());
-            int iTaught = Integer.valueOf(myData.getTaught());
-            int iCost=0;
-            int issUserEvaluation=0;
-            int issTaught=0;
-            int issCost=0;
-            try {
-                iCost = Integer.valueOf(cost);
-            } catch (NumberFormatException e) {
-            }
-            try {
-                issUserEvaluation = Integer.valueOf(ssUserEvaluation);
-            } catch (NumberFormatException e) {
-            }
-            try {
-                issTaught = Integer.valueOf(ssTaught);
-            } catch (NumberFormatException e) {
-            }
-            try {
-                issCost = Integer.valueOf(ssCost);
-            } catch (NumberFormatException e) {
-            }
+            if (myData!=null){
+                int iUserEvaluation = Integer.valueOf(myData.getEvaluations());
+                int iTaught = Integer.valueOf(myData.getTaught());
+                int iCost=0;
+                int issUserEvaluation=0;
+                int issTaught=0;
+                int issCost=0;
+                try {
+                    iCost = Integer.valueOf(cost);
+                } catch (NumberFormatException e) {
+                }
+                try {
+                    issUserEvaluation = Integer.valueOf(ssUserEvaluation);
+                } catch (NumberFormatException e) {
+                }
+                try {
+                    issTaught = Integer.valueOf(ssTaught);
+                } catch (NumberFormatException e) {
+                }
+                try {
+                    issCost = Integer.valueOf(ssCost);
+                } catch (NumberFormatException e) {
+                }
 
-            if (!(uid.equals(user.getUid()))){
-                //if (ssArea.equals(area)){
-                if (ssType.equals(type)){
-                    //難易度
-                    if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
-                        //ユーザーの評価
-                        if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
-                            //指導人数
-                            if(ssTaught.equals("指定しない") || issTaught>iTaught) {
-                                //受講方法
-                                if (ssMethod.equals("指定しない") || ssMethod.equals(method) || method.equals("指定しない")){
-                                    //日時
-                                    //if (ssDate.equals("指定しない") || postDate.equals(date)){
-                                    //場所
-                                    if (ssPlace.equals("指定しない") || ssPlace.equals(place) || place.equals("指定しない")){
-                                        //価格形式
-                                        if (ssCostType.equals("指定しない") || ssCostType.equals(costType) || costType.equals("応相談")){
-                                            //価格
-                                            if(ssCost.equals("指定しない") || issCost<=iCost){
-                                                //性別
-                                                if (ssSex.equals("未設定") || ssSex.equals(myData.getSex())){
-                                                    //年齢
-                                                    if (ssAge.equals("未設定") || ssAge.equals(myData.getAge())){
-                                                        //ここで通知
-                                                        if (filterKey!=null){
-                                                            Map<String,Object> mFilterKey = new HashMap<>();
+                if (!(uid.equals(user.getUid()))){
+                    //if (ssArea.equals(area)){
+                    if (ssType.equals(type)){
+                        //難易度
+                        if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
+                            //ユーザーの評価
+                            if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
+                                //指導人数
+                                if(ssTaught.equals("指定しない") || issTaught>iTaught) {
+                                    //受講方法
+                                    if (ssMethod.equals("指定しない") || ssMethod.equals(method) || method.equals("指定しない")){
+                                        //日時
+                                        //if (ssDate.equals("指定しない") || postDate.equals(date)){
+                                        //場所
+                                        if (ssPlace.equals("指定しない") || ssPlace.equals(place) || place.equals("指定しない")){
+                                            //価格形式
+                                            if (ssCostType.equals("指定しない") || ssCostType.equals(costType) || costType.equals("応相談")){
+                                                //価格
+                                                if(ssCost.equals("指定しない") || issCost<=iCost){
+                                                    //性別
+                                                    if (ssSex.equals("未設定") || ssSex.equals(myData.getSex())){
+                                                        //年齢
+                                                        if (ssAge.equals("未設定") || ssAge.equals(myData.getAge())){
+                                                            //ここで通知
+                                                            if (filterKey!=null){
+                                                                Map<String,Object> mFilterKey = new HashMap<>();
 
-                                                            mFilterKey.put("filterUid",uid);
-                                                            mFilterKey.put("userName",myData.getName());
-                                                            mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
-                                                            mFilterKey.put("time","");
-                                                            mFilterKey.put("filterKey",filterKey);
-                                                            mFilterKey.put("kind","その他");
-                                                            mFilterKey.put("kindDetail","検索履歴");
+                                                                mFilterKey.put("filterUid",uid);
+                                                                mFilterKey.put("userName",myData.getName());
+                                                                mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
+                                                                mFilterKey.put("time","");
+                                                                mFilterKey.put("filterKey",filterKey);
+                                                                mFilterKey.put("kind","その他");
+                                                                mFilterKey.put("kindDetail","検索履歴");
 
-                                                            Map<String,Object> childUpdates = new HashMap<>();
-                                                            childUpdates.put(filterKey,mFilterKey);
-                                                            filterRef.updateChildren(childUpdates);
+                                                                Map<String,Object> childUpdates = new HashMap<>();
+                                                                childUpdates.put(filterKey,mFilterKey);
+                                                                filterRef.updateChildren(childUpdates);
+
+                                                            }
 
                                                         }
-
                                                     }
                                                 }
                                             }
                                         }
+                                        //}
                                     }
-                                    //}
-                                }
 
+                                }
                             }
                         }
                     }
+                    //}
                 }
-                //}
             }
+
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -985,11 +989,6 @@ public class MakePostFragment extends Fragment {
             data.put("levelPosition",levelPosition);
             data.put("careerPosition", careerPosition);
             data.put("placePosition",placePosition);
-//            if (myData.getIconBitmapString()!=null){
-//                data.put("userIconBitmapString",myData.getIconBitmapString());
-//            }else {
-//                data.put("userIconBitmapString","");
-//            }
             data.put("userIconBitmapString","");
             data.put("stockPosition",stockPosition);
 
@@ -997,7 +996,11 @@ public class MakePostFragment extends Fragment {
             childUpdates.put(user.getUid(),data);
             savePostRef.child(user.getUid()).updateChildren(childUpdates);
         }
+        if (croppedBitmapString!=null){
+            croppedBitmapString=null;
+        }
+        myData=null;
         flag=false;
-        saveSearchRef.addChildEventListener(ssEventListener);
+        //saveSearchRef.addChildEventListener(ssEventListener);
     }
 }
