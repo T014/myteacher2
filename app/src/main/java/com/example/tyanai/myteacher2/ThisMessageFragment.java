@@ -2,12 +2,14 @@ package com.example.tyanai.myteacher2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +38,7 @@ public class ThisMessageFragment extends Fragment {
     DatabaseReference mDataBaseReference;
     DatabaseReference messageRef;
     private ArrayList<MessageListData> messageListDataArrayList;
+    private ArrayList<MessageListData> addMessageListDataArrayList;
     MessageListAdapter mAdapter;
     EditText editMessageEditText;
     Button sendMessageButton;
@@ -45,6 +48,8 @@ public class ThisMessageFragment extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute;
     UserData myData;
     String icon;
+    int removeMessageCount=0;
+    int totalMessageCount = 0;
 
 
 
@@ -69,6 +74,39 @@ public class ThisMessageFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
                 int last = messageListDataArrayList.size()-1;
                 messageListView.setSelection(last);
+            }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+    private ChildEventListener addMessageEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("userId");
+            String content = (String) map.get("contents");
+            String time = (String) map.get("time");
+            String bitmapString=(String) map.get("bitmapString");
+            String userName = "";
+            String key = "";
+            long lag =0;
+
+            MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag);
+
+            if (messageListData.getUid()!=null && messageListData.getTime()!=null){
+                addMessageListDataArrayList.add(messageListData);
             }
         }
         @Override
@@ -117,6 +155,7 @@ public class ThisMessageFragment extends Fragment {
         messageRef = mDataBaseReference.child(Const.MessagePATH);
 
         messageListDataArrayList = new ArrayList<MessageListData>();
+        addMessageListDataArrayList = new ArrayList<MessageListData>();
         mAdapter = new MessageListAdapter(this.getActivity(),R.layout.message_item);
 
         MainActivity.bottomNavigationView.setVisibility(View.GONE);
@@ -126,8 +165,52 @@ public class ThisMessageFragment extends Fragment {
             String roomName = bundle.getString("name");
             MainActivity.mToolbar.setTitle(roomName);
             icon = bundle.getString("icon");
-            messageRef.child(msKey).addChildEventListener(umEventListener);
+            messageRef.child(msKey).limitToLast(5).addChildEventListener(umEventListener);
         }
+
+        messageListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+            }
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem == 0){
+                    //スクロール位置を取得
+//                    if (getView().getTop()!=0){
+//                        goodPosition = messageListView.getFirstVisiblePosition();
+//                        if (goodPosition!=0){
+//                            y = timeLineListView.getChildAt(0).getTop();
+//                        }
+//                    }
+                    removeMessageCount = messageListDataArrayList.size();
+                    totalMessageCount = removeMessageCount + 5;
+                    messageRef.child(msKey).limitToLast(totalMessageCount).addChildEventListener(addMessageEventListener);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //先に入ってるやつを抜いてmessageListArrayListに追加したい
+                            for ()
+
+//                            if (messageListDataArrayList!=null){
+//                                if (addMessageListDataArrayList.size()!=0){
+//                                    addMessageListDataArrayList.addAll(messageListDataArrayList);
+//                                    messageListDataArrayList.clear();
+//                                    messageListDataArrayList.addAll(addMessageListDataArrayList);
+//                                    addMessageListDataArrayList.clear();
+//
+//                                    mAdapter.setMessageArrayList(messageListDataArrayList);
+//                                    messageListView.setAdapter(mAdapter);
+//                                    mAdapter.notifyDataSetChanged();
+//                                    //messageListDataArrayList.setSelectionFromTop(goodPosition,y);
+//                                }
+//                            }
+
+                        }
+                    }, 500);
+                }
+            }
+        });
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
