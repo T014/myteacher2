@@ -44,6 +44,8 @@ public class TimelineFragment extends Fragment {
     public static int y;
     UserData myData;
     private ArrayList<String> favKeyArrayList;
+    int totalCount = 0;
+    int removeCount = 0;
 
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
@@ -227,11 +229,10 @@ public class TimelineFragment extends Fragment {
             oldTimeLineArrayList.add(postData);
             Collections.reverse(oldTimeLineArrayList);
 
-            mAdapter.setTimeLineArrayList(oldTimeLineArrayList);
-            timeLineListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-            timeLineListView.setSelectionFromTop(goodPosition,y);
-            最初のn個は追加しない
+
+
+
+            //最初のn個は追加しない
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -273,6 +274,10 @@ public class TimelineFragment extends Fragment {
         followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        contentsRef.limitToLast(15).addChildEventListener(oldAddEventListener);
+
+
 
         timeLineListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -312,11 +317,29 @@ public class TimelineFragment extends Fragment {
                     }
                 }else if (firstVisibleItem + visibleItemCount == totalItemCount){
                     //時間でソートしたいタイムラグ作った方がいいかな
-                    int n = timeLineArrayList.size() + addTimeLineArrayList.size();
-                    int m = n + 20;
+                    removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
+                    for (int re = 0; re<removeCount;re++){
+                        if (oldTimeLineArrayList.size()==5){
+                            break;
+                        }else {
+                            oldTimeLineArrayList.remove(0);
+                        }
+                    }
 
-                    contentsRef.limitToLast(m).addChildEventListener(oldAddEventListener);
-                    最初のn個は追加しない！
+                    if (oldTimeLineArrayList.size()==5){
+                        timeLineArrayList.addAll(oldTimeLineArrayList);
+                        oldTimeLineArrayList.clear();
+                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+                        timeLineListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                        timeLineListView.setSelectionFromTop(goodPosition,y);
+
+                        removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
+                        totalCount = removeCount + 5;
+                        contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
+                    }
+
+
 
 
                     //一番下までスクロールしたときの処理
