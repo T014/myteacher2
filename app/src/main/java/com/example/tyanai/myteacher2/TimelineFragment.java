@@ -317,27 +317,49 @@ public class TimelineFragment extends Fragment {
                     }
                 }else if (firstVisibleItem + visibleItemCount == totalItemCount){
                     //時間でソートしたいタイムラグ作った方がいいかな
-                    removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
-                    for (int re = 0; re<removeCount;re++){
-                        if (oldTimeLineArrayList.size()==5){
-                            break;
-                        }else {
-                            oldTimeLineArrayList.remove(0);
+                    if (oldTimeLineArrayList.size()!=0){
+                        removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
+                        for (int re = 0; re<removeCount;re++) {
+                            if (oldTimeLineArrayList.size() != 0) {
+                                oldTimeLineArrayList.remove(0);
+                                if (re == removeCount - 1) {
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (oldTimeLineArrayList.size()<6){
+                            if (oldTimeLineArrayList.size()==5){
+                                timeLineArrayList.addAll(oldTimeLineArrayList);
+                                oldTimeLineArrayList.clear();
+                                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                                timeLineListView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
+                                timeLineListView.setSelectionFromTop(goodPosition,y);
+
+                                removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
+                                totalCount = removeCount + 5;
+                                contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
+                            }else {
+                                timeLineArrayList.addAll(oldTimeLineArrayList);
+                                oldTimeLineArrayList.clear();
+                                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                                timeLineListView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
+                                timeLineListView.setSelectionFromTop(goodPosition,y);
+                            }
                         }
                     }
 
-                    if (oldTimeLineArrayList.size()==5){
-                        timeLineArrayList.addAll(oldTimeLineArrayList);
-                        oldTimeLineArrayList.clear();
-                        mAdapter.setTimeLineArrayList(timeLineArrayList);
-                        timeLineListView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                        timeLineListView.setSelectionFromTop(goodPosition,y);
+//                        if (oldTimeLineArrayList.size()==5){
+//                            break;
+//                        }else {
+//                            if (oldTimeLineArrayList.size()!=0){
+//                                oldTimeLineArrayList.remove(0);
+//                            }
+//                        }
 
-                        removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
-                        totalCount = removeCount + 5;
-                        contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
-                    }
+
 
 
 
