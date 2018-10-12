@@ -32,7 +32,6 @@ import java.util.Map;
 public class DetailsFragment extends Fragment {
     public static final String TAG = "DetailsFragment";
 
-
     String intentKey;
     ImageView postContentsImageView;
     ToggleButton favButton;
@@ -68,7 +67,7 @@ public class DetailsFragment extends Fragment {
     TextView howLongDetailTextView;
     TextView costDetailTextView;
     TextView methodDetailTextView;
-    Button removeButton;
+    Button stopButton;
     Button permitButton;
     Button rejectButton;
     Button cancelButton;
@@ -105,8 +104,6 @@ public class DetailsFragment extends Fragment {
                 buyButton.setChecked(false);
             }
         }
-
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -181,14 +178,8 @@ public class DetailsFragment extends Fragment {
 
             if (userData.getUid().equals(user.getUid())){
                 myData = userData;
-//            }else if(userData.getUid().equals(thisPost.getUserId())){
-//                postUserData = userData;
             }
-
-
-
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -261,7 +252,7 @@ public class DetailsFragment extends Fragment {
             }else{
                 boughtDetailTextView.setText(null);
                 goodDetailTextView.setText(null);
-                removeButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.GONE);
             }
 
             byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
@@ -340,7 +331,7 @@ public class DetailsFragment extends Fragment {
         howLongDetailTextView = (TextView)v.findViewById(R.id.howLongDetailTextView);
         costDetailTextView = (TextView)v.findViewById(R.id.costDetailTextView);
         methodDetailTextView = (TextView)v.findViewById(R.id.methodDetailTextView);
-        removeButton = (Button)v.findViewById(R.id.removeButton);
+        stopButton = (Button)v.findViewById(R.id.stopButton);
         permitButton = (Button)v.findViewById(R.id.permitButton);
         rejectButton = (Button)v.findViewById(R.id.rejectButton);
         cancelButton = (Button)v.findViewById(R.id.cancelButton);
@@ -355,7 +346,7 @@ public class DetailsFragment extends Fragment {
         if (screenNum!=null){
             if (screenNum.equals("business")){
                 //取引履歴
-                removeButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
@@ -369,7 +360,7 @@ public class DetailsFragment extends Fragment {
             }else if (screenNum.equals("request")){
                 //取引リクエスト
                 cancelButton.setVisibility(View.GONE);
-                removeButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.GONE);
                 evaluationSpinner.setVisibility(View.GONE);
                 evaluationTextView.setVisibility(View.GONE);
                 saveButton.setVisibility(View.GONE);
@@ -424,23 +415,11 @@ public class DetailsFragment extends Fragment {
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
-
-
-
         usersRef.addChildEventListener(cEventListener);
-
-
-
-
-
-
-
 
         iconDetailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Bundle userBundle = new Bundle();
                 userBundle.putString("userId",thisPost.getUserId());
 
@@ -456,7 +435,6 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-
                 //ボタンの色がどっちならどう的な感じで上と連携してる
                 if (goodFlag == true){
                     //いいね済み
@@ -465,45 +443,66 @@ public class DetailsFragment extends Fragment {
                     totalGoods =totalGoods-1;
                     String totalGd =String.valueOf(totalGoods);
 
+                    goodDetailTextView.setText(totalGd);
+
+                    PostData newThisPost = new PostData(thisPost.getUserId(),thisPost.getName(),thisPost.getTime(),thisPost.getKey()
+                            ,thisPost.getDate(),thisPost.getImageBitmapString(),thisPost.getContents(),thisPost.getCostType()
+                            ,thisPost.getCost(),thisPost.getHowLong(),totalGd,thisPost.getFavFlag(),thisPost.getBought()
+                            ,thisPost.getEvaluation(),thisPost.getCancel(),thisPost.getMethod(),thisPost.getPostArea(),thisPost.getPostType()
+                            ,thisPost.getLevel(),thisPost.getCareer(),thisPost.getPlace(),thisPost.getSex(),thisPost.getAge(),thisPost.getTaught()
+                            ,thisPost.getUserEvaluation(),thisPost.getUserIconBitmapString(),thisPost.getStock());
+
+                    thisPost = newThisPost;
+
                     favRef.child(intentKey).removeValue();
 
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
                     goodFlag = false;
-                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-
+                    //contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
                 }else{
                     //未いいね
-                    Map<String,Object> favKey = new HashMap<>();
+                    if (!(thisPost.getUserId().equals(user.getUid()))){
+                        Map<String,Object> favKey = new HashMap<>();
+                        String key = favRef.push().getKey();
 
-                    favKey.put("postUid",thisPost.getUserId());
-                    favKey.put("userId",user.getUid());
-                    favKey.put("userName",myData.getName());
-                    favKey.put("iconBitmapString",myData.getIconBitmapString());
-                    favKey.put("time","0");
-                    favKey.put("favKey",thisPost.getKey());
-                    favKey.put("kind","いいね");
-                    favKey.put("kindDetail","いいね");
+                        favKey.put("postUid",thisPost.getUserId());
+                        favKey.put("userId",user.getUid());
+                        favKey.put("userName",myData.getName());
+                        favKey.put("iconBitmapString",myData.getIconBitmapString());
+                        favKey.put("time","0");
+                        favKey.put("favKey",key);
+                        favKey.put("kind","いいね");
+                        favKey.put("kindDetail","いいね");
+                        favKey.put("postKey",thisPost.getKey());
 
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(intentKey,favKey);
-                    favRef.updateChildren(childUpdates);
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put(intentKey,favKey);
+                        favRef.updateChildren(childUpdates);
+                    }
 
                     int totalGoods = Integer.parseInt(thisPost.getGood());
                     totalGoods =totalGoods+1;
                     String totalGd =String.valueOf(totalGoods);
 
+                    PostData newThisPost = new PostData(thisPost.getUserId(),thisPost.getName(),thisPost.getTime(),thisPost.getKey()
+                            ,thisPost.getDate(),thisPost.getImageBitmapString(),thisPost.getContents(),thisPost.getCostType()
+                            ,thisPost.getCost(),thisPost.getHowLong(),totalGd,thisPost.getFavFlag(),thisPost.getBought()
+                            ,thisPost.getEvaluation(),thisPost.getCancel(),thisPost.getMethod(),thisPost.getPostArea(),thisPost.getPostType()
+                            ,thisPost.getLevel(),thisPost.getCareer(),thisPost.getPlace(),thisPost.getSex(),thisPost.getAge(),thisPost.getTaught()
+                            ,thisPost.getUserEvaluation(),thisPost.getUserIconBitmapString(),thisPost.getStock());
+
+                    thisPost = newThisPost;
+
+                    goodDetailTextView.setText(totalGd);
+
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
                     goodFlag = true;
-                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+                    //contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
                 }
-
-
-
-
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -531,7 +530,6 @@ public class DetailsFragment extends Fragment {
                         int totalTaught = Integer.parseInt(thisPost.getTaught());
                         totalTaught =totalTaught+1;
                         String totalTa =String.valueOf(totalTaught);
-
 
 
                         Map<String,Object> taughtKey = new HashMap<>();
@@ -571,26 +569,21 @@ public class DetailsFragment extends Fragment {
             }
         });
 
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (NetworkManager.isConnected(getContext())){
+                    Map<String,Object> noStockKey = new HashMap<>();
+                    noStockKey.put("stock","0");
+                    contentsRef.child(thisPost.getKey()).updateChildren(noStockKey);
                     contentsRef.child(intentKey).removeValue();
-
-                    //前に開いていたフラグメントに戻る
 
                     ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
                     transaction.commit();
 
-                    Snackbar.make(view,"削除しました。",Snackbar.LENGTH_SHORT).show();
-                }else {
-                    Snackbar.make(view,"削除できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-                }
-
-                if (NetworkManager.isConnected(getContext())){
                     Snackbar.make(view,"削除しました。",Snackbar.LENGTH_SHORT).show();
                 }else {
                     Snackbar.make(view,"削除できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
@@ -732,9 +725,9 @@ public class DetailsFragment extends Fragment {
                         requestRef.child(thisTradeKey).removeValue();
                         buyFlag = false;
                         contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-                        Snackbar.make(view,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
                     }else {
-                        Snackbar.make(view,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                     }
                 }else{
                     if (NetworkManager.isConnected(getContext())){
@@ -765,6 +758,7 @@ public class DetailsFragment extends Fragment {
                             requestKey.put("buyName",myData.getName());
                             requestKey.put("buyIconBitmapString",myData.getIconBitmapString());
                             requestKey.put("permittedDate","");
+                            requestKey.put("refactorKey",thisPost.getKey());
 
                             Map<String,Object> childUpdates = new HashMap<>();
                             childUpdates.put(tradeKey,requestKey);
@@ -819,7 +813,7 @@ public class DetailsFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
 
-        favRef.orderByChild("favKey").equalTo(intentKey).addChildEventListener(fvEventListener);
+        favRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(fvEventListener);
         requestRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(bfEventListener);
     }
 
