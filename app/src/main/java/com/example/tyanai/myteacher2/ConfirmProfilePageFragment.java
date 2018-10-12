@@ -48,7 +48,7 @@ public class ConfirmProfilePageFragment extends Fragment {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String key = (String) map.get("favKey");
+            String key = (String) map.get("postKey");
             favKeyArrayList.add(key);
 
         }
@@ -118,14 +118,16 @@ public class ConfirmProfilePageFragment extends Fragment {
             if (page==2){
                 if (favKeyArrayList.size()!=0){
                     for (String aaa:favKeyArrayList){
-                        if (aaa.equals(postData.getKey())){
-                            Collections.reverse(timeLineArrayList);
-                            timeLineArrayList.add(postData);
-                            Collections.reverse(timeLineArrayList);
-                            mAdapter.setTimeLineArrayList(timeLineArrayList);
-                            profileListView.setAdapter(mAdapter);
-                            mAdapter.notifyDataSetChanged();
-                            profileListView.setSelectionFromTop(goodPosition,y);
+                        if (aaa!=null){
+                            if (aaa.equals(postData.getKey())){
+                                Collections.reverse(timeLineArrayList);
+                                timeLineArrayList.add(postData);
+                                Collections.reverse(timeLineArrayList);
+                                mAdapter.setTimeLineArrayList(timeLineArrayList);
+                                profileListView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
+                                profileListView.setSelectionFromTop(goodPosition,y);
+                            }
                         }
                     }
                 }
@@ -238,17 +240,18 @@ public class ConfirmProfilePageFragment extends Fragment {
                         contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
                         //いいねの処理
-                        String key = timeLineArrayList.get(position).getKey();
                         Map<String,Object> favKey = new HashMap<>();
+                        String key = favoriteRef.push().getKey();
 
                         favKey.put("postUid",timeLineArrayList.get(position).getUserId());
                         favKey.put("userId",user.getUid());
                         favKey.put("userName",ConfirmProfileFragment.accountData.getName());
                         favKey.put("iconBitmapString",ConfirmProfileFragment.accountData.getIconBitmapString());
                         favKey.put("time","0");
-                        favKey.put("favKey",timeLineArrayList.get(position).getKey());
+                        favKey.put("favKey",key);
                         favKey.put("kind","いいね");
                         favKey.put("kindDetail","いいね");
+                        favKey.put("postKey",timeLineArrayList.get(position).getKey());
 
                         favoriteRef.child(key).updateChildren(favKey);
                         favKeyArrayList.clear();
