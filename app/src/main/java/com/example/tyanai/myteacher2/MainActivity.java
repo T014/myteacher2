@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 transaction.replace(R.id.container, fragmentTimeline,TimelineFragment.TAG);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
+                            }else if (currentFragmentTag.equals("TimelineFragment")){
+                                TimelineFragment.backTop();
                             }
                         }
                     }
@@ -253,6 +255,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getKey().equals(user.getUid())){
+                HashMap map = (HashMap) dataSnapshot.getValue();
+
+                String userName = (String) map.get("userName");
+                String userId = (String) map.get("userId");
+                String follows = (String) map.get("follows");
+                String followers = (String) map.get("followers");
+                String iconBitmapString = (String) map.get("iconBitmapString");
+
+                if (userId.equals(user.getUid())){
+                    if (iconBitmapString.length()<10){
+                        InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container, fragmentInputProfile,InputProfileFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                    accountNameTextView.setText(userName);
+                    //自分を引いておく
+                    int f = Integer.parseInt(follows);
+                    String strF = String.valueOf(f);
+                    accountFollowTextView.setText(strF);
+                    accountFollowerTextView.setText(followers);
+
+                    byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+                    if(iconBytes.length!=0) {
+                        Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+//                        int postImageWidth = iconBitmap.getWidth();
+//                        int postImageHeight = iconBitmap.getHeight();
+//                        float postImageScale = Math.min((float)150 / postImageWidth,(float)150 / postImageHeight);
+//
+//                        //resize
+//                        Matrix postImageMatrix = new Matrix();
+//                        postImageMatrix.postScale(postImageScale,postImageScale);
+//                        Bitmap postImageResizedImage = Bitmap.createBitmap(iconBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
+//
+//                        ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+//                        postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                        //accountImageView.setImageBitmap(postImageResizedImage);
+                        accountImageView.setImageBitmap(iconBitmap);
+                    }
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -298,19 +343,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // ナビゲーションドロワーの設定
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name) {
-            // 閉じた時のイベント
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu();
-            }
-            // 開いた時のイベント
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu();
-                if (user !=null){
-                    userRef.addChildEventListener(aEventListener);
-                }
-            }
-        };
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -379,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_options,menu);
@@ -397,11 +429,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         switch (item.getItemId()){
             case R.id.notificationButton:
-//                new Handler().postDelayed(new Runnable() {
-//                    public void run() {
-//                        bottomNavigationView.setEnabled(true);
-//                    }
-//                }, 3000L);
 
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
@@ -668,29 +695,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("aaaaa","サイズ=" + size);
                     if (size<3000000){
                         Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        if(pFlag==2){
-                            //アイコン画像を表示
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(img);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
-                        }else if(pFlag==3){
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(img);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
-                        }
+                        SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                        SimpleCropViewFragment.cropImageView.setImageBitmap(img);
+                        SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
+                        SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
+
                     }else {
-                        if(pFlag==2){
-                            //アイコン画像を表示
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
-                        }else if(pFlag==3){
-//                            MakePostFragment.postImageView.setImageBitmap(null);
-//                            MakePostFragment.postImageView.setImageResource(R.drawable.plusbutton);
-                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
-                            SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
-                        }
+                        SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                        SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                     }
 
                     //エラー処理
