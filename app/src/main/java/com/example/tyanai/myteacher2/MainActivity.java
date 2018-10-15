@@ -237,18 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
                 if(iconBytes.length!=0) {
                     Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                    int postImageWidth = iconBitmap.getWidth();
-                    int postImageHeight = iconBitmap.getHeight();
-                    float postImageScale = Math.min((float)150 / postImageWidth,(float)150 / postImageHeight);
-
-                    //resize
-                    Matrix postImageMatrix = new Matrix();
-                    postImageMatrix.postScale(postImageScale,postImageScale);
-                    Bitmap postImageResizedImage = Bitmap.createBitmap(iconBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
-
-                    ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-                    postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
-                    accountImageView.setImageBitmap(postImageResizedImage);
+                    accountImageView.setImageBitmap(iconBitmap);
                 }
             }
         }
@@ -282,18 +271,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
                     if(iconBytes.length!=0) {
                         Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-//                        int postImageWidth = iconBitmap.getWidth();
-//                        int postImageHeight = iconBitmap.getHeight();
-//                        float postImageScale = Math.min((float)150 / postImageWidth,(float)150 / postImageHeight);
-//
-//                        //resize
-//                        Matrix postImageMatrix = new Matrix();
-//                        postImageMatrix.postScale(postImageScale,postImageScale);
-//                        Bitmap postImageResizedImage = Bitmap.createBitmap(iconBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
-//
-//                        ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-//                        postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
-                        //accountImageView.setImageBitmap(postImageResizedImage);
                         accountImageView.setImageBitmap(iconBitmap);
                     }
                 }
