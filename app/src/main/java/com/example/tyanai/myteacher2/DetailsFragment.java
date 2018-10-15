@@ -75,6 +75,8 @@ public class DetailsFragment extends Fragment {
     Boolean goodFlag = false;
     Boolean buyFlag = false;
     String thisTradeKey;
+    TextView gTextView;
+    TextView bTextView;
 
 
     private ChildEventListener bfEventListener = new ChildEventListener() {
@@ -255,23 +257,26 @@ public class DetailsFragment extends Fragment {
                 stopButton.setVisibility(View.GONE);
             }
 
-            byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
-            if(postImageBytes.length!=0){
-                Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                postContentsImageView.setImageBitmap(postImageBitmap);
+            if (postData.getImageBitmapString()!=null){
+                byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
+                if(postImageBytes.length!=0){
+                    Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    postContentsImageView.setImageBitmap(postImageBitmap);
+                }
             }
-            byte[] iconDetailImageBytes = Base64.decode(postData.getUserIconBitmapString(),Base64.DEFAULT);
-            if(iconDetailImageBytes.length!=0){
-                Bitmap iconDetailImageBitmap = BitmapFactory.decodeByteArray(iconDetailImageBytes,0, iconDetailImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                iconDetailImageView.setImageBitmap(iconDetailImageBitmap);
+            if (postData.getUserIconBitmapString()!=null){
+                byte[] iconDetailImageBytes = Base64.decode(postData.getUserIconBitmapString(),Base64.DEFAULT);
+                if(iconDetailImageBytes.length!=0){
+                    Bitmap iconDetailImageBitmap = BitmapFactory.decodeByteArray(iconDetailImageBytes,0, iconDetailImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    iconDetailImageView.setImageBitmap(iconDetailImageBitmap);
+                }
             }
-
 
             userNameDetailTextView.setText(postData.getName());
             evaluationDetailTextView.setText("評価："+postData.getEvaluation());
             timeDetailTextView.setText(postData.getTime());
-            goodDetailTextView.append("いいね："+postData.getGood());
-            boughtDetailTextView.append("購入者数："+postData.getBought());
+            goodDetailTextView.setText(postData.getGood());
+            boughtDetailTextView.setText(postData.getBought());
             contentsDetailTextView.setText(postData.getContents());
             areaDetailTextView.setText(postData.getPostArea());
             typeDetailTextView.setText(postData.getPostType());
@@ -286,6 +291,18 @@ public class DetailsFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            //要素に変更があった時の処理
+            if (thisPost.getKey().equals(dataSnapshot.getKey())){
+
+                HashMap map = (HashMap) dataSnapshot.getValue();
+                String goods = (String) map.get("goods");
+                String bought = (String) map.get("bought");
+
+                goodDetailTextView.setText(goods);
+                boughtDetailTextView.setText(bought);
+
+            }
+
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -335,6 +352,8 @@ public class DetailsFragment extends Fragment {
         permitButton = (Button)v.findViewById(R.id.permitButton);
         rejectButton = (Button)v.findViewById(R.id.rejectButton);
         cancelButton = (Button)v.findViewById(R.id.cancelButton);
+        gTextView = (TextView)v.findViewById(R.id.iine);
+        bTextView = (TextView)v.findViewById(R.id.kounyuu);
 
         return v;
     }
@@ -397,6 +416,8 @@ public class DetailsFragment extends Fragment {
             buyButton.setVisibility(View.GONE);
             goodDetailTextView.setVisibility(View.GONE);
             boughtDetailTextView.setVisibility(View.GONE);
+            gTextView.setVisibility(View.GONE);
+            bTextView.setVisibility(View.GONE);
             MainActivity.mToolbar.setTitle("取引履歴詳細");
         }
 
@@ -439,20 +460,9 @@ public class DetailsFragment extends Fragment {
                 if (goodFlag == true){
                     //いいね済み
                     favRef.child(intentKey).removeValue();
-                    int totalGoods = Integer.parseInt(thisPost.getGood());
+                    int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
                     totalGoods =totalGoods-1;
                     String totalGd =String.valueOf(totalGoods);
-
-                    goodDetailTextView.setText(totalGd);
-
-                    PostData newThisPost = new PostData(thisPost.getUserId(),thisPost.getName(),thisPost.getTime(),thisPost.getKey()
-                            ,thisPost.getDate(),thisPost.getImageBitmapString(),thisPost.getContents(),thisPost.getCostType()
-                            ,thisPost.getCost(),thisPost.getHowLong(),totalGd,thisPost.getFavFlag(),thisPost.getBought()
-                            ,thisPost.getEvaluation(),thisPost.getCancel(),thisPost.getMethod(),thisPost.getPostArea(),thisPost.getPostType()
-                            ,thisPost.getLevel(),thisPost.getCareer(),thisPost.getPlace(),thisPost.getSex(),thisPost.getAge(),thisPost.getTaught()
-                            ,thisPost.getUserEvaluation(),thisPost.getUserIconBitmapString(),thisPost.getStock());
-
-                    thisPost = newThisPost;
 
                     favRef.child(intentKey).removeValue();
 
@@ -482,26 +492,13 @@ public class DetailsFragment extends Fragment {
                         favRef.updateChildren(childUpdates);
                     }
 
-                    int totalGoods = Integer.parseInt(thisPost.getGood());
+                    int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
                     totalGoods =totalGoods+1;
                     String totalGd =String.valueOf(totalGoods);
-
-                    PostData newThisPost = new PostData(thisPost.getUserId(),thisPost.getName(),thisPost.getTime(),thisPost.getKey()
-                            ,thisPost.getDate(),thisPost.getImageBitmapString(),thisPost.getContents(),thisPost.getCostType()
-                            ,thisPost.getCost(),thisPost.getHowLong(),totalGd,thisPost.getFavFlag(),thisPost.getBought()
-                            ,thisPost.getEvaluation(),thisPost.getCancel(),thisPost.getMethod(),thisPost.getPostArea(),thisPost.getPostType()
-                            ,thisPost.getLevel(),thisPost.getCareer(),thisPost.getPlace(),thisPost.getSex(),thisPost.getAge(),thisPost.getTaught()
-                            ,thisPost.getUserEvaluation(),thisPost.getUserIconBitmapString(),thisPost.getStock());
-
-                    thisPost = newThisPost;
-
-                    goodDetailTextView.setText(totalGd);
-
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
                     goodFlag = true;
-                    //contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
                 }
             }
         });
@@ -688,31 +685,6 @@ public class DetailsFragment extends Fragment {
                 }
             }
         });
-
-//        cancelButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
-//
-//                Map<String,Object> newTradeKey = new HashMap<>();
-//                newTradeKey.put("kindDetail","キャンセル");
-//                requestRef.child(BusinessFragment.tradeKey).updateChildren(newTradeKey);
-//
-//                Snackbar.make(MainActivity.snack, "購入申請をキャンセルしました。", Snackbar.LENGTH_LONG).show();
-//
-//                //前に開いていたフラグメントに戻る
-//                Bundle screenBundle = new Bundle();
-//                screenBundle.putString("screenKey","1");
-//                BusinessFragment fragmentBusiness = new BusinessFragment();
-//                fragmentBusiness.setArguments(screenBundle);
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
-//                transaction.commit();
-//            }
-//        });
-
-
 
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
