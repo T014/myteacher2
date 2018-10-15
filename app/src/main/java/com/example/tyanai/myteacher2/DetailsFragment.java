@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +78,9 @@ public class DetailsFragment extends Fragment {
     String thisTradeKey;
     TextView gTextView;
     TextView bTextView;
+    private ArrayList<String> favUidArrayList;
+    private ArrayList<String> boughtUidArrayList;
+    String removeFavKey="";
 
 
     private ChildEventListener bfEventListener = new ChildEventListener() {
@@ -87,6 +91,7 @@ public class DetailsFragment extends Fragment {
             String userId = (String) map.get("bought");
             String kindDetail = (String) map.get("kindDetail");
             String tradeKey = (String) map.get("tradeKey");
+
 
 
 
@@ -127,14 +132,51 @@ public class DetailsFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userId = (String) map.get("userId");
+            String favKey = (String) map.get("favKey");
+
             if (userId.equals(user.getUid())){
-                //いいね済み
+
+                favUidArrayList.add(userId);
+                removeFavKey = favKey;
+            }
+
+            if (favUidArrayList.contains(user.getUid())){
                 goodFlag = true;
                 favButton.setChecked(true);
             }else{
-                //未いいね
                 goodFlag = false;
                 favButton.setChecked(false);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+    private ChildEventListener tEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userId = (String) map.get("bought");
+
+            if (userId.equals(user.getUid())){
+                boughtUidArrayList.add(userId);
+            }
+
+            if (boughtUidArrayList.contains(user.getUid())){
+                buyButton.setTextOff("購入済み");
+                buyButton.setEnabled(false);
             }
         }
 
@@ -286,8 +328,6 @@ public class DetailsFragment extends Fragment {
             howLongDetailTextView.setText("所要時間："+postData.getHowLong());
             costDetailTextView.setText("時給："+postData.getCost());
             methodDetailTextView.setText("手段："+postData.getMethod());
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -302,7 +342,6 @@ public class DetailsFragment extends Fragment {
                 boughtDetailTextView.setText(bought);
 
             }
-
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -314,11 +353,6 @@ public class DetailsFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-
-
-
 
 
     @Override
@@ -431,12 +465,15 @@ public class DetailsFragment extends Fragment {
         mMinute = calendar.get(Calendar.MINUTE);
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        boughtUidArrayList = new ArrayList<String>();
+        favUidArrayList = new ArrayList<String>();
         tradeRef = mDataBaseReference.child(Const.TradePATH);
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
         usersRef.addChildEventListener(cEventListener);
+        tradeRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(tEventListener);
 
         iconDetailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -464,33 +501,30 @@ public class DetailsFragment extends Fragment {
                     totalGoods =totalGoods-1;
                     String totalGd =String.valueOf(totalGoods);
 
-                    favRef.child(intentKey).removeValue();
+                    favRef.child(removeFavKey).removeValue();
 
                     Map<String,Object> postGoodKey = new HashMap<>();
                     postGoodKey.put("goods",totalGd);
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
                     goodFlag = false;
-                    //contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
                 }else{
                     //未いいね
-                    if (!(thisPost.getUserId().equals(user.getUid()))){
-                        Map<String,Object> favKey = new HashMap<>();
-                        String key = favRef.push().getKey();
 
-                        favKey.put("postUid",thisPost.getUserId());
-                        favKey.put("userId",user.getUid());
-                        favKey.put("userName",myData.getName());
-                        favKey.put("iconBitmapString",myData.getIconBitmapString());
-                        favKey.put("time","0");
-                        favKey.put("favKey",key);
-                        favKey.put("kind","いいね");
-                        favKey.put("kindDetail","いいね");
-                        favKey.put("postKey",thisPost.getKey());
+                    Map<String,Object> favKey = new HashMap<>();
+                    String key = favRef.push().getKey();
 
-                        Map<String,Object> childUpdates = new HashMap<>();
-                        childUpdates.put(intentKey,favKey);
-                        favRef.updateChildren(childUpdates);
-                    }
+                    favKey.put("postUid",thisPost.getUserId());
+                    favKey.put("userId",user.getUid());
+                    favKey.put("userName",myData.getName());
+                    favKey.put("iconBitmapString",myData.getIconBitmapString());
+                    favKey.put("time","0");
+                    favKey.put("favKey",key);
+                    favKey.put("kind","いいね");
+                    favKey.put("kindDetail","いいね");
+                    favKey.put("postKey",thisPost.getKey());
+
+                    favRef.child(key).updateChildren(favKey);
+
 
                     int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
                     totalGoods =totalGoods+1;
@@ -500,6 +534,7 @@ public class DetailsFragment extends Fragment {
                     contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
                     goodFlag = true;
                 }
+
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
