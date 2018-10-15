@@ -71,12 +71,12 @@ public class ThisMessageFragment extends Fragment {
             MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag);
             if (messageListData.getUid()!=null && messageListData.getTime()!=null){
 
-//                if (getView().getTop()!=0){
-//                        nowPosition = messageListView.getFirstVisiblePosition();
-//                        if (nowPosition!=0){
-//                            nowY = messageListView.getChildAt(0).getTop();
-//                        }
-//                }
+                if (getView().getTop()!=0){
+                        nowPosition = messageListView.getFirstVisiblePosition();
+                        if (nowPosition!=0){
+                            nowY = messageListView.getChildAt(0).getTop();
+                        }
+                }
 
                 messageListDataArrayList.add(messageListData);
                 mAdapter.setMessageArrayList(messageListDataArrayList);
@@ -92,7 +92,7 @@ public class ThisMessageFragment extends Fragment {
                     int last = messageListDataArrayList.size()-1;
                     messageListView.setSelection(last);
                 }else{
-                    messageListView.setSelectionFromTop(nowPosition,nowY);
+                    messageListView.setSelectionFromTop(nowPosition+2,nowY);
                 }
 
 
