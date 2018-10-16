@@ -93,10 +93,10 @@ public class TimelineFragment extends Fragment {
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
                 //10以上の時はためておく！！
-                if (timeLineArrayList.size()>9){
-                    Collections.reverse(timeLineArrayList);
+                if (timeLineArrayList.size()>4){
+                    Collections.reverse(addTimeLineArrayList);
                     addTimeLineArrayList.add(postData);
-                    Collections.reverse(timeLineArrayList);
+                    Collections.reverse(addTimeLineArrayList);
                 }else {
                     Collections.reverse(timeLineArrayList);
                     timeLineArrayList.add(postData);
@@ -110,28 +110,6 @@ public class TimelineFragment extends Fragment {
             }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            for (PostData aa : timeLineArrayList){
-//                if (aa.getKey().equals(dataSnapshot.getKey())){
-//                    HashMap map = (HashMap) dataSnapshot.getValue();
-//                    String goods = (String) map.get("goods");
-//
-//
-//
-//                    PostData newPostData = new PostData(aa.getUserId(),aa.getName(),aa.getTime(),aa.getKey(),aa.getDate()
-//                            ,aa.getImageBitmapString(), aa.getContents(),aa.getCostType(),aa.getCost(),aa.getHowLong(),goods
-//                            ,aa.getFavFlag(),aa.getBought(),aa.getEvaluation(),aa.getCancel(),aa.getMethod(),aa.getPostArea()
-//                            ,aa.getPostType(),aa.getLevel(),aa.getCareer(),aa.getPlace(),aa.getSex(),aa.getAge(),aa.getTaught()
-//                            ,aa.getUserEvaluation(),aa.getUserIconBitmapString(),aa.getStock());
-//                    timeLineArrayList.remove(aa);
-//                    timeLineArrayList.add(position,newPostData);
-//                    mAdapter.setTimeLineArrayList(timeLineArrayList);
-//                    timeLineListView.setAdapter(mAdapter);
-//                    mAdapter.notifyDataSetChanged();
-//                    timeLineListView.setSelectionFromTop(goodPosition,y);
-//
-//                }
-//            }
-
             for (int p=0;p<timeLineArrayList.size();p++){
                 String pKey = timeLineArrayList.get(p).getKey();
                 if (dataSnapshot.getKey().equals(pKey)){
@@ -329,98 +307,85 @@ public class TimelineFragment extends Fragment {
 
         timeLineListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-            }
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //スクロールしたときの処理
-                // 一番上までスクロールしたときの処理
-                if(firstVisibleItem == 0){
-                    //スクロール位置を取得
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
+
+                    int first = timeLineListView.getFirstVisiblePosition();
+                    int last = timeLineListView.getLastVisiblePosition();
+                    //スクロール位置取得
                     if (getView().getTop()!=0){
                         goodPosition = timeLineListView.getFirstVisiblePosition();
                         if (goodPosition!=0){
                             y = timeLineListView.getChildAt(0).getTop();
                         }
                     }
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
 
-                            if (timeLineArrayList!=null){
-                                if (addTimeLineArrayList.size()!=0){
-                                    if (timeLineArrayList.size()>100){
-                                        //消して追加
-                                        timeLineArrayList.clear();
-                                        timeLineArrayList = addTimeLineArrayList;
-                                        addTimeLineArrayList.clear();
-                                    }else {
+                    if (first==0){
+                        //一番上の時
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (timeLineArrayList!=null){
+                                    if (addTimeLineArrayList.size()!=0){
                                         //そのまま追加
                                         addTimeLineArrayList.addAll(timeLineArrayList);
                                         timeLineArrayList.clear();
                                         timeLineArrayList.addAll(addTimeLineArrayList);
                                         addTimeLineArrayList.clear();
+                                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+                                        timeLineListView.setAdapter(mAdapter);
+                                        mAdapter.notifyDataSetChanged();
+                                        timeLineListView.setSelectionFromTop(goodPosition,y);
                                     }
-                                    mAdapter.setTimeLineArrayList(timeLineArrayList);
-                                    timeLineListView.setAdapter(mAdapter);
-                                    mAdapter.notifyDataSetChanged();
-                                    timeLineListView.setSelectionFromTop(goodPosition,y);
                                 }
                             }
+                        }, 500);
+                    }else if (last==timeLineListView.getCount()-1){
+                        //一番下の時
+                        removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
+                        totalCount = removeCount + 2;
+                        oldTimeLineArrayList.clear();
+                        contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
 
-                        }
-                    }, 500);
-                }else if (firstVisibleItem + visibleItemCount == totalItemCount){
-                    //スクロール位置を取得
-                    if (getView().getTop()!=0){
-                        goodPosition = timeLineListView.getFirstVisiblePosition();
-                        if (goodPosition!=0){
-                            y = timeLineListView.getChildAt(0).getTop();
-                        }
-                    }
-                    //古い投稿を追加
-                    removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
-                    totalCount = removeCount + 5;
-                    oldTimeLineArrayList.clear();
-                    contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (oldTimeLineArrayList.size()!=0) {
-                                //removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();上でとってるやん
-                                if (removeCount<oldTimeLineArrayList.size()){
-                                    for (int re = 0; re < removeCount; re++) {
-                                        if (oldTimeLineArrayList.size() != 0) {
-                                            oldTimeLineArrayList.remove(0);
-                                            if (re == removeCount - 1) {
-                                                break;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (oldTimeLineArrayList.size()!=0) {
+                                    if (removeCount<oldTimeLineArrayList.size()){
+                                        for (int re = 0; re < removeCount; re++) {
+                                            if (oldTimeLineArrayList.size() != 0) {
+                                                oldTimeLineArrayList.remove(0);
+                                                if (re == removeCount - 1) {
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            if (oldTimeLineArrayList.size()!=0) {
-                                if (oldTimeLineArrayList.size()<6) {
-                                    timeLineArrayList.addAll(oldTimeLineArrayList);
-                                    oldTimeLineArrayList.clear();
-                                    mAdapter.setTimeLineArrayList(timeLineArrayList);
-                                    timeLineListView.setAdapter(mAdapter);
-                                    mAdapter.notifyDataSetChanged();
-                                    timeLineListView.setSelectionFromTop(goodPosition, y);
+                                if (oldTimeLineArrayList.size()!=0) {
+                                    if (oldTimeLineArrayList.size()<3) {
+                                        timeLineArrayList.addAll(oldTimeLineArrayList);
+                                        oldTimeLineArrayList.clear();
+                                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+                                        timeLineListView.setAdapter(mAdapter);
+                                        mAdapter.notifyDataSetChanged();
+                                        timeLineListView.setSelectionFromTop(goodPosition, y);
+                                    }
                                 }
                             }
-                        }
-                    }, 500);
+                        }, 500);
+                    }
                 }
+            }
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             }
         });
 
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                //favKeyArrayList.clear();
-
                 if (view.getId()==R.id.goodButton){
                     goodPosition = timeLineListView.getFirstVisiblePosition();
                     y = timeLineListView.getChildAt(0).getTop();
@@ -433,7 +398,6 @@ public class TimelineFragment extends Fragment {
                                 favRef.child(ff.getFavPostKey()).removeValue();
                             }
                         }
-                        //favRef.child(removeKey).removeValue();
 
                         String removeKey = timeLineArrayList.get(position).getKey();
 
@@ -546,7 +510,7 @@ public class TimelineFragment extends Fragment {
         timeLineArrayList = new ArrayList<PostData>();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.limitToLast(10).addChildEventListener(tEventListener);
+        contentsRef.limitToLast(4).addChildEventListener(tEventListener);
     }
 
     @Override
