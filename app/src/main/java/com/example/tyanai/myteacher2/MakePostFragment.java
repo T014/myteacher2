@@ -749,18 +749,8 @@ public class MakePostFragment extends Fragment {
 
                     BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
                     Bitmap postImageBitmap = postImageDrawable.getBitmap();
-
-                    int postImageWidth = postImageBitmap.getWidth();
-                    int postImageHeight = postImageBitmap.getHeight();
-                    float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
-
-                    //resize
-                    Matrix postImageMatrix = new Matrix();
-                    postImageMatrix.postScale(postImageScale,postImageScale);
-                    Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
-
                     ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-                    postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                    postImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
                     String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
 
                     String cts=contentsEditText.getText().toString();
@@ -946,16 +936,8 @@ public class MakePostFragment extends Fragment {
             String date=dateTextView.getText().toString();
             BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
             Bitmap postImageBitmap = postImageDrawable.getBitmap();
-
-            int postImageWidth = postImageBitmap.getWidth();
-            int postImageHeight = postImageBitmap.getHeight();
-            float postImageScale = Math.min((float)500 / postImageWidth,(float)500 / postImageHeight);
-            //resize
-            Matrix postImageMatrix = new Matrix();
-            postImageMatrix.postScale(postImageScale,postImageScale);
-            Bitmap postImageResizedImage = Bitmap.createBitmap(postImageBitmap,0,0,postImageWidth,postImageHeight,postImageMatrix,true);
             ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-            postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+            postImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
             String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
             String cts=contentsEditText.getText().toString();
             String contents =cts.replace("\n","");
@@ -1002,6 +984,5 @@ public class MakePostFragment extends Fragment {
         }
         myData=null;
         flag=false;
-        //saveSearchRef.addChildEventListener(ssEventListener);
     }
 }
