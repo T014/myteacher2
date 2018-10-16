@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -93,7 +92,7 @@ public class TimelineFragment extends Fragment {
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
                 //10以上の時はためておく！！
-                if (timeLineArrayList.size()>4){
+                if (timeLineArrayList.size()>9){
                     Collections.reverse(addTimeLineArrayList);
                     addTimeLineArrayList.add(postData);
                     Collections.reverse(addTimeLineArrayList);
@@ -344,7 +343,7 @@ public class TimelineFragment extends Fragment {
                     }else if (last==timeLineListView.getCount()-1){
                         //一番下の時
                         removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
-                        totalCount = removeCount + 2;
+                        totalCount = removeCount + 10;
                         oldTimeLineArrayList.clear();
                         contentsRef.limitToLast(totalCount).addChildEventListener(oldAddEventListener);
 
@@ -364,7 +363,7 @@ public class TimelineFragment extends Fragment {
                                     }
                                 }
                                 if (oldTimeLineArrayList.size()!=0) {
-                                    if (oldTimeLineArrayList.size()<3) {
+                                    if (oldTimeLineArrayList.size()<11) {
                                         timeLineArrayList.addAll(oldTimeLineArrayList);
                                         oldTimeLineArrayList.clear();
                                         mAdapter.setTimeLineArrayList(timeLineArrayList);
@@ -510,7 +509,7 @@ public class TimelineFragment extends Fragment {
         timeLineArrayList = new ArrayList<PostData>();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-        contentsRef.limitToLast(4).addChildEventListener(tEventListener);
+        contentsRef.limitToLast(10).addChildEventListener(tEventListener);
     }
 
     @Override
