@@ -703,10 +703,10 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onClick(View v){
                 //pFragを変更
+                ////                //icon画像選択に移動
+                ////                MainActivity mainActivity = (MainActivity)getActivity();
+                ////                mainActivity.onSelfCheck();
 //                MainActivity.pFlag=3;
-//                //icon画像選択に移動
-//                MainActivity mainActivity = (MainActivity)getActivity();
-//                mainActivity.onSelfCheck();
                 croppedFlag = false;
                 Bundle cropFlagBundle = new Bundle();
                 cropFlagBundle.putString("flag","make");
@@ -763,7 +763,8 @@ public class MakePostFragment extends Fragment {
                     postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
                     String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
 
-                    String contents=contentsEditText.getText().toString();
+                    String cts=contentsEditText.getText().toString();
+                    String contents =cts.replace("\n","");
                     cost = costEditText.getText().toString();
                     String howLong = (String)  howLongSpinner.getSelectedItem();
                     String goods="0";
@@ -932,7 +933,6 @@ public class MakePostFragment extends Fragment {
         savePostRef.child(user.getUid()).addChildEventListener(oEventListener);
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -957,7 +957,8 @@ public class MakePostFragment extends Fragment {
             ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
             postImageResizedImage.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
             String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
-            String contents=contentsEditText.getText().toString();
+            String cts=contentsEditText.getText().toString();
+            String contents =cts.replace("\n","");
             String cost = costEditText.getText().toString();
 
             int howLongPosition1 = howLongSpinner.getSelectedItemPosition();
