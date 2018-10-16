@@ -1,51 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/colorLvBg"
     android:layout_height="match_parent">
-
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="60dp"
-        android:paddingBottom="60dp"
+        android:paddingBottom="55dp"
         android:divider="@null"
-        android:background="@color/colorAccent"
         android:id="@+id/messageListView">
-
     </ListView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/messageLinearLayout"
+        android:background="@color/colorPd"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentLeft="true"
             android:layout_height="wrap_content"
-            android:text="戻る"
+            android:text="←"
+            android:layout_alignBottom="@+id/editMessageEditText"
             android:id="@+id/backButton"/>
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_weight="9"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:hint="メッセージを入力"
+            style="@style/EditMessage"
             android:inputType="textMultiLine"
+            android:padding="10dp"
             android:maxLength="120"
-            android:maxLines="10"
+            android:ems="13"
+            android:minLines="1"
+            android:maxLines="3"
+            android:background="@drawable/edit_frame"
             android:id="@+id/editMessageEditText"/>
         <Button
-            android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_width="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            android:text="送信"
+            android:layout_alignBottom="@+id/editMessageEditText"
+            android:text="→"
             android:id="@+id/sendMessageButton"/>
 
-    </LinearLayout>
-
-
-
+    </RelativeLayout>
 </RelativeLayout>
