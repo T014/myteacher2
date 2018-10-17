@@ -255,15 +255,15 @@ public class MessageFragment extends Fragment {
         messageListDataArrayList = new ArrayList<MessageListData>();
 
         mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
+        newMessageListDataArrayList.clear();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                newMessageListDataArrayList.clear();
 
                 userRef.addChildEventListener(userEventListener);
             }
-        }, 500);
+        }, 200);
 
 
         messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
