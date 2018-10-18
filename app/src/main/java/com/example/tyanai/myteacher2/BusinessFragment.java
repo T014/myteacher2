@@ -29,10 +29,10 @@ public class BusinessFragment extends Fragment {
     DatabaseReference tradeRef;
     DatabaseReference requestRef;
     FirebaseUser user;
-    public static String tradeKey;
+    public String tradeKey;
     String screenNum;
-    public static String boughtUid;
-    public static String buyDate;
+    public String boughtUid;
+    public String buyDate;
 
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
@@ -56,9 +56,10 @@ public class BusinessFragment extends Fragment {
             String buyName = (String) map.get("buyName");
             String buyIconBitmapString = (String) map.get("buyIconBitmapString");
             String permittedDate = (String) map.get("permittedDate");
+            String refactorKey = (String) map.get("refactorKey");
 
             BusinessData businessData = new BusinessData(bought, date,receiveDate,sold,payDay,tradeKey, userName,userIcon,evaluation,
-                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,permittedDate);
+                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,permittedDate,refactorKey);
 
             if (screenNum.equals("request")){
                 if (businessData.getKindDetail().equals("リクエスト")){
@@ -145,6 +146,11 @@ public class BusinessFragment extends Fragment {
                 Bundle businessBundle = new Bundle();
                 businessBundle.putString("key",businessDataArrayList.get(position).getPostKey());
                 businessBundle.putString("screenKey",screenNum);
+                businessBundle.putString("reqName",businessDataArrayList.get(position).getBuyName());
+                businessBundle.putString("reqIconBitmapString",businessDataArrayList.get(position).getBuyIconBitmapString());
+                businessBundle.putString("reqUid",businessDataArrayList.get(position).getSold());
+                businessBundle.putString("reqDate",businessDataArrayList.get(position).getDate());
+                businessBundle.putString("tradeKey",tradeKey);
 
                 DetailsFragment fragmentDetails = new DetailsFragment();
                 fragmentDetails.setArguments(businessBundle);

@@ -10,6 +10,7 @@ public class NotificationFavData {
     private String mKindDetail;
     private String mSoldUid;
     private String mTradeKey;
+    //timelineではpostKeyとして使ってる
 
     public String getUid(){
         return mUid;

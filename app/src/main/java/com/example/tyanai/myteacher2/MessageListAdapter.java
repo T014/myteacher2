@@ -3,10 +3,12 @@ package com.example.tyanai.myteacher2;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,7 @@ class MessageListViewHolder {
     TextView otherMessageImageTimeTextView;
     TextView newDateTextView;
     LinearLayout messageListLinearLayout;
+    View view;
 }
 
 public class MessageListAdapter extends BaseAdapter {
@@ -92,6 +95,8 @@ public class MessageListAdapter extends BaseAdapter {
         messageListViewHolder.otherMessageLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageLayout);
         messageListViewHolder.otherMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageImageLinearLayout);
         messageListViewHolder.newDateLinearLayout = (LinearLayout)convertView.findViewById(R.id.newDateLinearLayout);
+
+        messageListViewHolder.view = convertView;
 
         //convertView.setTag(messageListViewHolder);
 

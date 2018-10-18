@@ -44,7 +44,6 @@ public class SimpleCropViewFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //cropImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.sample5));
 
         final Bundle cropFlagBundle  = getArguments();
         if (cropFlagBundle!=null){
@@ -55,6 +54,7 @@ public class SimpleCropViewFragment extends Fragment {
                 MainActivity mainActivity = (MainActivity)getActivity();
                 mainActivity.onSelfCheck();
             }else if (cropFlag.equals("make")){
+                cropImageView.setCropMode(CropImageView.CropMode.RATIO_4_3);
                 MainActivity.pFlag=3;
                 //icon画像選択に移動
                 MainActivity mainActivity = (MainActivity)getActivity();

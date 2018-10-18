@@ -119,16 +119,20 @@ public class ListAdapter extends BaseAdapter{
                 listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(127,127,255));
             }
         }
-        byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
-        if(postImageBytes.length!=0){
-            Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-            listViewHolder.contentsImageView.setImageBitmap(postImageBitmap);
+        if (postImageBitmapString!=null){
+            byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
+            if(postImageBytes.length!=0){
+                Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                listViewHolder.contentsImageView.setImageBitmap(postImageBitmap);
+            }
         }
 
-        byte[] iconImageBytes = Base64.decode(userIconImageBitmapString,Base64.DEFAULT);
-        if(iconImageBytes.length!=0){
-            Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-            listViewHolder.userIconImageView.setImageBitmap(iconImageBitmap);
+        if (userIconImageBitmapString!=null){
+            byte[] iconImageBytes = Base64.decode(userIconImageBitmapString,Base64.DEFAULT);
+            if(iconImageBytes.length!=0){
+                Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                listViewHolder.userIconImageView.setImageBitmap(iconImageBitmap);
+            }
         }
         return convertView;
     }

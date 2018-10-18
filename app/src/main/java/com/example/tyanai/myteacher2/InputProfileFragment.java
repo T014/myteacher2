@@ -243,7 +243,8 @@ public class InputProfileFragment extends Fragment {
         if (saveDataFrag == 1) {
             //バックボタン押されたとき
             newUserName = userNameEditText.getText().toString();
-            String comment = commentEditText.getText().toString();
+            String cmt = commentEditText.getText().toString();
+            String comment = cmt.replace("\n","");
             //2回同じ処理をしてるから効率化できそう
             //icon画像の取得
             BitmapDrawable iconDrawable = (BitmapDrawable) iconImageView.getDrawable();
@@ -292,7 +293,8 @@ public class InputProfileFragment extends Fragment {
             //画像とテキストをデータベースに送信
             newUserName = userNameEditText.getText().toString();
             if (newUserName.length()>0){
-                String comment = commentEditText.getText().toString();
+                String cmt = commentEditText.getText().toString();
+                String comment = cmt.replace("\n","");
                 //icon画像の取得
                 BitmapDrawable iconDrawable = (BitmapDrawable) iconImageView.getDrawable();
                 //画像を取り出しエンコードする

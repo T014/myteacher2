@@ -18,6 +18,7 @@ public class BusinessData {
     private String mBuyName;
     private String mBuyIconBitmapString;
     private String mPermittedDate;
+    private String mRefactorKey;
 
 
     public String getBought(){
@@ -77,10 +78,13 @@ public class BusinessData {
         return mPermittedDate;
     }
 
+    public String getRefactorKey() {
+        return mRefactorKey;
+    }
 
     public BusinessData(String bought, String date, String receiveDate, String sold, String payDay, String requestKey, String userName,
                         String userIcon, String evaluation, String judgment, String postKey, String contentImageBitmapString,
-                        String kind,String kindDetail,String buyName,String buyIconBitmapString,String permittedDate){
+                        String kind, String kindDetail, String buyName, String buyIconBitmapString, String permittedDate, String refactorKey){
         mBought = bought;
         mDate = date;
         mReceiveDate = receiveDate;
@@ -98,5 +102,6 @@ public class BusinessData {
         mBuyName = buyName;
         mBuyIconBitmapString = buyIconBitmapString;
         mPermittedDate = permittedDate;
+        mRequestKey = requestKey;
     }
 }

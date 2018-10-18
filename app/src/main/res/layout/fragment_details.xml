@@ -105,7 +105,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/favButton"
+                android:id="@+id/iine"
                 android:layout_marginLeft="15dp"
+                android:layout_below="@+id/postContentsImageView"
+                android:text="いいね:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/iine"
                 android:layout_below="@+id/postContentsImageView"
                 android:id="@+id/goodDetailTextView"/>
             <ToggleButton
@@ -117,18 +125,26 @@
                 android:layout_below="@+id/postContentsImageView"
                 android:layout_toEndOf="@id/goodDetailTextView"
                 android:id="@+id/buyButton"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/buyButton"
+                android:id="@+id/kounyuu"
                 android:layout_marginLeft="10dp"
+                android:layout_below="@+id/postContentsImageView"
+                android:text="購入者数:"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/kounyuu"
                 android:layout_below="@+id/postContentsImageView"
                 android:id="@+id/boughtDetailTextView"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/removeButton"
-                android:text="削除"
+                android:id="@+id/stopButton"
+                android:text="募集終了"
                 android:layout_toEndOf="@id/boughtDetailTextView"
                 android:layout_below="@+id/postContentsImageView"/>
             <TextView
@@ -188,31 +204,59 @@
                 android:layout_centerHorizontal="true"
                 android:text="完了"/>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/saveButton"
+                android:id="@+id/widthView2"
+                android:layout_marginTop="16dp"
+                android:background="#ff808080" />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="15dp"
+                android:layout_below="@+id/widthView2"
+                android:id="@+id/reqIconImageView"
+                android:layout_alignParentLeft="true"
+                android:paddingStart="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/widthView2"
+                android:id="@+id/reqNameTextView"
+                android:layout_toEndOf="@+id/reqIconImageView"
+                android:layout_marginLeft="15dp"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/saveButton"
-                android:layout_marginLeft="30dp"
-                android:text="申請を許可する"
+                android:layout_below="@id/reqNameTextView"
+                android:layout_marginStart="15dp"
+                android:layout_toRightOf="@+id/reqIconImageView"
+                android:text="許可"
                 android:id="@+id/permitButton"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/saveButton"
-                android:layout_toEndOf="@+id/permitButton"
-                android:layout_marginLeft="10dp"
+                android:layout_below="@id/reqNameTextView"
+                android:layout_toRightOf="@+id/permitButton"
+                android:layout_marginStart="15dp"
                 android:id="@+id/rejectButton"
-                android:text="申請を拒否する"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/permitButton"
-                android:layout_marginLeft="30dp"
-                android:text="リクエストをキャンセルする"
-                android:layout_marginBottom="100dp"
-                android:id="@+id/cancelButton"/>
+                android:text="拒否"/>
 
 
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/reqIconImageView"
+                android:id="@+id/widthView3"
+                android:layout_marginTop="15dp"
+                android:background="#ff808080" />
 
         </RelativeLayout>
 

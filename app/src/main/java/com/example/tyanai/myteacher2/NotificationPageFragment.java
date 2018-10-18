@@ -89,7 +89,7 @@ public class NotificationPageFragment  extends Fragment {
             String buyKey = (String) map.get("postKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
-            String soldUid = (String) map.get("sold");
+            String soldUid = (String) map.get("bought");
             String tradeKey = (String) map.get("tradeKey");
 
             if (!(kindDetail.equals("キャンセル"))) {
@@ -228,7 +228,6 @@ public class NotificationPageFragment  extends Fragment {
         favUserArrayList = new ArrayList<NotificationFavData>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
         filterRef = mDataBaseReference.child(Const.FilterPATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
 
@@ -282,14 +281,19 @@ public class NotificationPageFragment  extends Fragment {
                         if (screenNumKey.equals("リクエスト")){
                             screenNum="request";
                         }else if (screenNumKey.equals("許可")){
-                            screenNum="business";
+                            screenNum="permit";
                         }else if (screenNumKey.equals("拒否")){
-                            screenNum="timeLine";
+                            screenNum="reject";
                         }
                         //購入の時アカウント
                         Bundle userBundle = new Bundle();
                         userBundle.putString("key",favUserArrayList.get(position).getFavPostKey());
                         userBundle.putString("screenKey",screenNum);
+                        userBundle.putString("reqName",favUserArrayList.get(position).getUserName());
+                        userBundle.putString("reqIconBitmapString",favUserArrayList.get(position).getIconBitmapString());
+                        userBundle.putString("reqUid",favUserArrayList.get(position).getSoldUid());
+                        userBundle.putString("reqDate",favUserArrayList.get(position).getTime());
+                        userBundle.putString("tradeKey",favUserArrayList.get(position).getTradeKey());
 
                         DetailsFragment fragmentDetails = new DetailsFragment();
                         fragmentDetails.setArguments(userBundle);

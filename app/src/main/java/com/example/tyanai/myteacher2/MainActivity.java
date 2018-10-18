@@ -404,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
 
         }
+
         switch (item.getItemId()){
             case R.id.notificationButton:
 
@@ -731,4 +732,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

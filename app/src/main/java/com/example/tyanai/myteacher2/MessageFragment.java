@@ -32,7 +32,6 @@ public class MessageFragment extends Fragment {
     public static final String TAG = "MessageFragment";
 
     DatabaseReference mDataBaseReference;
-    DatabaseReference messageRef;
     DatabaseReference messageKeyRef;
     FirebaseUser user;
     DatabaseReference userRef;
@@ -248,23 +247,15 @@ public class MessageFragment extends Fragment {
         //今日
         calDay2 = Calendar.getInstance();
 
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        messageRef = mDataBaseReference.child(Const.MessagePATH);
-        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-        userRef = mDataBaseReference.child(Const.UsersPATH);
+
         messageListDataArrayList = new ArrayList<MessageListData>();
-
         mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
-        newMessageListDataArrayList.clear();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                userRef.addChildEventListener(userEventListener);
-            }
-        }, 200);
-
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        newMessageListDataArrayList = new ArrayList<MessageListData>();
+        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
 
         messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -287,42 +278,35 @@ public class MessageFragment extends Fragment {
         });
     }
 
-
     @Override
-    public void onAttach(Context context){
-        super.onAttach(context);
+    public void onStart(){
+        super.onStart();
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        newMessageListDataArrayList = new ArrayList<MessageListData>();
-        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+        newMessageListDataArrayList.clear();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                userRef.addChildEventListener(userEventListener);
+            }
+        }, 200);
+
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
 
-
-//        user = FirebaseAuth.getInstance().getCurrentUser();
-//        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-//        messageRef = mDataBaseReference.child(Const.MessagePATH);
-//        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-//        userRef = mDataBaseReference.child(Const.UsersPATH);
-//        messageListDataArrayList = new ArrayList<MessageListData>();
-//        newMessageListDataArrayList = new ArrayList<MessageListData>();
-//        uidArrayList = new ArrayList<String>();
-//        keyArrayList = new ArrayList<String>();
-//        messageListDataArrayList.clear();
-//        newMessageListDataArrayList.clear();
-//        uidArrayList.clear();
-//        keyArrayList.clear();
-//        mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
-//        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
+
 }
