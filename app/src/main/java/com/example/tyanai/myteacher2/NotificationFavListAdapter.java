@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import java.util.ArrayList;
 class FavListViewHolder {
     TextView favListTextView;
     ImageView favImageView;
-    LinearLayout favListLinearLayout;
+    TextView favTimeTextView;
+    RelativeLayout favListRelativeLayout;
 }
 
 public class NotificationFavListAdapter extends BaseAdapter{
@@ -39,6 +41,7 @@ public class NotificationFavListAdapter extends BaseAdapter{
         String userIconImageBitmapString = favUserArrayList.get(position).getIconBitmapString();
         String kind = favUserArrayList.get(position).getKind();
         String kindDetail = favUserArrayList.get(position).getKindDetail();
+        String favTime = favUserArrayList.get(position).getTime();
 
         FavListViewHolder favListViewHolder;
         if (convertView == null) {
@@ -48,7 +51,8 @@ public class NotificationFavListAdapter extends BaseAdapter{
             favListViewHolder = new FavListViewHolder();
             favListViewHolder.favListTextView = (TextView) convertView.findViewById(R.id.favListTextView);
             favListViewHolder.favImageView = (ImageView) convertView.findViewById(R.id.favImageView);
-            favListViewHolder.favListLinearLayout = (LinearLayout)convertView.findViewById(R.id.favListLinearLayout);
+            favListViewHolder.favTimeTextView = (TextView) convertView.findViewById(R.id.favTimeTextView);
+            favListViewHolder.favListRelativeLayout = (RelativeLayout) convertView.findViewById(R.id.favListRelativeLayout);
             convertView.setTag(favListViewHolder);
         } else {
             favListViewHolder = (FavListViewHolder) convertView.getTag();
@@ -69,6 +73,10 @@ public class NotificationFavListAdapter extends BaseAdapter{
             }else if (kind.equals("その他")){
                 favListViewHolder.favListTextView.setText(userName+"さんがあなたの検索履歴に近い投稿をしました。");
             }
+        }
+
+        if (favTime!=null){
+            favListViewHolder.favTimeTextView.setText(favTime);
         }
 
         favListViewHolder.favImageView.setOnClickListener(new View.OnClickListener() {

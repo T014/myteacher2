@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class TimelineFragment extends Fragment {
     public static int goodPosition;
     public static int y;
     UserData myData;
+    private int mYear, mMonth, mDay, mHour, mMinute;
     private ArrayList<NotificationFavData> favKeyArrayList;
     int totalCount = 0;
     int removeCount = 0;
@@ -292,6 +294,13 @@ public class TimelineFragment extends Fragment {
         MainActivity.mToolbar.setTitle("タイムライン");
         MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Timeline);
 
+        Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
         }
@@ -434,6 +443,8 @@ public class TimelineFragment extends Fragment {
                         postGoodKey.put("goods",totalGd);
                         contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
+                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
 
                         Map<String,Object> favKey = new HashMap<>();
                         String key = favRef.push().getKey();
@@ -442,7 +453,7 @@ public class TimelineFragment extends Fragment {
                         favKey.put("userId",user.getUid());
                         favKey.put("userName",myData.getName());
                         favKey.put("iconBitmapString",myData.getIconBitmapString());
-                        favKey.put("time","0");
+                        favKey.put("time",time);
                         favKey.put("favKey",key);
                         favKey.put("kind","いいね");
                         favKey.put("kindDetail","いいね");

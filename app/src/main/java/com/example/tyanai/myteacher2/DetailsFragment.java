@@ -515,6 +515,8 @@ public class DetailsFragment extends Fragment {
                 }else{
                     //未いいね
 
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
                     Map<String,Object> favKey = new HashMap<>();
                     String key = favRef.push().getKey();
 
@@ -522,7 +524,7 @@ public class DetailsFragment extends Fragment {
                     favKey.put("userId",user.getUid());
                     favKey.put("userName",myData.getName());
                     favKey.put("iconBitmapString",myData.getIconBitmapString());
-                    favKey.put("time","0");
+                    favKey.put("time",time);
                     favKey.put("favKey",key);
                     favKey.put("kind","いいね");
                     favKey.put("kindDetail","いいね");
