@@ -163,8 +163,10 @@ public class TimelineFragment extends Fragment {
             String kindDetail = (String) map.get("kindDetail");
             String postUid = (String) map.get("postUid");
             String postKey = (String) map.get("postKey");
+            String permittedDate="";
+            long lag = 0;
 
-            NotificationFavData favData = new NotificationFavData(userId,userName,iconBitmapString,time,favKey,kind,kindDetail,postUid,postKey);
+            NotificationFavData favData = new NotificationFavData(userId,userName,iconBitmapString,time,favKey,kind,kindDetail,postUid,postKey,permittedDate,lag);
             favKeyArrayList.add(favData);
         }
         @Override

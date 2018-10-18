@@ -10,6 +10,8 @@ public class NotificationFavData {
     private String mKindDetail;
     private String mSoldUid;
     private String mTradeKey;
+    private String mPermittedDate;
+    private long mLag;
     //timelineではpostKeyとして使ってる
 
     public String getUid(){
@@ -39,8 +41,15 @@ public class NotificationFavData {
     public String getTradeKey() {
         return mTradeKey;
     }
+    public String getPermittedDate(){
+        return mPermittedDate;
+    }
 
-    public NotificationFavData(String uid, String userName, String iconBitmapString, String time, String favKey, String kind, String kindDetail,String soldUid,String tradeKey){
+    public long getLag() {
+        return mLag;
+    }
+
+    public NotificationFavData(String uid, String userName, String iconBitmapString, String time, String favKey, String kind, String kindDetail, String soldUid, String tradeKey, String permittedDate,long lag){
         mUid = uid;
         mUserName = userName;
         mIconBitmapString = iconBitmapString;
@@ -50,5 +59,7 @@ public class NotificationFavData {
         mKindDetail = kindDetail;
         mSoldUid = soldUid;
         mTradeKey = tradeKey;
+        mPermittedDate = permittedDate;
+        mLag = lag;
     }
 }

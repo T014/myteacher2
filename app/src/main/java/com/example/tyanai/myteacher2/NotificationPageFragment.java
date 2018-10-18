@@ -19,7 +19,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class NotificationPageFragment  extends Fragment {
@@ -52,11 +56,36 @@ public class NotificationPageFragment  extends Fragment {
             String kindDetail = (String) map.get("kindDetail");
             String soldUid = (String) map.get("sold");
             String tradeKey = (String) map.get("tradeKey");
+            String permittedDate = (String) map.get("permittedDate");
+
+
+            long lag = 0;
+
+            Calendar calDay = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+
+            Calendar calThen = Calendar.getInstance();
+            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+
+
+
+            try{
+                Calendar calDay2 = Calendar.getInstance();
+
+                calDay.setTime(sdf.parse(time));
+                calThen.setTime(sdfThen.parse(time));
+                lag = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
+
+            }catch (ParseException e){
+            }
+
+
 
             if (!(kindDetail.equals("キャンセル"))){
                 if (!(kindDetail.equals("リクエスト"))){
-                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey);
+                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey,permittedDate,lag);
                     favUserArrayList.add(notificationFavData);
+                    Collections.sort(favUserArrayList, new NotificationTimeSort());
                     mAdapter.setFavUserArrayList(favUserArrayList);
                     notificationListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -91,12 +120,40 @@ public class NotificationPageFragment  extends Fragment {
             String kindDetail = (String) map.get("kindDetail");
             String soldUid = (String) map.get("bought");
             String tradeKey = (String) map.get("tradeKey");
+            String permittedDate = (String) map.get("permittedDate");
+
+
+            long lag = 0;
+
+            Calendar calDay = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+
+            Calendar calThen = Calendar.getInstance();
+            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+
+
+
+            try{
+                Calendar calDay2 = Calendar.getInstance();
+
+                calDay.setTime(sdf.parse(time));
+                calThen.setTime(sdfThen.parse(time));
+                lag = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
+
+            }catch (ParseException e){
+            }
+
+
+
+
+
 
             if (!(kindDetail.equals("キャンセル"))) {
                 if (!(kindDetail.equals("許可"))){
                     if (!(kindDetail.equals("拒否"))){
-                        NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey);
+                        NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey,permittedDate,lag);
                         favUserArrayList.add(notificationFavData);
+                        Collections.sort(favUserArrayList, new NotificationTimeSort());
                         mAdapter.setFavUserArrayList(favUserArrayList);
                         notificationListView.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
@@ -126,15 +183,19 @@ public class NotificationPageFragment  extends Fragment {
             String userId = (String) map.get("filterUid");
             String userName = (String) map.get("userName");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String time="";
+            String time = "";
             String filterKey = (String) map.get("filterKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
             String soldUid ="";
             String tradeKey ="";
+            String permittedDate="";
+            long lag = 0;
 
-            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail,soldUid,tradeKey);
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,filterKey,kind,kindDetail,soldUid,tradeKey,permittedDate,lag);
+            Collections.reverse(favUserArrayList);
             favUserArrayList.add(notificationFavData);
+            Collections.reverse(favUserArrayList);
             mAdapter.setFavUserArrayList(favUserArrayList);
             notificationListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -161,16 +222,20 @@ public class NotificationPageFragment  extends Fragment {
             String userId = (String) map.get("userId");
             String userName = (String) map.get("userName");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String time="";
+            String time = (String) map.get("time");
             String favPostKey = (String) map.get("favKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
             String soldUid="";
             String tradeKey ="";
+            String permittedDate="";
+            long lag =0;
 
-            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail,soldUid,tradeKey);
+            NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,favPostKey,kind,kindDetail,soldUid,tradeKey,permittedDate,lag);
             if (!(notificationFavData.getUid().equals(user.getUid()))){
+                Collections.reverse(favUserArrayList);
                 favUserArrayList.add(notificationFavData);
+                Collections.reverse(favUserArrayList);
                 mAdapter.setFavUserArrayList(favUserArrayList);
                 notificationListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();

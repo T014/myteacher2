@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class BusinessFragment extends Fragment {
@@ -63,20 +64,26 @@ public class BusinessFragment extends Fragment {
 
             if (screenNum.equals("request")){
                 if (businessData.getKindDetail().equals("リクエスト")){
+                    Collections.reverse(businessDataArrayList);
                     businessDataArrayList.add(businessData);
+                    Collections.reverse(businessDataArrayList);
                     mAdapter.setBusinessDataArrayList(businessDataArrayList);
                     businessListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 }
             }else if (screenNum.equals("apply")){
                 if (businessData.getKindDetail().equals("リクエスト")){
+                    Collections.reverse(businessDataArrayList);
                     businessDataArrayList.add(businessData);
+                    Collections.reverse(businessDataArrayList);
                     mAdapter.setBusinessDataArrayList(businessDataArrayList);
                     businessListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 }
             }else if (screenNum.equals("business")){
+                Collections.reverse(businessDataArrayList);
                 businessDataArrayList.add(businessData);
+                Collections.reverse(businessDataArrayList);
                 mAdapter.setBusinessDataArrayList(businessDataArrayList);
                 businessListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();

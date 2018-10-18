@@ -635,8 +635,14 @@ public class DetailsFragment extends Fragment {
                     //購入済みかも確認いらん
                     contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
+
+                    //tradeに移動する
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+
                     Map<String,Object> newTradeKey = new HashMap<>();
                     newTradeKey.put("kindDetail","許可");
+                    newTradeKey.put("permittedDate",time);
                     requestRef.child(tradeKey).updateChildren(newTradeKey);
 
 
@@ -653,9 +659,6 @@ public class DetailsFragment extends Fragment {
                     userDataKey.put("stock",stc);
                     contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
 
-
-                    //tradeに移動する
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
 
                     Map<String,Object> tradeKey = new HashMap<>();
                     String key = tradeRef.child(user.getUid()).push().getKey();
@@ -702,8 +705,14 @@ public class DetailsFragment extends Fragment {
                 if (NetworkManager.isConnected(getContext())){
                     contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
+
+                    //tradeに移動する
+                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+
                     Map<String,Object> newTradeKey = new HashMap<>();
                     newTradeKey.put("kindDetail","拒否");
+                    newTradeKey.put("permittedDate",time);
                     requestRef.child(tradeKey).updateChildren(newTradeKey);
 
                     Bundle screenBundle = new Bundle();
