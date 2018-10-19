@@ -41,6 +41,7 @@ public class NotificationPageFragment  extends Fragment {
     NotificationFavListAdapter mAdapter;
     private ArrayList<NotificationFavData> favUserArrayList;
     private int page;
+    Calendar calDay;
 
     private ChildEventListener bEventListener = new ChildEventListener() {
         @Override
@@ -60,26 +61,24 @@ public class NotificationPageFragment  extends Fragment {
 
 
             long lag = 0;
-
-            Calendar calDay = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-
             Calendar calThen = Calendar.getInstance();
-            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
 
-
-
+            String timeLag;
+            if (kindDetail.equals("リクエスト")){
+                timeLag = time;
+            }else {
+                timeLag = permittedDate;
+            }
             try{
-                Calendar calDay2 = Calendar.getInstance();
-
-                calDay.setTime(sdf.parse(time));
-                calThen.setTime(sdfThen.parse(time));
-                lag = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
+                //投稿したとき
+                calThen.setTime(sdf.parse(timeLag));
+                //今日-投稿したとき
+                long lag1 = calDay.getTimeInMillis() - calThen.getTimeInMillis();
+                lag = (int)lag1;
 
             }catch (ParseException e){
             }
-
-
 
             if (!(kindDetail.equals("キャンセル"))){
                 if (!(kindDetail.equals("リクエスト"))){
@@ -94,6 +93,50 @@ public class NotificationPageFragment  extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            //同じtradeKey探して削除追加
+            String userId = (String) map.get("bought");
+            String userName = (String) map.get("userName");
+            String iconBitmapString = (String) map.get("userIcon");
+            String time = (String) map.get("date");
+            String buyKey = (String) map.get("postKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
+            String soldUid = (String) map.get("sold");
+            String tradeKey = (String) map.get("tradeKey");
+            String permittedDate = (String) map.get("permittedDate");
+
+            long lag = 0;
+            Calendar calThen = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+
+            String timeLag;
+            if (kindDetail.equals("リクエスト")){
+                timeLag = time;
+            }else {
+                timeLag = permittedDate;
+            }
+            try{
+                //投稿したとき
+                calThen.setTime(sdf.parse(timeLag));
+                //今日-投稿したとき
+                long lag1 = calDay.getTimeInMillis() - calThen.getTimeInMillis();
+                lag = (int)lag1;
+
+            }catch (ParseException e){
+            }
+
+            if (!(kindDetail.equals("キャンセル"))){
+                if (!(kindDetail.equals("リクエスト"))){
+                    NotificationFavData notificationFavData = new NotificationFavData(userId,userName,iconBitmapString,time,buyKey,kind,kindDetail,soldUid,tradeKey,permittedDate,lag);
+                    favUserArrayList.add(notificationFavData);
+                    Collections.sort(favUserArrayList, new NotificationTimeSort());
+                    mAdapter.setFavUserArrayList(favUserArrayList);
+                    notificationListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -122,31 +165,26 @@ public class NotificationPageFragment  extends Fragment {
             String tradeKey = (String) map.get("tradeKey");
             String permittedDate = (String) map.get("permittedDate");
 
-
             long lag = 0;
 
-            Calendar calDay = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-
             Calendar calThen = Calendar.getInstance();
-            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
 
-
-
+            String timeLag;
+            if (kindDetail.equals("リクエスト")){
+                timeLag = time;
+            }else {
+                timeLag = permittedDate;
+            }
             try{
-                Calendar calDay2 = Calendar.getInstance();
-
-                calDay.setTime(sdf.parse(time));
-                calThen.setTime(sdfThen.parse(time));
-                lag = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
+                //投稿したとき
+                calThen.setTime(sdf.parse(timeLag));
+                //今日-投稿したとき
+                long lag1 = calDay.getTimeInMillis() - calThen.getTimeInMillis();
+                lag = (int)lag1;
 
             }catch (ParseException e){
             }
-
-
-
-
-
 
             if (!(kindDetail.equals("キャンセル"))) {
                 if (!(kindDetail.equals("許可"))){
@@ -295,6 +333,9 @@ public class NotificationPageFragment  extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         filterRef = mDataBaseReference.child(Const.FilterPATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
+
+        calDay = Calendar.getInstance();
+
 
         if (page==1){
             favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
