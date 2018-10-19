@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -201,7 +202,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         }else if (page==2){
             contentsRef.limitToLast(30).addChildEventListener(updEventListener);
         }
-
 
         profileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
