@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -47,7 +48,6 @@ public class DetailsFragment extends Fragment {
     PostData thisPost;
     Spinner evaluationSpinner;
     DatabaseReference usersContentsRef;
-    private int mYear, mMonth, mDay, mHour, mMinute;
     Button saveButton;
     TextView evaluationTextView;
     String ev;
@@ -87,6 +87,8 @@ public class DetailsFragment extends Fragment {
     String reqUid;
     String reqDate;
     String tradeKey;
+    View widthView2;
+    View widthView3;
 
     private ChildEventListener bfEventListener = new ChildEventListener() {
         @Override
@@ -339,6 +341,13 @@ public class DetailsFragment extends Fragment {
 
                 goodDetailTextView.setText(goods);
                 boughtDetailTextView.setText(bought);
+                if (stock!=null){
+                    if (stock.equals("0")){
+                        buyButton.setText("sold out");
+                        buyButton.setEnabled(false);
+                    }
+                }
+
             }
         }
         @Override
@@ -387,6 +396,8 @@ public class DetailsFragment extends Fragment {
         bTextView = (TextView)v.findViewById(R.id.kounyuu);
         reqIconImageView = (ImageView)v.findViewById(R.id.reqIconImageView);
         reqNameTextView = (TextView)v.findViewById(R.id.reqNameTextView);
+        widthView2 = (View)v.findViewById(R.id.widthView2);
+        widthView3 = (View)v.findViewById(R.id.widthView3);
 
 
         return v;
@@ -402,10 +413,14 @@ public class DetailsFragment extends Fragment {
                 stopButton.setVisibility(View.GONE);
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
             }else if (screenNum.equals("apply")){
                 //取引申請
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
                 evaluationSpinner.setVisibility(View.GONE);
                 evaluationTextView.setVisibility(View.GONE);
                 saveButton.setVisibility(View.GONE);
@@ -419,14 +434,31 @@ public class DetailsFragment extends Fragment {
                 //タイムライン
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
                 evaluationSpinner.setVisibility(View.GONE);
                 evaluationTextView.setVisibility(View.GONE);
                 saveButton.setVisibility(View.GONE);
             }else if (screenNum.equals("confirm")){
                 //プロフィール
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
             }else if (screenNum.equals("grid")){
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("timeLine")){
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
+                permitButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }else if (screenNum.equals("business")){
+                stopButton.setVisibility(View.GONE);
+                widthView2.setVisibility(View.GONE);
+                widthView3.setVisibility(View.GONE);
                 permitButton.setVisibility(View.GONE);
                 rejectButton.setVisibility(View.GONE);
             }
@@ -447,12 +479,6 @@ public class DetailsFragment extends Fragment {
             MainActivity.mToolbar.setTitle("取引履歴詳細");
         }
 
-        Calendar calendar = Calendar.getInstance();
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         boughtUidArrayList = new ArrayList<String>();
@@ -515,7 +541,10 @@ public class DetailsFragment extends Fragment {
                 }else{
                     //未いいね
 
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    Calendar cal1 = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                    String time = sdf.format(cal1.getTime());
 
                     Map<String,Object> favKey = new HashMap<>();
                     String key = favRef.push().getKey();
@@ -551,7 +580,11 @@ public class DetailsFragment extends Fragment {
                     ev = (String) evaluationSpinner.getSelectedItem();
                     if (!(ev.equals("評価する"))){
 
-                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                        //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                        Calendar cal1 = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                        String time = sdf.format(cal1.getTime());
+
                         Map<String,Object> tradesKey = new HashMap<>();
 
                         tradesKey.put("evaluation",ev);
@@ -637,8 +670,10 @@ public class DetailsFragment extends Fragment {
 
 
                     //tradeに移動する
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
+                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    Calendar cal1 = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                    String time = sdf.format(cal1.getTime());
 
                     Map<String,Object> newTradeKey = new HashMap<>();
                     newTradeKey.put("kindDetail","許可");
@@ -707,8 +742,10 @@ public class DetailsFragment extends Fragment {
 
 
                     //tradeに移動する
-                    String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
+                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                    Calendar cal1 = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                    String time = sdf.format(cal1.getTime());
 
                     Map<String,Object> newTradeKey = new HashMap<>();
                     newTradeKey.put("kindDetail","拒否");
@@ -749,7 +786,10 @@ public class DetailsFragment extends Fragment {
                         int stockCount = Integer.parseInt(thisPost.getStock());
                         if (stockCount!=0){
 
-                            String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                            //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                            Calendar cal1 = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                            String time = sdf.format(cal1.getTime());
 
                             Map<String,Object> requestKey = new HashMap<>();
 
