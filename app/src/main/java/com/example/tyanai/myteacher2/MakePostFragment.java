@@ -259,6 +259,8 @@ public class MakePostFragment extends Fragment {
             }
             if (postType==null){
                 //tennis
+                postArea = "sports";
+                postType = "tennis";
                 tennisRadioButton.setChecked(true);
             }
             if (postArea!=null){

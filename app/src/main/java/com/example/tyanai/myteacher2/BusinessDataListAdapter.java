@@ -21,6 +21,7 @@ class BusinessDataHolder{
     ImageView contentImageView;
     TextView userNameTextView;
     TextView dateTextView;
+    TextView applyDateTextView;
     TextView receiveDateTextView;
     TextView payDayTextView;
     TextView evaluationTextView;
@@ -77,7 +78,7 @@ public class BusinessDataListAdapter extends BaseAdapter{
             businessDataHolder.userNameTextView.setText(userName);
         }
         if (date != null){
-            businessDataHolder.dateTextView.setText(date);
+            businessDataHolder.dateTextView.setText("申請日"+date);
         }
         if (date != null){
             businessDataHolder.receiveDateTextView.setText("受講日："+receiveDate);

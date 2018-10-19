@@ -20,12 +20,6 @@
         android:layout_toRightOf="@+id/iconImageView"
         android:id="@+id/userNameTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/dateTextView"/>
 
     <ImageView
         android:layout_width="150dp"
@@ -46,6 +40,12 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/dateTextView"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

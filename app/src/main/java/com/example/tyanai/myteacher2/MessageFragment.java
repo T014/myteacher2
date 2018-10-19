@@ -63,18 +63,24 @@ public class MessageFragment extends Fragment {
                 //投稿日
                 Calendar calDay = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-
+                //この画面開いたとき
                 Calendar calThen = Calendar.getInstance();
                 SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
 
                 long lag =0;
+                //(calDay2とCalNow)とtodayは形式が違うだけ
+                //calDay2とCalNowは同じだけど別の用途に使っている
                 try{
+                    //投稿した日
                     calDay.setTime(sdf.parse(time));
+                    //投稿した時間
                     calThen.setTime(sdfThen.parse(time));
+                    //日付の換算
                     long diffTime = calDay2.getTimeInMillis() - calDay.getTimeInMillis();
                     int diffDayMillis = 1000 * 60 * 60 * 24;
                     int diffDays = (int) (diffTime / diffDayMillis);
 
+                    //今-投稿した時間
                     long diffMillis = calNow.getTimeInMillis() - calThen.getTimeInMillis();
                     lag = (int)diffMillis;
 

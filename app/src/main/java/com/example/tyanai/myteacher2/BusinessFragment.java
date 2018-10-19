@@ -59,8 +59,22 @@ public class BusinessFragment extends Fragment {
             String permittedDate = (String) map.get("permittedDate");
             String refactorKey = (String) map.get("refactorKey");
 
-            BusinessData businessData = new BusinessData(bought, date,receiveDate,sold,payDay,tradeKey, userName,userIcon,evaluation,
-                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,permittedDate,refactorKey);
+            String subDate="0";
+            String subPayDay="0";
+            String subPermittedDate="0";
+            String subReceiveDate="0";
+            try {
+                subDate = date.substring(0,16);
+                subPermittedDate = permittedDate.substring(0,16);
+                subPayDay = payDay.substring(0,16);
+                subReceiveDate = receiveDate.substring(0,16);
+            }catch (StringIndexOutOfBoundsException e){
+
+            }
+
+
+            BusinessData businessData = new BusinessData(bought, subDate,subReceiveDate,sold,subPayDay,tradeKey, userName,userIcon,evaluation,
+                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,subPermittedDate,refactorKey);
 
             if (screenNum.equals("request")){
                 if (businessData.getKindDetail().equals("リクエスト")){
@@ -155,7 +169,7 @@ public class BusinessFragment extends Fragment {
                 businessBundle.putString("screenKey",screenNum);
                 businessBundle.putString("reqName",businessDataArrayList.get(position).getBuyName());
                 businessBundle.putString("reqIconBitmapString",businessDataArrayList.get(position).getBuyIconBitmapString());
-                businessBundle.putString("reqUid",businessDataArrayList.get(position).getSold());
+                businessBundle.putString("reqUid",businessDataArrayList.get(position).getBought());
                 businessBundle.putString("reqDate",businessDataArrayList.get(position).getDate());
                 businessBundle.putString("tradeKey",tradeKey);
 

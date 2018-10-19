@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -42,7 +43,6 @@ public class TimelineFragment extends Fragment {
     public static int goodPosition;
     public static int y;
     UserData myData;
-    private int mYear, mMonth, mDay, mHour, mMinute;
     private ArrayList<NotificationFavData> favKeyArrayList;
     int totalCount = 0;
     int removeCount = 0;
@@ -296,13 +296,6 @@ public class TimelineFragment extends Fragment {
         MainActivity.mToolbar.setTitle("タイムライン");
         MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Timeline);
 
-        Calendar calendar = Calendar.getInstance();
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
-
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
         }
@@ -445,8 +438,11 @@ public class TimelineFragment extends Fragment {
                         postGoodKey.put("goods",totalGd);
                         contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
-                        String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                        //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
 
+                        Calendar cal1 = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                        String time = sdf.format(cal1.getTime());
 
                         Map<String,Object> favKey = new HashMap<>();
                         String key = favRef.push().getKey();
