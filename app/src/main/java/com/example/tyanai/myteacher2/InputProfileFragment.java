@@ -347,5 +347,8 @@ public class InputProfileFragment extends Fragment {
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
         croppedFlag = false;
+
+
+        //保存したい
     }
 }

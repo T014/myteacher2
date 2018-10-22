@@ -488,7 +488,7 @@ public class DetailsFragment extends Fragment {
             if (reqName!=null){
                 reqNameTextView.setText(reqName+"さんから購入リクエストが届いています。");
             }
-            if (reqIconBitmapString!=null){
+            if (reqIconBitmapString!=null && !(reqIconBitmapString.equals(""))){
                 byte[] reqIconBytes = Base64.decode(reqIconBitmapString, Base64.DEFAULT);
                 if (reqIconBytes.length != 0) {
                     Bitmap croppedBitmap = BitmapFactory.decodeByteArray(reqIconBytes, 0, reqIconBytes.length).copy(Bitmap.Config.ARGB_8888, true);

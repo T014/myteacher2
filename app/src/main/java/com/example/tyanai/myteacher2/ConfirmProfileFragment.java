@@ -43,6 +43,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     TextView sexConfirmProfileTextView;
     TextView ageConfirmProfileTextView;
     TextView evaluationConfirmProfileTextView;
+    TextView coinConfirmProfileTextView;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
@@ -101,6 +102,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
             sexConfirmProfileTextView.setText("性別："+userData.getSex());
             ageConfirmProfileTextView.setText("年齢："+userData.getAge());
+            coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
             byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
             if(iconBytes.length!=0){
                 Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -318,6 +320,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         //viewPager = (ViewPager) v.findViewById(R.id.pager);
         viewPager = (CustomViewPager) v.findViewById(R.id.pager);
         editButton = (Button)v.findViewById(R.id.editButton);
+        coinConfirmProfileTextView = (TextView)v.findViewById(R.id.coinConfirmProfileTextView);
 
         return v;
     }

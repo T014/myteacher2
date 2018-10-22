@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView accountNameTextView;
     TextView accountFollowTextView;
     TextView accountFollowerTextView;
+    TextView accountCoinTextView;
     TextView followTextView;
     TextView followerTextView;
     DatabaseReference userRef;
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String follows = (String) map.get("follows");
             String followers = (String) map.get("followers");
             String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
 
             if (userId.equals(user.getUid())){
                 if (iconBitmapString.length()<10){
@@ -228,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     transaction.commit();
                 }
                 accountNameTextView.setText(userName);
-                //自分を引いておく
+                accountCoinTextView.setText(coin+" coin");
                 int f = Integer.parseInt(follows);
                 String strF = String.valueOf(f);
                 accountFollowTextView.setText(strF);
@@ -252,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String follows = (String) map.get("follows");
                 String followers = (String) map.get("followers");
                 String iconBitmapString = (String) map.get("iconBitmapString");
+                String coin = (String) map.get("coin");
 
                 if (userId.equals(user.getUid())){
                     if (iconBitmapString.length()<10){
@@ -262,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         transaction.commit();
                     }
                     accountNameTextView.setText(userName);
-                    //自分を引いておく
+                    accountCoinTextView.setText(coin+" coin");
                     int f = Integer.parseInt(follows);
                     String strF = String.valueOf(f);
                     accountFollowTextView.setText(strF);
@@ -330,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View navHeaderMain = navigationView.inflateHeaderView(R.layout.nav_header_main);
         accountImageView = (ImageView)navHeaderMain.findViewById(R.id.accountImageView);
+        accountCoinTextView = (TextView)navHeaderMain.findViewById(R.id.accountCoinTextView);
         accountNameTextView = (TextView)navHeaderMain.findViewById(R.id.accountNameTextView);
         accountFollowTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollow);
         accountFollowerTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollower);

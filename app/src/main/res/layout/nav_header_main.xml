@@ -1,14 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="30dp"
-    android:background="@color/colorPrimaryDark">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="30dp"
+        android:background="@color/colorPrimaryDark">
 
 
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/noimage"
+        android:id="@+id/accountImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/accountNameTextView"
+        android:layout_marginTop="3dp"
+        android:textSize="20sp"
+        android:layout_toEndOf="@id/accountImageView"
+        android:text="no name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/accountImageView"
+        android:layout_below="@+id/accountNameTextView"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:text="beginner"
+        android:id="@+id/titleTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/accountCoinTextView"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountImageView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="5dp"
+        android:id="@+id/accountFollow"
+        android:text="0"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountImageView"
+        android:layout_toRightOf="@+id/accountFollow"
+        android:layout_marginStart="3dp"
+        android:id="@+id/followTextView"
+        android:textStyle="bold"
+        android:text="フォロー"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountImageView"
+        android:layout_toRightOf="@+id/followTextView"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/accountFollower"
+        android:text="0"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountImageView"
+        android:layout_toRightOf="@+id/accountFollower"
+        android:layout_marginLeft="3dp"
+        android:id="@+id/followerTextView"
+        android:textStyle="bold"
+        android:text="フォロワー"/>
+
+
+</RelativeLayout>
+
+
+
+
+
+
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,6 +123,11 @@
                 android:layout_marginLeft="10dp"
                 android:text="beginner"
                 android:id="@+id/titleTextView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accountCoinTextView"/>
 
         </LinearLayout>
 
@@ -83,4 +168,5 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
+-->

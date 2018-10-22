@@ -72,16 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH).child(user.getUid());
                     // アカウント作成の時は表示名をFirebaseに保存する
-                    String uName = "";
                     String uId = user.getUid();
-                    String comment = "";
-                    String follows = "0";
-                    String followers = "0";
-                    String posts = "0";
-                    String evaluations = "0";
-                    String taught = "0";
-                    String period = "0";
-                    String groups = "0";
                     String favorites = "未設定";
                     String sex="未設定";
                     String age ="未設定";
@@ -90,28 +81,29 @@ public class LoginActivity extends AppCompatActivity {
                     //初期アイコンとヘッダーを読み込みたい
                     String iconBitmapString = "";
                     Map<String, String> data = new HashMap<String, String>();
-                    data.put("userName", uName);
+                    data.put("userName", "");
                     data.put("userId", uId);
                     //自己紹介
-                    data.put("comment", comment);
-                    data.put("follows", follows);
-                    data.put("followers", followers);
-                    data.put("posts", posts);
+                    data.put("comment", "");
+                    data.put("follows", "0");
+                    data.put("followers", "0");
+                    data.put("posts", "0");
                     data.put("favorites",favorites);
                     data.put("sex",sex);
                     data.put("age",age);
                     //評価
-                    data.put("evaluations", evaluations);
+                    data.put("evaluations", "0");
                     //指導人数
-                    data.put("taught", taught);
+                    data.put("taught", "0");
                     //アプリ使用期間
-                    data.put("period", period);
+                    data.put("period", "0");
                     //参加グループ数
-                    data.put("groups", groups);
+                    data.put("groups", "0");
                     //日付け
                     data.put("date",date);
                     //アイコン画像bitmapstring
                     data.put("iconBitmapString", iconBitmapString);
+                    data.put("coin","0");
                     userRef.setValue(data);
                 } else {
                     // 失敗した場合
