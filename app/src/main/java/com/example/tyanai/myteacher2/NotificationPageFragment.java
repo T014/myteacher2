@@ -268,7 +268,7 @@ public class NotificationPageFragment  extends Fragment {
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
             String soldUid="";
-            String tradeKey ="";
+            String tradeKey= (String) map.get("postKey");;
             String permittedDate="";
             long lag =0;
 
@@ -367,7 +367,7 @@ public class NotificationPageFragment  extends Fragment {
                                 .commit();
                     }else{
                         Bundle bundle = new Bundle();
-                        bundle.putString("key",favUserArrayList.get(position).getFavPostKey());
+                        bundle.putString("key",favUserArrayList.get(position).getTradeKey());
                         bundle.putString("screenKey","timeLine");
                         DetailsFragment fragmentDetails = new DetailsFragment();
                         fragmentDetails.setArguments(bundle);
