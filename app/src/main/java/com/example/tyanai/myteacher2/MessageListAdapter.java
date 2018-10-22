@@ -64,7 +64,7 @@ public class MessageListAdapter extends BaseAdapter {
 
         com.example.tyanai.myteacher2.MessageListViewHolder messageListViewHolder;
 
-//        if (convertView == null) {
+        if (convertView == null) {
         // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
         convertView = inflater.inflate(layoutId, parent, false);
         // ViewHolder を生成
@@ -98,11 +98,17 @@ public class MessageListAdapter extends BaseAdapter {
 
         messageListViewHolder.view = convertView;
 
-        //convertView.setTag(messageListViewHolder);
+        convertView.setTag(messageListViewHolder);
 
-//        } else {
-//            messageListViewHolder = (com.example.tyanai.myteacher2.MessageListViewHolder) convertView.getTag();
-//        }
+        } else {
+            messageListViewHolder = (com.example.tyanai.myteacher2.MessageListViewHolder) convertView.getTag();
+            messageListViewHolder.myMessageLayout.setVisibility(View.VISIBLE);
+            messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.VISIBLE);
+            messageListViewHolder.otherMessageLayout.setVisibility(View.VISIBLE);
+            messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.VISIBLE);
+            messageListViewHolder.messageListLinearLayout.setVisibility(View.VISIBLE);
+            messageListViewHolder.newDateLinearLayout.setVisibility(View.VISIBLE);
+        }
 
          if (uid.equals("")){
             if (time!=null){
@@ -113,7 +119,7 @@ public class MessageListAdapter extends BaseAdapter {
                 messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                 messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
             }
-        }else if (uid!=null){
+         }else if (uid!=null){
             String n = time.substring(11,16);
             if (uid.equals(myUid)){
                 //自分の時の処理
@@ -135,7 +141,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
-                    if (contents!=null){
+                    if (contents!=null && !(contents.equals(""))){
                         messageListViewHolder.messageContentsTextView.setText(contents);
                     }
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
@@ -167,7 +173,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.otherMessageTimeTextView.setText(n);
                     }
-                    if (contents!=null){
+                    if (contents!=null && !(contents.equals(""))){
                         messageListViewHolder.otherMessageContentsTextView.setText(contents);
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
