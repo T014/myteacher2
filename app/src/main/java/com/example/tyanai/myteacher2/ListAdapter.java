@@ -117,6 +117,8 @@ public class ListAdapter extends BaseAdapter{
         if (contents != null){
             if (contents.equals("あああ")){
                 listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(127,127,255));
+            }else {
+                listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(255,255,255));
             }
         }
         if (postImageBitmapString!=null){
