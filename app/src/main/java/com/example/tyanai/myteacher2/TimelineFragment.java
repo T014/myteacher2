@@ -315,13 +315,10 @@ public class TimelineFragment extends Fragment {
 
                     int first = timeLineListView.getFirstVisiblePosition();
                     int last = timeLineListView.getLastVisiblePosition();
-                    //スクロール位置取得
-                    if (getView().getTop()!=0){
-                        goodPosition = timeLineListView.getFirstVisiblePosition();
-                        if (goodPosition!=0){
-                            y = timeLineListView.getChildAt(0).getTop();
-                        }
-                    }
+
+
+                    goodPosition = timeLineListView.getFirstVisiblePosition();
+                    y = timeLineListView.getChildAt(0).getTop();
 
                     if (first==0){
                         //一番上の時
@@ -343,7 +340,7 @@ public class TimelineFragment extends Fragment {
                                     }
                                 }
                             }
-                        }, 500);
+                        }, 200);
                     }else if (last==timeLineListView.getCount()-1){
                         //一番下の時
                         removeCount = timeLineArrayList.size() + addTimeLineArrayList.size();
@@ -377,7 +374,7 @@ public class TimelineFragment extends Fragment {
                                     }
                                 }
                             }
-                        }, 500);
+                        }, 200);
                     }
                 }
             }
