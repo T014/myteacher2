@@ -394,7 +394,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     followData.put("followKey",key);
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,followData);
-                    followRef.child(user.getUid()).setValue(childUpdates);
+                    followRef.child(user.getUid()).updateChildren(childUpdates);
 
                     //フォロワー
                     Map<String,Object> followerData = new HashMap<>();
