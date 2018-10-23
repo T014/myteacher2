@@ -63,17 +63,6 @@ public class FFListAdapter extends BaseAdapter {
         }
 
 
-
-        //ここで色指定できる評価の高さによってフォローされているか！
-//        if (contents != null){
-//            if (contents.equals("あああ")){
-//                listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(127,127,255));
-//            }
-//        }
-
-
-
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);

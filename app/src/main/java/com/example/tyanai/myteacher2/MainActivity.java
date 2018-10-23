@@ -221,41 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String iconBitmapString = (String) map.get("iconBitmapString");
             String coin = (String) map.get("coin");
 
-            if (userId.equals(user.getUid())){
-                if (iconBitmapString.length()<10){
-                    InputProfileFragment fragmentInputProfile = new InputProfileFragment();
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, fragmentInputProfile,InputProfileFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-                accountNameTextView.setText(userName);
-                accountCoinTextView.setText(coin+" coin");
-                int f = Integer.parseInt(follows);
-                String strF = String.valueOf(f);
-                accountFollowTextView.setText(strF);
-                accountFollowerTextView.setText(followers);
-
-                byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
-                if(iconBytes.length!=0) {
-                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
-                    accountImageView.setImageBitmap(iconBitmap);
-                }
-            }
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            if (dataSnapshot.getKey().equals(user.getUid())){
-                HashMap map = (HashMap) dataSnapshot.getValue();
-
-                String userName = (String) map.get("userName");
-                String userId = (String) map.get("userId");
-                String follows = (String) map.get("follows");
-                String followers = (String) map.get("followers");
-                String iconBitmapString = (String) map.get("iconBitmapString");
-                String coin = (String) map.get("coin");
-
+            if (user!=null){
                 if (userId.equals(user.getUid())){
                     if (iconBitmapString.length()<10){
                         InputProfileFragment fragmentInputProfile = new InputProfileFragment();
@@ -275,6 +241,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if(iconBytes.length!=0) {
                         Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
                         accountImageView.setImageBitmap(iconBitmap);
+                    }
+                }
+            }
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getKey().equals(user.getUid())){
+                HashMap map = (HashMap) dataSnapshot.getValue();
+
+                String userName = (String) map.get("userName");
+                String userId = (String) map.get("userId");
+                String follows = (String) map.get("follows");
+                String followers = (String) map.get("followers");
+                String iconBitmapString = (String) map.get("iconBitmapString");
+                String coin = (String) map.get("coin");
+
+
+                if (user!=null){
+                    if (userId.equals(user.getUid())){
+                        if (iconBitmapString.length()<10){
+                            InputProfileFragment fragmentInputProfile = new InputProfileFragment();
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container, fragmentInputProfile,InputProfileFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                        accountNameTextView.setText(userName);
+                        accountCoinTextView.setText(coin+" coin");
+                        int f = Integer.parseInt(follows);
+                        String strF = String.valueOf(f);
+                        accountFollowTextView.setText(strF);
+                        accountFollowerTextView.setText(followers);
+
+                        byte[] iconBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+                        if(iconBytes.length!=0) {
+                            Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length).copy(Bitmap.Config.ARGB_8888, true);
+                            accountImageView.setImageBitmap(iconBitmap);
+                        }
                     }
                 }
             }

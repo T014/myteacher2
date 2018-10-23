@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,7 +89,6 @@ public class MakePostFragment extends Fragment {
 
     public static TextView dateTextView;
     FirebaseUser user;
-    DatabaseReference usersContentsRef;
     DatabaseReference userRef;
     DatabaseReference areaRef;
     DatabaseReference contentsRef;
@@ -117,89 +117,54 @@ public class MakePostFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String ssType = (String) map.get("type");
-            String ssLevel = (String) map.get("level");
             String ssUserEvaluation = (String) map.get("userEvaluation");
             String ssTaught = (String) map.get("taught");
             String ssMethod = (String) map.get("method");
             String ssPlace = (String) map.get("place");
-            String ssCostType = (String) map.get("costType");
-            String ssCost = (String) map.get("cost");
-            String ssSex = (String) map.get("sex");
-            String ssAge = (String) map.get("age");
             String uid = (String) map.get("uid");
 
             if (myData!=null){
                 int iUserEvaluation = Integer.valueOf(myData.getEvaluations());
                 int iTaught = Integer.valueOf(myData.getTaught());
-                int iCost=0;
                 int issUserEvaluation=0;
                 int issTaught=0;
-                int issCost=0;
-                try {
-                    iCost = Integer.valueOf(cost);
-                } catch (NumberFormatException e) {
-                }
                 try {
                     issUserEvaluation = Integer.valueOf(ssUserEvaluation);
-                } catch (NumberFormatException e) {
-                }
-                try {
                     issTaught = Integer.valueOf(ssTaught);
                 } catch (NumberFormatException e) {
                 }
-                try {
-                    issCost = Integer.valueOf(ssCost);
-                } catch (NumberFormatException e) {
-                }
 
-                if (!(uid.equals(user.getUid()))){
-                    if (ssType.equals(type)){
-                        //難易度
-                        if (ssLevel.equals("未設定") || ssLevel.equals(level) || level.equals("未設定")){
-                            //ユーザーの評価
-                            if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
-                                //指導人数
-                                if(ssTaught.equals("指定しない") || issTaught>iTaught) {
-                                    //受講方法
-                                    if (ssMethod.equals("指定しない") || ssMethod.equals(method) || method.equals("指定しない")){
-                                        //日時
-                                        //if (ssDate.equals("指定しない") || postDate.equals(date)){
-                                        //場所
-                                        if (ssPlace.equals("指定しない") || ssPlace.equals(place) || place.equals("指定しない")){
-                                            //価格形式
-                                            if (ssCostType.equals("指定しない") || ssCostType.equals(costType) || costType.equals("応相談")){
-                                                //価格
-                                                if(ssCost.equals("指定しない") || issCost<=iCost){
-                                                    //性別
-                                                    if (ssSex.equals("未設定") || ssSex.equals(myData.getSex())){
-                                                        //年齢
-                                                        if (ssAge.equals("未設定") || ssAge.equals(myData.getAge())){
-                                                            //ここで通知
-                                                            if (filterKey!=null){
-                                                                Map<String,Object> mFilterKey = new HashMap<>();
+                if (!(uid.equals(user.getUid())) && ssType.equals(type)){
+                    //ユーザーの評価
+                    if (ssUserEvaluation.equals("指定しない") || issUserEvaluation>iUserEvaluation){
+                        //指導人数
+                        if(ssTaught.equals("指定しない") || issTaught>iTaught) {
+                            //受講方法
+                            if (ssMethod.equals("指定しない") || ssMethod.equals(method) || method.equals("指定しない")){
+                                //場所
+                                if (ssPlace.equals("指定しない") || ssPlace.equals(place) || place.equals("指定しない")){
+                                    //ここで通知
+                                    if (filterKey!=null){
 
-                                                                mFilterKey.put("filterUid",uid);
-                                                                mFilterKey.put("userName",myData.getName());
-                                                                mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
-                                                                mFilterKey.put("time","");
-                                                                mFilterKey.put("filterKey",filterKey);
-                                                                mFilterKey.put("kind","その他");
-                                                                mFilterKey.put("kindDetail","検索履歴");
+                                        Calendar cal1 = Calendar.getInstance();
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                                        String time = sdf.format(cal1.getTime());
 
-                                                                Map<String,Object> childUpdates = new HashMap<>();
-                                                                childUpdates.put(filterKey,mFilterKey);
-                                                                filterRef.updateChildren(childUpdates);
+                                        Map<String,Object> mFilterKey = new HashMap<>();
 
-                                                            }
+                                        mFilterKey.put("filterUid",uid);
+                                        mFilterKey.put("userName",myData.getName());
+                                        mFilterKey.put("iconBitmapString",myData.getIconBitmapString());
+                                        mFilterKey.put("time",time);
+                                        mFilterKey.put("filterKey",filterKey);
+                                        mFilterKey.put("kind","その他");
+                                        mFilterKey.put("kindDetail","検索履歴");
 
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        //}
+                                        Map<String,Object> childUpdates = new HashMap<>();
+                                        childUpdates.put(filterKey,mFilterKey);
+                                        filterRef.updateChildren(childUpdates);
+
                                     }
-
                                 }
                             }
                         }
@@ -430,6 +395,29 @@ public class MakePostFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String userName = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
+
+            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+
+            myData = userData;
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -525,7 +513,6 @@ public class MakePostFragment extends Fragment {
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         userRef = mDataBaseReference.child(Const.UsersPATH);
         areaRef = mDataBaseReference.child(Const.AreaPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
@@ -821,15 +808,13 @@ public class MakePostFragment extends Fragment {
                                         childUpdates.put(key,data);
                                         contentsRef.updateChildren(childUpdates);
 
-                                        Map<String,Object> postKey = new HashMap<>();
-                                        String aaa = usersContentsRef.child(user.getUid()).push().getKey();
 
-                                        postKey.put("key",key);
-                                        postKey.put("userId",user.getUid());
 
-                                        Map<String,Object> postUpdates = new HashMap<>();
-                                        postUpdates.put(aaa,postKey);
-                                        usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
+                                        Map<String,Object> userPostCount = new HashMap<>();
+                                        int postCountInt = Integer.valueOf(myData.getPosts());
+                                        String postCount = String.valueOf(postCountInt+1);
+                                        userPostCount.put("posts",postCount);
+                                        userRef.child(user.getUid()).updateChildren(userPostCount);
 
                                         flag=true;
                                         savePostRef.child(user.getUid()).removeValue();
@@ -877,16 +862,6 @@ public class MakePostFragment extends Fragment {
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(key,data);
                                         contentsRef.updateChildren(childUpdates);
-
-                                        Map<String,Object> postKey = new HashMap<>();
-                                        String aaa = usersContentsRef.child(user.getUid()).push().getKey();
-
-                                        postKey.put("key",key);
-                                        postKey.put("userId",user.getUid());
-
-                                        Map<String,Object> postUpdates = new HashMap<>();
-                                        postUpdates.put(aaa,postKey);
-                                        usersContentsRef.child(user.getUid()).updateChildren(postUpdates);
 
                                         flag = true;
                                         savePostRef.child(user.getUid()).removeValue();

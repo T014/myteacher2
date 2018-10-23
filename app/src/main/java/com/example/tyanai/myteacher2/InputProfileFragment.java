@@ -42,7 +42,6 @@ public class InputProfileFragment extends Fragment {
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
-    DatabaseReference usersContentsRef;
     DatabaseReference contentsRef;
     public static String myFavorite;
     public static String newUserName;
@@ -189,7 +188,6 @@ public class InputProfileFragment extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-        usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(iEventListener);
 

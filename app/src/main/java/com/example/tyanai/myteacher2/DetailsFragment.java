@@ -47,7 +47,6 @@ public class DetailsFragment extends Fragment {
     DatabaseReference tradeRef;
     PostData thisPost;
     Spinner evaluationSpinner;
-    DatabaseReference usersContentsRef;
     Button saveButton;
     TextView evaluationTextView;
     String ev;
@@ -501,7 +500,6 @@ public class DetailsFragment extends Fragment {
         tradeRef = mDataBaseReference.child(Const.TradePATH);
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
-        usersContentsRef = mDataBaseReference.child(Const.UsersContentsPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
         usersRef.addChildEventListener(cEventListener);
         tradeRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(tEventListener);
@@ -510,14 +508,15 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle userBundle = new Bundle();
-                userBundle.putString("userId",thisPost.getUserId());
+                if (thisPost!=null){
+                    userBundle.putString("userId",thisPost.getUserId());
 
-                ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
-                fragmentProfileConfirm.setArguments(userBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
-                transaction.commit();
-
+                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                    fragmentProfileConfirm.setArguments(userBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
+                    transaction.commit();
+                }
             }
         });
         favButton.setOnClickListener(new View.OnClickListener() {

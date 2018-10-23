@@ -62,34 +62,41 @@ public class NotificationFavListAdapter extends BaseAdapter{
             if (kind.equals("いいね")){
                 favListViewHolder.favListTextView.setText(userName+"さんがあなたの投稿にいいねしました。");
                 if (favTime!=null){
-                    favListViewHolder.favTimeTextView.setText(favTime);
+                    String subTime = favTime.substring(0,16);
+                    favListViewHolder.favTimeTextView.setText(subTime);
                 }
             }else if (kind.equals("購入")){
                 if (kindDetail.equals("許可")){
                     favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を許可しました。");
                     if (permittedDate!=null){
-                        favListViewHolder.favTimeTextView.setText(permittedDate);
+                        String subTime = permittedDate.substring(0,16);
+                        favListViewHolder.favTimeTextView.setText(subTime);
                     }
                 }else if (kindDetail.equals("拒否")) {
                     favListViewHolder.favListTextView.setText(userName+"さんがあなたの申請を拒否しました。");
                     if (permittedDate!=null){
-                        favListViewHolder.favTimeTextView.setText(permittedDate);
+                        String subTime = permittedDate.substring(0,16);
+                        favListViewHolder.favTimeTextView.setText(subTime);
                     }
                 }else if (kindDetail.equals("リクエスト")){
                     favListViewHolder.favListTextView.setText(userName+"さんがあなたの投稿に購入リクエストを送りました。");
                     if (favTime!=null){
-                        favListViewHolder.favTimeTextView.setText(favTime);
+                        String subTime = favTime.substring(0,16);
+                        favListViewHolder.favTimeTextView.setText(subTime);
                     }
                 }else if (kindDetail.equals("キャンセル")){
                     favListViewHolder.favListTextView.setText(userName+"さんが購入リクエストをキャンセルしました。");
                     if (permittedDate!=null){
-                        favListViewHolder.favTimeTextView.setText(permittedDate);
+
+                        String subTime = permittedDate.substring(0,16);
+                        favListViewHolder.favTimeTextView.setText(subTime);
                     }
                 }
             }else if (kind.equals("その他")){
                 favListViewHolder.favListTextView.setText(userName+"さんがあなたの検索履歴に近い投稿をしました。");
                 if (favTime!=null){
-                    favListViewHolder.favTimeTextView.setText(favTime);
+                    String subTime = favTime.substring(0,16);
+                    favListViewHolder.favTimeTextView.setText(subTime);
                 }
             }
         }

@@ -224,7 +224,7 @@ public class NotificationPageFragment  extends Fragment {
             String userId = (String) map.get("filterUid");
             String userName = (String) map.get("userName");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String time = "";
+            String time = (String) map.get("time");
             String filterKey = (String) map.get("filterKey");
             String kind = (String) map.get("kind");
             String kindDetail = (String) map.get("kindDetail");
