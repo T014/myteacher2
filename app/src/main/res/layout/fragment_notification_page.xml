@@ -7,10 +7,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/notificationListView"
-        android:layout_marginBottom="60dp">
-
-
-
+        android:layout_marginBottom="60dp"
+        android:id="@+id/notificationListView">
     </ListView>
 </FrameLayout>
