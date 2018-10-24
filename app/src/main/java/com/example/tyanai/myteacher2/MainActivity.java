@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -305,6 +306,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+//        if(getSupportActionBar() != null){
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        }
+
+
+
+
+
+
+        findViewById(mToolbar.getId()).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                TimelineFragment.timeLineListView.setSelectionFromTop(0,0);
+            }
+        });
+
+
+
+
+
+
         snack = (CoordinatorLayout)findViewById(R.id.snack);
 
         //BottomNavigationViewの定義して設置する
@@ -397,7 +420,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user !=null){
             userRef.addChildEventListener(aEventListener);
         }
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -762,5 +788,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

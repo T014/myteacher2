@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ThisMessageFragment extends Fragment {
+public class ThisMessageFragment extends Fragment{
     public static final String TAG = "ThisMessageFragment";
 
     ListView messageListView;
