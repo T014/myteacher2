@@ -35,7 +35,7 @@ public class MessageFragment extends Fragment {
     DatabaseReference messageKeyRef;
     FirebaseUser user;
     DatabaseReference userRef;
-    ListView messageKeyListView;
+    public static ListView messageKeyListView;
     MessageKeyListAdapter mAdapter;
     private ArrayList<MessageListData> messageListDataArrayList;
     private ArrayList<MessageListData> newMessageListDataArrayList;

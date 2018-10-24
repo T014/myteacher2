@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -38,6 +39,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     ImageView newIconImageView;
     TextView userNameTextView;
     TextView commentTextView;
+    public static ScrollView confirmScrollView;
     Button okButton;
     Button messageButton;
     TextView sexConfirmProfileTextView;
@@ -302,6 +304,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         viewPager = (CustomViewPager) v.findViewById(R.id.pager);
         editButton = (Button)v.findViewById(R.id.editButton);
         coinConfirmProfileTextView = (TextView)v.findViewById(R.id.coinConfirmProfileTextView);
+        confirmScrollView = (ScrollView)v.findViewById(R.id.confirmScrollView);
 
         return v;
     }

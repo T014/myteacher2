@@ -35,7 +35,7 @@ import java.util.Map;
 public class ThisMessageFragment extends Fragment{
     public static final String TAG = "ThisMessageFragment";
 
-    ListView messageListView;
+    public static ListView messageListView;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference messageRef;

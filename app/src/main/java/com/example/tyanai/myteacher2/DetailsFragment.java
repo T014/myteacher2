@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -34,6 +35,7 @@ import java.util.Map;
 public class DetailsFragment extends Fragment {
     public static final String TAG = "DetailsFragment";
 
+    public static ScrollView detailScrollview;
     String intentKey;
     ImageView postContentsImageView;
     ToggleButton favButton;
@@ -397,6 +399,7 @@ public class DetailsFragment extends Fragment {
         reqNameTextView = (TextView)v.findViewById(R.id.reqNameTextView);
         widthView2 = (View)v.findViewById(R.id.widthView2);
         widthView3 = (View)v.findViewById(R.id.widthView3);
+        detailScrollview = (ScrollView)v.findViewById(R.id.detailScrollview);
 
 
         return v;

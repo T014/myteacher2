@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -306,20 +307,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-//        if(getSupportActionBar() != null){
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        }
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-
-
+        }
 
         findViewById(mToolbar.getId()).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                TimelineFragment.timeLineListView.setSelectionFromTop(0,0);
+                //currentfragment
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+                if (currentFragment.getTag().equals("TimeLineFragment")){
+                    TimelineFragment.timeLineListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("ThisMessageFragment")){
+                    ThisMessageFragment.messageListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("MessageFragment")){
+                    MessageFragment.messageKeyListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("ConfirmProfileFragment")){
+                    ConfirmProfileFragment.confirmScrollView.fullScroll(ScrollView.FOCUS_UP);
+                }else if (currentFragment.getTag().equals("DetailsFragment")){
+                    DetailsFragment.detailScrollview.fullScroll(ScrollView.FOCUS_UP);
+                }
             }
         });
 
