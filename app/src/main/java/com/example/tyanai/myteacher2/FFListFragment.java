@@ -2,6 +2,7 @@ package com.example.tyanai.myteacher2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,7 +171,12 @@ public class FFListFragment extends Fragment {
         ffUsersArrayList = new ArrayList<UserData>();
         mAdapter = new FFListAdapter(this.getActivity(),R.layout.ff_list_item);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
-        usersRef.addChildEventListener(tEventListener);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                usersRef.addChildEventListener(tEventListener);
+            }
+        }, 200);
 
         ffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

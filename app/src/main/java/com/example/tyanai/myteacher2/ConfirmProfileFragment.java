@@ -55,7 +55,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     String ffKey="";
     Button editButton;
     public static UserData accountData;
-
+    UserData myData;
     String intentUserId;
     public static String uid;
     private ToggleButton followFollowerButton;
@@ -92,88 +92,73 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             String iconBitmapString = (String) map.get("iconBitmapString");
             String coin = (String) map.get("coin");
 
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+            if (uid.equals(userId)){
+                UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
 
-            accountData = userData;
+                accountData = userData;
 
-            userNameTextView.setText(userData.getName());
-            commentTextView.setText(userData.getComment());
-            evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
-            sexConfirmProfileTextView.setText("性別："+userData.getSex());
-            ageConfirmProfileTextView.setText("年齢："+userData.getAge());
-            coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
-            byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
-            if(iconBytes.length!=0){
-                Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                newIconImageView.setImageBitmap(iconBitmap);
+                userNameTextView.setText(userData.getName());
+                commentTextView.setText(userData.getComment());
+                evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
+                sexConfirmProfileTextView.setText("性別："+userData.getSex());
+                ageConfirmProfileTextView.setText("年齢："+userData.getAge());
+                coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
+                byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
+                if(iconBytes.length!=0){
+                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    newIconImageView.setImageBitmap(iconBitmap);
+                }
+            }else if (user.getUid().equals(userId)){
+                UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                myData = userData;
             }
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-    private ChildEventListener gEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
+            String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
+            String comment = (String) map.get("comment");
             String follows = (String) map.get("follows");
             String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
 
-            if (followFollowerButton.isChecked()){
-                //フォローのとき押した
-                if (userId.equals(uid)){
-                    //相手のフォロワーを増やす
-                    Map<String,Object> plusFollowerCount = new HashMap<>();
-                    int frc = Integer.valueOf(followers);
-                    frc += 1;
-                    String strFollowerCount = String.valueOf(frc);
-                    plusFollowerCount.put("followers",strFollowerCount);
-                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
-                }else if (userId.equals(user.getUid())) {
-                    //自分のフォローを増やす
-                    Map<String, Object> plusFollowCount = new HashMap<>();
-                    int fc = Integer.valueOf(follows);
-                    fc += 1;
-                    String strFollowCount = String.valueOf(fc);
-                    plusFollowCount.put("follows", strFollowCount);
-                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+            if (accountData.getUid().equals(userId)){
+                UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+
+                accountData = userData;
+
+                userNameTextView.setText(userData.getName());
+                commentTextView.setText(userData.getComment());
+                evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
+                sexConfirmProfileTextView.setText("性別："+userData.getSex());
+                ageConfirmProfileTextView.setText("年齢："+userData.getAge());
+                coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
+                byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
+                if(iconBytes.length!=0){
+                    Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    newIconImageView.setImageBitmap(iconBitmap);
                 }
-            }else{
-                //フォロー中に押した
-                if (userId.equals(uid)){
-                    //相手のフォロワーを減らす
-                    Map<String,Object> minusFollowerCount = new HashMap<>();
-                    int frc = Integer.valueOf(followers);
-                    frc -= 1;
-                    String strFollowerCount = String.valueOf(frc);
-                    minusFollowerCount.put("followers",strFollowerCount);
-                    userRef.child(intentUserId).updateChildren(minusFollowerCount);
-                }else if (userId.equals(user.getUid())){
-                    //自分のフォローを減らす
-                    Map<String,Object> minusFollowCount = new HashMap<>();
-                    int fc = Integer.valueOf(follows);
-                    fc -= 1;
-                    String strFollowCount = String.valueOf(fc);
-                    minusFollowCount.put("follows",strFollowCount);
-                    userRef.child(user.getUid()).updateChildren(minusFollowCount);
-                }
+            }else if (user.getUid().equals(userId)){
+                UserData userData = new UserData(userName,userId,comment,follows,followers,posts
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                myData=userData;
             }
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -298,10 +283,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         super.onDetach();
     }
 
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -381,13 +362,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         viewPager.addOnPageChangeListener(this);
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
-        userRef.orderByChild("userId").equalTo(uid).addChildEventListener(cEventListener);
+        userRef.addChildEventListener(cEventListener);
 
         followFollowerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 if (followFollowerButton.isChecked()){
-                    //フォロー
+                    //自分のフォロー
                     Map<String,Object> followData = new HashMap<>();
                     String key = followRef.child(user.getUid()).push().getKey();
                     followData.put("followUid",intentUserId);
@@ -396,7 +377,16 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     childUpdates.put(key,followData);
                     followRef.child(user.getUid()).updateChildren(childUpdates);
 
-                    //フォロワー
+
+                    //自分のフォローを増やす
+                    Map<String, Object> plusFollowCount = new HashMap<>();
+                    int fc = Integer.valueOf(myData.getFollows());
+                    fc += 1;
+                    String strFollowCount = String.valueOf(fc);
+                    plusFollowCount.put("follows", strFollowCount);
+                    userRef.child(user.getUid()).updateChildren(plusFollowCount);
+
+                    //相手のフォロワー
                     Map<String,Object> followerData = new HashMap<>();
                     followerData.put("followerUid",user.getUid());
                     followerData.put("followerKey",key);
@@ -404,16 +394,42 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                     childUpdate.put(key,followerData);
                     followerRef.child(intentUserId).updateChildren(childUpdate);
 
+
+                    //相手のフォロワーを増やす
+                    Map<String,Object> plusFollowerCount = new HashMap<>();
+                    int frc = Integer.valueOf(accountData.getFollowers());
+                    frc += 1;
+                    String strFollowerCount = String.valueOf(frc);
+                    plusFollowerCount.put("followers",strFollowerCount);
+                    userRef.child(intentUserId).updateChildren(plusFollowerCount);
+
                     ffKey=key;
                 }else{
                     //自分のフォロー外す//相手のフォロワーから外す
-                    if(ffKey!=null){
+                    if(ffKey!=null && !(ffKey.equals(""))){
                         followRef.child(user.getUid()).child(ffKey).removeValue();
                         followerRef.child(accountData.getUid()).child(ffKey).removeValue();
+
+
+                        //相手のフォロワーを減らす
+                        Map<String,Object> minusFollowerCount = new HashMap<>();
+                        int frc = Integer.valueOf(accountData.getFollowers());
+                        frc -= 1;
+                        String strFollowerCount = String.valueOf(frc);
+                        minusFollowerCount.put("followers",strFollowerCount);
+                        userRef.child(intentUserId).updateChildren(minusFollowerCount);
+
+
+                        //自分のフォローを減らす
+                        Map<String,Object> minusFollowCount = new HashMap<>();
+                        int fc = Integer.valueOf(myData.getFollows());
+                        fc -= 1;
+                        String strFollowCount = String.valueOf(fc);
+                        minusFollowCount.put("follows",strFollowCount);
+                        userRef.child(user.getUid()).updateChildren(minusFollowCount);
                     }
                     ffKey = "";
                 }
-                userRef.addChildEventListener(gEventListener);
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {
