@@ -30,9 +30,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_below="@+id/postUserNameTextView"
             android:layout_toEndOf="@id/userIconImageView"
-            android:layout_marginStart="10dp"
             android:id="@+id/contentsTimeTextView"/>
 
         <ImageView
@@ -68,11 +68,12 @@
             android:id="@+id/goodButton"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
             android:layout_toEndOf="@+id/contentsImageView"
             android:layout_below="@+id/goodDetailTextView"
+            android:padding="15dp"
             android:id="@+id/postContentsTextView"/>
 
 

@@ -736,155 +736,159 @@ public class MakePostFragment extends Fragment {
                 if (NetworkManager.isConnected(getContext())){
                     //必須事項が入力されているかの確認
 
-                    String userId = user.getUid();
-                    String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-                    date = dateTextView.getText().toString();
+                    if (myData!=null){
+                        String userId = user.getUid();
+                        String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+                        date = dateTextView.getText().toString();
 
-                    BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
-                    Bitmap postImageBitmap = postImageDrawable.getBitmap();
-                    ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
-                    postImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
-                    String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
+                        BitmapDrawable postImageDrawable = (BitmapDrawable)postImageView.getDrawable();
+                        Bitmap postImageBitmap = postImageDrawable.getBitmap();
+                        ByteArrayOutputStream postImageBaos = new ByteArrayOutputStream();
+                        postImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, postImageBaos);
+                        String imageBitmapString = Base64.encodeToString(postImageBaos.toByteArray(), Base64.DEFAULT);
 
-                    String cts=contentsEditText.getText().toString();
-                    String contents =cts.replace("\n","");
-                    cost = costEditText.getText().toString();
-                    String howLong = (String)  howLongSpinner.getSelectedItem();
-                    String goods="0";
-                    String favFlag="false";
-                    String bought="0";
-                    String evaluation="0";
-                    String cancel="0";
-                    method=(String) methodSpinner.getSelectedItem();
-                    level=(String) levelSpinner.getSelectedItem();
-                    String career = (String) careerSpinner.getSelectedItem();
-                    place =(String) placeSpinner.getSelectedItem();
-                    String stock = (String) stockSpinner.getSelectedItem();
-                    costType = (String) costTypeSpinner.getSelectedItem();
-                    String cFirstCost="1";
-                    if (cost.length()!=0){
-                        char firstCost = cost.charAt(0);
-                        cFirstCost = String.valueOf(firstCost);
-                    }
+                        String cts=contentsEditText.getText().toString();
+                        String contents =cts.replace("\n","");
+                        cost = costEditText.getText().toString();
+                        String howLong = (String)  howLongSpinner.getSelectedItem();
+                        String goods="0";
+                        String favFlag="false";
+                        String bought="0";
+                        String evaluation="0";
+                        String cancel="0";
+                        method=(String) methodSpinner.getSelectedItem();
+                        level=(String) levelSpinner.getSelectedItem();
+                        String career = (String) careerSpinner.getSelectedItem();
+                        place =(String) placeSpinner.getSelectedItem();
+                        String stock = (String) stockSpinner.getSelectedItem();
+                        costType = (String) costTypeSpinner.getSelectedItem();
+                        String cFirstCost="1";
+                        if (cost.length()!=0){
+                            char firstCost = cost.charAt(0);
+                            cFirstCost = String.valueOf(firstCost);
+                        }
 
-                    String key = contentsRef.push().getKey();
-                    filterKey = key;
-                    if (area.length()!=0){
-                        if (type.length()!=0){
-                            if (contents.length()!=0){
-                                if (cost.length()!=0){
-                                    if (!(cFirstCost.equals("0")) || cost.equals("0")){
-                                        Map<String,Object> data = new HashMap<>();
+                        String key = contentsRef.push().getKey();
+                        filterKey = key;
+                        if (area.length()!=0){
+                            if (type.length()!=0){
+                                if (contents.length()!=0){
+                                    if (cost.length()!=0){
+                                        if (!(cFirstCost.equals("0")) || cost.equals("0")){
+                                            Map<String,Object> data = new HashMap<>();
 
-                                        data.put("userId", userId);
-                                        data.put("userName",myData.getName());
-                                        data.put("time", time);
-                                        data.put("key", key);
-                                        data.put("date", date);
-                                        data.put("imageBitmapString", imageBitmapString);
-                                        data.put("contents",contents);
-                                        data.put("costType",costType);
-                                        data.put("cost",cost );
-                                        data.put("howLong", howLong);
-                                        data.put("goods",goods );
-                                        data.put("favFlag",favFlag );
-                                        data.put("bought",bought );
-                                        data.put("evaluation", evaluation);
-                                        data.put("cancel",cancel );
-                                        data.put("method", method);
-                                        data.put("postArea", area);
-                                        data.put("postType",type );
-                                        data.put("level",level );
-                                        data.put("career", career);
-                                        data.put("place",place);
-                                        data.put("sex",myData.getSex());
-                                        data.put("age",myData.getAge());
-                                        data.put("taught",myData.getTaught());
-                                        data.put("userEvaluation",myData.getEvaluations());
-                                        data.put("userIconBitmapString",myData.getIconBitmapString());
-                                        data.put("stock",stock);
+                                            data.put("userId", userId);
+                                            data.put("userName",myData.getName());
+                                            data.put("time", time);
+                                            data.put("key", key);
+                                            data.put("date", date);
+                                            data.put("imageBitmapString", imageBitmapString);
+                                            data.put("contents",contents);
+                                            data.put("costType",costType);
+                                            data.put("cost",cost );
+                                            data.put("howLong", howLong);
+                                            data.put("goods",goods );
+                                            data.put("favFlag",favFlag );
+                                            data.put("bought",bought );
+                                            data.put("evaluation", evaluation);
+                                            data.put("cancel",cancel );
+                                            data.put("method", method);
+                                            data.put("postArea", area);
+                                            data.put("postType",type );
+                                            data.put("level",level );
+                                            data.put("career", career);
+                                            data.put("place",place);
+                                            data.put("sex",myData.getSex());
+                                            data.put("age",myData.getAge());
+                                            data.put("taught",myData.getTaught());
+                                            data.put("userEvaluation",myData.getEvaluations());
+                                            data.put("userIconBitmapString",myData.getIconBitmapString());
+                                            data.put("stock",stock);
 
-                                        Map<String,Object> childUpdates = new HashMap<>();
-                                        childUpdates.put(key,data);
-                                        contentsRef.updateChildren(childUpdates);
+                                            Map<String,Object> childUpdates = new HashMap<>();
+                                            childUpdates.put(key,data);
+                                            contentsRef.updateChildren(childUpdates);
 
 
 
-                                        Map<String,Object> userPostCount = new HashMap<>();
-                                        int postCountInt = Integer.valueOf(myData.getPosts());
-                                        String postCount = String.valueOf(postCountInt+1);
-                                        userPostCount.put("posts",postCount);
-                                        userRef.child(user.getUid()).updateChildren(userPostCount);
+                                            Map<String,Object> userPostCount = new HashMap<>();
+                                            int postCountInt = Integer.valueOf(myData.getPosts());
+                                            String postCount = String.valueOf(postCountInt+1);
+                                            userPostCount.put("posts",postCount);
+                                            userRef.child(user.getUid()).updateChildren(userPostCount);
 
-                                        flag=true;
-                                        savePostRef.child(user.getUid()).removeValue();
-                                        Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-                                        TimelineFragment fragmentTimeline = new TimelineFragment();
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
+                                            flag=true;
+                                            savePostRef.child(user.getUid()).removeValue();
+                                            Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
+                                            TimelineFragment fragmentTimeline = new TimelineFragment();
+                                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
+                                            transaction.addToBackStack(null);
+                                            transaction.commit();
+                                        }else{
+                                            Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
+                                        }
                                     }else{
-                                        Snackbar.make(MainActivity.snack, "価格の先頭に0を入力しないでください。", Snackbar.LENGTH_LONG).show();
+                                        if (costType.equals("応相談")){
+                                            Map<String,Object> data = new HashMap<>();
+
+                                            data.put("userId", userId);
+                                            data.put("userName",myData.getName());
+                                            data.put("time", time);
+                                            data.put("key", key);
+                                            data.put("date", date);
+                                            data.put("imageBitmapString", imageBitmapString);
+                                            data.put("contents",contents);
+                                            data.put("costType",costType);
+                                            data.put("cost",cost );
+                                            data.put("howLong", howLong);
+                                            data.put("goods",goods );
+                                            data.put("favFlag",favFlag);
+                                            data.put("bought",bought );
+                                            data.put("evaluation", evaluation);
+                                            data.put("cancel",cancel );
+                                            data.put("method", method);
+                                            data.put("postArea", area);
+                                            data.put("postType",type );
+                                            data.put("level",level );
+                                            data.put("career", career);
+                                            data.put("place",place);
+                                            data.put("sex",myData.getSex());
+                                            data.put("age",myData.getAge());
+                                            data.put("taught",myData.getTaught());
+                                            data.put("userEvaluation",myData.getEvaluations());
+                                            data.put("userIconBitmapString",myData.getIconBitmapString());
+                                            data.put("stock",stock);
+
+                                            Map<String,Object> childUpdates = new HashMap<>();
+                                            childUpdates.put(key,data);
+                                            contentsRef.updateChildren(childUpdates);
+
+                                            flag = true;
+                                            savePostRef.child(user.getUid()).removeValue();
+                                            Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
+
+                                            TimelineFragment fragmentTimeline = new TimelineFragment();
+                                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
+                                            transaction.addToBackStack(null);
+                                            transaction.commit();
+                                        }else{
+                                            Snackbar.make(MainActivity.snack, "価格を入力してください。", Snackbar.LENGTH_LONG).show();
+                                        }
                                     }
                                 }else{
-                                    if (costType.equals("応相談")){
-                                        Map<String,Object> data = new HashMap<>();
-
-                                        data.put("userId", userId);
-                                        data.put("userName",myData.getName());
-                                        data.put("time", time);
-                                        data.put("key", key);
-                                        data.put("date", date);
-                                        data.put("imageBitmapString", imageBitmapString);
-                                        data.put("contents",contents);
-                                        data.put("costType",costType);
-                                        data.put("cost",cost );
-                                        data.put("howLong", howLong);
-                                        data.put("goods",goods );
-                                        data.put("favFlag",favFlag);
-                                        data.put("bought",bought );
-                                        data.put("evaluation", evaluation);
-                                        data.put("cancel",cancel );
-                                        data.put("method", method);
-                                        data.put("postArea", area);
-                                        data.put("postType",type );
-                                        data.put("level",level );
-                                        data.put("career", career);
-                                        data.put("place",place);
-                                        data.put("sex",myData.getSex());
-                                        data.put("age",myData.getAge());
-                                        data.put("taught",myData.getTaught());
-                                        data.put("userEvaluation",myData.getEvaluations());
-                                        data.put("userIconBitmapString",myData.getIconBitmapString());
-                                        data.put("stock",stock);
-
-                                        Map<String,Object> childUpdates = new HashMap<>();
-                                        childUpdates.put(key,data);
-                                        contentsRef.updateChildren(childUpdates);
-
-                                        flag = true;
-                                        savePostRef.child(user.getUid()).removeValue();
-                                        Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
-
-                                        TimelineFragment fragmentTimeline = new TimelineFragment();
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.container, fragmentTimeline, TimelineFragment.TAG);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
-                                    }else{
-                                        Snackbar.make(MainActivity.snack, "価格を入力してください。", Snackbar.LENGTH_LONG).show();
-                                    }
+                                    Snackbar.make(MainActivity.snack, "内容を入力してください。", Snackbar.LENGTH_LONG).show();
                                 }
                             }else{
-                                Snackbar.make(MainActivity.snack, "内容を入力してください。", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(MainActivity.snack, "種目を選択してください。", Snackbar.LENGTH_LONG).show();
                             }
                         }else{
-                            Snackbar.make(MainActivity.snack, "種目を選択してください。", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                         }
-                    }else{
-                        Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                     }
+
+
                 }else {
                     Snackbar.make(MainActivity.snack,"オフラインです",Snackbar.LENGTH_LONG).show();
                 }
