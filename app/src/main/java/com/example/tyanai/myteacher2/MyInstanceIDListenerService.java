@@ -13,7 +13,6 @@ public class MyInstanceIDListenerService extends FirebaseMessagingService {
 
     //private static final String TAG = MyInstanceIDListenerService.class.getSimpleName();
 
-
 //    @Override
 //    public void onMessageReceived(RemoteMessage remoteMessage) {
 //        Log.d(TAG, "From: " + remoteMessage.getFrom());
