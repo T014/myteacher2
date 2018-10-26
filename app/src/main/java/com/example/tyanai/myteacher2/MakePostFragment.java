@@ -735,7 +735,6 @@ public class MakePostFragment extends Fragment {
 
                 if (NetworkManager.isConnected(getContext())){
                     //必須事項が入力されているかの確認
-
                     if (myData!=null){
                         String userId = user.getUid();
                         String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
@@ -864,6 +863,7 @@ public class MakePostFragment extends Fragment {
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
 
+
                                             flag = true;
                                             savePostRef.child(user.getUid()).removeValue();
                                             Snackbar.make(MainActivity.snack, "送信が完了しました。", Snackbar.LENGTH_LONG).show();
@@ -886,15 +886,11 @@ public class MakePostFragment extends Fragment {
                         }else{
                             Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                         }
+                    }else {
+                        Snackbar.make(MainActivity.snack,"オフラインです",Snackbar.LENGTH_LONG).show();
                     }
-
-
-                }else {
-                    Snackbar.make(MainActivity.snack,"オフラインです",Snackbar.LENGTH_LONG).show();
                 }
             }
-
-
         });
     }
 

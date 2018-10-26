@@ -6,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class ContractFragment extends Fragment {
     public static final String TAG = "ContractFragment";
@@ -22,7 +21,5 @@ public class ContractFragment extends Fragment {
 
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 }
