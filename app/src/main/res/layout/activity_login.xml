@@ -9,7 +9,7 @@
     android:paddingTop="16dp"
     android:id="@+id/container"
     android:orientation="vertical"
-    tools:context="com.example.tyanai.myteacher2.LoginActivity">
+    tools:context="com.example.tyanai.myteacher2.Screens.LoginActivity">
 
 
     <EditText
