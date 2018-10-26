@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +23,6 @@
 
         <activity android:name="com.example.tyanai.myteacher2.LoginActivity"></activity>
         <activity android:name="com.example.tyanai.myteacher2.PhoneAuthActivity"></activity>
-
-
 
         <service
             android:name=".MyInstanceIDListenerService">
@@ -41,9 +38,5 @@
             </intent-filter>
         </service>
 
-
-
-        <!-- [START firebase_service] -->
     </application>
-
 </manifest>

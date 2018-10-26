@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class MyInstanceIDListenerService extends FirebaseMessagingService {
 
-    private static final String TAG = MyInstanceIDListenerService.class.getSimpleName();
+    //private static final String TAG = MyInstanceIDListenerService.class.getSimpleName();
 
 
 //    @Override
@@ -48,6 +48,6 @@ public class MyInstanceIDListenerService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        Log.d(TAG,"NEW_TOKEN"+s);
+        Log.d("NEW_TOKEN",s);
     }
 }
