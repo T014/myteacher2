@@ -12,6 +12,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.nio.channels.Channel;
 import java.util.Map;
 
 public class MyFcmListenerService extends FirebaseMessagingService {
@@ -37,8 +38,8 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channelId")
+                .setSmallIcon(R.drawable.fav)
                 .setContentTitle("Push通知のタイトル")
                 .setSubText("Push通知のサブタイトル")
                 .setAutoCancel(true)
