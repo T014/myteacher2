@@ -32,6 +32,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         sendNotification(msg);
     }
 
+
     private void sendNotification(String message) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

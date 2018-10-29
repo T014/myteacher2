@@ -1,4 +1,4 @@
-package com.example.tyanai.myteacher2;
+package com.example.tyanai.myteacher2.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

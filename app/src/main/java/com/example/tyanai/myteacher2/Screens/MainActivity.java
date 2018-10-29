@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public MakePostFragment fragmentMakePost;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static final int CHOOSER_REQUEST_CODE = 100;
+    private static final int PERMISSIONS_REQUEST_INTERNET_CODE = 200;
+    private static final int PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE = 300;
+
     public static int pFlag = 0;
     ImageView accountImageView;
     TextView accountNameTextView;
@@ -454,6 +457,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+
+
+
+
+
+        // パーミッションの許可状態を確認する
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+                // 許可されている
+                Log.d("ANDROID", "許可されている");
+            } else {
+                Log.d("ANDROID", "許可されていない");
+                // 許可されていないので許可ダイアログを表示する
+                requestPermissions(new String[]{Manifest.permission.INTERNET}, PERMISSIONS_REQUEST_INTERNET_CODE);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+                // 許可されている
+                Log.d("ANDROID", "許可されている");
+            } else {
+                Log.d("ANDROID", "許可されていない");
+                // 許可されていないので許可ダイアログを表示する
+                requestPermissions(new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -714,6 +763,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("ANDROID", "許可された");
+                    showChooser();
+                } else {
+                    Log.d("ANDROID", "許可されなかった");
+                }
+                break;
+            case PERMISSIONS_REQUEST_INTERNET_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("ANDROID", "許可された");
+                    showChooser();
+                } else {
+                    Log.d("ANDROID", "許可されなかった");
+                }
+                break;
+            case PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("ANDROID", "許可された");
                     showChooser();
