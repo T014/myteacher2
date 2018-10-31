@@ -17,6 +17,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
+import static android.app.Notification.VISIBILITY_PUBLIC;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
@@ -38,11 +40,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //誰からか？
         String from = message.getFrom();
         Map data = message.getData();
+        String froms = data.get("froms").toString();
 
         String msg = data.get("data").toString();
         String ttl = data.get("title").toString();
         sendNotification(msg,ttl);
-        
+
 
     }
 
@@ -74,6 +77,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0 , intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.fav)
@@ -81,16 +85,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSubText("Push通知のサブタイトル")
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setVisibility(VISIBILITY_PUBLIC)
+                .setVibrate(new long[]{0, 1000})
+                .setWhen(System.currentTimeMillis())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setContentIntent(pendingIntent);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 , notificationBuilder.build());
+
     }
-
-
 
 
     @WorkerThread
@@ -109,5 +116,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String var1) {
         Log.d("NEW_TOKEN",var1);
     }
+
+
+
+
 
 }
