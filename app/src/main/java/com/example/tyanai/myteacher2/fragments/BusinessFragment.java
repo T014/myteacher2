@@ -140,8 +140,8 @@ public class BusinessFragment extends Fragment {
         mAdapter = new BusinessDataListAdapter(this.getActivity(),R.layout.business_item);
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        tradeRef = mDataBaseReference.child(Const.TradePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
+        tradeRef = mDataBaseReference.child(Const.TradePATH);
 
         Bundle screenBundle = getArguments();
         if (screenBundle!=null){

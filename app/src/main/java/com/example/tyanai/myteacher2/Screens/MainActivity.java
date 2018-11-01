@@ -596,28 +596,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         drawerTransaction.addToBackStack(null);
                         drawerTransaction.commit();
                     }
-                } else if (id == R.id.nav_provisional) {
-                    mToolbar.setTitle("取引履歴");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("ProvisionalFragment")) {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
-                            fragmentProvisional.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
-                            fragmentProvisional.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
-                        }
-                    }
                 } else if (id == R.id.nav_business) {
-                    mToolbar.setTitle("仮契約");
+                    mToolbar.setTitle("取引履歴");
                     if (currentFragmentTag != null) {
                         if (currentFragmentTag.equals("DetailsFragment")) {
                             Bundle screenBundle = new Bundle();
@@ -632,6 +612,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             BusinessFragment fragmentBusiness = new BusinessFragment();
                             fragmentBusiness.setArguments(screenBundle);
                             drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                            drawerTransaction.addToBackStack(null);
+                            drawerTransaction.commit();
+                        }
+                    }
+                } else if (id == R.id.nav_provisional) {
+                    mToolbar.setTitle("仮契約");
+                    if (currentFragmentTag != null) {
+                        if (currentFragmentTag.equals("ProvisionalFragment")) {
+                            Bundle screenBundle = new Bundle();
+                            screenBundle.putString("screenKey", "business");
+                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
+                            fragmentProvisional.setArguments(screenBundle);
+                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
+                            drawerTransaction.commit();
+                        } else {
+                            Bundle screenBundle = new Bundle();
+                            screenBundle.putString("screenKey", "business");
+                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
+                            fragmentProvisional.setArguments(screenBundle);
+                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
                             drawerTransaction.addToBackStack(null);
                             drawerTransaction.commit();
                         }
