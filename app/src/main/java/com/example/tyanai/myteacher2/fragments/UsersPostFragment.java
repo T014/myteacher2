@@ -12,8 +12,10 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.NotificationFavData;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.R;
+import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -22,7 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +40,7 @@ public class UsersPostFragment extends Fragment {
     DatabaseReference contentsRef;
     DatabaseReference favoriteRef;
     private ArrayList<PostData> timeLineArrayList;
-    private ArrayList<String> favKeyArrayList;
+    private ArrayList<NotificationFavData> favKeyArrayList;
     ListAdapter mAdapter;
     int goodPosition;
     int y;
@@ -48,8 +52,21 @@ public class UsersPostFragment extends Fragment {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
+
+            String userId = (String) map.get("userId");
+            String userName = (String) map.get("userName");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String time="";
+            String favKey = (String) map.get("favKey");
+            String kind = (String) map.get("kind");
+            String kindDetail = (String) map.get("kindDetail");
+            String postUid = (String) map.get("postUid");
             String key = (String) map.get("postKey");
-            favKeyArrayList.add(key);
+            String permittedDate="";
+            long lag = 0;
+
+            NotificationFavData favData = new NotificationFavData(userId,userName,iconBitmapString,time,favKey,kind,kindDetail,postUid,key,permittedDate,lag);
+            favKeyArrayList.add(favData);
 
         }
         @Override
@@ -100,8 +117,8 @@ public class UsersPostFragment extends Fragment {
             String stock = (String) map.get("stock");
             String favFlag="";
 
-            for (String fav : favKeyArrayList) {
-                if (key.equals(fav)) {
+            for (NotificationFavData fav : favKeyArrayList) {
+                if (key.equals(fav.getTradeKey())) {
                     favFlag = "true";
                     break;
                 } else {
@@ -116,9 +133,9 @@ public class UsersPostFragment extends Fragment {
 
             if (num==2){
                 if (favKeyArrayList.size()!=0){
-                    for (String aaa:favKeyArrayList){
+                    for (NotificationFavData aaa:favKeyArrayList){
                         if (aaa!=null){
-                            if (aaa.equals(postData.getKey())){
+                            if (aaa.getFavPostKey().equals(postData.getKey())){
                                 Collections.reverse(timeLineArrayList);
                                 timeLineArrayList.add(postData);
                                 Collections.reverse(timeLineArrayList);
@@ -143,6 +160,33 @@ public class UsersPostFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            for (int p=0;p<timeLineArrayList.size();p++){
+                String pKey = timeLineArrayList.get(p).getKey();
+                if (dataSnapshot.getKey().equals(pKey)){
+                    HashMap map = (HashMap) dataSnapshot.getValue();
+                    String goods = (String) map.get("goods");
+
+                    PostData newPostData = new PostData(timeLineArrayList.get(p).getUserId(),timeLineArrayList.get(p).getName()
+                            ,timeLineArrayList.get(p).getTime(),timeLineArrayList.get(p).getKey(),timeLineArrayList.get(p).getDate()
+                            ,timeLineArrayList.get(p).getImageBitmapString(), timeLineArrayList.get(p).getContents()
+                            ,timeLineArrayList.get(p).getCostType(),timeLineArrayList.get(p).getCost(),timeLineArrayList.get(p).getHowLong()
+                            ,goods,timeLineArrayList.get(p).getFavFlag(),timeLineArrayList.get(p).getBought(),timeLineArrayList.get(p).getEvaluation()
+                            ,timeLineArrayList.get(p).getCancel(),timeLineArrayList.get(p).getMethod(),timeLineArrayList.get(p).getPostArea()
+                            ,timeLineArrayList.get(p).getPostType(),timeLineArrayList.get(p).getLevel(),timeLineArrayList.get(p).getCareer()
+                            ,timeLineArrayList.get(p).getPlace(),timeLineArrayList.get(p).getSex(),timeLineArrayList.get(p).getAge()
+                            ,timeLineArrayList.get(p).getTaught(),timeLineArrayList.get(p).getUserEvaluation(),timeLineArrayList.get(p).getUserIconBitmapString()
+                            ,timeLineArrayList.get(p).getStock());
+                    timeLineArrayList.remove(p);
+                    timeLineArrayList.add(p,newPostData);
+                    mAdapter.setTimeLineArrayList(timeLineArrayList);
+                    profileListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                    profileListView.setSelectionFromTop(goodPosition,y);
+
+                    break;
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -188,8 +232,10 @@ public class UsersPostFragment extends Fragment {
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
         timeLineArrayList.clear();
         if (num==1){
+            MainActivity.mToolbar.setTitle("投稿");
             contentsRef.orderByChild("userId").equalTo(uid).limitToLast(30).addChildEventListener(updEventListener);
         }else{
+            MainActivity.mToolbar.setTitle("いいね");
             contentsRef.limitToLast(30).addChildEventListener(updEventListener);
         }
 
@@ -204,8 +250,14 @@ public class UsersPostFragment extends Fragment {
 
                     String favFlag = timeLineArrayList.get(position).getFavFlag();
                     if (favFlag.equals("true")){
+
+                        for (NotificationFavData ff : favKeyArrayList){
+                            if (ff.getTradeKey().equals(timeLineArrayList.get(position).getKey())){
+                                favoriteRef.child(ff.getFavPostKey()).removeValue();
+                            }
+                        }
+
                         String removeKey = timeLineArrayList.get(position).getKey();
-                        favoriteRef.child(removeKey).removeValue();
 
                         int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                         totalGoods =totalGoods-1;
@@ -216,9 +268,30 @@ public class UsersPostFragment extends Fragment {
                         postGoodKey.put("goods",totalGd);
                         contentsRef.child(removeKey).updateChildren(postGoodKey);
 
-                        favKeyArrayList.clear();
-                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
-                        timeLineArrayList.clear();
+
+
+                        String newFavFlag = "false";
+                        PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
+                                ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
+                                ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
+                                ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
+                                ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
+                                ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
+                                ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
+                                ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
+                                ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
+                                ,timeLineArrayList.get(position).getStock());
+                        timeLineArrayList.remove(position);
+                        timeLineArrayList.add(position,newPostData);
+                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+                        profileListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                        profileListView.setSelectionFromTop(goodPosition,y);
+
+
+//                        favKeyArrayList.clear();
+//                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+//                        timeLineArrayList.clear();
 
                     }else {
                         int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
@@ -229,28 +302,57 @@ public class UsersPostFragment extends Fragment {
                         postGoodKey.put("goods",totalGd);
                         contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
+                        Calendar cal1 = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                        String time = sdf.format(cal1.getTime());
+
                         //いいねの処理
                         Map<String,Object> favKey = new HashMap<>();
                         String key = favoriteRef.push().getKey();
+
 
                         favKey.put("postUid",timeLineArrayList.get(position).getUserId());
                         favKey.put("userId",user.getUid());
                         favKey.put("userName",ConfirmProfileFragment.accountData.getName());
                         favKey.put("iconBitmapString",ConfirmProfileFragment.accountData.getIconBitmapString());
-                        favKey.put("time","0");
+                        favKey.put("time",time);
                         favKey.put("favKey",key);
                         favKey.put("kind","いいね");
                         favKey.put("kindDetail","いいね");
                         favKey.put("postKey",timeLineArrayList.get(position).getKey());
 
                         favoriteRef.child(key).updateChildren(favKey);
-                        favKeyArrayList.clear();
-                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+
+
+
+
+                        String newFavFlag = "true";
+                        PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
+                                ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
+                                ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
+                                ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
+                                ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
+                                ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
+                                ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
+                                ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
+                                ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
+                                ,timeLineArrayList.get(position).getStock());
+                        timeLineArrayList.remove(position);
+                        timeLineArrayList.add(position,newPostData);
+                        mAdapter.setTimeLineArrayList(timeLineArrayList);
+                        profileListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                        profileListView.setSelectionFromTop(goodPosition,y);
+
+
+
+//                        favKeyArrayList.clear();
+//                        favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
 
                     }
 
-                    timeLineArrayList.clear();
-                    contentsRef.orderByChild("userId").equalTo(uid).addChildEventListener(updEventListener);
+//                    timeLineArrayList.clear();
+//                    contentsRef.orderByChild("userId").equalTo(uid).addChildEventListener(updEventListener);
 
 
                 }else if (view.getId()==R.id.userIconImageView){
@@ -295,7 +397,7 @@ public class UsersPostFragment extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
-        favKeyArrayList = new ArrayList<String>();
+        favKeyArrayList = new ArrayList<NotificationFavData>();
 
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
     }

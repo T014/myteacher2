@@ -97,7 +97,7 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
 
     TabLayout tabLayout;
     ViewPager viewPager;
-    FragmentPagerAdapter adapter;
+    FragmentStatePagerAdapter adapter;
     //NotificationFragmentPagerAdapter adapter;
 
     @Override
@@ -117,7 +117,7 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
 
         final String[] pageTitle = {"いいね", "購入"};
 
-        adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+        adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return NotificationPageFragment.newInstance(position+1);
@@ -132,7 +132,7 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
             }
         };
 
-        NotificationPageFragment.newInstance(1);
+        //NotificationPageFragment.newInstance(1);
         //adapter = new NotificationFragmentPagerAdapter(this.getActivity().getSupportFragmentManager());
         // ViewPagerにページを設定
         viewPager.setAdapter(adapter);
@@ -140,13 +140,13 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // do your work
-                NotificationPageFragment.newInstance(position+1);
-            }
-        });
+//        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                // do your work
+//                NotificationPageFragment.newInstance(position+1);
+//            }
+//        });
     }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -172,21 +172,22 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
     public void onResume(){
         super.onResume();
 
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(this);
-        viewPager.setCurrentItem(0);
-        tabLayout.setupWithViewPager(viewPager);
-
+//        viewPager.setAdapter(adapter);
+//        viewPager.addOnPageChangeListener(this);
+//        viewPager.setCurrentItem(1);
+//        tabLayout.setupWithViewPager(viewPager);
+//        NotificationPageFragment.newInstance(1);
     }
 
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            // Refresh your fragment here
-            NotificationPageFragment.newInstance(0);
-        }
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            // Refresh your fragment here
+//            //NotificationPageFragment.newInstance(0);
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
 }
 

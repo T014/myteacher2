@@ -31,7 +31,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class NotificationPageFragment  extends Fragment {
+public class NotificationPageFragment extends Fragment {
 
     private static final String ARG_PARAM = "page";
     private String mParam;
@@ -342,6 +342,7 @@ public class NotificationPageFragment  extends Fragment {
             requestRef = mDataBaseReference.child(Const.RequestPATH);
 
             calDay = Calendar.getInstance();
+
 
         if (page==1){
             favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
