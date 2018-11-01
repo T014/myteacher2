@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
-import com.example.tyanai.myteacher2.func.NetworkManager;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 
 import android.widget.ImageButton;
 import android.widget.LinearLayout;

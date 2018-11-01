@@ -10,16 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"/>
-<!--
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tabs" />-->
-    <com.example.tyanai.myteacher2.CustomViewPager
-        android:layout_below="@+id/tabs"
-        android:id="@+id/pager"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
-
+        android:layout_below="@+id/tabs" />
 </RelativeLayout>

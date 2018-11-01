@@ -1,4 +1,4 @@
-package com.example.tyanai.myteacher2.func;
+package com.example.tyanai.myteacher2.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;

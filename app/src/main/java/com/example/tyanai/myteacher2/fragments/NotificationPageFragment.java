@@ -15,7 +15,7 @@ import com.example.tyanai.myteacher2.Adapters.NotificationFavListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.NotificationFavData;
 import com.example.tyanai.myteacher2.R;
-import com.example.tyanai.myteacher2.func.NotificationTimeSort;
+import com.example.tyanai.myteacher2.Models.NotificationTimeSort;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -463,16 +463,16 @@ public class NotificationPageFragment  extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            // Refresh your fragment here
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-            favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
-            favUserArrayList = new ArrayList<NotificationFavData>();
-            favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
-        }
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            // Refresh your fragment here
+//            user = FirebaseAuth.getInstance().getCurrentUser();
+//            mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+//            favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
+//            favUserArrayList = new ArrayList<NotificationFavData>();
+//            favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
+//        }
+//    }
 }

@@ -15,7 +15,7 @@ import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
-import com.example.tyanai.myteacher2.func.NetworkManager;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

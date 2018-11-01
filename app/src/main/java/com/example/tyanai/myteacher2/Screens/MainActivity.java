@@ -49,12 +49,12 @@ import com.example.tyanai.myteacher2.fragments.InputProfileFragment;
 import com.example.tyanai.myteacher2.fragments.LogoutFragment;
 import com.example.tyanai.myteacher2.fragments.MakePostFragment;
 import com.example.tyanai.myteacher2.fragments.MessageFragment;
-import com.example.tyanai.myteacher2.func.NetworkManager;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.fragments.NotificationFragment;
 import com.example.tyanai.myteacher2.fragments.ProvisionalFragment;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.fragments.SearchFragment;
-import com.example.tyanai.myteacher2.func.SimpleCropViewFragment;
+import com.example.tyanai.myteacher2.fragments.SimpleCropViewFragment;
 import com.example.tyanai.myteacher2.fragments.ThisMessageFragment;
 import com.example.tyanai.myteacher2.fragments.TimelineFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -793,12 +793,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         //バックスタックの登録数をチェックして0であればPopUpは存在しない
         if (1 == getSupportFragmentManager().getBackStackEntryCount()){
             this.finish();
             this.moveTaskToBack(true);
         }
-     super.onBackPressed();
     }
 
     private void showChooser() {

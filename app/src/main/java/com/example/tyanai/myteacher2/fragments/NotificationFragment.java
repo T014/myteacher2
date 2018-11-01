@@ -4,12 +4,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tyanai.myteacher2.Adapters.NotificationFragmentPagerAdapter;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 
@@ -95,7 +97,8 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
 
     TabLayout tabLayout;
     ViewPager viewPager;
-    FragmentStatePagerAdapter adapter;
+    FragmentPagerAdapter adapter;
+    //NotificationFragmentPagerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,7 +117,7 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
 
         final String[] pageTitle = {"いいね", "購入"};
 
-        adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
+        adapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return NotificationPageFragment.newInstance(position+1);
@@ -128,11 +131,22 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
                 return pageTitle.length;
             }
         };
+
+        NotificationPageFragment.newInstance(1);
+        //adapter = new NotificationFragmentPagerAdapter(this.getActivity().getSupportFragmentManager());
         // ViewPagerにページを設定
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
         // ViewPagerをTabLayoutを設定
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // do your work
+                NotificationPageFragment.newInstance(position+1);
+            }
+        });
     }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -163,6 +177,16 @@ public class NotificationFragment extends Fragment implements ViewPager.OnPageCh
         viewPager.setCurrentItem(0);
         tabLayout.setupWithViewPager(viewPager);
 
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // Refresh your fragment here
+            NotificationPageFragment.newInstance(0);
+        }
     }
 }
 

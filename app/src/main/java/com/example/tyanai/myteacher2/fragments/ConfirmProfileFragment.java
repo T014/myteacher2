@@ -22,13 +22,12 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.tyanai.myteacher2.Adapters.ListAdapter;
-import com.example.tyanai.myteacher2.CustomViewPager;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.MessageListData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
-import com.example.tyanai.myteacher2.func.NetworkManager;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -73,8 +72,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     ListAdapter mAdapter;
 
     TabLayout tabLayout;
-    //ViewPager viewPager;
-    CustomViewPager viewPager;
+    ViewPager viewPager;
     FragmentStatePagerAdapter adapter;
 
     private ArrayList<MessageListData> messageUidArrayList;
@@ -308,8 +306,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         evaluationConfirmProfileTextView = (TextView)v.findViewById(R.id.evaluationConfirmProfileTextView);
         messageButton = (Button)v.findViewById(R.id.messageButton);
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
-        //viewPager = (ViewPager) v.findViewById(R.id.pager);
-        viewPager = (CustomViewPager) v.findViewById(R.id.pager);
+        viewPager = (ViewPager) v.findViewById(R.id.pager);
         editButton = (Button)v.findViewById(R.id.editButton);
         coinConfirmProfileTextView = (TextView)v.findViewById(R.id.coinConfirmProfileTextView);
         confirmScrollView = (ScrollView)v.findViewById(R.id.confirmScrollView);
@@ -531,17 +528,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (position==0){
-            viewPager.setAdapter(adapter);
-            viewPager.addOnPageChangeListener(this);
-            viewPager.setCurrentItem(0);
-            tabLayout.setupWithViewPager(viewPager);
-        }else if (position==1){
-            viewPager.setAdapter(adapter);
-            viewPager.addOnPageChangeListener(this);
-            viewPager.setCurrentItem(1);
-            tabLayout.setupWithViewPager(viewPager);
-        }
     }
     @Override
     public void onPageSelected(int position) {

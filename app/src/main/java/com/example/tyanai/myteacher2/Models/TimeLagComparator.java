@@ -1,6 +1,5 @@
-package com.example.tyanai.myteacher2.func;
+package com.example.tyanai.myteacher2.Models;
 
-import com.example.tyanai.myteacher2.Models.MessageListData;
 
 import java.util.Comparator;
 
