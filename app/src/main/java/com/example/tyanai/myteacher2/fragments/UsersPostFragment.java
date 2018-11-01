@@ -27,12 +27,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfirmProfilePageFragment extends Fragment {
+public class UsersPostFragment extends Fragment {
+    public static final String TAG = "UserPostFragment";
 
-
-    private static final String ARG_PARAM = "page";
-    private String mParam;
-    private ConfirmProfilePageFragment.OnFragmentInteractionListener mListener;
     ListView profileListView;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
@@ -43,8 +40,8 @@ public class ConfirmProfilePageFragment extends Fragment {
     ListAdapter mAdapter;
     int goodPosition;
     int y;
-    int page;
-
+    int num;
+    String uid;
 
     private ChildEventListener fvdEventListener = new ChildEventListener() {
         @Override
@@ -68,7 +65,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
 
 
     private ChildEventListener updEventListener = new ChildEventListener() {
@@ -118,7 +114,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
-            if (page==2){
+            if (num==2){
                 if (favKeyArrayList.size()!=0){
                     for (String aaa:favKeyArrayList){
                         if (aaa!=null){
@@ -134,7 +130,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                         }
                     }
                 }
-            }else if (page==1){
+            }else if (num==1){
                 Collections.reverse(timeLineArrayList);
                 timeLineArrayList.add(postData);
                 Collections.reverse(timeLineArrayList);
@@ -143,6 +139,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
                 profileListView.setSelectionFromTop(goodPosition,y);
             }
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -159,28 +156,12 @@ public class ConfirmProfilePageFragment extends Fragment {
     };
 
 
-    public static ConfirmProfilePageFragment newInstance(int page) {
-            ConfirmProfilePageFragment fragment = new ConfirmProfilePageFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_PARAM, page);
-            fragment.setArguments(args);
-
-            return fragment;
-    }
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam = getArguments().getString(ARG_PARAM);
-//        }
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_confirmprofile_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_post, container, false);
         profileListView = (ListView) view.findViewById(R.id.profileListView);
 
         return view;
@@ -196,12 +177,19 @@ public class ConfirmProfilePageFragment extends Fragment {
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         timeLineArrayList = new ArrayList<PostData>();
 
-        page = getArguments().getInt(ARG_PARAM, 0);
+        //uid取得
+        Bundle uidBundle = getArguments();
+        if (uidBundle!=null){
+            uid = uidBundle.getString("uid");
+            String number = uidBundle.getString("num");
+            num = Integer.valueOf(number);
+        }
+
         //ここで分岐させてお気に入りとか自分の投稿とかを表示させる
         timeLineArrayList.clear();
-        if (page==1){
-            contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).limitToLast(30).addChildEventListener(updEventListener);
-        }else if (page==2){
+        if (num==1){
+            contentsRef.orderByChild("userId").equalTo(uid).limitToLast(30).addChildEventListener(updEventListener);
+        }else{
             contentsRef.limitToLast(30).addChildEventListener(updEventListener);
         }
 
@@ -262,7 +250,7 @@ public class ConfirmProfilePageFragment extends Fragment {
                     }
 
                     timeLineArrayList.clear();
-                    contentsRef.orderByChild("userId").equalTo(ConfirmProfileFragment.uid).addChildEventListener(updEventListener);
+                    contentsRef.orderByChild("userId").equalTo(uid).addChildEventListener(updEventListener);
 
 
                 }else if (view.getId()==R.id.userIconImageView){
@@ -298,23 +286,10 @@ public class ConfirmProfilePageFragment extends Fragment {
         });
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-        }
-
-        page = getArguments().getInt(ARG_PARAM, 0);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
@@ -325,13 +300,6 @@ public class ConfirmProfilePageFragment extends Fragment {
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

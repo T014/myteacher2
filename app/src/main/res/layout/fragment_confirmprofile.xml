@@ -94,7 +94,23 @@
                     android:layout_centerHorizontal="true"
                     android:id="@+id/commentTextView"/>
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/commentTextView"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/postButton"
+                    android:text="投稿"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/commentTextView"
+                    android:layout_toEndOf="@id/postButton"
+                    android:layout_marginStart="10dp"
+                    android:text="いいね"
+                    android:id="@+id/gdButton"/>
+
             </RelativeLayout>
         </ScrollView>
-    <include layout="@layout/confirmprofile_content_main" />
     </android.support.design.widget.CoordinatorLayout>

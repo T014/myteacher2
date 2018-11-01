@@ -40,8 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPageChangeListener,
-        ConfirmProfilePageFragment.OnFragmentInteractionListener {
+public class ConfirmProfileFragment extends Fragment{
     public static final String TAG = "ConfirmProfileFragment";
     ImageView newIconImageView;
     TextView userNameTextView;
@@ -49,6 +48,8 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     public static ScrollView confirmScrollView;
     Button okButton;
     Button messageButton;
+    Button postButton;
+    Button gdButton;
     TextView sexConfirmProfileTextView;
     TextView ageConfirmProfileTextView;
     TextView evaluationConfirmProfileTextView;
@@ -71,9 +72,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
     private ArrayList<String> followArrayList;
     ListAdapter mAdapter;
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    FragmentStatePagerAdapter adapter;
 
     private ArrayList<MessageListData> messageUidArrayList;
 
@@ -300,13 +298,13 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
         userNameTextView = (TextView)v.findViewById(R.id.userNameTextView);
         commentTextView = (TextView)v.findViewById(R.id.commentTextView);
         okButton = (Button)v.findViewById(R.id.okButton);
+        postButton = (Button)v.findViewById(R.id.postButton);
         sexConfirmProfileTextView = (TextView)v.findViewById(R.id.sexConfirmProfileTextView);
         ageConfirmProfileTextView = (TextView)v.findViewById(R.id.ageConfirmProfileTextView);
         followFollowerButton = (ToggleButton) v.findViewById(R.id.followFollowerButton);
         evaluationConfirmProfileTextView = (TextView)v.findViewById(R.id.evaluationConfirmProfileTextView);
         messageButton = (Button)v.findViewById(R.id.messageButton);
-        tabLayout = (TabLayout) v.findViewById(R.id.tabs);
-        viewPager = (ViewPager) v.findViewById(R.id.pager);
+        gdButton = (Button) v.findViewById(R.id.gdButton);
         editButton = (Button)v.findViewById(R.id.editButton);
         coinConfirmProfileTextView = (TextView)v.findViewById(R.id.coinConfirmProfileTextView);
         confirmScrollView = (ScrollView)v.findViewById(R.id.confirmScrollView);
@@ -349,27 +347,7 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             messageButton.setVisibility(View.GONE);
             MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
         }
-        final String[] pageTitle = {"投稿", "いいね"};
-        adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return ConfirmProfilePageFragment.newInstance(position + 1);
-            }
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return pageTitle[position];
-            }
-            @Override
-            public int getCount() {
-                return pageTitle.length;
-            }
-        };
-        // ViewPagerにページを設定
-        viewPager.setAdapter(adapter);
-        viewPager.beginFakeDrag();
-        viewPager.addOnPageChangeListener(this);
-        // ViewPagerをTabLayoutを設定
-        tabLayout.setupWithViewPager(viewPager);
+
         userRef.addChildEventListener(cEventListener);
 
         followFollowerButton.setOnClickListener(new View.OnClickListener(){
@@ -451,6 +429,46 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
             }
         });
 
+        postButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //uid
+
+
+                Bundle uidBundle = new Bundle();
+                uidBundle.putString("uid",accountData.getUid());
+                uidBundle.putString("num","1");
+                UsersPostFragment fragmentUsersPost = new UsersPostFragment();
+                fragmentUsersPost.setArguments(uidBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentUsersPost,UsersPostFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+            }
+        });
+
+        gdButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //uid
+
+
+                Bundle uidBundle = new Bundle();
+                uidBundle.putString("uid",accountData.getUid());
+                uidBundle.putString("num","2");
+                UsersPostFragment fragmentUsersPost = new UsersPostFragment();
+                fragmentUsersPost.setArguments(uidBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentUsersPost,UsersPostFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+            }
+        });
+
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -497,9 +515,6 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
 
 
 
-
-
-
                     Map<String,Object> makeMessageRef = new HashMap<>();
                     makeMessageRef.put("userId","");
                     makeMessageRef.put("bitmapString","");
@@ -524,18 +539,5 @@ public class ConfirmProfileFragment extends Fragment implements ViewPager.OnPage
                 }
             }
         });
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-    @Override
-    public void onPageSelected(int position) {
-    }
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-    @Override
-    public void onFragmentInteraction(Uri uri) {
     }
 }
