@@ -178,6 +178,13 @@
                 android:layout_marginLeft="15dp"
                 android:layout_below="@+id/howLongDetailTextView"
                 android:id="@+id/methodDetailTextView"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/howLongDetailTextView"
+                android:layout_toEndOf="@+id/methodDetailTextView"
+                android:text="相談"
+                android:id="@+id/discussButton"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

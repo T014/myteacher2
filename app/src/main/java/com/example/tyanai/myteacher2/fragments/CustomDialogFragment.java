@@ -35,7 +35,12 @@ public class CustomDialogFragment extends DialogFragment {
                             dateStr = year + "/" + (month + 1) + "/" + (dayOfMonth);
                         }
 
-                        MakePostFragment.dateTextView.setText(dateStr);
+                        if (MakePostFragment.dateTextView!=null){
+                            MakePostFragment.dateTextView.setText(dateStr);
+                        }
+                        if (ContractFragment.cldTextView!=null){
+                            ContractFragment.cldTextView.setText(dateStr);
+                        }
                     }
                 },
                 calendar.get(Calendar.YEAR), // 初期選択年

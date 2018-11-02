@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.MessageListData;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
@@ -53,13 +55,14 @@ public class DetailsFragment extends Fragment {
     DatabaseReference mDataBaseReference;
     DatabaseReference contentsRef;
     DatabaseReference tradeRef;
+    DatabaseReference messageRef;
+    DatabaseReference messageKeyRef;
     PostData thisPost;
     Spinner evaluationSpinner;
     Button saveButton;
     TextView evaluationTextView;
     String ev;
     UserData myData;
-    UserData postUserData;
     ImageView iconDetailImageView;
     TextView userNameDetailTextView;
     TextView evaluationDetailTextView;
@@ -96,6 +99,9 @@ public class DetailsFragment extends Fragment {
     String tradeKey;
     View widthView2;
     View widthView3;
+    UserData accountData;
+    Button discussButton;
+    private ArrayList<MessageListData> messageUidArrayList;
 
     private ChildEventListener bfEventListener = new ChildEventListener() {
         @Override
@@ -232,6 +238,10 @@ public class DetailsFragment extends Fragment {
 
             if (userData.getUid().equals(user.getUid())){
                 myData = userData;
+            }else if(thisPost!=null){
+                if (thisPost.getUserId().equals(userData.getUid())){
+                    accountData=userData;
+                }
             }
         }
         @Override
@@ -368,6 +378,37 @@ public class DetailsFragment extends Fragment {
         }
     };
 
+    private ChildEventListener mkEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String messageKey = (String) map.get("roomKey");
+            String uid = (String) map.get("userId");
+            String userName = "";
+            String iconBitmapString = "";
+            String time="";
+            String contents = "";
+            String bitmapString = "";
+            long lag=0;
+
+            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid(),lag);
+            messageUidArrayList.add(messageListData);
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -405,6 +446,7 @@ public class DetailsFragment extends Fragment {
         reqNameTextView = (TextView)v.findViewById(R.id.reqNameTextView);
         widthView2 = (View)v.findViewById(R.id.widthView2);
         widthView3 = (View)v.findViewById(R.id.widthView3);
+        discussButton = (Button)v.findViewById(R.id.discussButton);
         detailScrollview = (ScrollView)v.findViewById(R.id.detailScrollview);
 
 
@@ -510,8 +552,16 @@ public class DetailsFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
-        usersRef.addChildEventListener(cEventListener);
+
         tradeRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(tEventListener);
+
+        new Handler().postDelayed(new Runnable(){
+            public void run(){
+                usersRef.addChildEventListener(cEventListener);
+            }
+        },700);
+
+
 
         iconDetailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -618,11 +668,11 @@ public class DetailsFragment extends Fragment {
                         contentsRef.child(thisPost.getKey()).updateChildren(taughtKey);
 
 
-                        int totalUserEvaluation = Integer.parseInt(postUserData.getEvaluations());
+                        int totalUserEvaluation = Integer.parseInt(accountData.getEvaluations());
                         totalUserEvaluation = totalUserEvaluation+ Integer.parseInt(ev);
                         String totalUserEv = String.valueOf(totalUserEvaluation);
 
-                        int totalUserTaught = Integer.parseInt(postUserData.getTaught());
+                        int totalUserTaught = Integer.parseInt(accountData.getTaught());
                         totalUserTaught =totalUserTaught+1;
                         String totalUserTa =String.valueOf(totalUserTaught);
 
@@ -673,8 +723,6 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
 
                 if (NetworkManager.isConnected(getContext())){
-                    //購入済みかも確認いらん
-                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
                     //tradeに移動する
@@ -746,11 +794,9 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (NetworkManager.isConnected(getContext())){
-                    contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
 
 
                     //tradeに移動する
-                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal1.getTime());
@@ -778,13 +824,13 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+
+
 
                 if (buyFlag==true){
                     if (NetworkManager.isConnected(getContext())){
                         requestRef.child(thisTradeKey).removeValue();
                         buyFlag = false;
-                        contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
                         Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
                     }else {
                         Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
@@ -794,7 +840,6 @@ public class DetailsFragment extends Fragment {
                         int stockCount = Integer.parseInt(thisPost.getStock());
                         if (stockCount!=0){
 
-                            //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                             Calendar cal1 = Calendar.getInstance();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                             String time = sdf.format(cal1.getTime());
@@ -831,18 +876,105 @@ public class DetailsFragment extends Fragment {
                             userDataKey.put("stock",thisPost.getStock());
                             contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
 
-                            contentsRef.orderByChild("key").equalTo(intentKey).addChildEventListener(dEventListener);
+                            buyFlag = true;
 
+                            //契約内容確認画面に移動
+                            Bundle caseNumBundle = new Bundle();
+                            caseNumBundle.putString("caseNum",tradeKey);
+                            caseNumBundle.putString("key",thisPost.getKey());
+                            caseNumBundle.putString("postUid",thisPost.getUserId());
+                            ContractFragment fragmentContract = new ContractFragment();
+                            fragmentContract.setArguments(caseNumBundle);
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
+                            transaction.commit();
+                            Snackbar.make(view,"購入リクエストを送信しました。",Snackbar.LENGTH_SHORT).show();
                         }else{
                             Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
                         }
-                        buyFlag = true;
 
-                        Snackbar.make(view,"購入リクエストを送信しました。",Snackbar.LENGTH_SHORT).show();
+
+
                     }else {
                         Snackbar.make(view,"購入リクエストを送信できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                     }
                 }
+            }
+        });
+
+        discussButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                ArrayList<String> uidArrayList = new ArrayList<String>();
+                for (int i=0;i<messageUidArrayList.size();i++){
+                    uidArrayList.add(messageUidArrayList.get(i).getUid());
+                }
+                if (uidArrayList.contains(accountData.getUid())){
+                    for (MessageListData bbb:messageUidArrayList){
+                        if (bbb.getUid().equals(accountData.getUid())){
+                            Bundle messageKeyBundle = new Bundle();
+                            messageKeyBundle.putString("key",bbb.getKey());
+                            messageKeyBundle.putString("name",accountData.getName());
+                            messageKeyBundle.putString("icon",accountData.getIconBitmapString());
+                            messageKeyBundle.putString("uid",accountData.getUid());
+                            ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                            fragmentThisMessage.setArguments(messageKeyBundle);
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    }
+                }else{
+
+                    Map<String,Object> makeMessageKeyRef = new HashMap<>();
+                    String key = messageRef.push().getKey();
+                    makeMessageKeyRef.put("userId",user.getUid());
+                    makeMessageKeyRef.put("time","");
+                    makeMessageKeyRef.put("content","");
+                    makeMessageKeyRef.put("roomKey",key);
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put(key,makeMessageKeyRef);
+                    messageKeyRef.child(accountData.getUid()).updateChildren(childUpdates);
+
+                    Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
+                    makeMessageKeyRef2.put("userId",accountData.getUid());
+                    makeMessageKeyRef2.put("time","");
+                    makeMessageKeyRef2.put("content","");
+                    makeMessageKeyRef2.put("roomKey",key);
+                    Map<String,Object> childUpdates2 = new HashMap<>();
+                    childUpdates2.put(key,makeMessageKeyRef2);
+                    messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
+
+
+
+                    Map<String,Object> makeMessageRef = new HashMap<>();
+                    makeMessageRef.put("userId","");
+                    makeMessageRef.put("bitmapString","");
+                    makeMessageRef.put("contents","");
+                    makeMessageRef.put("time","");
+                    makeMessageRef.put("roomKey",key);
+                    Map<String,Object> childUp = new HashMap<>();
+                    childUp.put(key,makeMessageRef);
+                    messageRef.child(key).updateChildren(childUp);
+
+                    Bundle messageKeyBundle = new Bundle();
+                    messageKeyBundle.putString("key",key);
+                    messageKeyBundle.putString("name",accountData.getName());
+                    messageKeyBundle.putString("icon",accountData.getIconBitmapString());
+                    messageKeyBundle.putString("uid",accountData.getUid());
+                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                    fragmentThisMessage.setArguments(messageKeyBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
+
+
             }
         });
 
@@ -889,9 +1021,15 @@ public class DetailsFragment extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
+        messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
+        messageUidArrayList = new ArrayList<MessageListData>();
+        messageRef = mDataBaseReference.child(Const.MessagePATH);
 
         favRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(fvEventListener);
         requestRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(bfEventListener);
+
+        messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
+
     }
 
     @Override

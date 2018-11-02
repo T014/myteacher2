@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-            bottomNavigationView.setEnabled(false);
+
 
             switch (item.getItemId()) {
                 case R.id.item_Timeline:
@@ -143,11 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         }
                     }
-                    new Handler().postDelayed(new Runnable(){
-                        public void run(){
-                            bottomNavigationView.setEnabled(true);
-                        }
-                    },3000L);
                     return true;
 
                 case R.id.item_Post:
@@ -166,11 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         }
                     }
-                    new Handler().postDelayed(new Runnable(){
-                        public void run(){
-                            bottomNavigationView.setEnabled(true);
-                        }
-                    },3000L);
                     return true;
 
                 case R.id.item_Message:
@@ -189,11 +179,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         }
                     }
-                    new Handler().postDelayed(new Runnable(){
-                        public void run(){
-                            bottomNavigationView.setEnabled(true);
-                        }
-                    },3000L);
                     return true;
 
                 case R.id.item_Community:
@@ -213,11 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                     }
-                    new Handler().postDelayed(new Runnable(){
-                        public void run(){
-                            bottomNavigationView.setEnabled(true);
-                        }
-                    },3000L);
 //                    fragmentCommunity = new CommunityFragment();
 //                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
 //                    transaction.commit();

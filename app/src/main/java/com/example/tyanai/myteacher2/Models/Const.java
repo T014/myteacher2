@@ -10,6 +10,8 @@ public class Const {
     public static final String RequestPATH = "request";
     public static final String ContentsPATH = "contents";
     public static final String SavePostPATH = "savePost";
+    public static final String ConfirmPATH = "confirm";
+    public static final String ConfirmKeyPATH = "confirmKey";
     public static final String LetterPATH = "letter";
     public static final String MessagePATH = "message";
     public static final String MessageKeyPATH = "messageKey";

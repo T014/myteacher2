@@ -48,11 +48,9 @@ public class ThisMessageFragment extends Fragment{
     MessageListAdapter mAdapter;
     EditText editMessageEditText;
     Button sendMessageButton;
-    DatabaseReference userRef;
     DatabaseReference messageKeyRef;
     String msKey;
-    Button backButton;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    Button confirmButton;
     UserData myData;
     String icon;
     int removeMessageCount=0;
@@ -158,7 +156,7 @@ public class ThisMessageFragment extends Fragment{
         messageListView = (ListView)v.findViewById(R.id.messageListView);
         sendMessageButton = (Button)v.findViewById(R.id.sendMessageButton);
         editMessageEditText = (EditText)v.findViewById(R.id.editMessageEditText);
-        backButton = (Button)v.findViewById(R.id.backButton);
+        confirmButton = (Button)v.findViewById(R.id.confirmButton);
 
         return v;
     }
@@ -169,13 +167,6 @@ public class ThisMessageFragment extends Fragment{
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
         }
-
-        Calendar calendar = Calendar.getInstance();
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
@@ -339,7 +330,7 @@ public class ThisMessageFragment extends Fragment{
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);

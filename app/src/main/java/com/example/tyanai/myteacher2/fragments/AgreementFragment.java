@@ -27,6 +27,9 @@ public class AgreementFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+        //利用規約
+
+
 
 
     }
