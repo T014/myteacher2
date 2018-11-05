@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
@@ -21,9 +22,10 @@ import java.util.ArrayList;
 class ProvisionalListViewHolder{
     ImageView iconImageView;
     TextView userNameTextView;
+    ImageView contentImageView;
     TextView contentTextView;
     TextView countTextView;
-    LinearLayout listLinearLayout;
+    RelativeLayout listRelativeLayout;
 }
 
 public class ProvisionalListAdapter extends BaseAdapter {
@@ -43,6 +45,8 @@ public class ProvisionalListAdapter extends BaseAdapter {
         String iconBitmapString = provisionalKeyDataArrayList.get(position).getIconBitmapString();
         String userName = provisionalKeyDataArrayList.get(position).getName();
         String content = provisionalKeyDataArrayList.get(position).getContent();
+        String count = provisionalKeyDataArrayList.get(position).getCount();
+        String contentBitmapString = provisionalKeyDataArrayList.get(position).getContentBitmapString();
 
         ProvisionalListViewHolder provisionalListViewHolder;
         if (convertView == null) {
@@ -52,12 +56,12 @@ public class ProvisionalListAdapter extends BaseAdapter {
             provisionalListViewHolder = new ProvisionalListViewHolder();
             provisionalListViewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
             provisionalListViewHolder.userNameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+            provisionalListViewHolder.contentImageView = (ImageView) convertView.findViewById(R.id.contentImageView);
             provisionalListViewHolder.contentTextView = (TextView) convertView.findViewById(R.id.contentTextView);
             provisionalListViewHolder.countTextView = (TextView) convertView.findViewById(R.id.countTextView);
-            provisionalListViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
+            provisionalListViewHolder.listRelativeLayout = (RelativeLayout) convertView.findViewById(R.id.listRelativeLayout);
             convertView.setTag(provisionalListViewHolder);
-        }
-        else {
+        } else {
             provisionalListViewHolder = (ProvisionalListViewHolder) convertView.getTag();
         }
         if (userName != null){
@@ -66,12 +70,22 @@ public class ProvisionalListAdapter extends BaseAdapter {
         if (content != null){
             provisionalListViewHolder.contentTextView.setText(content);
         }
+        if (count!=null){
+            provisionalListViewHolder.countTextView.setText(count);
+        }
 
 
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
-        if(iconImageBytes.length!=0){
+        if(iconImageBytes.length>5){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             provisionalListViewHolder.iconImageView.setImageBitmap(iconImageBitmap);
+        }
+
+
+        byte[] contentImageBytes = Base64.decode(contentBitmapString,Base64.DEFAULT);
+        if(contentImageBytes.length>5){
+            Bitmap contentImageBitmap = BitmapFactory.decodeByteArray(contentImageBytes,0, contentImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+            provisionalListViewHolder.contentImageView.setImageBitmap(contentImageBitmap);
         }
 
         return convertView;
