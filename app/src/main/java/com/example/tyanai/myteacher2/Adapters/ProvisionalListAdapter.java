@@ -71,7 +71,7 @@ public class ProvisionalListAdapter extends BaseAdapter {
             provisionalListViewHolder.contentTextView.setText(content);
         }
         if (count!=null){
-            provisionalListViewHolder.countTextView.setText(count);
+            provisionalListViewHolder.countTextView.setText("仮契約"+count+"人");
         }
 
 

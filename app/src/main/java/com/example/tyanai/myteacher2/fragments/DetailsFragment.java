@@ -101,6 +101,8 @@ public class DetailsFragment extends Fragment {
     View widthView3;
     UserData accountData;
     Button discussButton;
+    DatabaseReference confirmRef;
+    DatabaseReference confirmKeyRef;
     private ArrayList<MessageListData> messageUidArrayList;
 
     private ChildEventListener bfEventListener = new ChildEventListener() {
@@ -552,6 +554,8 @@ public class DetailsFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         usersRef = mDataBaseReference.child(Const.UsersPATH);
+        confirmRef = mDataBaseReference.child(Const.ConfirmPATH);
+        confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
 
         tradeRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(tEventListener);
 
@@ -830,7 +834,12 @@ public class DetailsFragment extends Fragment {
                 if (buyFlag==true){
                     if (NetworkManager.isConnected(getContext())){
                         requestRef.child(thisTradeKey).removeValue();
+                        confirmRef.child(thisTradeKey).removeValue();
+                        confirmKeyRef.child(accountData.getUid()).child(thisTradeKey).removeValue();
+                        confirmKeyRef.child(user.getUid()).child(thisTradeKey).removeValue();
                         buyFlag = false;
+
+
                         Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
                     }else {
                         Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();

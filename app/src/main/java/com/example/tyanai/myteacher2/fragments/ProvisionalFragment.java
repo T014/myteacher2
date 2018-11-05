@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -146,30 +147,30 @@ public class ProvisionalFragment extends Fragment {
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String mIconBitmapString = (String) map.get("iconBitmapString");
-            String mName = (String) map.get("userName");
-            String uid = (String) map.get("userId");
-            String mContent = "";
-            String mCount = "1";
-            String mContentBitmapString = "";
-
-            for (int m = 0; m < newProvisionalKeyDataArrayList.size(); m++) {
-                if (newProvisionalKeyDataArrayList.get(m).getUid().equals(uid)) {
-                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(m).getCaseNum()
-                            , newProvisionalKeyDataArrayList.get(m).getPostKey(), newProvisionalKeyDataArrayList.get(m).getTime()
-                            , uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount);
-                    newProvisionalKeyDataArrayList.remove(m);
-                    newProvisionalKeyDataArrayList.add(m, newProvisionalKeyData);
-
-
-                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
-                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
-                    provisionalListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
+//            HashMap map = (HashMap) dataSnapshot.getValue();
+//
+//            String mIconBitmapString = (String) map.get("iconBitmapString");
+//            String mName = (String) map.get("userName");
+//            String uid = (String) map.get("userId");
+//            String mContent = "";
+//            String mCount = "1";
+//            String mContentBitmapString = "";
+//
+//            for (int m = 0; m < newProvisionalKeyDataArrayList.size(); m++) {
+//                if (newProvisionalKeyDataArrayList.get(m).getUid().equals(uid)) {
+//                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(m).getCaseNum()
+//                            , newProvisionalKeyDataArrayList.get(m).getPostKey(), newProvisionalKeyDataArrayList.get(m).getTime()
+//                            , uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount);
+//                    newProvisionalKeyDataArrayList.remove(m);
+//                    newProvisionalKeyDataArrayList.add(m, newProvisionalKeyData);
+//
+//
+//                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+//                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+//                    provisionalListView.setAdapter(mAdapter);
+//                    mAdapter.notifyDataSetChanged();
+//                }
+//            }
 
 
         }
@@ -229,28 +230,28 @@ public class ProvisionalFragment extends Fragment {
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String postKey = (String) map.get("key");
-            String mContent = (String) map.get("contents");
-            String mContentBitmapString = (String) map.get("imageBitmapString");
-
-            for (int k = 0; k < newProvisionalKeyDataArrayList.size(); k++) {
-                if (newProvisionalKeyDataArrayList.get(k).getPostKey().equals(postKey)) {
-                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(k).getCaseNum()
-                            , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
-                            , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
-                            , mContentBitmapString, newProvisionalKeyDataArrayList.get(k).getName(), mContent
-                            , newProvisionalKeyDataArrayList.get(k).getCount());
-                    newProvisionalKeyDataArrayList.remove(k);
-                    newProvisionalKeyDataArrayList.add(k, newProvisionalKeyData);
-
-                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
-                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
-                    provisionalListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
+//            HashMap map = (HashMap) dataSnapshot.getValue();
+//
+//            String postKey = (String) map.get("key");
+//            String mContent = (String) map.get("contents");
+//            String mContentBitmapString = (String) map.get("imageBitmapString");
+//
+//            for (int k = 0; k < newProvisionalKeyDataArrayList.size(); k++) {
+//                if (newProvisionalKeyDataArrayList.get(k).getPostKey().equals(postKey)) {
+//                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(k).getCaseNum()
+//                            , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
+//                            , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
+//                            , mContentBitmapString, newProvisionalKeyDataArrayList.get(k).getName(), mContent
+//                            , newProvisionalKeyDataArrayList.get(k).getCount());
+//                    newProvisionalKeyDataArrayList.remove(k);
+//                    newProvisionalKeyDataArrayList.add(k, newProvisionalKeyData);
+//
+//                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+//                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+//                    provisionalListView.setAdapter(mAdapter);
+//                    mAdapter.notifyDataSetChanged();
+//                }
+//            }
         }
 
         @Override
@@ -316,7 +317,25 @@ public class ProvisionalFragment extends Fragment {
         }, 200);
 
 
+        provisionalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
+                //confirmKeyRef.child(user.getUid()).orderByChild("postKey").equalTo(provisionalKeyDataArrayList.get(position).getPostKey()).addChildEventListener(cKeyEventListener);
+
+                Bundle pKeyBundle = new Bundle();
+                pKeyBundle.putString("intentPostKey",provisionalKeyDataArrayList.get(position).getPostKey());
+                ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
+                fragmentProvisionalUser.setArguments(pKeyBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentProvisionalUser,ProvisionalUserFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
+
+
+
 
     @Override
     public void onStart() {
@@ -336,33 +355,7 @@ public class ProvisionalFragment extends Fragment {
 
     public void listCounter() {
 
-//        for (ProvisionalKeyData a :newProvisionalKeyDataArrayList){
-//            for (int i =0;i<newProvisionalKeyDataArrayList.size();i++){
-//                if (a.getPostKey().equals(newProvisionalKeyDataArrayList.get(i).getPostKey())){
-//                    int a1 = Integer.valueOf(a.getCount());
-//                    int a2 = Integer.valueOf(newProvisionalKeyDataArrayList.get(i).getCount());
-//                    a1+=a2;
-//                    a2=0;
-//                    ProvisionalKeyData A1provisionalKeyData = new ProvisionalKeyData(a.getCaseNum(),a.getPostKey(),a.getTime(),a.getUid()
-//                            ,a.getIconBitmapString(),a.getContentBitmapString(),a.getName(),a.getContent(),String.valueOf(a1));
-//                    ProvisionalKeyData A2provisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(i).getCaseNum()
-//                            ,newProvisionalKeyDataArrayList.get(i).getPostKey(),newProvisionalKeyDataArrayList.get(i).getPostKey()
-//                            ,newProvisionalKeyDataArrayList.get(i).getUid(),newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
-//                            ,newProvisionalKeyDataArrayList.get(i).getName(),newProvisionalKeyDataArrayList.get(i).getName()
-//                            ,newProvisionalKeyDataArrayList.get(i).getContentBitmapString(),String.valueOf(a2));
-//
-//                    newProvisionalKeyDataArrayList.remove(a);
-//                    newProvisionalKeyDataArrayList.add(A1provisionalKeyData);
-//
-//                    newProvisionalKeyDataArrayList.remove(i);
-//                    newProvisionalKeyDataArrayList.add(i,A2provisionalKeyData);
-//
-//
-//
-//
-//                }
-//            }
-//        }
+        //同じ投稿を表示しない
 
         for (int k = 0; k < newProvisionalKeyDataArrayList.size(); k++) {
             for (int i = 0; i < newProvisionalKeyDataArrayList.size(); i++) {
@@ -387,7 +380,6 @@ public class ProvisionalFragment extends Fragment {
                         newProvisionalKeyDataArrayList.add(k, A1provisionalKeyData);
 
                         newProvisionalKeyDataArrayList.remove(i);
-                        //newProvisionalKeyDataArrayList.add(i, A2provisionalKeyData);
 
 
                     }

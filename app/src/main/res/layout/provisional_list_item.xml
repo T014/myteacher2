@@ -20,16 +20,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
-        android:text="name"
         android:id="@+id/nameTextView"/>
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_below="@+id/iconImageView"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="10dp"
         android:id="@+id/contentImageView"/>
 
 
@@ -38,17 +38,16 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/nameTextView"
         android:layout_marginStart="10dp"
-        android:text="count"
         android:id="@+id/countTextView"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/contentsImageView"
+        android:layout_toEndOf="@+id/contentImageView"
         android:layout_marginStart="10dp"
-        android:layout_below="@+id/nameTextView"
-        android:text="content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="70dp"
         android:id="@+id/contentTextView"/>
 
 
