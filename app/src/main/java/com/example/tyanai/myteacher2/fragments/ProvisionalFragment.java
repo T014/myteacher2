@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -53,7 +54,69 @@ public class ProvisionalFragment extends Fragment {
     FirebaseUser user;
 
 
-    private ChildEventListener userEventListener = new ChildEventListener() {
+    private ChildEventListener cKeyEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String caseNum = (String) map.get("caseNum");
+            String postKey = (String) map.get("postKey");
+            String time = (String) map.get("time");
+            String uid = (String) map.get("uid");
+            String mIconBitmapString="";
+            String mName="";
+            String mContent="";
+            String mCount="";
+            String mContentBitmapString="";
+
+            ProvisionalKeyData provisionalKeyData = new ProvisionalKeyData(caseNum,postKey,time,uid,mIconBitmapString,mContentBitmapString,mName,mContent,mCount);
+            provisionalKeyDataArrayList.add(provisionalKeyData);
+
+
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String caseNum = (String) map.get("caseNum");
+            String postKey = (String) map.get("postKey");
+            String time = (String) map.get("time");
+            String uid = (String) map.get("uid");
+
+            for (int i =0;i<newProvisionalKeyDataArrayList.size();i++){
+                if (newProvisionalKeyDataArrayList.get(i).getCaseNum().equals(caseNum)){
+                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(caseNum,postKey,time,uid,newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
+                            ,newProvisionalKeyDataArrayList.get(i).getName(),newProvisionalKeyDataArrayList.get(i).getName()
+                            ,newProvisionalKeyDataArrayList.get(i).getContentBitmapString(),newProvisionalKeyDataArrayList.get(i).getCount());
+
+                    newProvisionalKeyDataArrayList.remove(i);
+                    newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
+
+
+                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+                    provisionalListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+
+
+                }
+            }
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
+
+
+    private ChildEventListener uEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
@@ -182,68 +245,6 @@ public class ProvisionalFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
-    private ChildEventListener cKeyEventListener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String caseNum = (String) map.get("caseNum");
-            String postKey = (String) map.get("postKey");
-            String time = (String) map.get("time");
-            String uid = (String) map.get("uid");
-            String mIconBitmapString="";
-            String mName="";
-            String mContent="";
-            String mCount="";
-            String mContentBitmapString="";
-
-            ProvisionalKeyData provisionalKeyData = new ProvisionalKeyData(caseNum,postKey,time,uid,mIconBitmapString,mContentBitmapString,mName,mContent,mCount);
-            provisionalKeyDataArrayList.add(provisionalKeyData);
-
-
-
-        }
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
-
-            String caseNum = (String) map.get("caseNum");
-            String postKey = (String) map.get("postKey");
-            String time = (String) map.get("time");
-            String uid = (String) map.get("uid");
-
-            for (int i =0;i<newProvisionalKeyDataArrayList.size();i++){
-                if (newProvisionalKeyDataArrayList.get(i).getCaseNum().equals(caseNum)){
-                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(caseNum,postKey,time,uid,newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
-                            ,newProvisionalKeyDataArrayList.get(i).getName(),newProvisionalKeyDataArrayList.get(i).getName()
-                            ,newProvisionalKeyDataArrayList.get(i).getContentBitmapString(),newProvisionalKeyDataArrayList.get(i).getCount());
-
-                    newProvisionalKeyDataArrayList.remove(i);
-                    newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
-
-
-                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
-                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
-                    provisionalListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-
-
-                }
-            }
-        }
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -286,7 +287,20 @@ public class ProvisionalFragment extends Fragment {
         userRef = mDataBaseReference.child(Const.UsersPATH);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        userRef.addChildEventListener(userEventListener);
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                userRef.addChildEventListener(uEventListener);
+                contentsRef.addChildEventListener(contentEventListener);
+            }
+        }, 200);
+
+
 
     }
 
@@ -294,10 +308,10 @@ public class ProvisionalFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-
-        contentsRef.addChildEventListener(contentEventListener);
+//        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+//
+//        contentsRef.addChildEventListener(contentEventListener);
 
     }
 
