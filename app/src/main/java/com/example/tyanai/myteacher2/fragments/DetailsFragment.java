@@ -827,7 +827,7 @@ public class DetailsFragment extends Fragment {
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
 
 
                 if (buyFlag==true){

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -144,6 +145,17 @@ public class ProvisionalUserFragment extends Fragment {
         userRef = mDataBaseReference.child(Const.UsersPATH);
 
         userRef.addChildEventListener(uEventListener);
+
+
+        provisionalUserListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
+                //message画面に移動許可拒否
+
+
+
+            }
+        });
 
     }
 
