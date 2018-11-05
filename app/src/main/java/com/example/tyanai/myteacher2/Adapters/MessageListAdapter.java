@@ -62,6 +62,8 @@ public class MessageListAdapter extends BaseAdapter {
         String time = messageArrayList.get(position).getTime();
         String uid = messageArrayList.get(position).getUid();
         String myUid = messageArrayList.get(position).getMyUid();
+        int v=0;
+        String newContents;
 
         MessageListViewHolder messageListViewHolder;
 
@@ -143,6 +145,27 @@ public class MessageListAdapter extends BaseAdapter {
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
                     if (contents!=null && !(contents.equals(""))){
+                        int contentsCount = contents.length();
+                        int indentionCount = contentsCount/15;
+                        int o = 0;
+                        for (int m=0;m<indentionCount;m++){
+                            v += 15*m+1;
+                            //String newContents = contents.StringBuilder(contents).insert(v,"\n");
+                            newContents = contents+contents.substring(o,v);
+                            o=v;
+
+                        }
+                        //割り切れなかった分の追加
+
+                        ｆ
+
+
+
+
+
+
+
+
                         messageListViewHolder.messageContentsTextView.setText(contents);
                     }
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
