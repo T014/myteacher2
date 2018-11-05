@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.example.tyanai.myteacher2.Adapters.ProvisionalListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
@@ -48,6 +49,7 @@ public class ProvisionalFragment extends Fragment {
     DatabaseReference userRef;
     DatabaseReference contentsRef;
     ListView provisionalListView;
+    ProvisionalListAdapter mAdapter;
     FirebaseUser user;
 
 
@@ -90,7 +92,12 @@ public class ProvisionalFragment extends Fragment {
                     newProvisionalKeyDataArrayList.remove(i);
                     newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
 
-                    //作り直し
+
+                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+                    provisionalListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+
 
                 }
             }
@@ -149,6 +156,12 @@ public class ProvisionalFragment extends Fragment {
                             ,uid,mIconBitmapString,mContentBitmapString,mName,mContent,mCount);
                     newProvisionalKeyDataArrayList.remove(m);
                     newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
+
+
+                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+                    provisionalListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -184,6 +197,11 @@ public class ProvisionalFragment extends Fragment {
                             ,mContentBitmapString,newProvisionalKeyDataArrayList.get(k).getName(),mContent,mCount);
                     newProvisionalKeyDataArrayList.remove(k);
                     newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
+
+                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+                    provisionalListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -205,6 +223,11 @@ public class ProvisionalFragment extends Fragment {
                             ,mContentBitmapString,newProvisionalKeyDataArrayList.get(k).getName(),mContent,mCount);
                     newProvisionalKeyDataArrayList.remove(k);
                     newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
+
+                    //Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
+                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
+                    provisionalListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -218,6 +241,26 @@ public class ProvisionalFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        provisionalKeyDataArrayList = new ArrayList<ProvisionalKeyData>();
+        newProvisionalKeyDataArrayList = new ArrayList<ProvisionalKeyData>();
+        mAdapter = new ProvisionalListAdapter(this.getActivity(),R.layout.provisional_list_item);
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        confirmKeyRef.child(user.getUid()).addChildEventListener(cKeyEventListener);
+
+
+
+
+
+
+    }
 
 
 
@@ -234,26 +277,8 @@ public class ProvisionalFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
-
-        contentsRef.addChildEventListener(contentEventListener);
-
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        provisionalKeyDataArrayList = new ArrayList<ProvisionalKeyData>();
-        newProvisionalKeyDataArrayList = new ArrayList<ProvisionalKeyData>();
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-        confirmKeyRef.child(user.getUid()).addChildEventListener(cKeyEventListener);
-
 
 
     }
@@ -263,6 +288,10 @@ public class ProvisionalFragment extends Fragment {
         super.onStart();
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+
+        contentsRef.addChildEventListener(contentEventListener);
+
         userRef = mDataBaseReference.child(Const.UsersPATH);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
