@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.tyanai.myteacher2.Adapters.ProvisionalMessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
 import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProvisionalMessageFragment extends Fragment {
@@ -27,9 +30,11 @@ public class ProvisionalMessageFragment extends Fragment {
 
     ListView provisionalMessageListView;
     DatabaseReference mDataBaseReference;
-    DatabaseReference confirmKeyRef;
+    DatabaseReference confirmRef;
     FirebaseUser user;
     String caseNum;
+    ProvisionalMessageListAdapter mAdapter;
+    ArrayList<ProvisionalMessageData> provisionalMessageDataArrayList;
 
 
     private ChildEventListener pEventListener = new ChildEventListener() {
@@ -49,6 +54,17 @@ public class ProvisionalMessageFragment extends Fragment {
             String time =(String) map.get("time");
             String typePay = (String) map.get("typePay");
             String booleans = (String) map.get("booleans");
+
+
+            ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
+            ,key,message,money,receiveUid,sendUid,time,typePay,booleans);
+            provisionalMessageDataArrayList.add(provisionalMessageData);
+            mAdapter.setProvisionalMessageArrayList(provisionalMessageDataArrayList);
+            provisionalMessageListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+
+
+
 
         }
         @Override
@@ -84,9 +100,13 @@ public class ProvisionalMessageFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
+        confirmRef = mDataBaseReference.child(Const.ConfirmPATH);
+        mAdapter = new ProvisionalMessageListAdapter(this.getActivity(),R.layout.provisional_message_list_item);
+        provisionalMessageDataArrayList = new ArrayList<ProvisionalMessageData>();
+
+
         Bundle bundle = getArguments();
         caseNum = bundle.getString("caseNum");
-        confirmKeyRef.child(caseNum).addChildEventListener(pEventListener);
+        confirmRef.child(caseNum).addChildEventListener(pEventListener);
     }
 }
