@@ -110,6 +110,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         });
         provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.VISIBLE);
         if (0==position){
+            provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.VISIBLE);
             if (sendUid.equals(watchUid)){
                 //自分で送ったやつ
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127,127,255));
@@ -119,6 +120,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             }
         }else{
             provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
+            provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.GONE);
             if (sendUid.equals(watchUid)){
                 //自分で送ったやつ
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127,127,255));
