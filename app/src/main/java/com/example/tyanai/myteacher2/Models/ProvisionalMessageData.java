@@ -15,6 +15,9 @@ public class ProvisionalMessageData {
     private String mBooleans;
     private String mIconBitmapString;
     private String mUserName;
+    private String mPostKey;
+    private String mPostUid;
+    private String mWatchUid;
 
     public String getCaseNum() {
         return mCaseNum;
@@ -60,9 +63,22 @@ public class ProvisionalMessageData {
         return mUserName;
     }
 
+    public String getPostKey() {
+        return mPostKey;
+    }
+
+    public String getPostUid() {
+        return mPostUid;
+    }
+
+    public String getWatchUid() {
+        return mWatchUid;
+    }
+
     public ProvisionalMessageData(String caseNum, String confirmKey, String date, String detail
             , String key, String message, String money, String receiveUid, String sendUid, String time
-            , String typePay, String booleans,String iconBitmapString,String userName){
+            , String typePay, String booleans, String iconBitmapString, String userName, String postKey
+            , String postUid,String watchUid){
 
         mCaseNum = caseNum;
         mConfirmKey = confirmKey;
@@ -78,5 +94,8 @@ public class ProvisionalMessageData {
         mBooleans = booleans;
         mIconBitmapString = iconBitmapString;
         mUserName = userName;
+        mPostKey = postKey;
+        mPostUid = postUid;
+        mWatchUid = watchUid;
     }
 }

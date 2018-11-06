@@ -116,14 +116,6 @@ public class ListAdapter extends BaseAdapter{
             }
         });
 
-        //ここで色指定できる評価の高さによって
-        if (contents != null){
-            if (contents.equals("あああ")){
-                listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(127,127,255));
-            }else {
-                listViewHolder.listLinearLayout.setBackgroundColor(Color.rgb(255,255,255));
-            }
-        }
         if (postImageBitmapString!=null){
             byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
             if(postImageBytes.length!=0){

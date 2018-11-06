@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProvisionalMessageFragment extends Fragment {
 
@@ -42,9 +45,6 @@ public class ProvisionalMessageFragment extends Fragment {
     ProvisionalMessageListAdapter mAdapter;
     ArrayList<ProvisionalMessageData> provisionalMessageDataArrayList;
     ArrayList<ProvisionalMessageData> newProvisionalMessageDataArrayList;
-    LinearLayout provisionalMessageLinearLayout;
-    EditText provisionalMessageEditText;
-    Button provisionalMessageSendButton;
 
     private ChildEventListener uEventListener = new ChildEventListener() {
         @Override
@@ -59,8 +59,10 @@ public class ProvisionalMessageFragment extends Fragment {
                 if (a.getSendUid().equals(uid)){
                     ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
                             ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
-                            ,a.getBooleans(),iconBitmapString,name);
+                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid());
+                    Collections.reverse(newProvisionalMessageDataArrayList);
                     newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
+                    Collections.reverse(newProvisionalMessageDataArrayList);
                     mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
                     provisionalMessageListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -103,10 +105,13 @@ public class ProvisionalMessageFragment extends Fragment {
             String booleans = (String) map.get("booleans");
             String icon="";
             String name="";
+            String postKey = (String) map.get("postKey");
+            String postUid = (String)map.get("postUid");
+            String watchUid = user.getUid();
 
 
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
-            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name);
+            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid);
             provisionalMessageDataArrayList.add(provisionalMessageData);
 
         }
@@ -153,14 +158,37 @@ public class ProvisionalMessageFragment extends Fragment {
 
         provisionalMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 if (view.getId()==R.id.provisionalMessageOkButton){
                     //買い手が押したら支払い画面に移動
-                    //この時支払われなかった時のためにpayButton
-                    String s = "";
+
+                    if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put("booleans","ok");
+                        String postUid = newProvisionalMessageDataArrayList.get(position).getPostUid();
+                        confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
+                                .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
+                                .updateChildren(childUpdates);
+                        //booleans=ok
+                        if (postUid.equals(user.getUid())){
+                            //通知を投げて支払いさせる
+                        }else{
+                            //購入画面に移動
+                        }
+                    }
+
                 }else if (view.getId()==R.id.provisionalMessageNoButton){
                     //新しい契約内容を入力させるeditTextVisible
-                    
+                    //契約内容確認画面に移動
+                    Bundle caseNumBundle = new Bundle();
+                    caseNumBundle.putString("caseNum",newProvisionalMessageDataArrayList.get(position).getCaseNum());
+                    caseNumBundle.putString("key",newProvisionalMessageDataArrayList.get(position).getPostKey());
+                    caseNumBundle.putString("postUid",newProvisionalMessageDataArrayList.get(position).getPostUid());
+                    ContractFragment fragmentContract = new ContractFragment();
+                    fragmentContract.setArguments(caseNumBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
+                    transaction.commit();
                 }
             }
         });

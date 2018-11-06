@@ -178,6 +178,8 @@ public class ContractFragment extends Fragment {
                                         data.put("caseNum",caseNum);
                                         data.put("confirmKey",confirmKey);
                                         data.put("booleans","");
+                                        data.put("postKey",postKey);
+                                        data.put("postUid",postUid);
 
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(confirmKey,data);
@@ -206,15 +208,27 @@ public class ContractFragment extends Fragment {
                                         confirmKeyRef.child(postUid).child(caseNum).updateChildren(mdatas);
 
 
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("key",postKey);
-                                        bundle.putString("screenKey","timeLine");
-                                        DetailsFragment fragmentDetails = new DetailsFragment();
-                                        fragmentDetails.setArguments(bundle);
+//                                        Bundle bundle = new Bundle();
+//                                        bundle.putString("key",postKey);
+//                                        bundle.putString("screenKey","timeLine");
+//                                        DetailsFragment fragmentDetails = new DetailsFragment();
+//                                        fragmentDetails.setArguments(bundle);
+//                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+//                                        transaction.addToBackStack(null);
+//                                        transaction.commit();
+
+                                        Bundle cNumBundle = new Bundle();
+                                        cNumBundle.putString("caseNum",caseNum);
+                                        ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+                                        fragmentProvisionalMessage.setArguments(cNumBundle);
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                                        transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
+
+
+
 
                                         //notification
 

@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
@@ -29,6 +30,7 @@ class ProvisionalMessageListViewHolder{
     TextView provisionalMessageTextView;
     Button provisionalMessageOkButton;
     Button provisionalMessageNoButton;
+    RelativeLayout provisionalMessageRelativeLayout;
 }
 
 public class ProvisionalMessageListAdapter extends BaseAdapter{
@@ -51,6 +53,9 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         String typePay = provisionalMessageArrayList.get(position).getTypePay();
         String detail = provisionalMessageArrayList.get(position).getDetail();
         String message = provisionalMessageArrayList.get(position).getMessage();
+        String sendUid = provisionalMessageArrayList.get(position).getSendUid();
+        String watchUid = provisionalMessageArrayList.get(position).getWatchUid();
+        String booleans = provisionalMessageArrayList.get(position).getBooleans();
 
         ProvisionalMessageListViewHolder provisionalMessageListViewHolder;
         if (convertView == null) {
@@ -67,6 +72,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             provisionalMessageListViewHolder.provisionalMessageTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTextView);
             provisionalMessageListViewHolder.provisionalMessageOkButton = (Button) convertView.findViewById(R.id.provisionalMessageOkButton);
             provisionalMessageListViewHolder.provisionalMessageNoButton = (Button) convertView.findViewById(R.id.provisionalMessageNoButton);
+            provisionalMessageListViewHolder.provisionalMessageRelativeLayout = (RelativeLayout)convertView.findViewById(R.id.provisionalMessageRelativeLayout);
             convertView.setTag(provisionalMessageListViewHolder);
         }
         else {
@@ -102,6 +108,30 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
                 ((ListView)parent).performItemClick(view,position,R.id.provisionalMessageNoButton);
             }
         });
+        provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.VISIBLE);
+        if (0==position){
+            if (sendUid.equals(watchUid)){
+                //自分で送ったやつ
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127,127,255));
+                provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
+            }else {
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
+            }
+        }else{
+            provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
+            if (sendUid.equals(watchUid)){
+                //自分で送ったやつ
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127,127,255));
+            }else {
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
+            }
+        }
+
+        if (booleans.equals("ok")){
+            provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
+        }else{
+            provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+        }
 
 
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
