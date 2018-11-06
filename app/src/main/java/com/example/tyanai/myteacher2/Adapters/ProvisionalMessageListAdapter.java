@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
@@ -18,7 +20,15 @@ import com.example.tyanai.myteacher2.R;
 import java.util.ArrayList;
 
 class ProvisionalMessageListViewHolder{
+    ImageView provisionalMessageIconImageView;
+    TextView provisionalMessageNameTextView;
+    TextView provisionalMessageDateTextView;
+    TextView provisionalMessageMoneyTextView;
+    TextView provisionalMessageTypePayTextView;
+    TextView provisionalMessageDetailTextView;
     TextView provisionalMessageTextView;
+    Button provisionalMessageOkButton;
+    Button provisionalMessageNoButton;
 }
 
 public class ProvisionalMessageListAdapter extends BaseAdapter{
@@ -33,9 +43,13 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-//        String iconBitmapString = provisionalMessageArrayList.get(position).getIconBitmapString();
-//        String comment = provisionalMessageArrayList.get(position).getComment();
+    public View getView(final int position, View convertView,final ViewGroup parent){
+        String iconBitmapString = provisionalMessageArrayList.get(position).getIconBitmapString();
+        String name = provisionalMessageArrayList.get(position).getUserName();
+        String date = provisionalMessageArrayList.get(position).getDate();
+        String money = provisionalMessageArrayList.get(position).getMoney();
+        String typePay = provisionalMessageArrayList.get(position).getTypePay();
+        String detail = provisionalMessageArrayList.get(position).getDetail();
         String message = provisionalMessageArrayList.get(position).getMessage();
 
         ProvisionalMessageListViewHolder provisionalMessageListViewHolder;
@@ -44,11 +58,15 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             convertView = inflater.inflate(layoutId, parent, false);
             // ViewHolder を生成
             provisionalMessageListViewHolder = new ProvisionalMessageListViewHolder();
-//            provisionalMessageListViewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.FFListIcon);
-//            provisionalMessageListViewHolder.userNameTextView = (TextView) convertView.findViewById(R.id.FFListName);
-//            provisionalMessageListViewHolder.commentTextView = (TextView) convertView.findViewById(R.id.FFListComment);
-//            provisionalMessageListViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
+            provisionalMessageListViewHolder.provisionalMessageIconImageView = (ImageView)convertView.findViewById(R.id.provisionalMessageIconImageView);
+            provisionalMessageListViewHolder.provisionalMessageNameTextView = (TextView)convertView.findViewById(R.id.provisionalMessageNameTextView);
+            provisionalMessageListViewHolder.provisionalMessageDateTextView = (TextView)convertView.findViewById(R.id.provisionalMessageDateTextView);
+            provisionalMessageListViewHolder.provisionalMessageMoneyTextView = (TextView)convertView.findViewById(R.id.provisionalMessageMoneyTextView);
+            provisionalMessageListViewHolder.provisionalMessageTypePayTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTypePayTextView);
+            provisionalMessageListViewHolder.provisionalMessageDetailTextView = (TextView)convertView.findViewById(R.id.provisionalMessageDetailTextView);
             provisionalMessageListViewHolder.provisionalMessageTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTextView);
+            provisionalMessageListViewHolder.provisionalMessageOkButton = (Button) convertView.findViewById(R.id.provisionalMessageOkButton);
+            provisionalMessageListViewHolder.provisionalMessageNoButton = (Button) convertView.findViewById(R.id.provisionalMessageNoButton);
             convertView.setTag(provisionalMessageListViewHolder);
         }
         else {
@@ -57,19 +75,40 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         if (message!=null){
             provisionalMessageListViewHolder.provisionalMessageTextView.setText(message);
         }
-//        if (userName != null){
-//            provisionalMessageListViewHolder.userNameTextView.setText(userName);
-//        }
-//        if (comment != null){
-//            provisionalMessageListViewHolder.commentTextView.setText(comment);
-//        }
-//
-//
-//        byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
-//        if(iconImageBytes.length!=0){
-//            Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-//            ffListViewHolder.iconImageView.setImageBitmap(iconImageBitmap);
-//        }
+        if (name != null){
+            provisionalMessageListViewHolder.provisionalMessageNameTextView.setText(name);
+        }
+        if (date != null){
+            provisionalMessageListViewHolder.provisionalMessageDateTextView.setText(date);
+        }
+        if (money!=null){
+            provisionalMessageListViewHolder.provisionalMessageMoneyTextView.setText(money);
+        }
+        if (typePay!=null){
+            provisionalMessageListViewHolder.provisionalMessageTypePayTextView.setText(typePay);
+        }
+        if (detail!=null){
+            provisionalMessageListViewHolder.provisionalMessageDetailTextView.setText(detail);
+        }
+        provisionalMessageListViewHolder.provisionalMessageOkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.provisionalMessageOkButton);
+            }
+        });
+        provisionalMessageListViewHolder.provisionalMessageNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.provisionalMessageNoButton);
+            }
+        });
+
+
+        byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
+        if(iconImageBytes.length!=0){
+            Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+            provisionalMessageListViewHolder.provisionalMessageIconImageView.setImageBitmap(iconImageBitmap);
+        }
 
         return convertView;
     }

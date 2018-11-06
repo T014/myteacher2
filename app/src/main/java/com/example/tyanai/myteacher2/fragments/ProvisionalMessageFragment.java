@@ -1,16 +1,21 @@
 package com.example.tyanai.myteacher2.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalMessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
-import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +35,53 @@ public class ProvisionalMessageFragment extends Fragment {
 
     ListView provisionalMessageListView;
     DatabaseReference mDataBaseReference;
+    DatabaseReference userRef;
     DatabaseReference confirmRef;
     FirebaseUser user;
     String caseNum;
     ProvisionalMessageListAdapter mAdapter;
     ArrayList<ProvisionalMessageData> provisionalMessageDataArrayList;
+    ArrayList<ProvisionalMessageData> newProvisionalMessageDataArrayList;
+    LinearLayout provisionalMessageLinearLayout;
+    EditText provisionalMessageEditText;
+    Button provisionalMessageSendButton;
+
+    private ChildEventListener uEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String uid = (String) map.get("userId");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String name = (String) map.get("userName");
+
+            for (ProvisionalMessageData a :provisionalMessageDataArrayList){
+                if (a.getSendUid().equals(uid)){
+                    ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
+                            ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
+                            ,a.getBooleans(),iconBitmapString,name);
+                    newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
+                    mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
+                    provisionalMessageListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
 
     private ChildEventListener pEventListener = new ChildEventListener() {
@@ -54,17 +101,13 @@ public class ProvisionalMessageFragment extends Fragment {
             String time =(String) map.get("time");
             String typePay = (String) map.get("typePay");
             String booleans = (String) map.get("booleans");
+            String icon="";
+            String name="";
 
 
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
-            ,key,message,money,receiveUid,sendUid,time,typePay,booleans);
+            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name);
             provisionalMessageDataArrayList.add(provisionalMessageData);
-            mAdapter.setProvisionalMessageArrayList(provisionalMessageDataArrayList);
-            provisionalMessageListView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-
-
-
 
         }
         @Override
@@ -73,7 +116,6 @@ public class ProvisionalMessageFragment extends Fragment {
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
         }
-
         @Override
         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
         }
@@ -90,7 +132,6 @@ public class ProvisionalMessageFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_provisional_message,container,false);
         provisionalMessageListView = (ListView)v.findViewById(R.id.provisionalMessageListView);
-
         return v;
     }
 
@@ -98,11 +139,46 @@ public class ProvisionalMessageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         MainActivity.mToolbar.setTitle("契約提案");
 
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                userRef.addChildEventListener(uEventListener);
+            }
+        }, 200);
+
+
+
+
+        provisionalMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (view.getId()==R.id.provisionalMessageOkButton){
+                    //買い手が押したら支払い画面に移動
+                    //この時支払われなかった時のためにpayButton
+                    String s = "";
+                }else if (view.getId()==R.id.provisionalMessageNoButton){
+                    //新しい契約内容を入力させるeditTextVisible
+                    
+                }
+            }
+        });
+
+
+
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         confirmRef = mDataBaseReference.child(Const.ConfirmPATH);
         mAdapter = new ProvisionalMessageListAdapter(this.getActivity(),R.layout.provisional_message_list_item);
         provisionalMessageDataArrayList = new ArrayList<ProvisionalMessageData>();
+        newProvisionalMessageDataArrayList = new ArrayList<ProvisionalMessageData>();
 
 
         Bundle bundle = getArguments();

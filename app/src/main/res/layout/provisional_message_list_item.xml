@@ -1,11 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/provisionalMessageIconImageView"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/provisionalMessageIconImageView"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/provisionalMessageNameTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/provisionalMessageIconImageView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:id="@+id/provisionalMessageDatesTextView"
+        android:text="日付"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessageIconImageView"
+        android:layout_toEndOf="@+id/provisionalMessageDatesTextView"
+        android:id="@+id/provisionalMessageDateTextView"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/provisionalMessageDateTextView"
+        android:id="@+id/provisionalMessageMoneysTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:text="金額"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/provisionalMessageMoneysTextView"
+        android:layout_below="@+id/provisionalMessageDateTextView"
+        android:id="@+id/provisionalMessageMoneyTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/provisionalMessageMoneyTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:id="@+id/provisionalMessageTypePaysTextView"
+        android:text="価格形式"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessageMoneyTextView"
+        android:layout_toEndOf="@+id/provisionalMessageTypePaysTextView"
+        android:id="@+id/provisionalMessageTypePayTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessageTypePayTextView"
+        android:id="@+id/provisionalMessageDetailsTextView"
+        android:text="契約詳細"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessageDetailsTextView"
+        android:id="@+id/provisionalMessageDetailTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessageDetailTextView"
+        android:id="@+id/provisionalMessagesTextView"
+        android:text="ひとこと"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/provisionalMessagesTextView"
         android:id="@+id/provisionalMessageTextView"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/provisionalMessageTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/provisionalMessageOkButton"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentTop="true"
+            android:text="契約する"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/provisionalMessageOkButton"
+            android:id="@+id/provisionalMessageNoButton"
+            android:text="契約内容を変更する"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
