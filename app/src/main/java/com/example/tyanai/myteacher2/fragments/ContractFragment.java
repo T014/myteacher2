@@ -177,6 +177,7 @@ public class ContractFragment extends Fragment {
                                         data.put("receiveUid",postUid);
                                         data.put("caseNum",caseNum);
                                         data.put("confirmKey",confirmKey);
+                                        data.put("booleans","");
 
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(confirmKey,data);

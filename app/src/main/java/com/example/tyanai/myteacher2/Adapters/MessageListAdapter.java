@@ -144,32 +144,6 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
-//                    if (contents!=null && !(contents.equals(""))){
-//                        int contentsCount = contents.length();
-//                        if (contentsCount>15){
-//                            int o = 0;
-//                            for (int m=0;m<contentsCount;m++){
-//                                v = o+15;
-//                                if (contentsCount-o<15 || contentsCount-o==15){
-//                                    String searchContents = contents.substring(o,contentsCount);
-//                                    newContents = newContents.concat(searchContents);
-//                                    break;
-//                                }
-//                                String searchContents = contents.substring(o,v);
-//                                int jg = searchContents.indexOf("\n");
-//
-//                                if (jg==-1){
-//                                    newContents = newContents.concat(searchContents+"\n");
-//                                    o=v;
-//                                }else{
-//                                    String a = searchContents.substring(0,jg+1);
-//                                    newContents = newContents.concat(a);
-//                                    o+=jg+1;
-//                                }
-//                            }
-//                        }else{
-//                            newContents = contents;
-//                        }
                     if (contents!=null && !(contents.equals(""))){
                         int contentsCount = contents.length();
                         if (contentsCount>16){
@@ -203,13 +177,7 @@ public class MessageListAdapter extends BaseAdapter {
                             newContents = contents;
                         }
 
-//                        int m =contentsCount%15;
-//                        String mContents = contents.substring(contentsCount-m,contentsCount);
-//                        newContents.concat(mContents);
-                        //割り切れなかった分の追加
-
                         messageListViewHolder.messageContentsTextView.setText(newContents);
-                        newContents = null;
                     }
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.GONE);

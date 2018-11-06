@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.FFListAdapter;
+import com.example.tyanai.myteacher2.Adapters.ProvisionalUserListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
+import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -32,11 +35,11 @@ public class ProvisionalUserFragment extends Fragment {
     public static final String TAG = "ProvisionalUserFragment";
 
     ListView provisionalUserListView;
-    FFListAdapter mAdapter;
+    ProvisionalUserListAdapter mAdapter;
     DatabaseReference mDataBaseReference;
     FirebaseUser user;
-    ArrayList<UserData> provisionalUserDataArrayList;
-    ArrayList<String> provisionalUserIdArrayList;
+    ArrayList<ProvisionalUserData> provisionalUserDataArrayList;
+    ArrayList<ProvisionalUserData> provisionalUserIdArrayList;
     DatabaseReference confirmKeyRef;
     DatabaseReference userRef;
     String intentPostKey;
@@ -49,8 +52,13 @@ public class ProvisionalUserFragment extends Fragment {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userId = (String) map.get("uid");
+            String caseNum = (String) map.get("caseNum");
+            String name="";
+            String icon="";
 
-            provisionalUserIdArrayList.add(userId);
+            ProvisionalUserData provisionalUserData = new ProvisionalUserData(name,userId,icon,caseNum);
+
+            provisionalUserIdArrayList.add(provisionalUserData);
 
         }
         @Override
@@ -79,27 +87,13 @@ public class ProvisionalUserFragment extends Fragment {
             String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String comment = "";
-            String follows = "";
-            String followers = "";
-            String posts = "";
-            String favorites = "";
-            String sex = "";
-            String age = "";
-            String evaluations = "";
-            String taught = "";
-            String period = "";
-            String groups = "";
-            String date = "";
-            String coin = "";
 
-            UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+            for (ProvisionalUserData u:provisionalUserIdArrayList){
+                if (u.getUid().equals(userId)){
 
-            for (String u:provisionalUserIdArrayList){
-                if (u.equals(userId)){
-                    provisionalUserDataArrayList.add(userData);
-                    mAdapter.setFFUsersArrayList(provisionalUserDataArrayList);
+                    ProvisionalUserData provisionalUserData = new ProvisionalUserData(userName,userId,iconBitmapString,u.getCaseNum());
+                    provisionalUserDataArrayList.add(provisionalUserData);
+                    mAdapter.setProvisionalUserArrayList(provisionalUserDataArrayList);
                     provisionalUserListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -153,6 +147,16 @@ public class ProvisionalUserFragment extends Fragment {
                 //message画面に移動許可拒否
 
 
+                //caseNum
+                Bundle cNumBundle = new Bundle();
+                cNumBundle.putString("caseNum",provisionalUserDataArrayList.get(position).getCaseNum());
+                ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+                fragmentProvisionalMessage.setArguments(cNumBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
 
             }
         });
@@ -165,12 +169,12 @@ public class ProvisionalUserFragment extends Fragment {
         super.onAttach(context);
 
         //データ取得
-        provisionalUserDataArrayList = new ArrayList<UserData>();
-        provisionalUserIdArrayList = new ArrayList<String>();
+        provisionalUserDataArrayList = new ArrayList<ProvisionalUserData>();
+        provisionalUserIdArrayList = new ArrayList<ProvisionalUserData>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
-        mAdapter = new FFListAdapter(this.getActivity(),R.layout.ff_list_item);
+        mAdapter = new ProvisionalUserListAdapter(this.getActivity(),R.layout.ff_list_item);
 
         Bundle bundle = getArguments();
         intentPostKey = bundle.getString("intentPostKey");
