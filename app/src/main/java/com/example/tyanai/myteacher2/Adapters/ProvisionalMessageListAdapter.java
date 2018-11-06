@@ -135,7 +135,6 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
         }
 
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
