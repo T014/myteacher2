@@ -63,7 +63,7 @@ public class MessageListAdapter extends BaseAdapter {
         String uid = messageArrayList.get(position).getUid();
         String myUid = messageArrayList.get(position).getMyUid();
         int v=0;
-        String newContents;
+        String newContents="";
 
         MessageListViewHolder messageListViewHolder;
 
@@ -144,29 +144,72 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
+//                    if (contents!=null && !(contents.equals(""))){
+//                        int contentsCount = contents.length();
+//                        if (contentsCount>15){
+//                            int o = 0;
+//                            for (int m=0;m<contentsCount;m++){
+//                                v = o+15;
+//                                if (contentsCount-o<15 || contentsCount-o==15){
+//                                    String searchContents = contents.substring(o,contentsCount);
+//                                    newContents = newContents.concat(searchContents);
+//                                    break;
+//                                }
+//                                String searchContents = contents.substring(o,v);
+//                                int jg = searchContents.indexOf("\n");
+//
+//                                if (jg==-1){
+//                                    newContents = newContents.concat(searchContents+"\n");
+//                                    o=v;
+//                                }else{
+//                                    String a = searchContents.substring(0,jg+1);
+//                                    newContents = newContents.concat(a);
+//                                    o+=jg+1;
+//                                }
+//                            }
+//                        }else{
+//                            newContents = contents;
+//                        }
                     if (contents!=null && !(contents.equals(""))){
                         int contentsCount = contents.length();
-                        int indentionCount = contentsCount/15;
-                        int o = 0;
-                        for (int m=0;m<indentionCount;m++){
-                            v += 15*m+1;
-                            //String newContents = contents.StringBuilder(contents).insert(v,"\n");
-                            newContents = contents+contents.substring(o,v);
-                            o=v;
+                        if (contentsCount>16){
+                            int o = 0;
+                            for (int m=0;m<contentsCount;m++){
+                                v = o+16;
+                                if (contentsCount-o<15 || contentsCount-o==15){
+                                    String searchContents = contents.substring(o,contentsCount);
+                                    newContents = newContents.concat(searchContents);
+                                    break;
+                                }
+                                String searchContents = contents.substring(o,v);
+                                int jg = searchContents.indexOf("\n");
 
+                                if (jg==-1){
+                                    newContents = newContents.concat(searchContents.substring(0,15)+"\n");
+                                    o=v-1;
+                                }else if(jg==16){
+                                    //
+                                    newContents = newContents.concat(searchContents.substring(0,15).concat("\n"+searchContents.charAt(15)));
+                                } else{
+                                    String a = searchContents.substring(0,jg+1);
+                                    newContents = newContents.concat(a);
+                                    o+=jg+2;
+                                }
+                            }
+                        }else if(contentsCount==16) {
+                            //15+/n+1
+                            newContents = contents.substring(0,15).concat("\n"+contents.charAt(15));
+                        }else{
+                            newContents = contents;
                         }
+
+//                        int m =contentsCount%15;
+//                        String mContents = contents.substring(contentsCount-m,contentsCount);
+//                        newContents.concat(mContents);
                         //割り切れなかった分の追加
 
-                        ｆ
-
-
-
-
-
-
-
-
-                        messageListViewHolder.messageContentsTextView.setText(contents);
+                        messageListViewHolder.messageContentsTextView.setText(newContents);
+                        newContents = null;
                     }
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.GONE);

@@ -23,7 +23,7 @@ public class ProvisionalMessageFragment extends Fragment {
     DatabaseReference mDataBaseReference;
     DatabaseReference confirmKeyRef;
     FirebaseUser user;
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
