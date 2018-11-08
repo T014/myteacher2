@@ -321,7 +321,7 @@ public class ProvisionalFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
 
                 Bundle pKeyBundle = new Bundle();
-                pKeyBundle.putString("intentPostKey",provisionalKeyDataArrayList.get(position).getPostKey());
+                pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
                 ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
                 fragmentProvisionalUser.setArguments(pKeyBundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
