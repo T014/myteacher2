@@ -200,10 +200,9 @@ public class ProvisionalFragment extends Fragment {
             String mCount = "1";
 
             for (int k = 0; k < newProvisionalKeyDataArrayList.size(); k++) {
-                String u = newProvisionalKeyDataArrayList.get(k).getPostKey();
                 if (newProvisionalKeyDataArrayList.get(k).getPostKey().equals(postKey)) {
                     ProvisionalKeyData newProvisionalKeyData;
-                    if (newProvisionalKeyDataArrayList.get(k).getContent().equals("1")){
+                    if (newProvisionalKeyDataArrayList.get(k).getCount().equals("1")){
                         newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(k).getCaseNum()
                                 , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
                                 , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
@@ -320,7 +319,6 @@ public class ProvisionalFragment extends Fragment {
         provisionalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                //confirmKeyRef.child(user.getUid()).orderByChild("postKey").equalTo(provisionalKeyDataArrayList.get(position).getPostKey()).addChildEventListener(cKeyEventListener);
 
                 Bundle pKeyBundle = new Bundle();
                 pKeyBundle.putString("intentPostKey",provisionalKeyDataArrayList.get(position).getPostKey());
