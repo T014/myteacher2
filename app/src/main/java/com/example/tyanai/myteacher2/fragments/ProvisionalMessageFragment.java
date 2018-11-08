@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalMessageListAdapter;
@@ -161,6 +158,7 @@ public class ProvisionalMessageFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 if (view.getId()==R.id.provisionalMessageOkButton){
                     //買い手が押したら支払い画面に移動
+                    //支払い終わったら取引履歴にデータを移動する
 
                     if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
                         Map<String,Object> childUpdates = new HashMap<>();

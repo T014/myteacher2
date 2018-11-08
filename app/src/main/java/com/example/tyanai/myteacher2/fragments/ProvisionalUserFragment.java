@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.example.tyanai.myteacher2.Adapters.FFListAdapter;
 import com.example.tyanai.myteacher2.Adapters.ProvisionalUserListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
-import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
 import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
@@ -43,7 +40,6 @@ public class ProvisionalUserFragment extends Fragment {
     DatabaseReference confirmKeyRef;
     DatabaseReference userRef;
     String intentPostKey;
-
 
 
     private ChildEventListener cKeyEventListener = new ChildEventListener() {
@@ -115,11 +111,6 @@ public class ProvisionalUserFragment extends Fragment {
     };
 
 
-
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -135,38 +126,6 @@ public class ProvisionalUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("仮契約ユーザー");
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        userRef = mDataBaseReference.child(Const.UsersPATH);
-
-        userRef.addChildEventListener(uEventListener);
-
-
-        provisionalUserListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                //message画面に移動許可拒否
-
-
-                //caseNum
-                Bundle cNumBundle = new Bundle();
-                cNumBundle.putString("caseNum",provisionalUserDataArrayList.get(position).getCaseNum());
-                ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
-                fragmentProvisionalMessage.setArguments(cNumBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
-
-            }
-        });
-
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
         //データ取得
         provisionalUserDataArrayList = new ArrayList<ProvisionalUserData>();
@@ -179,6 +138,43 @@ public class ProvisionalUserFragment extends Fragment {
         Bundle bundle = getArguments();
         intentPostKey = bundle.getString("intentPostKey");
         confirmKeyRef.child(user.getUid()).orderByChild("postKey").equalTo(intentPostKey).addChildEventListener(cKeyEventListener);
+
+
+        provisionalUserListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
+                //message画面に移動許可拒否
+
+                //caseNum
+                Bundle cNumBundle = new Bundle();
+                cNumBundle.putString("caseNum",provisionalUserDataArrayList.get(position).getCaseNum());
+                ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+                fragmentProvisionalMessage.setArguments(cNumBundle);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+
+        userRef.addChildEventListener(uEventListener);
+    }
+
+
+        @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
 
     }
 
