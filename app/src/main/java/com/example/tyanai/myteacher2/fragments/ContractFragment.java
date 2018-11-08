@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -79,11 +80,20 @@ public class ContractFragment extends Fragment {
         confirmRef = mDataBaseReference.child(Const.ConfirmPATH);
         confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
 
+        MainActivity.bottomNavigationView.setVisibility(View.GONE);
+        MainActivity.mToolbar.setVisibility(View.GONE);
+
         Bundle caseNumBundle = getArguments();
         //roomKey
         caseNum = caseNumBundle.getString("caseNum");
         postKey = caseNumBundle.getString("key");
         postUid = caseNumBundle.getString("postUid");
+        String reqDate = caseNumBundle.getString("reqDate");
+        String reqMoney = caseNumBundle.getString("reqMoney");
+        String reqDetail = caseNumBundle.getString("reqDetail");
+        cldTextView.setText(reqDate);
+        moneyEditText.setText(reqMoney);
+        detailEditText.setText(reqDetail);
 
         cldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,32 +108,46 @@ public class ContractFragment extends Fragment {
         backPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("key",postKey);
-                bundle.putString("screenKey","timeLine");
-                DetailsFragment fragmentDetails = new DetailsFragment();
-                fragmentDetails.setArguments(bundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                requestRef.child(caseNum).removeValue();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key",postKey);
+                        bundle.putString("screenKey","timeLine");
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(bundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }, 1000);
+
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 requestRef.child(caseNum).removeValue();
-                Bundle bundle = new Bundle();
-                bundle.putString("key",postKey);
-                bundle.putString("screenKey","timeLine");
-                DetailsFragment fragmentDetails = new DetailsFragment();
-                fragmentDetails.setArguments(bundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key",postKey);
+                        bundle.putString("screenKey","timeLine");
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(bundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }, 1000);
+
             }
         });
 
@@ -201,18 +225,21 @@ public class ContractFragment extends Fragment {
                                         transaction.addToBackStack(null);
                                         transaction.commit();
 
+
+                                        Snackbar.make(view,"契約内容を送信しました。",Snackbar.LENGTH_SHORT).show();
+
                                         //notification
                                     }else {
 
                                      //time前の画面に戻す
-                                        Bundle cNumBundle = new Bundle();
-                                        cNumBundle.putString("caseNum",caseNum);
-                                        ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
-                                        fragmentProvisionalMessage.setArguments(cNumBundle);
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
+//                                        Bundle cNumBundle = new Bundle();
+//                                        cNumBundle.putString("caseNum",caseNum);
+//                                        ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+//                                        fragmentProvisionalMessage.setArguments(cNumBundle);
+//                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                                        transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
+//                                        transaction.addToBackStack(null);
+//                                        transaction.commit();
                                     }
                                 }else {
                                     //message
@@ -236,5 +263,12 @@ public class ContractFragment extends Fragment {
                 }
             }
         });
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+        MainActivity.mToolbar.setVisibility(View.VISIBLE);
     }
 }

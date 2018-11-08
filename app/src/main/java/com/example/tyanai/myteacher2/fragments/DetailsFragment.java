@@ -158,7 +158,6 @@ public class DetailsFragment extends Fragment {
                 favUidArrayList.add(userId);
                 removeFavKey = favKey;
             }
-
             if (favUidArrayList.contains(user.getUid())){
                 goodFlag = true;
                 favButton.setChecked(true);
@@ -167,7 +166,6 @@ public class DetailsFragment extends Fragment {
                 favButton.setChecked(false);
             }
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -192,7 +190,6 @@ public class DetailsFragment extends Fragment {
             if (userId.equals(user.getUid())){
                 boughtUidArrayList.add(userId);
             }
-
             if (boughtUidArrayList.contains(user.getUid())){
                 buyButton.setTextOff("購入済み");
                 buyButton.setEnabled(false);
@@ -304,7 +301,6 @@ public class DetailsFragment extends Fragment {
                     buyButton.setEnabled(false);
                 }
             }
-
             if (userId.equals(user.getUid())){
                 boughtDetailTextView.setText(null);
                 goodDetailTextView.setText(null);
@@ -317,7 +313,6 @@ public class DetailsFragment extends Fragment {
                 goodDetailTextView.setText(null);
                 stopButton.setVisibility(View.GONE);
             }
-
             if (postData.getImageBitmapString()!=null){
                 byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
                 if(postImageBytes.length!=0){
@@ -332,7 +327,6 @@ public class DetailsFragment extends Fragment {
                     iconDetailImageView.setImageBitmap(iconDetailImageBitmap);
                 }
             }
-
             userNameDetailTextView.setText(postData.getName());
             evaluationDetailTextView.setText("評価："+postData.getEvaluation());
             timeDetailTextView.setText(postData.getTime());
@@ -728,7 +722,6 @@ public class DetailsFragment extends Fragment {
                 if (NetworkManager.isConnected(getContext())){
 
                     //tradeに移動する
-                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal1.getTime());
@@ -823,82 +816,98 @@ public class DetailsFragment extends Fragment {
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (myData!=null){
+                    if (accountData!=null){
+                        if (buyFlag==true){
+                            if (NetworkManager.isConnected(getContext())){
+                                if (accountData.getUid()!=null){
+                                    requestRef.child(thisTradeKey).removeValue();
+                                    confirmRef.child(thisTradeKey).removeValue();
+                                    confirmKeyRef.child(accountData.getUid()).child(thisTradeKey).removeValue();
+                                    confirmKeyRef.child(user.getUid()).child(thisTradeKey).removeValue();
+                                    buyFlag = false;
 
+                                    Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
+                                }
 
-
-                if (buyFlag==true){
-                    if (NetworkManager.isConnected(getContext())){
-                        requestRef.child(thisTradeKey).removeValue();
-                        confirmRef.child(thisTradeKey).removeValue();
-                        confirmKeyRef.child(accountData.getUid()).child(thisTradeKey).removeValue();
-                        confirmKeyRef.child(user.getUid()).child(thisTradeKey).removeValue();
-                        buyFlag = false;
-
-                        Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
-                    }else {
-                        Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-                    }
-                }else{
-                    if (NetworkManager.isConnected(getContext())){
-                        int stockCount = Integer.parseInt(thisPost.getStock());
-                        if (stockCount!=0){
-
-                            Calendar cal1 = Calendar.getInstance();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-                            String time = sdf.format(cal1.getTime());
-
-                            Map<String,Object> requestKey = new HashMap<>();
-
-                            String tradeKey = requestRef.push().getKey();
-
-                            requestKey.put("tradeKey",tradeKey);
-                            requestKey.put("bought",user.getUid());
-                            requestKey.put("sold",thisPost.getUserId());
-                            requestKey.put("receiveDate","0");
-                            requestKey.put("date",time);
-                            requestKey.put("payDay","0");
-                            requestKey.put("userName",thisPost.getName());
-                            requestKey.put("userIcon",thisPost.getUserIconBitmapString());
-                            requestKey.put("evaluation","0");
-                            requestKey.put("postKey",intentKey);
-                            requestKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
-                            requestKey.put("stock",thisPost.getStock());
-                            requestKey.put("kind","購入");
-                            requestKey.put("kindDetail","リクエスト");
-                            requestKey.put("buyName",myData.getName());
-                            requestKey.put("buyIconBitmapString",myData.getIconBitmapString());
-                            requestKey.put("permittedDate","");
-                            requestKey.put("refactorKey",thisPost.getKey());
-
-                            Map<String,Object> childUpdates = new HashMap<>();
-                            childUpdates.put(tradeKey,requestKey);
-                            requestRef.updateChildren(childUpdates);
-
-                            Map<String,Object> userDataKey = new HashMap<>();
-                            userDataKey.put("bought",thisPost.getBought());
-                            userDataKey.put("stock",thisPost.getStock());
-                            contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
-
-                            buyFlag = true;
-
-                            //契約内容確認画面に移動
-                            Bundle caseNumBundle = new Bundle();
-                            caseNumBundle.putString("caseNum",tradeKey);
-                            caseNumBundle.putString("key",thisPost.getKey());
-                            caseNumBundle.putString("postUid",thisPost.getUserId());
-                            ContractFragment fragmentContract = new ContractFragment();
-                            fragmentContract.setArguments(caseNumBundle);
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
-                            transaction.commit();
-                            Snackbar.make(view,"購入リクエストを送信しました。",Snackbar.LENGTH_SHORT).show();
+                            }else {
+                                Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                            }
                         }else{
-                            Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                            if (NetworkManager.isConnected(getContext())){
+                                int stockCount = Integer.parseInt(thisPost.getStock());
+                                if (stockCount!=0){
+
+                                    Calendar cal1 = Calendar.getInstance();
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                                    String time = sdf.format(cal1.getTime());
+
+                                    Map<String,Object> requestKey = new HashMap<>();
+
+                                    String tradeKey = requestRef.push().getKey();
+
+                                    requestKey.put("tradeKey",tradeKey);
+                                    requestKey.put("bought",user.getUid());
+                                    requestKey.put("sold",thisPost.getUserId());
+                                    requestKey.put("receiveDate",thisPost.getDate());
+                                    requestKey.put("date",time);
+                                    requestKey.put("payDay","0");
+                                    requestKey.put("userName",thisPost.getName());
+                                    requestKey.put("userIcon",thisPost.getUserIconBitmapString());
+                                    requestKey.put("evaluation","0");
+                                    requestKey.put("postKey",intentKey);
+                                    requestKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                                    requestKey.put("stock",thisPost.getStock());
+                                    requestKey.put("kind","購入");
+                                    requestKey.put("kindDetail","リクエスト");
+                                    requestKey.put("buyName",myData.getName());
+                                    requestKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                                    requestKey.put("permittedDate","");
+                                    requestKey.put("refactorKey",thisPost.getKey());
+
+                                    Map<String,Object> childUpdates = new HashMap<>();
+                                    childUpdates.put(tradeKey,requestKey);
+                                    requestRef.updateChildren(childUpdates);
+
+                                    Map<String,Object> userDataKey = new HashMap<>();
+                                    userDataKey.put("bought",thisPost.getBought());
+                                    userDataKey.put("stock",thisPost.getStock());
+                                    contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+                                    buyFlag = true;
+
+                                    //契約内容確認画面に移動
+                                    Bundle caseNumBundle = new Bundle();
+                                    caseNumBundle.putString("caseNum",tradeKey);
+                                    caseNumBundle.putString("key",thisPost.getKey());
+                                    caseNumBundle.putString("postUid",thisPost.getUserId());
+                                    caseNumBundle.putString("reqDate",thisPost.getDate());
+                                    caseNumBundle.putString("reqMoney",thisPost.getCost());
+                                    caseNumBundle.putString("reqDetail",thisPost.getContents());
+                                    ContractFragment fragmentContract = new ContractFragment();
+                                    fragmentContract.setArguments(caseNumBundle);
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
+                                    transaction.commit();
+                                }else{
+                                    Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
+                                }
+                            }else {
+                                buyButton.setChecked(false);
+                                Snackbar.make(view,"購入リクエストを送信できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                            }
                         }
                     }else {
-                        Snackbar.make(view,"購入リクエストを送信できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                        usersRef.addChildEventListener(cEventListener);
+                        buyButton.setChecked(false);
+                        Snackbar.make(MainActivity.snack, "購入リクエストを送信できませんでした。もう一度押してください。", Snackbar.LENGTH_LONG).show();
                     }
+                }else {
+                    usersRef.addChildEventListener(cEventListener);
+                    buyButton.setChecked(false);
+                    Snackbar.make(MainActivity.snack, "購入リクエストを送信できませんでした。もう一度押してください。", Snackbar.LENGTH_LONG).show();
                 }
+
             }
         });
 
@@ -911,65 +920,69 @@ public class DetailsFragment extends Fragment {
                 for (int i=0;i<messageUidArrayList.size();i++){
                     uidArrayList.add(messageUidArrayList.get(i).getUid());
                 }
-                if (uidArrayList.contains(accountData.getUid())){
-                    for (MessageListData bbb:messageUidArrayList){
-                        if (bbb.getUid().equals(accountData.getUid())){
-                            Bundle messageKeyBundle = new Bundle();
-                            messageKeyBundle.putString("key",bbb.getKey());
-                            messageKeyBundle.putString("name",accountData.getName());
-                            messageKeyBundle.putString("icon",accountData.getIconBitmapString());
-                            messageKeyBundle.putString("uid",accountData.getUid());
-                            ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
-                            fragmentThisMessage.setArguments(messageKeyBundle);
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                if (accountData.getUid()!=null){
+                    if (uidArrayList.contains(accountData.getUid())){
+                        for (MessageListData bbb:messageUidArrayList){
+                            if (bbb.getUid().equals(accountData.getUid())){
+                                Bundle messageKeyBundle = new Bundle();
+                                messageKeyBundle.putString("key",bbb.getKey());
+                                messageKeyBundle.putString("name",accountData.getName());
+                                messageKeyBundle.putString("icon",accountData.getIconBitmapString());
+                                messageKeyBundle.putString("uid",accountData.getUid());
+                                ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                                fragmentThisMessage.setArguments(messageKeyBundle);
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                                transaction.commit();
+                            }
                         }
+                    }else{
+
+                        Map<String,Object> makeMessageKeyRef = new HashMap<>();
+                        String key = messageRef.push().getKey();
+                        makeMessageKeyRef.put("userId",user.getUid());
+                        makeMessageKeyRef.put("time","");
+                        makeMessageKeyRef.put("content","");
+                        makeMessageKeyRef.put("roomKey",key);
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put(key,makeMessageKeyRef);
+                        messageKeyRef.child(accountData.getUid()).updateChildren(childUpdates);
+
+                        Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
+                        makeMessageKeyRef2.put("userId",accountData.getUid());
+                        makeMessageKeyRef2.put("time","");
+                        makeMessageKeyRef2.put("content","");
+                        makeMessageKeyRef2.put("roomKey",key);
+                        Map<String,Object> childUpdates2 = new HashMap<>();
+                        childUpdates2.put(key,makeMessageKeyRef2);
+                        messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
+
+                        Map<String,Object> makeMessageRef = new HashMap<>();
+                        makeMessageRef.put("userId","");
+                        makeMessageRef.put("bitmapString","");
+                        makeMessageRef.put("contents","");
+                        makeMessageRef.put("time","");
+                        makeMessageRef.put("roomKey",key);
+                        Map<String,Object> childUp = new HashMap<>();
+                        childUp.put(key,makeMessageRef);
+                        messageRef.child(key).updateChildren(childUp);
+
+                        Bundle messageKeyBundle = new Bundle();
+                        messageKeyBundle.putString("key",key);
+                        messageKeyBundle.putString("name",accountData.getName());
+                        messageKeyBundle.putString("icon",accountData.getIconBitmapString());
+                        messageKeyBundle.putString("uid",accountData.getUid());
+                        ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                        fragmentThisMessage.setArguments(messageKeyBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                        transaction.commit();
                     }
-                }else{
-
-                    Map<String,Object> makeMessageKeyRef = new HashMap<>();
-                    String key = messageRef.push().getKey();
-                    makeMessageKeyRef.put("userId",user.getUid());
-                    makeMessageKeyRef.put("time","");
-                    makeMessageKeyRef.put("content","");
-                    makeMessageKeyRef.put("roomKey",key);
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put(key,makeMessageKeyRef);
-                    messageKeyRef.child(accountData.getUid()).updateChildren(childUpdates);
-
-                    Map<String,Object> makeMessageKeyRef2 = new HashMap<>();
-                    makeMessageKeyRef2.put("userId",accountData.getUid());
-                    makeMessageKeyRef2.put("time","");
-                    makeMessageKeyRef2.put("content","");
-                    makeMessageKeyRef2.put("roomKey",key);
-                    Map<String,Object> childUpdates2 = new HashMap<>();
-                    childUpdates2.put(key,makeMessageKeyRef2);
-                    messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
-
-                    Map<String,Object> makeMessageRef = new HashMap<>();
-                    makeMessageRef.put("userId","");
-                    makeMessageRef.put("bitmapString","");
-                    makeMessageRef.put("contents","");
-                    makeMessageRef.put("time","");
-                    makeMessageRef.put("roomKey",key);
-                    Map<String,Object> childUp = new HashMap<>();
-                    childUp.put(key,makeMessageRef);
-                    messageRef.child(key).updateChildren(childUp);
-
-                    Bundle messageKeyBundle = new Bundle();
-                    messageKeyBundle.putString("key",key);
-                    messageKeyBundle.putString("name",accountData.getName());
-                    messageKeyBundle.putString("icon",accountData.getIconBitmapString());
-                    messageKeyBundle.putString("uid",accountData.getUid());
-                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
-                    fragmentThisMessage.setArguments(messageKeyBundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                }else {
+                    usersRef.addChildEventListener(cEventListener);
+                    Snackbar.make(MainActivity.snack, "データを取得できませんでした。もう一度押してください。", Snackbar.LENGTH_LONG).show();
                 }
+
             }
         });
 

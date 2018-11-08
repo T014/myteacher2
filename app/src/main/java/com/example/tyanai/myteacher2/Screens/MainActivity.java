@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (id == R.id.nav_provisional) {
                     mToolbar.setTitle("仮契約");
                     if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("ProvisionalFragment")) {
+                        if (currentFragmentTag.equals("DetailsFragment")) {
                             Bundle screenBundle = new Bundle();
                             screenBundle.putString("screenKey", "business");
                             ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
@@ -614,8 +614,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
                             drawerTransaction.commit();
                         } else {
-
-
                             Bundle screenBundle = new Bundle();
                             screenBundle.putString("screenKey", "apply");
                             BusinessFragment fragmentBusiness = new BusinessFragment();
@@ -634,7 +632,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             BusinessFragment fragmentBusiness = new BusinessFragment();
                             fragmentBusiness.setArguments(screenBundle);
                             drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
                             drawerTransaction.commit();
                         } else {
                             Bundle screenBundle = new Bundle();

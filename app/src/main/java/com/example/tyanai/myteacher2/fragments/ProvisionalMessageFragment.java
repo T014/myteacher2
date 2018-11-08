@@ -185,6 +185,9 @@ public class ProvisionalMessageFragment extends Fragment {
                         caseNumBundle.putString("caseNum",newProvisionalMessageDataArrayList.get(position).getCaseNum());
                         caseNumBundle.putString("key",newProvisionalMessageDataArrayList.get(position).getPostKey());
                         caseNumBundle.putString("postUid",newProvisionalMessageDataArrayList.get(position).getPostUid());
+                        caseNumBundle.putString("reqDate",newProvisionalMessageDataArrayList.get(position).getDate());
+                        caseNumBundle.putString("reqMoney",newProvisionalMessageDataArrayList.get(position).getMoney());
+                        caseNumBundle.putString("reqDetail",newProvisionalMessageDataArrayList.get(position).getDetail());
                         ContractFragment fragmentContract = new ContractFragment();
                         fragmentContract.setArguments(caseNumBundle);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
