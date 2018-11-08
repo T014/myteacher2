@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -48,8 +49,6 @@ public class ContractFragment extends Fragment {
     private DatabaseReference confirmKeyRef;
     FirebaseUser user;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -75,19 +74,16 @@ public class ContractFragment extends Fragment {
 
         MainActivity.mToolbar.setTitle("契約内容");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         confirmRef = mDataBaseReference.child(Const.ConfirmPATH);
         confirmKeyRef = mDataBaseReference.child(Const.ConfirmKeyPATH);
-
 
         Bundle caseNumBundle = getArguments();
         //roomKey
         caseNum = caseNumBundle.getString("caseNum");
         postKey = caseNumBundle.getString("key");
         postUid = caseNumBundle.getString("postUid");
-
 
         cldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +94,6 @@ public class ContractFragment extends Fragment {
                 dialog.show(getFragmentManager(), "sample");
             }
         });
-
 
         backPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +115,6 @@ public class ContractFragment extends Fragment {
             public void onClick(View view) {
 
                 requestRef.child(caseNum).removeValue();
-
                 Bundle bundle = new Bundle();
                 bundle.putString("key",postKey);
                 bundle.putString("screenKey","timeLine");
@@ -138,7 +132,6 @@ public class ContractFragment extends Fragment {
             public void onClick(View view) {
 
                 String typePay="";
-
                 int checkedId = costTypeRadioGroup.getCheckedRadioButtonId();
                 if (-1 != checkedId) {
                     if (checkedId==typeTimeRadioButton.getId()){
@@ -183,38 +176,21 @@ public class ContractFragment extends Fragment {
                                         childUpdates.put(confirmKey,data);
                                         confirmRef.child(caseNum).updateChildren(childUpdates);
 
-
                                         //管理画面
 
                                         Map<String,Object> datas = new HashMap<>();
-
                                         datas.put("time",time);
                                         datas.put("uid",postUid);
                                         datas.put("postKey",postKey);
                                         datas.put("caseNum",caseNum);
-
                                         confirmKeyRef.child(user.getUid()).child(caseNum).updateChildren(datas);
 
-
                                         Map<String,Object> mdatas = new HashMap<>();
-
                                         mdatas.put("time",time);
                                         mdatas.put("uid",user.getUid());
                                         mdatas.put("postKey",postKey);
                                         mdatas.put("caseNum",caseNum);
-
                                         confirmKeyRef.child(postUid).child(caseNum).updateChildren(mdatas);
-
-
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putString("key",postKey);
-//                                        bundle.putString("screenKey","timeLine");
-//                                        DetailsFragment fragmentDetails = new DetailsFragment();
-//                                        fragmentDetails.setArguments(bundle);
-//                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-//                                        transaction.addToBackStack(null);
-//                                        transaction.commit();
 
                                         Bundle cNumBundle = new Bundle();
                                         cNumBundle.putString("caseNum",caseNum);
@@ -225,49 +201,39 @@ public class ContractFragment extends Fragment {
                                         transaction.addToBackStack(null);
                                         transaction.commit();
 
-
-
-
                                         //notification
-
-
                                     }else {
-                                     //time
+
+                                     //time前の画面に戻す
+                                        Bundle cNumBundle = new Bundle();
+                                        cNumBundle.putString("caseNum",caseNum);
+                                        ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+                                        fragmentProvisionalMessage.setArguments(cNumBundle);
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
+                                        transaction.addToBackStack(null);
+                                        transaction.commit();
                                     }
                                 }else {
                                     //message
+                                    Snackbar.make(MainActivity.snack,"メッセージを入力してください。",Snackbar.LENGTH_SHORT).show();
                                 }
                             }else {
                                 //detail
+                                Snackbar.make(MainActivity.snack,"契約内容の詳細を入力してください。",Snackbar.LENGTH_SHORT).show();
                             }
-
                         }else{
                             //date
+                            Snackbar.make(MainActivity.snack,"日時を入力してください。",Snackbar.LENGTH_SHORT).show();
                         }
                     }else {
                         //money
+                        Snackbar.make(MainActivity.snack,"金額を入力してください。",Snackbar.LENGTH_SHORT).show();
                     }
-
-
-
-
-
-
                 } else {
-
+                    Snackbar.make(MainActivity.snack,"支払い方式を選択してください。",Snackbar.LENGTH_SHORT).show();
                     //radiobutton選択してくれ
                 }
-
-
-
-
-
-
-
-
-
-
-
             }
         });
     }

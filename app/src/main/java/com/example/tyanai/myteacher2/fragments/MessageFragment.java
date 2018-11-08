@@ -313,20 +313,23 @@ public class MessageFragment extends Fragment {
         messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Bundle messageKeyBundle = new Bundle();
-                messageKeyBundle.putString("key",newMessageListDataArrayList.get(position).getKey());
-                messageKeyBundle.putString("name",newMessageListDataArrayList.get(position).getUserName());
-                messageKeyBundle.putString("icon",newMessageListDataArrayList.get(position).getIconBitmapString());
-                messageKeyBundle.putString("uid",newMessageListDataArrayList.get(position).getUid());
-                messageListDataArrayList.clear();
-                newMessageListDataArrayList.clear();
-                ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
-                fragmentThisMessage.setArguments(messageKeyBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (NetworkManager.isConnected(getContext())){
+                    Bundle messageKeyBundle = new Bundle();
+                    messageKeyBundle.putString("key",newMessageListDataArrayList.get(position).getKey());
+                    messageKeyBundle.putString("name",newMessageListDataArrayList.get(position).getUserName());
+                    messageKeyBundle.putString("icon",newMessageListDataArrayList.get(position).getIconBitmapString());
+                    messageKeyBundle.putString("uid",newMessageListDataArrayList.get(position).getUid());
+                    messageListDataArrayList.clear();
+                    newMessageListDataArrayList.clear();
+                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+                    fragmentThisMessage.setArguments(messageKeyBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
             }
         });
     }

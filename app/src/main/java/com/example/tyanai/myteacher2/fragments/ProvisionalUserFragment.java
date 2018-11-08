@@ -2,6 +2,7 @@ package com.example.tyanai.myteacher2.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalUserListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
@@ -144,17 +146,19 @@ public class ProvisionalUserFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
                 //message画面に移動許可拒否
-
-                //caseNum
-                Bundle cNumBundle = new Bundle();
-                cNumBundle.putString("caseNum",provisionalUserDataArrayList.get(position).getCaseNum());
-                ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
-                fragmentProvisionalMessage.setArguments(cNumBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
+                if (NetworkManager.isConnected(getContext())){
+                    //caseNum
+                    Bundle cNumBundle = new Bundle();
+                    cNumBundle.putString("caseNum",provisionalUserDataArrayList.get(position).getCaseNum());
+                    ProvisionalMessageFragment fragmentProvisionalMessage = new ProvisionalMessageFragment();
+                    fragmentProvisionalMessage.setArguments(cNumBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 

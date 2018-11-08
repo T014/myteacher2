@@ -394,117 +394,122 @@ public class TimelineFragment extends Fragment {
         timeLineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                if (view.getId()==R.id.goodButton){
-                    goodPosition = timeLineListView.getFirstVisiblePosition();
-                    y = timeLineListView.getChildAt(0).getTop();
 
-                    //いいねの処理
-                    String favFlag = timeLineArrayList.get(position).getFavFlag();
-                    if (favFlag.equals("true")){
-                        for (NotificationFavData ff : favKeyArrayList){
-                            if (ff.getTradeKey().equals(timeLineArrayList.get(position).getKey())){
-                                favRef.child(ff.getFavPostKey()).removeValue();
+                if (NetworkManager.isConnected(getContext())){
+                    if (view.getId()==R.id.goodButton){
+                        goodPosition = timeLineListView.getFirstVisiblePosition();
+                        y = timeLineListView.getChildAt(0).getTop();
+
+                        //いいねの処理
+                        String favFlag = timeLineArrayList.get(position).getFavFlag();
+                        if (favFlag.equals("true")){
+                            for (NotificationFavData ff : favKeyArrayList){
+                                if (ff.getTradeKey().equals(timeLineArrayList.get(position).getKey())){
+                                    favRef.child(ff.getFavPostKey()).removeValue();
+                                }
                             }
+
+                            String removeKey = timeLineArrayList.get(position).getKey();
+
+                            int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
+                            totalGoods =totalGoods-1;
+                            String totalGd =String.valueOf(totalGoods);
+
+                            Map<String,Object> postGoodKey = new HashMap<>();
+                            postGoodKey.put("goods",totalGd);
+                            contentsRef.child(removeKey).updateChildren(postGoodKey);
+
+                            String newFavFlag = "false";
+                            PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
+                                    ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
+                                    ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
+                                    ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
+                                    ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
+                                    ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
+                                    ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
+                                    ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
+                                    ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
+                                    ,timeLineArrayList.get(position).getStock());
+                            timeLineArrayList.remove(position);
+                            timeLineArrayList.add(position,newPostData);
+                            mAdapter.setTimeLineArrayList(timeLineArrayList);
+                            timeLineListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                            timeLineListView.setSelectionFromTop(goodPosition,y);
+                        }else{
+                            int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
+                            totalGoods =totalGoods+1;
+                            String totalGd =String.valueOf(totalGoods);
+
+                            Map<String,Object> postGoodKey = new HashMap<>();
+                            postGoodKey.put("goods",totalGd);
+                            contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
+
+                            //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
+
+                            Calendar cal1 = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                            String time = sdf.format(cal1.getTime());
+
+                            Map<String,Object> favKey = new HashMap<>();
+                            String key = favRef.push().getKey();
+
+                            favKey.put("postUid",timeLineArrayList.get(position).getUserId());
+                            favKey.put("userId",user.getUid());
+                            favKey.put("userName",myData.getName());
+                            favKey.put("iconBitmapString",myData.getIconBitmapString());
+                            favKey.put("time",time);
+                            favKey.put("favKey",key);
+                            favKey.put("kind","いいね");
+                            favKey.put("kindDetail","いいね");
+                            favKey.put("postKey",timeLineArrayList.get(position).getKey());
+
+                            favRef.child(key).updateChildren(favKey);
+
+                            String newFavFlag = "true";
+                            PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
+                                    ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
+                                    ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
+                                    ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
+                                    ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
+                                    ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
+                                    ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
+                                    ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
+                                    ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
+                                    ,timeLineArrayList.get(position).getStock());
+                            timeLineArrayList.remove(position);
+                            timeLineArrayList.add(position,newPostData);
+                            mAdapter.setTimeLineArrayList(timeLineArrayList);
+                            timeLineListView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                            timeLineListView.setSelectionFromTop(goodPosition,y);
                         }
 
-                        String removeKey = timeLineArrayList.get(position).getKey();
+                    }else if (view.getId()==R.id.userIconImageView){
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
 
-                        int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
-                        totalGoods =totalGoods-1;
-                        String totalGd =String.valueOf(totalGoods);
+                        ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                        fragmentProfileConfirm.setArguments(userBundle);
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                                .commit();
 
-                        Map<String,Object> postGoodKey = new HashMap<>();
-                        postGoodKey.put("goods",totalGd);
-                        contentsRef.child(removeKey).updateChildren(postGoodKey);
-
-                        String newFavFlag = "false";
-                        PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
-                                ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
-                                ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
-                                ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
-                                ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
-                                ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
-                                ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
-                                ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
-                                ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
-                                ,timeLineArrayList.get(position).getStock());
-                        timeLineArrayList.remove(position);
-                        timeLineArrayList.add(position,newPostData);
-                        mAdapter.setTimeLineArrayList(timeLineArrayList);
-                        timeLineListView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                        timeLineListView.setSelectionFromTop(goodPosition,y);
+                    }else if (view.getId()==R.id.contentImageView) {
+                        //画像拡大表示
                     }else{
-                        int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
-                        totalGoods =totalGoods+1;
-                        String totalGd =String.valueOf(totalGoods);
-
-                        Map<String,Object> postGoodKey = new HashMap<>();
-                        postGoodKey.put("goods",totalGd);
-                        contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
-
-                        //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
-                        Calendar cal1 = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-                        String time = sdf.format(cal1.getTime());
-
-                        Map<String,Object> favKey = new HashMap<>();
-                        String key = favRef.push().getKey();
-
-                        favKey.put("postUid",timeLineArrayList.get(position).getUserId());
-                        favKey.put("userId",user.getUid());
-                        favKey.put("userName",myData.getName());
-                        favKey.put("iconBitmapString",myData.getIconBitmapString());
-                        favKey.put("time",time);
-                        favKey.put("favKey",key);
-                        favKey.put("kind","いいね");
-                        favKey.put("kindDetail","いいね");
-                        favKey.put("postKey",timeLineArrayList.get(position).getKey());
-
-                        favRef.child(key).updateChildren(favKey);
-
-                        String newFavFlag = "true";
-                        PostData newPostData = new PostData(timeLineArrayList.get(position).getUserId(),timeLineArrayList.get(position).getName()
-                                ,timeLineArrayList.get(position).getTime(),timeLineArrayList.get(position).getKey(),timeLineArrayList.get(position).getDate()
-                                ,timeLineArrayList.get(position).getImageBitmapString(), timeLineArrayList.get(position).getContents()
-                                ,timeLineArrayList.get(position).getCostType(),timeLineArrayList.get(position).getCost(),timeLineArrayList.get(position).getHowLong()
-                                ,totalGd,newFavFlag,timeLineArrayList.get(position).getBought(),timeLineArrayList.get(position).getEvaluation()
-                                ,timeLineArrayList.get(position).getCancel(),timeLineArrayList.get(position).getMethod(),timeLineArrayList.get(position).getPostArea()
-                                ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
-                                ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
-                                ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
-                                ,timeLineArrayList.get(position).getStock());
-                        timeLineArrayList.remove(position);
-                        timeLineArrayList.add(position,newPostData);
-                        mAdapter.setTimeLineArrayList(timeLineArrayList);
-                        timeLineListView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                        timeLineListView.setSelectionFromTop(goodPosition,y);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key",timeLineArrayList.get(position).getKey());
+                        bundle.putString("screenKey","timeLine");
+                        DetailsFragment fragmentDetails = new DetailsFragment();
+                        fragmentDetails.setArguments(bundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
-
-                }else if (view.getId()==R.id.userIconImageView){
-                    Bundle userBundle = new Bundle();
-                    userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
-
-                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
-                    fragmentProfileConfirm.setArguments(userBundle);
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
-                            .commit();
-
-                }else if (view.getId()==R.id.contentImageView) {
-                    //画像拡大表示
-                }else{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("key",timeLineArrayList.get(position).getKey());
-                    bundle.putString("screenKey","timeLine");
-                    DetailsFragment fragmentDetails = new DetailsFragment();
-                    fragmentDetails.setArguments(bundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.FFListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -144,20 +146,25 @@ public class FFListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        ffArrayList = new ArrayList<String>();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
-        followerRef = mDataBaseReference.child(Const.FollowerPATH).child(user.getUid());
-        Bundle flagBundle = getArguments();
-        ffFlag = flagBundle.getString("flagBundle");
-        if (ffFlag.equals("follow")){
-            MainActivity.mToolbar.setTitle("follow");
-            followRef.addChildEventListener(fEventListener);
-        }else if (ffFlag.equals("follower")){
-            MainActivity.mToolbar.setTitle("follower");
-            followerRef.addChildEventListener(ffEventListener);
+        if (!(NetworkManager.isConnected(getContext()))){
+            Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }else {
+            ffArrayList = new ArrayList<String>();
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+            followRef = mDataBaseReference.child(Const.FollowPATH).child(user.getUid());
+            followerRef = mDataBaseReference.child(Const.FollowerPATH).child(user.getUid());
+            Bundle flagBundle = getArguments();
+            ffFlag = flagBundle.getString("flagBundle");
+            if (ffFlag.equals("follow")){
+                MainActivity.mToolbar.setTitle("follow");
+                followRef.addChildEventListener(fEventListener);
+            }else if (ffFlag.equals("follower")){
+                MainActivity.mToolbar.setTitle("follower");
+                followerRef.addChildEventListener(ffEventListener);
+            }
         }
+
     }
 
 
@@ -187,14 +194,19 @@ public class FFListFragment extends Fragment {
         ffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle userBundle = new Bundle();
-                userBundle.putString("userId",ffUsersArrayList.get(position).getUid());
+                if (NetworkManager.isConnected(getContext())){
+                    Bundle userBundle = new Bundle();
+                    userBundle.putString("userId",ffUsersArrayList.get(position).getUid());
 
-                ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
-                fragmentProfileConfirm.setArguments(userBundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
-                        .commit();
+                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                    fragmentProfileConfirm.setArguments(userBundle);
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                            .commit();
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
+
             }
         });
     }

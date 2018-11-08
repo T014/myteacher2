@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
 import com.example.tyanai.myteacher2.R;
+import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -80,11 +83,9 @@ public class ProvisionalFragment extends Fragment {
                     mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
                     provisionalListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-
                 }
             }
         }
-
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
         }
@@ -214,14 +215,19 @@ public class ProvisionalFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
 
-                Bundle pKeyBundle = new Bundle();
-                pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
-                ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
-                fragmentProvisionalUser.setArguments(pKeyBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentProvisionalUser,ProvisionalUserFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (NetworkManager.isConnected(getContext())){
+                    Bundle pKeyBundle = new Bundle();
+                    pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
+                    ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
+                    fragmentProvisionalUser.setArguments(pKeyBundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentProvisionalUser,ProvisionalUserFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }
+
             }
         });
     }
@@ -243,18 +249,14 @@ public class ProvisionalFragment extends Fragment {
                 contentsRef.addChildEventListener(contentEventListener);
             }
         }, 200);
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
-
     public void listCounter() {
-
         //同じ投稿を表示しない
-
         for (int k = 0; k < newProvisionalKeyDataArrayList.size(); k++) {
             for (int i = 0; i < newProvisionalKeyDataArrayList.size(); i++) {
                 if (k!=i){

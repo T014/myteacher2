@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalMessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -156,43 +158,44 @@ public class ProvisionalMessageFragment extends Fragment {
         provisionalMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                if (view.getId()==R.id.provisionalMessageOkButton){
-                    //買い手が押したら支払い画面に移動
-                    //支払い終わったら取引履歴にデータを移動する
+                if (NetworkManager.isConnected(getContext())){
+                    if (view.getId()==R.id.provisionalMessageOkButton){
+                        //買い手が押したら支払い画面に移動
+                        //支払い終わったら取引履歴にデータを移動する
 
-                    if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
-                        Map<String,Object> childUpdates = new HashMap<>();
-                        childUpdates.put("booleans","ok");
-                        String postUid = newProvisionalMessageDataArrayList.get(position).getPostUid();
-                        confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
-                                .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
-                                .updateChildren(childUpdates);
-                        //booleans=ok
-                        if (postUid.equals(user.getUid())){
-                            //通知を投げて支払いさせる
-                        }else{
-                            //購入画面に移動
+                        if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
+                            Map<String,Object> childUpdates = new HashMap<>();
+                            childUpdates.put("booleans","ok");
+                            String postUid = newProvisionalMessageDataArrayList.get(position).getPostUid();
+                            confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
+                                    .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
+                                    .updateChildren(childUpdates);
+                            //booleans=ok
+                            if (postUid.equals(user.getUid())){
+                                //通知を投げて支払いさせる
+                            }else{
+                                //購入画面に移動
+                            }
                         }
-                    }
 
-                }else if (view.getId()==R.id.provisionalMessageNoButton){
-                    //新しい契約内容を入力させるeditTextVisible
-                    //契約内容確認画面に移動
-                    Bundle caseNumBundle = new Bundle();
-                    caseNumBundle.putString("caseNum",newProvisionalMessageDataArrayList.get(position).getCaseNum());
-                    caseNumBundle.putString("key",newProvisionalMessageDataArrayList.get(position).getPostKey());
-                    caseNumBundle.putString("postUid",newProvisionalMessageDataArrayList.get(position).getPostUid());
-                    ContractFragment fragmentContract = new ContractFragment();
-                    fragmentContract.setArguments(caseNumBundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
-                    transaction.commit();
+                    }else if (view.getId()==R.id.provisionalMessageNoButton){
+                        //新しい契約内容を入力させるeditTextVisible
+                        //契約内容確認画面に移動
+                        Bundle caseNumBundle = new Bundle();
+                        caseNumBundle.putString("caseNum",newProvisionalMessageDataArrayList.get(position).getCaseNum());
+                        caseNumBundle.putString("key",newProvisionalMessageDataArrayList.get(position).getPostKey());
+                        caseNumBundle.putString("postUid",newProvisionalMessageDataArrayList.get(position).getPostUid());
+                        ContractFragment fragmentContract = new ContractFragment();
+                        fragmentContract.setArguments(caseNumBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
+                        transaction.commit();
+                    }
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
-
-
-
     }
 
     @Override

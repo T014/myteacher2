@@ -42,6 +42,7 @@ import com.example.tyanai.myteacher2.fragments.AuthenticationFragment;
 import com.example.tyanai.myteacher2.fragments.BusinessFragment;
 import com.example.tyanai.myteacher2.fragments.ConfirmProfileFragment;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.fragments.ContactFragment;
 import com.example.tyanai.myteacher2.fragments.ContractFragment;
 import com.example.tyanai.myteacher2.fragments.DetailsFragment;
 import com.example.tyanai.myteacher2.fragments.FFListFragment;
@@ -258,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String iconBitmapString = (String) map.get("iconBitmapString");
                 String coin = (String) map.get("coin");
 
-
                 if (user!=null){
                     if (userId.equals(user.getUid())){
                         if (iconBitmapString.length()<10){
@@ -295,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,9 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //購読解除
         FirebaseMessaging.getInstance().unsubscribeFromTopic("mytopic");
 
-
         String aaa = FirebaseInstanceId.getInstance().getId();
-
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -337,11 +334,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-
-
-
-
-
 
         snack = (CoordinatorLayout)findViewById(R.id.snack);
 
@@ -430,17 +422,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-                mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
+
         if (user !=null){
             userRef.addChildEventListener(aEventListener);
         }
-
-
-
-
-
-
 
         // パーミッションの許可状態を確認する
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -687,7 +674,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             drawerTransaction.commit();
                         }
                     }
-                } else if (id == R.id.nav_contract) {
+                } else if (id == R.id.nav_contact) {
                     mToolbar.setTitle("お問い合わせ");
                     if (currentFragmentTag != null) {
                         if (currentFragmentTag.equals("DetailsFragment")) {
@@ -695,8 +682,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
                             drawerTransaction.commit();
                         } else {
-                            ContractFragment fragmentContract = new ContractFragment();
-                            drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
+                            ContactFragment fragmentContact = new ContactFragment();
+                            drawerTransaction.replace(R.id.container, fragmentContact, ContactFragment.TAG);
                             drawerTransaction.addToBackStack(null);
                             drawerTransaction.commit();
                         }
@@ -775,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         super.onBackPressed();
         //バックスタックの登録数をチェックして0であればPopUpは存在しない
-        if (1 == getSupportFragmentManager().getBackStackEntryCount()){
+        if (0 == getSupportFragmentManager().getBackStackEntryCount()){
             this.finish();
             this.moveTaskToBack(true);
         }

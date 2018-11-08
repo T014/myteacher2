@@ -603,7 +603,6 @@ public class DetailsFragment extends Fragment {
                 }else{
                     //未いいね
 
-                    //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal1.getTime());
@@ -728,7 +727,6 @@ public class DetailsFragment extends Fragment {
 
                 if (NetworkManager.isConnected(getContext())){
 
-
                     //tradeに移動する
                     //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                     Calendar cal1 = Calendar.getInstance();
@@ -739,7 +737,6 @@ public class DetailsFragment extends Fragment {
                     newTradeKey.put("kindDetail","許可");
                     newTradeKey.put("permittedDate",time);
                     requestRef.child(tradeKey).updateChildren(newTradeKey);
-
 
                     int stockCount = Integer.parseInt(thisPost.getStock());
                     stockCount = stockCount-1;
@@ -799,7 +796,6 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
                 if (NetworkManager.isConnected(getContext())){
 
-
                     //tradeに移動する
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -837,7 +833,6 @@ public class DetailsFragment extends Fragment {
                         confirmKeyRef.child(accountData.getUid()).child(thisTradeKey).removeValue();
                         confirmKeyRef.child(user.getUid()).child(thisTradeKey).removeValue();
                         buyFlag = false;
-
 
                         Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
                     }else {
@@ -900,9 +895,6 @@ public class DetailsFragment extends Fragment {
                         }else{
                             Snackbar.make(MainActivity.snack, "売り切れです。", Snackbar.LENGTH_LONG).show();
                         }
-
-
-
                     }else {
                         Snackbar.make(view,"購入リクエストを送信できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                     }
@@ -956,8 +948,6 @@ public class DetailsFragment extends Fragment {
                     childUpdates2.put(key,makeMessageKeyRef2);
                     messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
 
-
-
                     Map<String,Object> makeMessageRef = new HashMap<>();
                     makeMessageRef.put("userId","");
                     makeMessageRef.put("bitmapString","");
@@ -980,9 +970,6 @@ public class DetailsFragment extends Fragment {
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
-
-
-
             }
         });
 
@@ -1037,7 +1024,6 @@ public class DetailsFragment extends Fragment {
         requestRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(bfEventListener);
 
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
-
     }
 
     @Override
