@@ -210,63 +210,6 @@
                 android:layout_centerHorizontal="true"
                 android:text="完了"/>
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/saveButton"
-                android:id="@+id/widthView2"
-                android:layout_marginTop="16dp"
-                android:background="#ff808080" />
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="15dp"
-                android:layout_below="@+id/widthView2"
-                android:id="@+id/reqIconImageView"
-                android:layout_alignParentLeft="true"
-                android:paddingStart="15dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/widthView2"
-                android:id="@+id/reqNameTextView"
-                android:layout_toEndOf="@+id/reqIconImageView"
-                android:layout_marginLeft="15dp"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/reqNameTextView"
-                android:layout_marginStart="15dp"
-                android:layout_toRightOf="@+id/reqIconImageView"
-                android:text="許可"
-                android:id="@+id/permitButton"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/reqNameTextView"
-                android:layout_toRightOf="@+id/permitButton"
-                android:layout_marginStart="15dp"
-                android:id="@+id/rejectButton"
-                android:text="拒否"/>
-
-
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/reqIconImageView"
-                android:id="@+id/widthView3"
-                android:layout_marginTop="15dp"
-                android:background="#ff808080" />
-
         </RelativeLayout>
-
-
-
 
 </ScrollView>

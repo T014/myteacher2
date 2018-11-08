@@ -10,6 +10,7 @@ public class ProvisionalKeyData {
     private String mName;
     private String mContent;
     private String mCount;
+    private String mPostUid;
 
 
     public String getCaseNum(){
@@ -40,8 +41,12 @@ public class ProvisionalKeyData {
         return mCount;
     }
 
+    public String getPostUid() {
+        return mPostUid;
+    }
+
     public ProvisionalKeyData(String caseNum, String postKey, String time, String uid, String iconBitmapString
-            , String contentBitmapString, String name, String content, String count){
+            , String contentBitmapString, String name, String content, String count,String postUid){
         mCaseNum = caseNum;
         mPostKey = postKey;
         mTime = time;
@@ -51,5 +56,6 @@ public class ProvisionalKeyData {
         mName = name;
         mContent = content;
         mCount = count;
+        mPostUid = postUid;
     }
 }

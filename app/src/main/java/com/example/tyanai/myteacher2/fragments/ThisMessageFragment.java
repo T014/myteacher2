@@ -51,7 +51,6 @@ public class ThisMessageFragment extends Fragment{
     DatabaseReference messageKeyRef;
     String msKey;
     Button confirmButton;
-    UserData myData;
     String icon;
     int removeMessageCount=0;
     int totalMessageCount = 0;
@@ -101,7 +100,6 @@ public class ThisMessageFragment extends Fragment{
                 }
             }
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -316,7 +314,6 @@ public class ThisMessageFragment extends Fragment{
                         messageRef.child(msKey).updateChildren(childUpdates);
                     }
 
-
                     Map<String,Object> messageData = new HashMap<>();
                     String key = messageRef.child(msKey).push().getKey();
 
@@ -338,9 +335,8 @@ public class ThisMessageFragment extends Fragment{
                     messageKeyRef.child(otherUid).child(msKey).updateChildren(makeMessageKeyRef);
 
                     messageListView.setSelectionFromTop(nowPosition,nowY);
-
                 }
-}
+            }
         });
 
         confirmButton.setOnClickListener(new View.OnClickListener() {

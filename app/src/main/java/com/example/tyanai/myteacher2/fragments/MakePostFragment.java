@@ -113,7 +113,6 @@ public class MakePostFragment extends Fragment {
     String croppedBitmapString;
     Boolean croppedFlag = false;
 
-
     private ChildEventListener ssEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -890,7 +889,8 @@ public class MakePostFragment extends Fragment {
                             Snackbar.make(MainActivity.snack, "分野を選択してください。", Snackbar.LENGTH_LONG).show();
                         }
                     }else {
-                        Snackbar.make(MainActivity.snack,"オフラインです",Snackbar.LENGTH_LONG).show();
+                        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
+                        Snackbar.make(MainActivity.snack,"送信が失敗しました。もう一度送信してください。",Snackbar.LENGTH_LONG).show();
                     }
                 }
             }

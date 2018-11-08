@@ -120,7 +120,6 @@ public class ContractFragment extends Fragment {
                         fragmentDetails.setArguments(bundle);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                        transaction.addToBackStack(null);
                         transaction.commit();
                     }
                 }, 1000);
@@ -143,7 +142,6 @@ public class ContractFragment extends Fragment {
                         fragmentDetails.setArguments(bundle);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                        transaction.addToBackStack(null);
                         transaction.commit();
                     }
                 }, 1000);
@@ -207,6 +205,7 @@ public class ContractFragment extends Fragment {
                                         datas.put("uid",postUid);
                                         datas.put("postKey",postKey);
                                         datas.put("caseNum",caseNum);
+                                        datas.put("postUid",postUid);
                                         confirmKeyRef.child(user.getUid()).child(caseNum).updateChildren(datas);
 
                                         Map<String,Object> mdatas = new HashMap<>();
@@ -214,6 +213,7 @@ public class ContractFragment extends Fragment {
                                         mdatas.put("uid",user.getUid());
                                         mdatas.put("postKey",postKey);
                                         mdatas.put("caseNum",caseNum);
+                                        mdatas.put("postUid",postUid);
                                         confirmKeyRef.child(postUid).child(caseNum).updateChildren(mdatas);
 
                                         Bundle cNumBundle = new Bundle();
@@ -222,7 +222,6 @@ public class ContractFragment extends Fragment {
                                         fragmentProvisionalMessage.setArguments(cNumBundle);
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                         transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
-                                        transaction.addToBackStack(null);
                                         transaction.commit();
 
 
@@ -238,7 +237,6 @@ public class ContractFragment extends Fragment {
 //                                        fragmentProvisionalMessage.setArguments(cNumBundle);
 //                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 //                                        transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
-//                                        transaction.addToBackStack(null);
 //                                        transaction.commit();
                                     }
                                 }else {
