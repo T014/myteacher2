@@ -144,7 +144,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
-                    if (contents!=null && !(contents.equals(""))){
+                    if (contents!=null){
                         int contentsCount = contents.length();
                         if (contentsCount>16){
                             int o = 0;
@@ -208,7 +208,7 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.otherMessageTimeTextView.setText(n);
                     }
-                    if (contents!=null && !(contents.equals(""))){
+                    if (contents!=null){
                         messageListViewHolder.otherMessageContentsTextView.setText(contents);
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);

@@ -308,6 +308,7 @@ public class DetailsFragment extends Fragment {
                 evaluationSpinner.setVisibility(View.GONE);
                 evaluationTextView.setVisibility(View.GONE);
                 saveButton.setVisibility(View.GONE);
+                discussButton.setVisibility(View.GONE);
             }else{
                 boughtDetailTextView.setText(null);
                 goodDetailTextView.setText(null);
@@ -635,7 +636,6 @@ public class DetailsFragment extends Fragment {
                     ev = (String) evaluationSpinner.getSelectedItem();
                     if (!(ev.equals("評価する"))){
 
-                        //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                         Calendar cal1 = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                         String time = sdf.format(cal1.getTime());
@@ -920,7 +920,7 @@ public class DetailsFragment extends Fragment {
                 for (int i=0;i<messageUidArrayList.size();i++){
                     uidArrayList.add(messageUidArrayList.get(i).getUid());
                 }
-                if (accountData.getUid()!=null){
+                if (accountData!=null){
                     if (uidArrayList.contains(accountData.getUid())){
                         for (MessageListData bbb:messageUidArrayList){
                             if (bbb.getUid().equals(accountData.getUid())){

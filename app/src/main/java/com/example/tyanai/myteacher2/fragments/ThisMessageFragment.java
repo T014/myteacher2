@@ -60,8 +60,6 @@ public class ThisMessageFragment extends Fragment{
     int lvp = 15;
     String otherUid;
 
-
-
     private ChildEventListener umEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -99,9 +97,11 @@ public class ThisMessageFragment extends Fragment{
                         messageListView.setSelection(last);
                     }else{
                         messageListView.setSelectionFromTop(nowPosition+2,nowY);
-                    } }
+                    }
+                }
             }
         }
+
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -232,16 +232,13 @@ public class ThisMessageFragment extends Fragment{
 
                                                     messageListView.setSelection(n);
                                                 }
-
                                             }
                                         }
                                     }
                                 }
-
                             }
 
                         }, 500);
-
                     }
                 }
             }
@@ -256,78 +253,94 @@ public class ThisMessageFragment extends Fragment{
             @Override
             public void onClick(View view) {
 
-                //最新のメッセージの日付と比較して違かったら日付を送信
+                String contents = editMessageEditText.getText().toString();
+                if (contents!=null && !(contents.equals(""))){
 
-                //投稿時間
-                Calendar cal1 = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-                String time = sdf.format(cal1.getTime());
-                //投稿日
-                String nowDay = time.substring(0,10);
-                if (messageListDataArrayList.size()!=0){
-                    String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
-                    if (lastDate!=null && !(lastDate.equals(""))){
-                        String lastDay = lastDate.substring(0,10);
+                    //最新のメッセージの日付と比較して違かったら日付を送信
 
-                        int deff = nowDay.compareTo(lastDay);
-                        if (deff!=0){
-                            //日付送信
-                            Map<String,Object> messageData = new HashMap<>();
-                            String key = messageRef.child(msKey).push().getKey();
-
-                            messageData.put("bitmapString","");
-                            messageData.put("contents","");
-                            messageData.put("time",nowDay);
-                            messageData.put("userId","");
-                            messageData.put("roomKey",msKey);
-
-                            Map<String,Object> childUpdates = new HashMap<>();
-                            childUpdates.put(key,messageData);
-                            messageRef.child(msKey).updateChildren(childUpdates);
+                    if (messageListDataArrayList.size()>0){
+                        nowPosition = messageListView.getFirstVisiblePosition();
+                        if (nowPosition!=0){
+                            nowY = messageListView.getChildAt(0).getTop();
+                        }
+                    }else{
+                        if (getView().getTop()!=0){
+                            nowPosition = messageListView.getFirstVisiblePosition();
+                            if (nowPosition!=0){
+                                nowY = messageListView.getChildAt(0).getTop();
+                            }
                         }
                     }
 
-                }else {
-                    //日付送信
+                    //投稿時間
+                    Calendar cal1 = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                    String time = sdf.format(cal1.getTime());
+                    //投稿日
+                    String nowDay = time.substring(0,10);
+                    if (messageListDataArrayList.size()!=0){
+                        String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
+                        if (lastDate!=null && !(lastDate.equals(""))){
+                            String lastDay = lastDate.substring(0,10);
+
+                            int deff = nowDay.compareTo(lastDay);
+                            if (deff!=0){
+                                //日付送信
+                                Map<String,Object> messageData = new HashMap<>();
+                                String key = messageRef.child(msKey).push().getKey();
+
+                                messageData.put("bitmapString","");
+                                messageData.put("contents","");
+                                messageData.put("time",nowDay);
+                                messageData.put("userId","");
+                                messageData.put("roomKey",msKey);
+
+                                Map<String,Object> childUpdates = new HashMap<>();
+                                childUpdates.put(key,messageData);
+                                messageRef.child(msKey).updateChildren(childUpdates);
+                            }
+                        }
+                    }else {
+                        //日付送信
+                        Map<String,Object> messageData = new HashMap<>();
+                        String key = messageRef.child(msKey).push().getKey();
+
+                        messageData.put("bitmapString","");
+                        messageData.put("contents","");
+                        messageData.put("time",nowDay);
+                        messageData.put("userId","");
+                        messageData.put("roomKey",msKey);
+
+                        Map<String,Object> childUpdates = new HashMap<>();
+                        childUpdates.put(key,messageData);
+                        messageRef.child(msKey).updateChildren(childUpdates);
+                    }
+
+
                     Map<String,Object> messageData = new HashMap<>();
                     String key = messageRef.child(msKey).push().getKey();
 
                     messageData.put("bitmapString","");
-                    messageData.put("contents","");
-                    messageData.put("time",nowDay);
-                    messageData.put("userId","");
+                    messageData.put("contents",contents);
+                    messageData.put("time",time);
+                    messageData.put("userId",user.getUid());
                     messageData.put("roomKey",msKey);
 
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,messageData);
                     messageRef.child(msKey).updateChildren(childUpdates);
+                    editMessageEditText.getEditableText().clear();
+
+                    Map<String,Object> makeMessageKeyRef = new HashMap<>();
+                    makeMessageKeyRef.put("time",time);
+                    makeMessageKeyRef.put("content",contents);
+                    messageKeyRef.child(user.getUid()).child(msKey).updateChildren(makeMessageKeyRef);
+                    messageKeyRef.child(otherUid).child(msKey).updateChildren(makeMessageKeyRef);
+
+                    messageListView.setSelectionFromTop(nowPosition,nowY);
+
                 }
-
-                String contents = editMessageEditText.getText().toString();
-
-                Map<String,Object> messageData = new HashMap<>();
-                String key = messageRef.child(msKey).push().getKey();
-
-                messageData.put("bitmapString","");
-                messageData.put("contents",contents);
-                messageData.put("time",time);
-                messageData.put("userId",user.getUid());
-                messageData.put("roomKey",msKey);
-
-                Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put(key,messageData);
-                messageRef.child(msKey).updateChildren(childUpdates);
-                editMessageEditText.getEditableText().clear();
-
-
-
-                Map<String,Object> makeMessageKeyRef = new HashMap<>();
-                makeMessageKeyRef.put("time",time);
-                makeMessageKeyRef.put("content",contents);
-                messageKeyRef.child(user.getUid()).child(msKey).updateChildren(makeMessageKeyRef);
-                messageKeyRef.child(otherUid).child(msKey).updateChildren(makeMessageKeyRef);
-
-            }
+}
         });
 
         confirmButton.setOnClickListener(new View.OnClickListener() {

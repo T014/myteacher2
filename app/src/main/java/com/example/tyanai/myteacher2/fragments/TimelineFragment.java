@@ -445,8 +445,6 @@ public class TimelineFragment extends Fragment {
                             postGoodKey.put("goods",totalGd);
                             contentsRef.child(timeLineArrayList.get(position).getKey()).updateChildren(postGoodKey);
 
-                            //String time= mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
-
                             Calendar cal1 = Calendar.getInstance();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                             String time = sdf.format(cal1.getTime());
