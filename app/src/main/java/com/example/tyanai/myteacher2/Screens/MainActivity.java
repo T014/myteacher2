@@ -603,46 +603,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             drawerTransaction.commit();
                         }
                     }
-                } else if (id == R.id.nav_apply) {
-                    mToolbar.setTitle("購入申請");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "apply");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "apply");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
-                        }
-                    }
-                } else if (id == R.id.nav_request) {
-                    mToolbar.setTitle("購入リクエスト");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "request");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "request");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
-                        }
-                    }
                 } else if (id == R.id.nav_authentication) {
                     mToolbar.setTitle("ユーザー認証");
                     if (currentFragmentTag != null) {

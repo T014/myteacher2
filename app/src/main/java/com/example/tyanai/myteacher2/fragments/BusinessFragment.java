@@ -72,39 +72,20 @@ public class BusinessFragment extends Fragment {
                 subPermittedDate = permittedDate.substring(0,16);
                 subPayDay = payDay.substring(0,16);
                 subReceiveDate = receiveDate.substring(0,16);
+
+                BusinessData businessData = new BusinessData(bought, subDate,subReceiveDate,sold,subPayDay,tradeKey, userName,userIcon,evaluation,
+                        judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,subPermittedDate,refactorKey);
+
+                if (screenNum.equals("business")){
+                    Collections.reverse(businessDataArrayList);
+                    businessDataArrayList.add(businessData);
+                    Collections.reverse(businessDataArrayList);
+                    mAdapter.setBusinessDataArrayList(businessDataArrayList);
+                    businessListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+
             }catch (StringIndexOutOfBoundsException e){
-
-            }
-
-
-            BusinessData businessData = new BusinessData(bought, subDate,subReceiveDate,sold,subPayDay,tradeKey, userName,userIcon,evaluation,
-                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,subPermittedDate,refactorKey);
-
-            if (screenNum.equals("request")){
-                if (businessData.getKindDetail().equals("リクエスト")){
-                    Collections.reverse(businessDataArrayList);
-                    businessDataArrayList.add(businessData);
-                    Collections.reverse(businessDataArrayList);
-                    mAdapter.setBusinessDataArrayList(businessDataArrayList);
-                    businessListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }else if (screenNum.equals("apply")){
-                if (businessData.getKindDetail().equals("リクエスト")){
-                    Collections.reverse(businessDataArrayList);
-                    businessDataArrayList.add(businessData);
-                    Collections.reverse(businessDataArrayList);
-                    mAdapter.setBusinessDataArrayList(businessDataArrayList);
-                    businessListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }else if (screenNum.equals("business")){
-                Collections.reverse(businessDataArrayList);
-                businessDataArrayList.add(businessData);
-                Collections.reverse(businessDataArrayList);
-                mAdapter.setBusinessDataArrayList(businessDataArrayList);
-                businessListView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
             }
         }
         @Override
@@ -146,13 +127,9 @@ public class BusinessFragment extends Fragment {
         Bundle screenBundle = getArguments();
         if (screenBundle!=null){
             screenNum = screenBundle.getString("screenKey");
-            if (screenNum.equals("business")){
+            if (screenNum.equals("business")) {
                 tradeRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
                 tradeRef.orderByChild("sold").equalTo(user.getUid()).addChildEventListener(tEventListener);
-            }else if (screenNum.equals("apply")){
-                requestRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
-            }else if (screenNum.equals("request")){
-                requestRef.orderByChild("sold").equalTo(user.getUid()).addChildEventListener(tEventListener);
             }
         }else{
             tradeRef.orderByChild("bought").equalTo(user.getUid()).addChildEventListener(tEventListener);
