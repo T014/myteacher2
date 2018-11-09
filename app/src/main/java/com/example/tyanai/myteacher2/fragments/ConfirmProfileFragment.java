@@ -3,14 +3,10 @@ package com.example.tyanai.myteacher2.fragments;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,8 +67,6 @@ public class ConfirmProfileFragment extends Fragment{
     private ToggleButton followFollowerButton;
     private ArrayList<String> followArrayList;
     ListAdapter mAdapter;
-
-
     private ArrayList<MessageListData> messageUidArrayList;
 
     //mEventListenerの設定と初期化
@@ -267,7 +261,6 @@ public class ConfirmProfileFragment extends Fragment{
         messageUidArrayList = new ArrayList<MessageListData>();
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -307,7 +300,6 @@ public class ConfirmProfileFragment extends Fragment{
         return v;
     }
 
-
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -342,7 +334,6 @@ public class ConfirmProfileFragment extends Fragment{
             messageButton.setVisibility(View.GONE);
             MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
         }
-
         userRef.addChildEventListener(cEventListener);
 
         followFollowerButton.setOnClickListener(new View.OnClickListener(){
@@ -419,7 +410,6 @@ public class ConfirmProfileFragment extends Fragment{
                 transaction.commit();
             }
         });
-
         postButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -437,7 +427,6 @@ public class ConfirmProfileFragment extends Fragment{
 
             }
         });
-
         gdButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -455,7 +444,6 @@ public class ConfirmProfileFragment extends Fragment{
 
             }
         });
-
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -498,7 +486,6 @@ public class ConfirmProfileFragment extends Fragment{
                     Map<String,Object> childUpdates2 = new HashMap<>();
                     childUpdates2.put(key,makeMessageKeyRef2);
                     messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
-
 
                     Map<String,Object> makeMessageRef = new HashMap<>();
                     makeMessageRef.put("userId","");

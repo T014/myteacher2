@@ -35,7 +35,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ThisMessageFragment extends Fragment{
     public static final String TAG = "ThisMessageFragment";
 
@@ -352,8 +351,6 @@ public class ThisMessageFragment extends Fragment{
         });
     }
 
-
-
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -366,7 +363,6 @@ public class ThisMessageFragment extends Fragment{
 
     public void onDestroyView() {
         super.onDestroyView();
-
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }

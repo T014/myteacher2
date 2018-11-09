@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
-import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 
 import java.util.ArrayList;
@@ -73,21 +71,16 @@ public class ProvisionalListAdapter extends BaseAdapter {
         if (count!=null){
             provisionalListViewHolder.countTextView.setText("仮契約"+count+"人");
         }
-
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length>5){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             provisionalListViewHolder.iconImageView.setImageBitmap(iconImageBitmap);
         }
-
-
         byte[] contentImageBytes = Base64.decode(contentBitmapString,Base64.DEFAULT);
         if(contentImageBytes.length>5){
             Bitmap contentImageBitmap = BitmapFactory.decodeByteArray(contentImageBytes,0, contentImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             provisionalListViewHolder.contentImageView.setImageBitmap(contentImageBitmap);
         }
-
         return convertView;
     }
 
@@ -96,12 +89,10 @@ public class ProvisionalListAdapter extends BaseAdapter {
         // List<String> imgList の全要素数を返す
         return provisionalKeyDataArrayList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return null;
     }
-
     @Override
     public long getItemId(int position) {
         return 0;
@@ -109,10 +100,4 @@ public class ProvisionalListAdapter extends BaseAdapter {
     public void setProvisionalKeyDataArrayList(ArrayList<ProvisionalKeyData> list){
         provisionalKeyDataArrayList = list;
     }
-
-
-
-
-
-
 }

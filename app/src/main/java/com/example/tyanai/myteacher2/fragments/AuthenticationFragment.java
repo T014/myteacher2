@@ -39,8 +39,6 @@ public class AuthenticationFragment extends Fragment {
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
-
-
     TextView loginMethodTextView;
     TextView cautionTextView;
     EditText phoneNumberEditText;
@@ -48,10 +46,6 @@ public class AuthenticationFragment extends Fragment {
     Button enterButton;
     Button verifyButton;
     Button resendButton;
-
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,16 +70,12 @@ public class AuthenticationFragment extends Fragment {
 //        }
 
         mAuth = FirebaseAuth.getInstance();
-
-
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 mVerificationInProgress = false;
                 signInWithPhoneAuthCredential(credential);
             }
-
             @Override
             public void onVerificationFailed(FirebaseException e) {
                 mVerificationInProgress = false;
@@ -95,10 +85,7 @@ public class AuthenticationFragment extends Fragment {
                     Snackbar.make(MainActivity.snack, "Quota exceeded.",
                             Snackbar.LENGTH_SHORT).show();
                 }
-
-
             }
-
             @Override
             public void onCodeSent(String verificationId,
                                    PhoneAuthProvider.ForceResendingToken token) {
@@ -106,7 +93,6 @@ public class AuthenticationFragment extends Fragment {
                 mResendToken = token;
             }
         };
-
 
         enterButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -117,7 +103,6 @@ public class AuthenticationFragment extends Fragment {
                 startPhoneNumberVerification(phoneNumberEditText.getText().toString());
             }
         });
-
         verifyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -129,7 +114,6 @@ public class AuthenticationFragment extends Fragment {
                 verifyPhoneNumberWithCode(mVerificationId, code);
             }
         });
-
         resendButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -138,8 +122,6 @@ public class AuthenticationFragment extends Fragment {
 //                startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -161,7 +143,6 @@ public class AuthenticationFragment extends Fragment {
 //        super.onRestoreInstanceState(savedInstanceState);
 //        mVerificationInProgress = savedInstanceState.getBoolean(KEY_VERIFY_IN_PROGRESS);
 //    }
-
 
     private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(

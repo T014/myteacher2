@@ -29,7 +29,6 @@ class MessageListViewHolder {
     TextView messageTimeTextView;
     TextView messageContentsTextView;
     ImageView myMessageImageView;
-    ImageView myMessageImageIconImageView;
     TextView myMessageImageTimeTextView;
     ImageView otherMessageIconImageView;
     TextView otherMessageContentsTextView;
@@ -66,43 +65,38 @@ public class MessageListAdapter extends BaseAdapter {
         String newContents="";
 
         MessageListViewHolder messageListViewHolder;
-
         if (convertView == null) {
-        // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
-        convertView = inflater.inflate(layoutId, parent, false);
-        // ViewHolder を生成
+            // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
+            convertView = inflater.inflate(layoutId, parent, false);
+            // ViewHolder を生成
 
-        messageListViewHolder = new MessageListViewHolder();
+            messageListViewHolder = new MessageListViewHolder();
 
+            messageListViewHolder.messageTimeTextView = (TextView) convertView.findViewById(R.id.messageTimeTextView);
+            messageListViewHolder.messageContentsTextView = (TextView) convertView.findViewById(R.id.messageContentsTextView);
 
+            messageListViewHolder.myMessageImageTimeTextView = (TextView) convertView.findViewById(R.id.myMessageImageTimeTextView);
+            messageListViewHolder.myMessageImageView = (ImageView) convertView.findViewById(R.id.myMessageImageView);
 
-        messageListViewHolder.messageTimeTextView = (TextView) convertView.findViewById(R.id.messageTimeTextView);
-        messageListViewHolder.messageContentsTextView = (TextView) convertView.findViewById(R.id.messageContentsTextView);
+            messageListViewHolder.otherMessageIconImageView = (ImageView) convertView.findViewById(R.id.otherMessageIconImageView);
+            messageListViewHolder.otherMessageContentsTextView = (TextView) convertView.findViewById(R.id.otherMessageContentsTextView);
+            messageListViewHolder.otherMessageTimeTextView = (TextView) convertView.findViewById(R.id.otherMessageTimeTextView);
 
-        messageListViewHolder.myMessageImageTimeTextView = (TextView) convertView.findViewById(R.id.myMessageImageTimeTextView);
-        messageListViewHolder.myMessageImageView = (ImageView) convertView.findViewById(R.id.myMessageImageView);
+            messageListViewHolder.otherMessageImageView = (ImageView) convertView.findViewById(R.id.otherMessageImageView);
+            messageListViewHolder.otherMessageImageIconImageView = (ImageView) convertView.findViewById(R.id.otherMessageImageIconImageView);
+            messageListViewHolder.otherMessageImageTimeTextView = (TextView) convertView.findViewById(R.id.otherMessageImageTimeTextView);
 
-        messageListViewHolder.otherMessageIconImageView = (ImageView) convertView.findViewById(R.id.otherMessageIconImageView);
-        messageListViewHolder.otherMessageContentsTextView = (TextView) convertView.findViewById(R.id.otherMessageContentsTextView);
-        messageListViewHolder.otherMessageTimeTextView = (TextView) convertView.findViewById(R.id.otherMessageTimeTextView);
+            messageListViewHolder.newDateTextView = (TextView) convertView.findViewById(R.id.newDateTextView);
 
-        messageListViewHolder.otherMessageImageView = (ImageView) convertView.findViewById(R.id.otherMessageImageView);
-        messageListViewHolder.otherMessageImageIconImageView = (ImageView) convertView.findViewById(R.id.otherMessageImageIconImageView);
-        messageListViewHolder.otherMessageImageTimeTextView = (TextView) convertView.findViewById(R.id.otherMessageImageTimeTextView);
+            messageListViewHolder.messageListLinearLayout = (LinearLayout)convertView.findViewById(R.id.messageListLinearLayout);
+            messageListViewHolder.myMessageLayout = (LinearLayout)convertView.findViewById(R.id.myMessageLayout);
+            messageListViewHolder.myMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.myMessageImageLinearLayout);
+            messageListViewHolder.otherMessageLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageLayout);
+            messageListViewHolder.otherMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageImageLinearLayout);
+            messageListViewHolder.newDateLinearLayout = (LinearLayout)convertView.findViewById(R.id.newDateLinearLayout);
 
-        messageListViewHolder.newDateTextView = (TextView) convertView.findViewById(R.id.newDateTextView);
-
-        messageListViewHolder.messageListLinearLayout = (LinearLayout)convertView.findViewById(R.id.messageListLinearLayout);
-        messageListViewHolder.myMessageLayout = (LinearLayout)convertView.findViewById(R.id.myMessageLayout);
-        messageListViewHolder.myMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.myMessageImageLinearLayout);
-        messageListViewHolder.otherMessageLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageLayout);
-        messageListViewHolder.otherMessageImageLinearLayout = (LinearLayout)convertView.findViewById(R.id.otherMessageImageLinearLayout);
-        messageListViewHolder.newDateLinearLayout = (LinearLayout)convertView.findViewById(R.id.newDateLinearLayout);
-
-        messageListViewHolder.view = convertView;
-
-        convertView.setTag(messageListViewHolder);
-
+            messageListViewHolder.view = convertView;
+            convertView.setTag(messageListViewHolder);
         } else {
             messageListViewHolder = (MessageListViewHolder) convertView.getTag();
             messageListViewHolder.myMessageLayout.setVisibility(View.VISIBLE);
@@ -112,8 +106,7 @@ public class MessageListAdapter extends BaseAdapter {
             messageListViewHolder.messageListLinearLayout.setVisibility(View.VISIBLE);
             messageListViewHolder.newDateLinearLayout.setVisibility(View.VISIBLE);
         }
-
-         if (uid.equals("")){
+        if (uid.equals("")){
             if (time!=null){
                 messageListViewHolder.newDateTextView.setText(time);
                 //時間送信　全部非表示　コンテンツをmatchで表示
@@ -122,7 +115,7 @@ public class MessageListAdapter extends BaseAdapter {
                 messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                 messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
             }
-         }else if (uid!=null){
+        }else if (uid!=null){
             String n = time.substring(11,16);
             if (uid.equals(myUid)){
                 //自分の時の処理
@@ -134,7 +127,6 @@ public class MessageListAdapter extends BaseAdapter {
                     if (time!=null){
                         messageListViewHolder.myMessageImageTimeTextView.setText(n);
                     }
-
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
@@ -157,7 +149,6 @@ public class MessageListAdapter extends BaseAdapter {
                                 }
                                 String searchContents = contents.substring(o,v);
                                 int jg = searchContents.indexOf("\n");
-
                                 if (jg==-1){
                                     newContents = newContents.concat(searchContents.substring(0,15)+"\n");
                                     o=v-1;
@@ -176,7 +167,6 @@ public class MessageListAdapter extends BaseAdapter {
                         }else{
                             newContents = contents;
                         }
-
                         messageListViewHolder.messageContentsTextView.setText(newContents);
                     }
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
@@ -240,7 +230,6 @@ public class MessageListAdapter extends BaseAdapter {
                         }else{
                             newContents = contents;
                         }
-
                         messageListViewHolder.otherMessageContentsTextView.setText(newContents);
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
@@ -248,7 +237,6 @@ public class MessageListAdapter extends BaseAdapter {
                         Bitmap otherMessageIconImageBitmap = BitmapFactory.decodeByteArray(otherMessageIconImageBytes, 0, otherMessageIconImageBytes.length).copy(Bitmap.Config.ARGB_8888, true);
                         messageListViewHolder.otherMessageIconImageView.setImageBitmap(otherMessageIconImageBitmap);
                     }
-
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.myMessageImageLinearLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
@@ -258,7 +246,6 @@ public class MessageListAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
     @Override
     public boolean areAllItemsEnabled() {
         return false;

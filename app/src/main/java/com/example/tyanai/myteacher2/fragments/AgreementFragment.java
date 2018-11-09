@@ -8,29 +8,19 @@ import android.view.ViewGroup;
 
 import com.example.tyanai.myteacher2.R;
 
-
 public class AgreementFragment extends Fragment {
     public static final String TAG = "AgreementFragment";
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_agreement,container,false);
 
-
-
         return v;
     }
 
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         //利用規約
-
-
-
-
     }
 }

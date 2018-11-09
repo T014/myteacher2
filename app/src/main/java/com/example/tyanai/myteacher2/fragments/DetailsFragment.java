@@ -134,7 +134,6 @@ public class DetailsFragment extends Fragment {
         }
     };
 
-
     private ChildEventListener fvEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -144,7 +143,6 @@ public class DetailsFragment extends Fragment {
             String favKey = (String) map.get("favKey");
 
             if (userId.equals(user.getUid())){
-
                 favUidArrayList.add(userId);
                 removeFavKey = favKey;
             }
@@ -185,7 +183,6 @@ public class DetailsFragment extends Fragment {
                 buyButton.setEnabled(false);
             }
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -395,7 +392,6 @@ public class DetailsFragment extends Fragment {
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -462,7 +458,6 @@ public class DetailsFragment extends Fragment {
                 stopButton.setVisibility(View.GONE);
             }
         }
-
         if (tradeKey==null){
             evaluationSpinner.setVisibility(View.GONE);
             evaluationTextView.setVisibility(View.GONE);
@@ -477,7 +472,6 @@ public class DetailsFragment extends Fragment {
             bTextView.setVisibility(View.GONE);
             MainActivity.mToolbar.setTitle("取引履歴詳細");
         }
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         boughtUidArrayList = new ArrayList<String>();
         favUidArrayList = new ArrayList<String>();
@@ -502,7 +496,6 @@ public class DetailsFragment extends Fragment {
                 Bundle userBundle = new Bundle();
                 if (thisPost!=null){
                     userBundle.putString("userId",thisPost.getUserId());
-
                     ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
                     fragmentProfileConfirm.setArguments(userBundle);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -522,7 +515,6 @@ public class DetailsFragment extends Fragment {
                     int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
                     totalGoods =totalGoods-1;
                     String totalGd =String.valueOf(totalGoods);
-
                     favRef.child(removeFavKey).removeValue();
 
                     Map<String,Object> postGoodKey = new HashMap<>();
@@ -531,14 +523,12 @@ public class DetailsFragment extends Fragment {
                     goodFlag = false;
                 }else{
                     //未いいね
-
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal1.getTime());
 
                     Map<String,Object> favKey = new HashMap<>();
                     String key = favRef.push().getKey();
-
                     favKey.put("postUid",thisPost.getUserId());
                     favKey.put("userId",user.getUid());
                     favKey.put("userName",myData.getName());
@@ -548,7 +538,6 @@ public class DetailsFragment extends Fragment {
                     favKey.put("kind","いいね");
                     favKey.put("kindDetail","いいね");
                     favKey.put("postKey",thisPost.getKey());
-
                     favRef.child(key).updateChildren(favKey);
 
                     int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
@@ -575,11 +564,9 @@ public class DetailsFragment extends Fragment {
                         String time = sdf.format(cal1.getTime());
 
                         Map<String,Object> tradesKey = new HashMap<>();
-
                         tradesKey.put("evaluation",ev);
                         tradesKey.put("case","評価済み");
                         tradesKey.put("receiveDate",time);
-
                         requestRef.child(tradeKey).updateChildren(tradesKey);
                         //評価済みはtradeにしよう
 
@@ -603,7 +590,6 @@ public class DetailsFragment extends Fragment {
                         int totalUserTaught = Integer.parseInt(accountData.getTaught());
                         totalUserTaught =totalUserTaught+1;
                         String totalUserTa =String.valueOf(totalUserTaught);
-
 
                         Map<String,Object> userDataKey = new HashMap<>();
                         userDataKey.put("evaluations",totalUserEv);
@@ -639,7 +625,6 @@ public class DetailsFragment extends Fragment {
                 }else {
                     Snackbar.make(view,"募集を終了できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
-
             }
         });
 
@@ -689,7 +674,6 @@ public class DetailsFragment extends Fragment {
 
                                     Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルしました。",Snackbar.LENGTH_SHORT).show();
                                 }
-
                             }else {
                                 Snackbar.make(MainActivity.snack,"購入リクエストをキャンセルできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                             }
@@ -792,7 +776,6 @@ public class DetailsFragment extends Fragment {
                             }
                         }
                     }else{
-
                         Map<String,Object> makeMessageKeyRef = new HashMap<>();
                         String key = messageRef.push().getKey();
                         makeMessageKeyRef.put("userId",user.getUid());
@@ -870,7 +853,6 @@ public class DetailsFragment extends Fragment {
 
         favRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(fvEventListener);
         requestRef.orderByChild("postKey").equalTo(intentKey).addChildEventListener(bfEventListener);
-
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
     }
 

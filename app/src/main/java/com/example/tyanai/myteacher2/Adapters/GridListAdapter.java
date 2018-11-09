@@ -58,7 +58,6 @@ public class GridListAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
         holder.textview.setText(userName);
-
         //ここで色指定できる評価の高さによって
         if (contents.equals("あああ")){
             holder.linearLayout.setBackgroundColor(Color.rgb(127,127,255));

@@ -16,7 +16,6 @@ public class CustomDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // 今日の日付のカレンダーインスタンスを取得
         final Calendar calendar = Calendar.getInstance();
-
         // ダイアログ生成  DatePickerDialogのBuilderクラスを指定してインスタンス化します
         DatePickerDialog dateBuilder = new DatePickerDialog(
                 getActivity(),
@@ -24,7 +23,6 @@ public class CustomDialogFragment extends DialogFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // 選択された年・月・日を整形 ※月は0-1なので+1している
-
                         if (month+1<10 && dayOfMonth<10){
                             dateStr = year + "/" + ("0"+(month + 1)) + "/" + ("0"+dayOfMonth);
                         }else if (month+1<10 && dayOfMonth>9){
@@ -34,7 +32,6 @@ public class CustomDialogFragment extends DialogFragment {
                         }else if(month+1>9 && dayOfMonth>9){
                             dateStr = year + "/" + (month + 1) + "/" + (dayOfMonth);
                         }
-
                         if (MakePostFragment.dateTextView!=null){
                             MakePostFragment.dateTextView.setText(dateStr);
                         }
@@ -47,7 +44,6 @@ public class CustomDialogFragment extends DialogFragment {
                 calendar.get(Calendar.MONTH), // 初期選択月
                 calendar.get(Calendar.DAY_OF_MONTH) // 初期選択日
         );
-
         // dateBulderを返す
         return dateBuilder;
     }

@@ -128,19 +128,16 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
             }
         }
-
         if (booleans.equals("ok")){
             provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
         }else{
             provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
         }
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             provisionalMessageListViewHolder.provisionalMessageIconImageView.setImageBitmap(iconImageBitmap);
         }
-
         return convertView;
     }
 
@@ -159,12 +156,8 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
     public long getItemId(int position) {
         return 0;
     }
+
     public void setProvisionalMessageArrayList(ArrayList<ProvisionalMessageData> list){
         provisionalMessageArrayList = list;
     }
-
-
-
-
-
 }

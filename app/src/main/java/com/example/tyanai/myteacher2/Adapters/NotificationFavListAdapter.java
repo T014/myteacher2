@@ -124,16 +124,15 @@ public class NotificationFavListAdapter extends BaseAdapter{
         // List<String> imgList の全要素数を返す
         return favUserArrayList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return null;
     }
-
     @Override
     public long getItemId(int position) {
         return 0;
     }
+
     public void setFavUserArrayList(ArrayList<NotificationFavData> list){
         favUserArrayList = list;
     }

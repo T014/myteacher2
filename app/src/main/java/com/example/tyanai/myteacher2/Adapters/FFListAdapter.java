@@ -24,7 +24,6 @@ class FFListViewHolder {
     LinearLayout listLinearLayout;
 }
 
-
 public class FFListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int layoutId;
@@ -64,14 +63,11 @@ public class FFListAdapter extends BaseAdapter {
         if (comment != null){
             ffListViewHolder.commentTextView.setText(comment);
         }
-
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             ffListViewHolder.iconImageView.setImageBitmap(iconImageBitmap);
         }
-
         return convertView;
     }
 
@@ -90,9 +86,8 @@ public class FFListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+
     public void setFFUsersArrayList(ArrayList<UserData> list){
         ffUsersArrayList = list;
     }
-
-
 }

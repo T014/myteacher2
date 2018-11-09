@@ -58,7 +58,6 @@ public class MessageKeyListAdapter extends BaseAdapter {
             messageKeyListViewHolder.timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
             messageKeyListViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
             convertView.setTag(messageKeyListViewHolder);
-
         } else {
             messageKeyListViewHolder = (MessageKeyListViewHolder) convertView.getTag();
         }

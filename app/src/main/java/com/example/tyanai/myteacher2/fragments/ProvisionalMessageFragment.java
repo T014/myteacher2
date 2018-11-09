@@ -1,14 +1,11 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +94,6 @@ public class ProvisionalMessageFragment extends Fragment {
                     , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
             thisPost=postData;
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -270,7 +266,6 @@ public class ProvisionalMessageFragment extends Fragment {
                             @Override
                             public void run() {
                                 //支払いが終わった時の処理
-
 //                    //tradeに移動する
                                 Calendar cal1 = Calendar.getInstance();
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -300,7 +295,6 @@ public class ProvisionalMessageFragment extends Fragment {
                                 }else {
                                     boughtUid=user.getUid();
                                 }
-
                                 Map<String,Object> tradeKey = new HashMap<>();
                                 String key = tradeRef.child(user.getUid()).push().getKey();
 
@@ -335,8 +329,6 @@ public class ProvisionalMessageFragment extends Fragment {
                                 transaction.commit();
                             }
                         }, 500);
-
-
                     }else if (view.getId()==R.id.provisionalMessageNoButton){
                         //新しい契約内容を入力させるeditTextVisible
                         //契約内容確認画面に移動
@@ -353,9 +345,6 @@ public class ProvisionalMessageFragment extends Fragment {
                         transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
                         transaction.commit();
                     }
-
-
-
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
@@ -373,7 +362,6 @@ public class ProvisionalMessageFragment extends Fragment {
         mAdapter = new ProvisionalMessageListAdapter(this.getActivity(),R.layout.provisional_message_list_item);
         provisionalMessageDataArrayList = new ArrayList<ProvisionalMessageData>();
         newProvisionalMessageDataArrayList = new ArrayList<ProvisionalMessageData>();
-
 
         Bundle bundle = getArguments();
         caseNum = bundle.getString("caseNum");

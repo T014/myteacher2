@@ -18,7 +18,6 @@ import com.example.tyanai.myteacher2.R;
 import java.util.ArrayList;
 
 class ProvisionalUserViewHolder{
-
     ImageView iconImageView;
     TextView userNameTextView;
     LinearLayout listLinearLayout;
@@ -57,14 +56,11 @@ public class ProvisionalUserListAdapter extends BaseAdapter{
         if (userName != null){
             provisionalUserViewHolder.userNameTextView.setText(userName);
         }
-
-
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
             provisionalUserViewHolder.iconImageView.setImageBitmap(iconImageBitmap);
         }
-
         return convertView;
     }
 
@@ -83,10 +79,8 @@ public class ProvisionalUserListAdapter extends BaseAdapter{
     public long getItemId(int position) {
         return 0;
     }
+
     public void setProvisionalUserArrayList(ArrayList<ProvisionalUserData> list){
         ProvisionalUserArrayList = list;
     }
-
-
-
 }

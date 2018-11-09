@@ -82,7 +82,6 @@ public class ContractFragment extends Fragment {
 
         MainActivity.bottomNavigationView.setVisibility(View.GONE);
         MainActivity.mToolbar.setVisibility(View.GONE);
-
         Bundle caseNumBundle = getArguments();
         //roomKey
         caseNum = caseNumBundle.getString("caseNum");
@@ -104,7 +103,6 @@ public class ContractFragment extends Fragment {
                 dialog.show(getFragmentManager(), "sample");
             }
         });
-
         backPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +123,6 @@ public class ContractFragment extends Fragment {
                 }, 1000);
             }
         });
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,7 +143,6 @@ public class ContractFragment extends Fragment {
                 }, 1000);
             }
         });
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +161,6 @@ public class ContractFragment extends Fragment {
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal.getTime());
-
                     String date = cldTextView.getText().toString();
                     if (money!=null){
                         if (date!=null){
@@ -194,9 +189,7 @@ public class ContractFragment extends Fragment {
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(confirmKey,data);
                                         confirmRef.child(caseNum).updateChildren(childUpdates);
-
                                         //管理画面
-
                                         Map<String,Object> datas = new HashMap<>();
                                         datas.put("time",time);
                                         datas.put("uid",postUid);
@@ -222,7 +215,6 @@ public class ContractFragment extends Fragment {
                                         transaction.commit();
 
                                         Snackbar.make(view,"契約内容を送信しました。",Snackbar.LENGTH_SHORT).show();
-
                                         //notification
                                     }else {
 
@@ -261,7 +253,6 @@ public class ContractFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
     }

@@ -3,7 +3,6 @@ package com.example.tyanai.myteacher2.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,7 +114,6 @@ public class ListAdapter extends BaseAdapter{
                 ((ListView)parent).performItemClick(view,position,R.id.contentsImageView);
             }
         });
-
         if (postImageBitmapString!=null){
             byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
             if(postImageBytes.length!=0){
@@ -123,7 +121,6 @@ public class ListAdapter extends BaseAdapter{
                 listViewHolder.contentsImageView.setImageBitmap(postImageBitmap);
             }
         }
-
         if (userIconImageBitmapString!=null){
             byte[] iconImageBytes = Base64.decode(userIconImageBitmapString,Base64.DEFAULT);
             if(iconImageBytes.length!=0){

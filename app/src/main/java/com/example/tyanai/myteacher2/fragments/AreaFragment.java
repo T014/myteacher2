@@ -94,7 +94,6 @@ public class AreaFragment extends Fragment {
         scienceImageButton = (ImageButton)v.findViewById(R.id.scienceImageButton);
         otherStudyImageButton = (ImageButton)v.findViewById(R.id.otherStudyImageButton);
 
-
         return v;
     }
 
@@ -267,7 +266,6 @@ public class AreaFragment extends Fragment {
                 transaction.commit();
             }
         });
-
         otherMusicImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -281,8 +279,6 @@ public class AreaFragment extends Fragment {
                 transaction.commit();
             }
         });
-
-
         filmImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -322,7 +318,6 @@ public class AreaFragment extends Fragment {
                 transaction.commit();
             }
         });
-
         japaneseImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -409,8 +404,5 @@ public class AreaFragment extends Fragment {
                 studyGroup.setVisibility(View.VISIBLE);
             }
         }
-
     }
-
-
 }
