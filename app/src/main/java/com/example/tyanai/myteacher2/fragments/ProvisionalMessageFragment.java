@@ -1,11 +1,14 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,9 @@ import android.widget.ListView;
 import com.example.tyanai.myteacher2.Adapters.ProvisionalMessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.NetworkManager;
+import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
+import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +31,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,35 +46,57 @@ public class ProvisionalMessageFragment extends Fragment {
     DatabaseReference mDataBaseReference;
     DatabaseReference userRef;
     DatabaseReference confirmRef;
+    DatabaseReference requestRef;
+    DatabaseReference contentsRef;
+    DatabaseReference tradeRef;
     FirebaseUser user;
     String caseNum;
+    UserData myData;
+    UserData otherData;
     ProvisionalMessageListAdapter mAdapter;
     ArrayList<ProvisionalMessageData> provisionalMessageDataArrayList;
     ArrayList<ProvisionalMessageData> newProvisionalMessageDataArrayList;
+    String thisPostKey;
+    PostData thisPost;
 
-    private ChildEventListener uEventListener = new ChildEventListener() {
+    private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
-            String uid = (String) map.get("userId");
-            String iconBitmapString = (String) map.get("iconBitmapString");
-            String name = (String) map.get("userName");
+            String userId = (String) map.get("userId");
+            String userName = (String) map.get("userName");
+            String time = (String) map.get("time");
+            String key = (String) map.get("key");
+            String date = (String) map.get("date");
+            String imageBitmapString = (String) map.get("imageBitmapString");
+            String contents = (String) map.get("contents");
+            String costType = (String) map.get("costType");
+            String cost = (String) map.get("cost");
+            String howLong = (String) map.get("howLong");
+            String goods = (String) map.get("goods");
+            String share = (String) map.get("share");
+            String bought = (String) map.get("bought");
+            String evaluation = (String) map.get("evaluation");
+            String cancel = (String) map.get("cancel");
+            String method = (String) map.get("method");
+            String postArea = (String) map.get("postArea");
+            String postType = (String) map.get("postType");
+            String level = (String) map.get("level");
+            String career = (String) map.get("career");
+            String place = (String) map.get("place");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String taught = (String) map.get("taught");
+            String userEvaluation = (String) map.get("userEvaluation");
+            String userIconBitmapString = (String) map.get("userIconBitmapString");
+            String stock = (String) map.get("stock");
 
-            for (ProvisionalMessageData a :provisionalMessageDataArrayList){
-                if (a.getSendUid().equals(uid)){
-                    ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
-                            ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
-                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid());
-                    Collections.reverse(newProvisionalMessageDataArrayList);
-                    newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
-                    Collections.reverse(newProvisionalMessageDataArrayList);
-                    mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
-                    provisionalMessageListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
+            PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
+                    , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
 
+            thisPost=postData;
 
         }
         @Override
@@ -84,6 +113,64 @@ public class ProvisionalMessageFragment extends Fragment {
         }
     };
 
+    private ChildEventListener uEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String name = (String) map.get("userName");
+            String uid = (String) map.get("userId");
+            String comment = (String) map.get("comment");
+            String follows = (String) map.get("follows");
+            String followers = (String) map.get("followers");
+            String posts = (String) map.get("posts");
+            String favorites = (String) map.get("favorites");
+            String sex = (String) map.get("sex");
+            String age = (String) map.get("age");
+            String evaluations = (String) map.get("evaluations");
+            String taught = (String) map.get("taught");
+            String period = (String) map.get("period");
+            String groups = (String) map.get("groups");
+            String date = (String) map.get("date");
+            String iconBitmapString = (String) map.get("iconBitmapString");
+            String coin = (String) map.get("coin");
+
+            UserData userData = new UserData(name,uid,comment,follows,followers,posts
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+
+            if (userData.getUid().equals(user.getUid())){
+                myData=userData;
+            }else {
+                otherData=userData;
+            }
+            
+            for (ProvisionalMessageData a :provisionalMessageDataArrayList){
+                if (a.getSendUid().equals(uid)){
+                    ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
+                            ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
+                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid());
+                    Collections.reverse(newProvisionalMessageDataArrayList);
+                    newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
+                    Collections.reverse(newProvisionalMessageDataArrayList);
+                    mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
+                    provisionalMessageListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
     private ChildEventListener pEventListener = new ChildEventListener() {
         @Override
@@ -108,11 +195,11 @@ public class ProvisionalMessageFragment extends Fragment {
             String postUid = (String)map.get("postUid");
             String watchUid = user.getUid();
 
+            thisPostKey = postKey;
 
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
             ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid);
             provisionalMessageDataArrayList.add(provisionalMessageData);
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -129,7 +216,6 @@ public class ProvisionalMessageFragment extends Fragment {
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -144,20 +230,22 @@ public class ProvisionalMessageFragment extends Fragment {
         MainActivity.mToolbar.setTitle("契約提案");
 
         userRef = mDataBaseReference.child(Const.UsersPATH);
+        requestRef = mDataBaseReference.child(Const.RequestPATH);
+        contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+        tradeRef = mDataBaseReference.child(Const.TradePATH);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 userRef.addChildEventListener(uEventListener);
+
             }
         }, 200);
-
-
-
 
         provisionalMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                contentsRef.orderByChild("key").equalTo(thisPostKey).addChildEventListener(tEventListener);
                 if (NetworkManager.isConnected(getContext())){
                     if (view.getId()==R.id.provisionalMessageOkButton){
                         //買い手が押したら支払い画面に移動
@@ -178,6 +266,77 @@ public class ProvisionalMessageFragment extends Fragment {
                             }
                         }
 
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //支払いが終わった時の処理
+
+//                    //tradeに移動する
+                                Calendar cal1 = Calendar.getInstance();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                                String time = sdf.format(cal1.getTime());
+
+                                Map<String,Object> newTradeKey = new HashMap<>();
+                                newTradeKey.put("kindDetail","許可");
+                                newTradeKey.put("permittedDate",time);
+                                requestRef.child(thisPost.getKey()).updateChildren(newTradeKey);
+
+                                int stockCount = Integer.parseInt(thisPost.getStock());
+                                stockCount = stockCount-1;
+                                String stc = String.valueOf(stockCount);
+
+                                int totalBought = Integer.parseInt(thisPost.getBought());
+                                totalBought =totalBought+1;
+                                String totalBg =String.valueOf(totalBought);
+
+                                Map<String,Object> userDataKey = new HashMap<>();
+                                userDataKey.put("bought",totalBg);
+                                userDataKey.put("stock",stc);
+                                contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
+
+                                String boughtUid;
+                                if (thisPost.getUserId().equals(user.getUid())){
+                                    boughtUid=otherData.getUid();
+                                }else {
+                                    boughtUid=user.getUid();
+                                }
+
+                                Map<String,Object> tradeKey = new HashMap<>();
+                                String key = tradeRef.child(user.getUid()).push().getKey();
+
+                                tradeKey.put("tradeKey",key);
+                                tradeKey.put("bought",boughtUid);
+                                tradeKey.put("sold",thisPost.getUserId());
+                                tradeKey.put("receiveDate","0");
+                                tradeKey.put("date",time);
+                                tradeKey.put("payDay",time);
+                                tradeKey.put("userName",thisPost.getName());
+                                tradeKey.put("userIcon",thisPost.getUserIconBitmapString());
+                                tradeKey.put("evaluation","0");
+                                tradeKey.put("postKey",thisPost.getKey());
+                                tradeKey.put("contentImageBitmapString",thisPost.getImageBitmapString());
+                                tradeKey.put("stock",stc);
+                                tradeKey.put("kind","購入");
+                                tradeKey.put("kindDetail","許可済み");
+                                tradeKey.put("buyName",myData.getName());
+                                tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
+                                tradeKey.put("permittedDate",time);
+
+                                Map<String,Object> childUpdates = new HashMap<>();
+                                childUpdates.put(key,tradeKey);
+                                tradeRef.updateChildren(childUpdates);
+
+                                Bundle screenBundle = new Bundle();
+                                screenBundle.putString("screenKey","request");
+                                BusinessFragment fragmentBusiness = new BusinessFragment();
+                                fragmentBusiness.setArguments(screenBundle);
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
+                                transaction.commit();
+                            }
+                        }, 500);
+
+
                     }else if (view.getId()==R.id.provisionalMessageNoButton){
                         //新しい契約内容を入力させるeditTextVisible
                         //契約内容確認画面に移動
@@ -194,6 +353,9 @@ public class ProvisionalMessageFragment extends Fragment {
                         transaction.replace(R.id.container, fragmentContract,ContractFragment.TAG);
                         transaction.commit();
                     }
+
+
+
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
