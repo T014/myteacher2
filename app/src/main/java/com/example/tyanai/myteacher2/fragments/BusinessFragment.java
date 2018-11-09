@@ -63,24 +63,28 @@ public class BusinessFragment extends Fragment {
             String permittedDate = (String) map.get("permittedDate");
             String refactorKey = (String) map.get("refactorKey");
 
+            String subDate="0";
+            String subPermittedDate="0";
+            String subPayDay="0";
+            String subReceiveDate="0";
             try {
-                String subDate = date.substring(0,16);
-                String subPermittedDate = permittedDate.substring(0,16);
-                String subPayDay = payDay.substring(0,16);
-                String subReceiveDate = receiveDate.substring(0,16);
+                subDate = date.substring(0,16);
+                subPermittedDate = permittedDate.substring(0,16);
+                subPayDay = payDay.substring(0,16);
+                subReceiveDate = receiveDate.substring(0,16);
 
-                BusinessData businessData = new BusinessData(bought, subDate,subReceiveDate,sold,subPayDay,tradeKey, userName,userIcon,evaluation,
-                        judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,subPermittedDate,refactorKey);
-
-                if (screenNum.equals("business")){
-                    Collections.reverse(businessDataArrayList);
-                    businessDataArrayList.add(businessData);
-                    Collections.reverse(businessDataArrayList);
-                    mAdapter.setBusinessDataArrayList(businessDataArrayList);
-                    businessListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                }
             }catch (StringIndexOutOfBoundsException e){
+            }
+            BusinessData businessData = new BusinessData(bought, subDate,subReceiveDate,sold,subPayDay,tradeKey, userName,userIcon,evaluation,
+                    judgment,postKey,contentImageBitmapString,kind,kindDetail,buyName,buyIconBitmapString,subPermittedDate,refactorKey);
+
+            if (screenNum.equals("business")){
+                Collections.reverse(businessDataArrayList);
+                businessDataArrayList.add(businessData);
+                Collections.reverse(businessDataArrayList);
+                mAdapter.setBusinessDataArrayList(businessDataArrayList);
+                businessListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
             }
         }
         @Override

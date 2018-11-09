@@ -209,7 +209,39 @@ public class MessageListAdapter extends BaseAdapter {
                         messageListViewHolder.otherMessageTimeTextView.setText(n);
                     }
                     if (contents!=null){
-                        messageListViewHolder.otherMessageContentsTextView.setText(contents);
+                        int contentsCount = contents.length();
+                        if (contentsCount>16){
+                            int o = 0;
+                            for (int m=0;m<contentsCount;m++){
+                                v = o+16;
+                                if (contentsCount-o<15 || contentsCount-o==15){
+                                    String searchContents = contents.substring(o,contentsCount);
+                                    newContents = newContents.concat(searchContents);
+                                    break;
+                                }
+                                String searchContents = contents.substring(o,v);
+                                int jg = searchContents.indexOf("\n");
+
+                                if (jg==-1){
+                                    newContents = newContents.concat(searchContents.substring(0,15)+"\n");
+                                    o=v-1;
+                                }else if(jg==16){
+                                    //
+                                    newContents = newContents.concat(searchContents.substring(0,15).concat("\n"+searchContents.charAt(15)));
+                                } else{
+                                    String a = searchContents.substring(0,jg+1);
+                                    newContents = newContents.concat(a);
+                                    o+=jg+2;
+                                }
+                            }
+                        }else if(contentsCount==16) {
+                            //15+/n+1
+                            newContents = contents.substring(0,15).concat("\n"+contents.charAt(15));
+                        }else{
+                            newContents = contents;
+                        }
+
+                        messageListViewHolder.otherMessageContentsTextView.setText(newContents);
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
                     if(otherMessageIconImageBytes.length>5) {

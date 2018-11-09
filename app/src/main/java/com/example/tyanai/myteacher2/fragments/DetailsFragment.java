@@ -306,14 +306,14 @@ public class DetailsFragment extends Fragment {
             }
             if (postData.getImageBitmapString()!=null){
                 byte[] postImageBytes = Base64.decode(postData.getImageBitmapString(),Base64.DEFAULT);
-                if(postImageBytes.length!=0){
+                if(postImageBytes.length>5){
                     Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                     postContentsImageView.setImageBitmap(postImageBitmap);
                 }
             }
             if (postData.getUserIconBitmapString()!=null){
                 byte[] iconDetailImageBytes = Base64.decode(postData.getUserIconBitmapString(),Base64.DEFAULT);
-                if(iconDetailImageBytes.length!=0){
+                if(iconDetailImageBytes.length>5){
                     Bitmap iconDetailImageBitmap = BitmapFactory.decodeByteArray(iconDetailImageBytes,0, iconDetailImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
                     iconDetailImageView.setImageBitmap(iconDetailImageBitmap);
                 }
