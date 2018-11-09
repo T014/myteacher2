@@ -315,7 +315,6 @@ public class TimelineFragment extends Fragment {
         favRef = mDataBaseReference.child(Const.FavoritePATH);
         favRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvEventListener);
 
-
         timeLineListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -407,9 +406,7 @@ public class TimelineFragment extends Fragment {
                                     favRef.child(ff.getFavPostKey()).removeValue();
                                 }
                             }
-
                             String removeKey = timeLineArrayList.get(position).getKey();
-
                             int totalGoods = Integer.parseInt(timeLineArrayList.get(position).getGood());
                             totalGoods =totalGoods-1;
                             String totalGd =String.valueOf(totalGoods);
@@ -450,7 +447,6 @@ public class TimelineFragment extends Fragment {
 
                             Map<String,Object> favKey = new HashMap<>();
                             String key = favRef.push().getKey();
-
                             favKey.put("postUid",timeLineArrayList.get(position).getUserId());
                             favKey.put("userId",user.getUid());
                             favKey.put("userName",myData.getName());
@@ -460,7 +456,6 @@ public class TimelineFragment extends Fragment {
                             favKey.put("kind","いいね");
                             favKey.put("kindDetail","いいね");
                             favKey.put("postKey",timeLineArrayList.get(position).getKey());
-
                             favRef.child(key).updateChildren(favKey);
 
                             String newFavFlag = "true";
@@ -527,7 +522,6 @@ public class TimelineFragment extends Fragment {
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         contentsRef.limitToLast(10).addChildEventListener(tEventListener);
     }
-
     @Override
     public void onResume(){
         super.onResume();
@@ -538,7 +532,6 @@ public class TimelineFragment extends Fragment {
         usersRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(cEventListener);
         timeLineListView.setSelectionFromTop(goodPosition,y);
     }
-
     @Override
     public void onDestroyView(){
         super.onDestroyView();

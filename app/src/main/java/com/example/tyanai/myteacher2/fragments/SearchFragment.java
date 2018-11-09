@@ -15,7 +15,6 @@ import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
-import com.example.tyanai.myteacher2.fragments.GridFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -159,7 +158,7 @@ public class SearchFragment extends Fragment {
         }
     };
 
-            private ChildEventListener sEventListener = new ChildEventListener() {
+    private ChildEventListener sEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap map = (HashMap) dataSnapshot.getValue();
@@ -389,14 +388,12 @@ public class SearchFragment extends Fragment {
         });
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
         int postAreaPosition1 = postAreaSpinner.getSelectedItemPosition();
         String postAreaPosition = String.valueOf(postAreaPosition1);
-
         int sportsPostTypePosition1 = sportsPostTypeSpinner.getSelectedItemPosition();
         int musicPostTypePosition1 = musicPostTypeSpinner.getSelectedItemPosition();
         int editPostTypePosition1 = editPostTypeSpinner.getSelectedItemPosition();

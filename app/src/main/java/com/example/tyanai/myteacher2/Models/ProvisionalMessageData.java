@@ -55,22 +55,18 @@ public class ProvisionalMessageData {
     public String getBooleans() {
         return mBooleans;
     }
-
     public String getIconBitmapString() {
         return mIconBitmapString;
     }
     public String getUserName(){
         return mUserName;
     }
-
     public String getPostKey() {
         return mPostKey;
     }
-
     public String getPostUid() {
         return mPostUid;
     }
-
     public String getWatchUid() {
         return mWatchUid;
     }

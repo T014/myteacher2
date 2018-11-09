@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.tyanai.myteacher2.fragments.InputProfileFragment;
-import com.example.tyanai.myteacher2.fragments.MakePostFragment;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.isseiaoki.simplecropview.CropImageView;
@@ -46,7 +44,6 @@ public class SimpleCropViewFragment extends Fragment {
 
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         final Bundle cropFlagBundle  = getArguments();
         if (cropFlagBundle!=null){
@@ -82,7 +79,6 @@ public class SimpleCropViewFragment extends Fragment {
                 }
             }
         });
-
         cropButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,10 +121,8 @@ public class SimpleCropViewFragment extends Fragment {
                     //selectImage
                     Snackbar.make(MainActivity.snack,"画像を選択してください。",Snackbar.LENGTH_LONG).show();
                 }
-
             }
         });
-
     }
     @Override
     public void onDestroyView(){

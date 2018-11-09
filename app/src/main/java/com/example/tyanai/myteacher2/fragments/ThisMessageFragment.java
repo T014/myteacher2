@@ -81,12 +81,10 @@ public class ThisMessageFragment extends Fragment{
                             nowY = messageListView.getChildAt(0).getTop();
                         }
                     }
-
                     messageListDataArrayList.add(messageListData);
                     mAdapter.setMessageArrayList(messageListDataArrayList);
                     messageListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-
                     if (lvp==-1){
                         int last = messageListDataArrayList.size()-1;
                         messageListView.setSelection(last);
@@ -164,12 +162,10 @@ public class ThisMessageFragment extends Fragment{
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
         }
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         messageRef = mDataBaseReference.child(Const.MessagePATH);
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
-
         messageListDataArrayList = new ArrayList<MessageListData>();
         oldMessageListDataArrayList = new ArrayList<MessageListData>();
         mAdapter = new MessageListAdapter(this.getActivity(),R.layout.message_item);
@@ -234,7 +230,6 @@ public class ThisMessageFragment extends Fragment{
                                     }
                                 }
                             }
-
                         }, 500);
                     }
                 }
@@ -252,9 +247,7 @@ public class ThisMessageFragment extends Fragment{
 
                 String contents = editMessageEditText.getText().toString();
                 if (contents!=null && !(contents.equals(""))){
-
                     //最新のメッセージの日付と比較して違かったら日付を送信
-
                     if (messageListDataArrayList.size()>0){
                         nowPosition = messageListView.getFirstVisiblePosition();
                         if (nowPosition!=0){
@@ -268,7 +261,6 @@ public class ThisMessageFragment extends Fragment{
                             }
                         }
                     }
-
                     //投稿時間
                     Calendar cal1 = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -291,7 +283,6 @@ public class ThisMessageFragment extends Fragment{
                                 messageData.put("time",nowDay);
                                 messageData.put("userId","");
                                 messageData.put("roomKey",msKey);
-
                                 Map<String,Object> childUpdates = new HashMap<>();
                                 childUpdates.put(key,messageData);
                                 messageRef.child(msKey).updateChildren(childUpdates);
@@ -307,7 +298,6 @@ public class ThisMessageFragment extends Fragment{
                         messageData.put("time",nowDay);
                         messageData.put("userId","");
                         messageData.put("roomKey",msKey);
-
                         Map<String,Object> childUpdates = new HashMap<>();
                         childUpdates.put(key,messageData);
                         messageRef.child(msKey).updateChildren(childUpdates);
@@ -315,13 +305,11 @@ public class ThisMessageFragment extends Fragment{
 
                     Map<String,Object> messageData = new HashMap<>();
                     String key = messageRef.child(msKey).push().getKey();
-
                     messageData.put("bitmapString","");
                     messageData.put("contents",contents);
                     messageData.put("time",time);
                     messageData.put("userId",user.getUid());
                     messageData.put("roomKey",msKey);
-
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,messageData);
                     messageRef.child(msKey).updateChildren(childUpdates);
@@ -350,12 +338,10 @@ public class ThisMessageFragment extends Fragment{
             }
         });
     }
-
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
     }
-
     @Override
     public void onStart(){
         super.onStart();

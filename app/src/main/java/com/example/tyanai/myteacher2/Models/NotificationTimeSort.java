@@ -1,7 +1,5 @@
 package com.example.tyanai.myteacher2.Models;
 
-import com.example.tyanai.myteacher2.Models.NotificationFavData;
-
 import java.util.Comparator;
 
 public class NotificationTimeSort implements Comparator<NotificationFavData> {

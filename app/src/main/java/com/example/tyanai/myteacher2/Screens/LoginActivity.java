@@ -29,8 +29,6 @@ import java.util.Map;
  * Created by taiso on 2018/01/21.
  */
 
-
-
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
@@ -68,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                     String email = mEmailEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
                     login(email, password);
-
                     // 成功した場合
                     FirebaseUser user = mAuth.getCurrentUser();
                     DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH).child(user.getUid());
@@ -114,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
-
         // ログイン処理のリスナー
         mLoginListener = new OnCompleteListener<AuthResult>() {
             @Override
@@ -154,7 +150,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +171,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     private void createAccount(String email, String password) {
         // アカウントを作成する
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(mCreateAccountListener);
@@ -198,6 +192,3 @@ public class LoginActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 }
-
-
-

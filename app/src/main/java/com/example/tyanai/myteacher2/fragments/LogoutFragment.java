@@ -36,7 +36,6 @@ public class LogoutFragment extends Fragment{
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 Snackbar.make( view,"ログアウトしました", Snackbar.LENGTH_LONG).show();
-
                 Intent intent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);
             }

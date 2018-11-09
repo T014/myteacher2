@@ -35,7 +35,6 @@ public class MessageListData {
     public String getMyUid() {
         return mMyUid;
     }
-
     public long getLag() {
         return mLag;
     }

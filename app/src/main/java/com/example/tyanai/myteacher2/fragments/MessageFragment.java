@@ -50,8 +50,6 @@ public class MessageFragment extends Fragment {
     Calendar calDay2;
     Calendar calNow;
 
-
-
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -121,7 +119,6 @@ public class MessageFragment extends Fragment {
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             if (newMessageListDataArrayList.size()!=0){
-
                 HashMap map = (HashMap) dataSnapshot.getValue();
 
                 String userId = (String) map.get("userId");
@@ -140,8 +137,6 @@ public class MessageFragment extends Fragment {
                 Calendar calThen = Calendar.getInstance();
                 SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                 if (ketList.contains(dataSnapshot.getKey())){
-
-
                     long newLag = 0;
                     try{
                         calThen.setTime(sdfThen.parse(time));
@@ -151,7 +146,6 @@ public class MessageFragment extends Fragment {
                         time = nnn;
                     }catch (ParseException e){
                     }
-
                     for (int n = 0;n<newMessageListDataArrayList.size();n++) {
                         if (dataSnapshot.getKey().equals(newMessageListDataArrayList.get(n).getKey())){
                             if (time!=null && !(time.equals(""))) {
@@ -168,33 +162,25 @@ public class MessageFragment extends Fragment {
                             }
                         }
                     }
-
-
                 }else {
-                        //新しい人から着たとき
-                        if (time!=null && !(time.equals(""))){
-                            //この画面開いたとき
-
-                            long lag =0;
-                            //(calDay2とCalNow)とtodayは形式が違うだけ
-                            //calDay2とCalNowは同じだけど別の用途に使っている
-                            try{
-                                //投稿した時間
-                                calThen.setTime(sdfThen.parse(time));
-
-                                //今-投稿した時間
-                                long diffMillis = calNow.getTimeInMillis() - calThen.getTimeInMillis();
-                                lag = (int)diffMillis;
-
-
-                            }catch (ParseException e){
-                            }
-                            MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag);
-                            messageListDataArrayList.add(MessageListData);
-
-                            userRef.orderByChild("userId").equalTo(MessageListData.getUid()).addChildEventListener(userEventListener);
-
+                    //新しい人から着たとき
+                    if (time!=null && !(time.equals(""))){
+                        //この画面開いたとき
+                        long lag =0;
+                        //(calDay2とCalNow)とtodayは形式が違うだけ
+                        //calDay2とCalNowは同じだけど別の用途に使っている
+                        try{
+                            //投稿した時間
+                            calThen.setTime(sdfThen.parse(time));
+                            //今-投稿した時間
+                            long diffMillis = calNow.getTimeInMillis() - calThen.getTimeInMillis();
+                            lag = (int)diffMillis;
+                        }catch (ParseException e){
                         }
+                        MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag);
+                        messageListDataArrayList.add(MessageListData);
+                        userRef.orderByChild("userId").equalTo(MessageListData.getUid()).addChildEventListener(userEventListener);
+                    }
                 }
             }
         }
@@ -231,7 +217,6 @@ public class MessageFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             String userName = (String) map.get("userName");
@@ -266,13 +251,10 @@ public class MessageFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
         }
     };
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_message,container,false);
-
         messageKeyListView = (ListView)v.findViewById(R.id.messageKeyListView);
 
         return v;
@@ -296,14 +278,10 @@ public class MessageFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         today = sdf.format(cal1.getTime());
         calNow = Calendar.getInstance();
-
         //今日
         calDay2 = Calendar.getInstance();
-
-
         messageListDataArrayList = new ArrayList<MessageListData>();
         mAdapter = new MessageKeyListAdapter(this.getActivity(),R.layout.messagekey_item);
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         messageKeyRef = mDataBaseReference.child(Const.MessageKeyPATH);
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -333,7 +311,6 @@ public class MessageFragment extends Fragment {
             }
         });
     }
-
     @Override
     public void onStart(){
         super.onStart();
@@ -341,28 +318,19 @@ public class MessageFragment extends Fragment {
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
         newMessageListDataArrayList.clear();
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 userRef.addChildEventListener(userEventListener);
             }
         }, 200);
-
-
     }
-
     @Override
     public void onResume(){
         super.onResume();
-
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
-
 }

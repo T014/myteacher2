@@ -200,7 +200,6 @@ public class UsersPostFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
@@ -309,9 +308,7 @@ public class UsersPostFragment extends Fragment {
                         mAdapter.notifyDataSetChanged();
                         profileListView.setSelectionFromTop(goodPosition,y);
                     }
-
                 }else if (view.getId()==R.id.userIconImageView){
-
                     Bundle userBundle = new Bundle();
                     userBundle.putString("userId",timeLineArrayList.get(position).getUserId());
 
@@ -324,7 +321,6 @@ public class UsersPostFragment extends Fragment {
                 }else if (view.getId()==R.id.contentImageView) {
                     //画像拡大表示
                 }else {
-
                     Bundle bundle = new Bundle();
                     bundle.putString("key", timeLineArrayList.get(position).getKey());
                     bundle.putString("screenKey", "confirm");
@@ -346,7 +342,6 @@ public class UsersPostFragment extends Fragment {
         favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
         mAdapter = new ListAdapter(this.getActivity(),R.layout.list_item);
         favKeyArrayList = new ArrayList<NotificationFavData>();
-
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
     }
 }

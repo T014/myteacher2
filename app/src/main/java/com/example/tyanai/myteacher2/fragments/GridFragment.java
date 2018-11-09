@@ -78,7 +78,6 @@ public class GridFragment extends Fragment {
             gridView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -107,10 +106,8 @@ public class GridFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setTitle("???");
-
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-
         }
         mAdapter = new GridListAdapter(this.getActivity(),R.layout.grid_items);
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
@@ -150,7 +147,6 @@ public class GridFragment extends Fragment {
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
-
             }
         });
     }

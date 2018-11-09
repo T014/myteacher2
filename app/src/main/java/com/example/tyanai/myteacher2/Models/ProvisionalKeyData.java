@@ -12,7 +12,6 @@ public class ProvisionalKeyData {
     private String mCount;
     private String mPostUid;
 
-
     public String getCaseNum(){
         return  mCaseNum;
     }
@@ -40,7 +39,6 @@ public class ProvisionalKeyData {
     public String getCount() {
         return mCount;
     }
-
     public String getPostUid() {
         return mPostUid;
     }

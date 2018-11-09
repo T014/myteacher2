@@ -62,5 +62,4 @@ public class NotificationFavData {
         mPermittedDate = permittedDate;
         mLag = lag;
     }
-
 }

@@ -17,7 +17,6 @@ import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
-import com.example.tyanai.myteacher2.fragments.ConfirmProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -139,9 +138,6 @@ public class FFListFragment extends Fragment {
         }
     };
 
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -164,9 +160,7 @@ public class FFListFragment extends Fragment {
                 followerRef.addChildEventListener(ffEventListener);
             }
         }
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -197,7 +191,6 @@ public class FFListFragment extends Fragment {
                 if (NetworkManager.isConnected(getContext())){
                     Bundle userBundle = new Bundle();
                     userBundle.putString("userId",ffUsersArrayList.get(position).getUid());
-
                     ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
                     fragmentProfileConfirm.setArguments(userBundle);
                     getFragmentManager().beginTransaction()
@@ -206,7 +199,6 @@ public class FFListFragment extends Fragment {
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
-
             }
         });
     }

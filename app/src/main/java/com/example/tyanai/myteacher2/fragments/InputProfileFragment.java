@@ -136,12 +136,10 @@ public class InputProfileFragment extends Fragment {
             String age = (String) map.get("age");
 
             Map<String,Object> data = new HashMap<>();
-
             data.put("userName",newUserName);
             data.put("sex",sex);
             data.put("age",age);
             data.put("userIconBitmapString",newIconBitmapString);
-
             contentsRef.child(key).updateChildren(data);
         }
         @Override
@@ -181,14 +179,12 @@ public class InputProfileFragment extends Fragment {
 
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-
         }
         Bundle croppedBitmapBundle  = getArguments();
         if (croppedBitmapBundle!=null){
             croppedBitmapString = croppedBitmapBundle.getString("croppedBitmapString");
             croppedFlag = true;
         }
-
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userRef = mDataBaseReference.child(Const.UsersPATH);
@@ -198,14 +194,6 @@ public class InputProfileFragment extends Fragment {
         iconImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //pFragを変更
-//                MainActivity.pFlag=2;
-//                //icon画像選択に移動
-//                MainActivity mainActivity = (MainActivity)getActivity();
-//                mainActivity.onSelfCheck();
-
-//                Bundle cropBundle = new Bundle();
-//                cropBundle.putString("key",key);
                 croppedFlag = false;
                 Bundle cropFlagBundle = new Bundle();
                 cropFlagBundle.putString("flag","input");
@@ -270,14 +258,12 @@ public class InputProfileFragment extends Fragment {
             DatabaseReference userRef = mDataBaseReference.child(Const.UsersPATH);
 
             String userId = user.getUid();
-
             String sex = (String)sexSpinner.getSelectedItem();
             String age = (String)ageSpinner.getSelectedItem();
 
             //Firebaseにデータ作成、データのkey取得
             Map<String,Object> data = new HashMap<>();
             //データベースへの書き方の確認
-
             data.put("userName", newUserName);
             data.put("userId", userId);
             data.put("comment", comment);
@@ -285,7 +271,6 @@ public class InputProfileFragment extends Fragment {
             data.put("sex",sex);
             data.put("age",age);
             data.put("iconBitmapString", newIconBitmapString);
-
             userRef.child(user.getUid()).updateChildren(data);
             MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
             MainActivity.mToolbar.setVisibility(View.VISIBLE);
@@ -332,7 +317,6 @@ public class InputProfileFragment extends Fragment {
                 data.put("sex",sex);
                 data.put("age",age);
                 data.put("iconBitmapString", newIconBitmapString);
-
                 userRef.child(user.getUid()).updateChildren(data);
                 MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                 MainActivity.mToolbar.setVisibility(View.VISIBLE);
@@ -349,8 +333,6 @@ public class InputProfileFragment extends Fragment {
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
         croppedFlag = false;
-
-
         //保存したい
     }
 }

@@ -192,7 +192,6 @@ public class ProvisionalMessageFragment extends Fragment {
             String watchUid = user.getUid();
 
             thisPostKey = postKey;
-
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
             ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid);
             provisionalMessageDataArrayList.add(provisionalMessageData);

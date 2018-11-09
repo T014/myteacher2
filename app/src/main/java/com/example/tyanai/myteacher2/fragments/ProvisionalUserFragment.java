@@ -15,7 +15,6 @@ import com.example.tyanai.myteacher2.Adapters.ProvisionalUserListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.ProvisionalUserData;
-import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +42,6 @@ public class ProvisionalUserFragment extends Fragment {
     DatabaseReference userRef;
     String intentPostKey;
 
-
     private ChildEventListener cKeyEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -56,9 +54,7 @@ public class ProvisionalUserFragment extends Fragment {
             String icon="";
 
             ProvisionalUserData provisionalUserData = new ProvisionalUserData(name,userId,icon,caseNum);
-
             provisionalUserIdArrayList.add(provisionalUserData);
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -66,11 +62,9 @@ public class ProvisionalUserFragment extends Fragment {
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
         }
-
         @Override
         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
         }
-
         @Override
         public void onCancelled(DatabaseError databaseError) {
         }
@@ -89,7 +83,6 @@ public class ProvisionalUserFragment extends Fragment {
 
             for (ProvisionalUserData u:provisionalUserIdArrayList){
                 if (u.getUid().equals(userId)){
-
                     ProvisionalUserData provisionalUserData = new ProvisionalUserData(userName,userId,iconBitmapString,u.getCaseNum());
                     provisionalUserDataArrayList.add(provisionalUserData);
                     mAdapter.setProvisionalUserArrayList(provisionalUserDataArrayList);
@@ -98,7 +91,6 @@ public class ProvisionalUserFragment extends Fragment {
                 }
             }
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         }
@@ -113,11 +105,9 @@ public class ProvisionalUserFragment extends Fragment {
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View v = inflater.inflate(R.layout.fragment_provisional_user,container,false);
 
         provisionalUserListView = (ListView)v.findViewById(R.id.provisionalUserListView);
@@ -142,7 +132,6 @@ public class ProvisionalUserFragment extends Fragment {
         intentPostKey = bundle.getString("intentPostKey");
         confirmKeyRef.child(user.getUid()).orderByChild("postKey").equalTo(intentPostKey).addChildEventListener(cKeyEventListener);
 
-
         provisionalUserListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
@@ -162,7 +151,6 @@ public class ProvisionalUserFragment extends Fragment {
                 }
             }
         });
-
     }
 
     @Override
@@ -171,16 +159,11 @@ public class ProvisionalUserFragment extends Fragment {
 
         mDataBaseReference = FirebaseDatabase.getInstance().getReference();
         userRef = mDataBaseReference.child(Const.UsersPATH);
-
         userRef.addChildEventListener(uEventListener);
     }
 
-
-        @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-
     }
-
 }

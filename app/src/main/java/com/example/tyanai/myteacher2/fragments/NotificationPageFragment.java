@@ -64,7 +64,6 @@ public class NotificationPageFragment extends Fragment {
             String tradeKey = (String) map.get("tradeKey");
             String permittedDate = (String) map.get("permittedDate");
 
-
             long lag = 0;
             Calendar calThen = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -300,15 +299,12 @@ public class NotificationPageFragment extends Fragment {
 
     public static NotificationPageFragment newInstance(int page) {
         //ここで2のn乗回pageを入れられて処理が多くなってる
-
-
         NotificationPageFragment fragment = new NotificationPageFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM, page);
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -316,7 +312,6 @@ public class NotificationPageFragment extends Fragment {
             mParam = getArguments().getString(ARG_PARAM);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -330,19 +325,16 @@ public class NotificationPageFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-            page = getArguments().getInt(ARG_PARAM, 0);
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-            usersRef = mDataBaseReference.child(Const.UsersPATH);
-            favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
-            mAdapter = new NotificationFavListAdapter(this.getActivity(),R.layout.notification_favlist);
-            favUserArrayList = new ArrayList<NotificationFavData>();
-            filterRef = mDataBaseReference.child(Const.FilterPATH);
-            requestRef = mDataBaseReference.child(Const.RequestPATH);
-
-            calDay = Calendar.getInstance();
-
-
+        page = getArguments().getInt(ARG_PARAM, 0);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+        usersRef = mDataBaseReference.child(Const.UsersPATH);
+        favoriteRef = mDataBaseReference.child(Const.FavoritePATH);
+        mAdapter = new NotificationFavListAdapter(this.getActivity(),R.layout.notification_favlist);
+        favUserArrayList = new ArrayList<NotificationFavData>();
+        filterRef = mDataBaseReference.child(Const.FilterPATH);
+        requestRef = mDataBaseReference.child(Const.RequestPATH);
+        calDay = Calendar.getInstance();
         if (page==1){
             favoriteRef.orderByChild("postUid").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
         }else if (page==2){
@@ -435,7 +427,6 @@ public class NotificationPageFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -446,13 +437,11 @@ public class NotificationPageFragment extends Fragment {
 //                    + " must implement OnFragmentInteractionListener");
         }
     }
-
     @Override
     public void onStart(){
         super.onStart();
 
     }
-
     @Override
     public void onDetach() {
         super.onDetach();

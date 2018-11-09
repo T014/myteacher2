@@ -7,7 +7,6 @@ public class ProvisionalUserData {
     private String mIconBitmapString;
     private String mCaseNum;
 
-
     public String getName(){
         return mName;
     }

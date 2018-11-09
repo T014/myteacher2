@@ -47,7 +47,6 @@ public class ProvisionalFragment extends Fragment {
     Button otherListButton;
     boolean which = true;
 
-
     private ChildEventListener cKeyEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -297,8 +296,6 @@ public class ProvisionalFragment extends Fragment {
                             newProvisionalKeyDataArrayList.remove(k);
                             newProvisionalKeyDataArrayList.add(k, A1provisionalKeyData);
 
-
-
                             ProvisionalKeyData A2provisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(i).getCaseNum()
                                     , newProvisionalKeyDataArrayList.get(i).getPostKey(), newProvisionalKeyDataArrayList.get(i).getTime()
                                     , newProvisionalKeyDataArrayList.get(i).getUid(), newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
@@ -307,14 +304,11 @@ public class ProvisionalFragment extends Fragment {
 
                             newProvisionalKeyDataArrayList.remove(i);
                             newProvisionalKeyDataArrayList.add(i, A2provisionalKeyData);
-
                         }
-
                     }
                 }
             }
         }
-
         for (int t = 0;t<newProvisionalKeyDataArrayList.size();t++){
             if (newProvisionalKeyDataArrayList.get(t).getCount().equals("0")) {
                 newProvisionalKeyDataArrayList.remove(newProvisionalKeyDataArrayList.get(t));

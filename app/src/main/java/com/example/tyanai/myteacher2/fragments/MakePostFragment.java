@@ -350,9 +350,6 @@ public class MakePostFragment extends Fragment {
 //                placeSpinner.setSelection(p);
 //            }
 
-
-
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -777,7 +774,6 @@ public class MakePostFragment extends Fragment {
                                     if (cost.length()!=0){
                                         if (!(cFirstCost.equals("0")) || cost.equals("0")){
                                             Map<String,Object> data = new HashMap<>();
-
                                             data.put("userId", userId);
                                             data.put("userName",myData.getName());
                                             data.put("time", time);
@@ -805,7 +801,6 @@ public class MakePostFragment extends Fragment {
                                             data.put("userEvaluation",myData.getEvaluations());
                                             data.put("userIconBitmapString",myData.getIconBitmapString());
                                             data.put("stock",stock);
-
                                             Map<String,Object> childUpdates = new HashMap<>();
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
@@ -832,7 +827,6 @@ public class MakePostFragment extends Fragment {
                                     }else{
                                         if (costType.equals("応相談")){
                                             Map<String,Object> data = new HashMap<>();
-
                                             data.put("userId", userId);
                                             data.put("userName",myData.getName());
                                             data.put("time", time);
@@ -860,7 +854,6 @@ public class MakePostFragment extends Fragment {
                                             data.put("userEvaluation",myData.getEvaluations());
                                             data.put("userIconBitmapString",myData.getIconBitmapString());
                                             data.put("stock",stock);
-
                                             Map<String,Object> childUpdates = new HashMap<>();
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
@@ -943,7 +936,6 @@ public class MakePostFragment extends Fragment {
             String placePosition = String.valueOf(placePosition1);
 
             Map<String,Object> data = new HashMap<>();
-
             data.put("date", date);
             data.put("imageBitmapString", imageBitmapString);
             data.put("contents",contents);
@@ -958,7 +950,6 @@ public class MakePostFragment extends Fragment {
             data.put("placePosition",placePosition);
             data.put("userIconBitmapString","");
             data.put("stockPosition",stockPosition);
-
             Map<String,Object> childUpdates = new HashMap<>();
             childUpdates.put(user.getUid(),data);
             savePostRef.child(user.getUid()).updateChildren(childUpdates);

@@ -1,6 +1,5 @@
 package com.example.tyanai.myteacher2.Models;
 
-
 import java.util.Comparator;
 
 public class TimeLagComparator implements Comparator<MessageListData> {

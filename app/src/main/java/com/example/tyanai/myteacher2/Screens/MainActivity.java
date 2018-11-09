@@ -67,7 +67,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-
 
             switch (item.getItemId()) {
                 case R.id.item_Timeline:
@@ -198,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 transaction.commit();
                             }
                         }
-
                     }
 //                    fragmentCommunity = new CommunityFragment();
 //                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
@@ -316,9 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         }
-
         findViewById(mToolbar.getId()).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -337,18 +332,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-
         snack = (CoordinatorLayout)findViewById(R.id.snack);
-
         //BottomNavigationViewの定義して設置する
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         //リスナーのセット
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         if(user==null){
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(intent);
@@ -363,7 +354,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // ナビゲーションドロワーの設定
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
-
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -378,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         accountFollowerTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollower);
         followTextView = (TextView)navHeaderMain.findViewById(R.id.followTextView);
         followerTextView = (TextView)navHeaderMain.findViewById(R.id.followerTextView);
-
 
         followTextView.setClickable(true);
         followTextView.setOnClickListener(new View.OnClickListener() {
@@ -453,35 +442,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissions(new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_options,menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
@@ -489,12 +455,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (!(NetworkManager.isConnected(this))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
-
         }
-
         switch (item.getItemId()){
             case R.id.notificationButton:
-
                 if (currentFragment!=null){
                     String currentFragmentTag = currentFragment.getTag();
                     if (currentFragmentTag!=null){
@@ -539,13 +502,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         FragmentTransaction drawerTransaction = getSupportFragmentManager().beginTransaction();
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-
         if (!(NetworkManager.isConnected(this))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
 
@@ -727,7 +688,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.moveTaskToBack(true);
         }
     }
-
     private void showChooser() {
         // ギャラリーから選択するIntent
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -736,13 +696,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         galleryIntent.setAction(Intent.ACTION_PICK);
         startActivityForResult(Intent.createChooser(galleryIntent,"画像を選択"), CHOOSER_REQUEST_CODE);
     }
-
     //選択した結果を受け取る
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             //選択されたのがnullでない場合
             if (data.getData() != null) {
-
                 try {
                     //エラーが出なかった時にしたい処理
                     //サイズを取得する
@@ -757,12 +715,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SimpleCropViewFragment.cropImageView.setImageBitmap(img);
                         SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
                         SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
-
                     }else {
                         SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                         SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);
                     }
-
                     //エラー処理
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -773,7 +729,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-
     public static String getPath(Context context, Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         String[] columns = { MediaStore.Images.Media.DATA };
@@ -783,14 +738,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cursor.close();
         return path;
     }
-
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             // 戻るボタンが押されたときの処理
             //fragmentを取得してinputなら現在の画面を保存して終了
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
             FragmentTransaction backStackTransaction = getSupportFragmentManager().beginTransaction();
-
             if (currentFragment!=null){
                 String currentFragmentTag = currentFragment.getTag();
                 if (currentFragmentTag.equals("InputProfileFragment")){

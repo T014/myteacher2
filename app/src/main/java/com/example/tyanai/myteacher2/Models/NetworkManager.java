@@ -16,7 +16,6 @@ public class NetworkManager {
         if(networkInfo != null ){
             return connectivityManager.getActiveNetworkInfo().isConnected();
         }
-
         return false;
     }
 }
