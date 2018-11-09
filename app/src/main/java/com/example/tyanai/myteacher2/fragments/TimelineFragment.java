@@ -324,7 +324,6 @@ public class TimelineFragment extends Fragment {
                     int first = timeLineListView.getFirstVisiblePosition();
                     int last = timeLineListView.getLastVisiblePosition();
 
-
                     goodPosition = timeLineListView.getFirstVisiblePosition();
                     y = timeLineListView.getChildAt(0).getTop();
 

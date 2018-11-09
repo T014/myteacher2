@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -301,10 +302,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //Push通知の購読開始
-        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
+//        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
 
         //購読解除
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("mytopic");
+//        FirebaseMessaging.getInstance().unsubscribeFromTopic("mytopic");
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         String aaa = FirebaseInstanceId.getInstance().getId();
 

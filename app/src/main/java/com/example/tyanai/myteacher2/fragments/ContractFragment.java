@@ -123,7 +123,6 @@ public class ContractFragment extends Fragment {
                         transaction.commit();
                     }
                 }, 1000);
-
             }
         });
 
@@ -145,7 +144,6 @@ public class ContractFragment extends Fragment {
                         transaction.commit();
                     }
                 }, 1000);
-
             }
         });
 
@@ -161,7 +159,6 @@ public class ContractFragment extends Fragment {
                     }else if (checkedId==typeFixedRadiobutton.getId()){
                         typePay = typeFixedRadiobutton.getText().toString();
                     }
-
                     String money = moneyEditText.getText().toString();
                     String detail = detailEditText.getText().toString();
                     String message = messageEditText.getText().toString();
@@ -223,7 +220,6 @@ public class ContractFragment extends Fragment {
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                         transaction.replace(R.id.container,fragmentProvisionalMessage,ProvisionalMessageFragment.TAG);
                                         transaction.commit();
-
 
                                         Snackbar.make(view,"契約内容を送信しました。",Snackbar.LENGTH_SHORT).show();
 

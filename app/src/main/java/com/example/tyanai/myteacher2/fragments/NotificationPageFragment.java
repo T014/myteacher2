@@ -47,7 +47,6 @@ public class NotificationPageFragment extends Fragment {
     private ArrayList<NotificationFavData> favUserArrayList;
     private int page;
     Calendar calDay;
-    int c =1;
 
     private ChildEventListener bEventListener = new ChildEventListener() {
         @Override

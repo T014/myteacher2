@@ -132,20 +132,25 @@ public class GridFragment extends Fragment {
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-                Bundle bundle = new Bundle();
-                if (flag.equals("search")){
-                    bundle.putString("key",SearchFragment.searchArrayList.get(position).getKey());
-                }else{
-                    bundle.putString("key",postDataArrayList.get(position).getKey());
-                }
-                bundle.putString("screenKey","grid");
+                if (!(NetworkManager.isConnected(getContext()))){
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                }else {
+                    Bundle bundle = new Bundle();
+                    if (flag.equals("search")){
+                        bundle.putString("key",SearchFragment.searchArrayList.get(position).getKey());
+                    }else{
+                        bundle.putString("key",postDataArrayList.get(position).getKey());
+                    }
+                    bundle.putString("screenKey","grid");
 
-                DetailsFragment fragmentDetails = new DetailsFragment();
-                fragmentDetails.setArguments(bundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    DetailsFragment fragmentDetails = new DetailsFragment();
+                    fragmentDetails.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container,fragmentDetails,DetailsFragment.TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
             }
         });
     }

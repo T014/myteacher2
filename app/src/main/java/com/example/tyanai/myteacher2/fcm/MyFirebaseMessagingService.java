@@ -21,7 +21,6 @@ import static android.app.Notification.VISIBILITY_PUBLIC;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-
 //    @WorkerThread
 //    public void onMessageReceived(RemoteMessage message) {
 //
@@ -32,8 +31,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        sendNotification(msg);
 //
 //    }
-
-
     @WorkerThread
     public void onMessageReceived(RemoteMessage message) {
 
@@ -45,10 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String msg = data.get("data").toString();
         String ttl = data.get("title").toString();
         sendNotification(msg,ttl);
-
-
     }
-
 //    private void sendNotification(String message) {
 //        Intent intent = new Intent(this, MainActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -77,7 +71,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0 , intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.fav)
@@ -91,34 +84,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setContentIntent(pendingIntent);
 
-
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 , notificationBuilder.build());
-
     }
-
 
     @WorkerThread
     public void onDeletedMessages() {
     }
-
     @WorkerThread
     public void onMessageSent(String var1) {
     }
-
     @WorkerThread
     public void onSendError(String var1, Exception var2) {
     }
-
     @WorkerThread
     public void onNewToken(String var1) {
         Log.d("NEW_TOKEN",var1);
     }
-
-
-
-
-
 }
