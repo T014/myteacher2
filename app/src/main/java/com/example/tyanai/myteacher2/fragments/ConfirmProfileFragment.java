@@ -120,7 +120,6 @@ public class ConfirmProfileFragment extends Fragment{
                         ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
                 myData = userData;
             }
-
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -213,7 +212,6 @@ public class ConfirmProfileFragment extends Fragment{
         }
     };
 
-
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -245,7 +243,6 @@ public class ConfirmProfileFragment extends Fragment{
         }
     };
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -261,7 +258,6 @@ public class ConfirmProfileFragment extends Fragment{
 
         followRef.child(user.getUid()).addChildEventListener(followEventListener);
     }
-
     @Override
     public void onStart(){
         super.onStart();
@@ -278,7 +274,6 @@ public class ConfirmProfileFragment extends Fragment{
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
         ffKey=null;
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -363,7 +358,6 @@ public class ConfirmProfileFragment extends Fragment{
                     childUpdates.put(key,followData);
                     followRef.child(user.getUid()).updateChildren(childUpdates);
 
-
                     //自分のフォローを増やす
                     Map<String, Object> plusFollowCount = new HashMap<>();
                     int fc = Integer.valueOf(myData.getFollows());
@@ -380,7 +374,6 @@ public class ConfirmProfileFragment extends Fragment{
                     childUpdate.put(key,followerData);
                     followerRef.child(intentUserId).updateChildren(childUpdate);
 
-
                     //相手のフォロワーを増やす
                     Map<String,Object> plusFollowerCount = new HashMap<>();
                     int frc = Integer.valueOf(accountData.getFollowers());
@@ -396,7 +389,6 @@ public class ConfirmProfileFragment extends Fragment{
                         followRef.child(user.getUid()).child(ffKey).removeValue();
                         followerRef.child(accountData.getUid()).child(ffKey).removeValue();
 
-
                         //相手のフォロワーを減らす
                         Map<String,Object> minusFollowerCount = new HashMap<>();
                         int frc = Integer.valueOf(accountData.getFollowers());
@@ -404,7 +396,6 @@ public class ConfirmProfileFragment extends Fragment{
                         String strFollowerCount = String.valueOf(frc);
                         minusFollowerCount.put("followers",strFollowerCount);
                         userRef.child(intentUserId).updateChildren(minusFollowerCount);
-
 
                         //自分のフォローを減らす
                         Map<String,Object> minusFollowCount = new HashMap<>();
@@ -434,7 +425,6 @@ public class ConfirmProfileFragment extends Fragment{
             public void onClick(View view){
                 //uid
 
-
                 Bundle uidBundle = new Bundle();
                 uidBundle.putString("uid",accountData.getUid());
                 uidBundle.putString("num","1");
@@ -445,7 +435,6 @@ public class ConfirmProfileFragment extends Fragment{
                 transaction.addToBackStack(null);
                 transaction.commit();
 
-
             }
         });
 
@@ -453,7 +442,6 @@ public class ConfirmProfileFragment extends Fragment{
             @Override
             public void onClick(View view){
                 //uid
-
 
                 Bundle uidBundle = new Bundle();
                 uidBundle.putString("uid",accountData.getUid());
@@ -464,7 +452,6 @@ public class ConfirmProfileFragment extends Fragment{
                 transaction.replace(R.id.container,fragmentUsersPost,UsersPostFragment.TAG);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
 
             }
         });
@@ -493,7 +480,6 @@ public class ConfirmProfileFragment extends Fragment{
                         }
                     }
                 }else{
-
                     Map<String,Object> makeMessageKeyRef = new HashMap<>();
                     String key = messageRef.push().getKey();
                     makeMessageKeyRef.put("userId",user.getUid());
@@ -512,7 +498,6 @@ public class ConfirmProfileFragment extends Fragment{
                     Map<String,Object> childUpdates2 = new HashMap<>();
                     childUpdates2.put(key,makeMessageKeyRef2);
                     messageKeyRef.child(user.getUid()).updateChildren(childUpdates2);
-
 
 
                     Map<String,Object> makeMessageRef = new HashMap<>();
