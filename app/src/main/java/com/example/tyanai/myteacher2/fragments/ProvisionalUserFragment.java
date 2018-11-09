@@ -51,6 +51,7 @@ public class ProvisionalUserFragment extends Fragment {
 
             String userId = (String) map.get("uid");
             String caseNum = (String) map.get("caseNum");
+            String postUid = (String) map.get("postUid");
             String name="";
             String icon="";
 

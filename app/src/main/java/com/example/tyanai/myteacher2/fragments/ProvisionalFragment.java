@@ -45,6 +45,7 @@ public class ProvisionalFragment extends Fragment {
     FirebaseUser user;
     Button myListButton;
     Button otherListButton;
+    boolean which = true;
 
 
     private ChildEventListener cKeyEventListener = new ChildEventListener() {
@@ -66,30 +67,8 @@ public class ProvisionalFragment extends Fragment {
             ProvisionalKeyData provisionalKeyData = new ProvisionalKeyData(caseNum, postKey, time, uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount,postUid);
             provisionalKeyDataArrayList.add(provisionalKeyData);
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            HashMap map = (HashMap) dataSnapshot.getValue();
-//
-//            String caseNum = (String) map.get("caseNum");
-//            String postKey = (String) map.get("postKey");
-//            String time = (String) map.get("time");
-//            String uid = (String) map.get("uid");
-//
-//            for (int i = 0; i < newProvisionalKeyDataArrayList.size(); i++) {
-//                if (newProvisionalKeyDataArrayList.get(i).getCaseNum().equals(caseNum)) {
-//                    ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(caseNum, postKey, time, uid, newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
-//                            , newProvisionalKeyDataArrayList.get(i).getName(), newProvisionalKeyDataArrayList.get(i).getName()
-//                            , newProvisionalKeyDataArrayList.get(i).getContentBitmapString(), newProvisionalKeyDataArrayList.get(i).getCount());
-//
-//                    newProvisionalKeyDataArrayList.remove(i);
-//                    newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
-//
-//                    mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
-//                    provisionalListView.setAdapter(mAdapter);
-//                    mAdapter.notifyDataSetChanged();
-//                }
-//            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -120,7 +99,6 @@ public class ProvisionalFragment extends Fragment {
                         ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(provisionalKeyDataArrayList.get(n).getCaseNum()
                                 , provisionalKeyDataArrayList.get(n).getPostKey(), provisionalKeyDataArrayList.get(n).getTime()
                                 , uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount,provisionalKeyDataArrayList.get(n).getPostUid());
-
                         newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
                     }
                 }
@@ -222,7 +200,11 @@ public class ProvisionalFragment extends Fragment {
 
                 if (NetworkManager.isConnected(getContext())){
                     Bundle pKeyBundle = new Bundle();
-                    pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
+                    if (which){
+                        pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
+                    }else {
+                        pKeyBundle.putString("intentPostKey",myProvisionalKeyDataArrayList.get(position).getPostKey());
+                    }
                     ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
                     fragmentProvisionalUser.setArguments(pKeyBundle);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -237,6 +219,7 @@ public class ProvisionalFragment extends Fragment {
         myListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                which=true;
                 mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
                 provisionalListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
@@ -245,6 +228,7 @@ public class ProvisionalFragment extends Fragment {
         otherListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                which=false;
                 mAdapter.setProvisionalKeyDataArrayList(myProvisionalKeyDataArrayList);
                 provisionalListView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
@@ -324,7 +308,6 @@ public class ProvisionalFragment extends Fragment {
                             newProvisionalKeyDataArrayList.remove(i);
                             newProvisionalKeyDataArrayList.add(i, A2provisionalKeyData);
 
-                            //newProvisionalKeyDataArrayList.remove(k);
                         }
 
                     }
@@ -332,27 +315,17 @@ public class ProvisionalFragment extends Fragment {
             }
         }
 
-//        for (ProvisionalKeyData aa :newProvisionalKeyDataArrayList){
-//            if (aa.getCount().equals("0")){
-//                newProvisionalKeyDataArrayList.remove(aa);
-//                if (aa.getPostUid().equals(user.getUid())){
-//                    myProvisionalKeyDataArrayList.add(aa);
-//                    newProvisionalKeyDataArrayList.remove(aa);
-//                }
-//            }
-//        }
-        
-
         for (int t = 0;t<newProvisionalKeyDataArrayList.size();t++){
             if (newProvisionalKeyDataArrayList.get(t).getCount().equals("0")) {
                 newProvisionalKeyDataArrayList.remove(newProvisionalKeyDataArrayList.get(t));
             }else {
-                if (newProvisionalKeyDataArrayList.get(t).getPostUid().equals(user.getUid())) {
-                    myProvisionalKeyDataArrayList.add(newProvisionalKeyDataArrayList.get(t));
-                    newProvisionalKeyDataArrayList.remove(newProvisionalKeyDataArrayList.get(t));
+                if (newProvisionalKeyDataArrayList.get(t).getContent()!=null && !(newProvisionalKeyDataArrayList.get(t).getContent().equals(""))){
+                    if (newProvisionalKeyDataArrayList.get(t).getPostUid().equals(user.getUid())) {
+                        myProvisionalKeyDataArrayList.add(newProvisionalKeyDataArrayList.get(t));
+                        newProvisionalKeyDataArrayList.remove(newProvisionalKeyDataArrayList.get(t));
+                    }
                 }
             }
-
         }
         mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
         provisionalListView.setAdapter(mAdapter);
