@@ -143,7 +143,7 @@ public class ProvisionalMessageFragment extends Fragment {
             }else {
                 otherData=userData;
             }
-            
+
             for (ProvisionalMessageData a :provisionalMessageDataArrayList){
                 if (a.getSendUid().equals(uid)){
                     ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
