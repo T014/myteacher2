@@ -129,10 +129,9 @@ public class ProvisionalMessageFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(name,uid,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             if (userData.getUid().equals(user.getUid())){
                 myData=userData;
@@ -145,9 +144,9 @@ public class ProvisionalMessageFragment extends Fragment {
                     ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
                             ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
                             ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid());
-                    Collections.reverse(newProvisionalMessageDataArrayList);
                     newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
-                    Collections.reverse(newProvisionalMessageDataArrayList);
+                    //sort
+                    //TimeLagComparator
                     mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
                     provisionalMessageListView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -229,6 +228,8 @@ public class ProvisionalMessageFragment extends Fragment {
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
 
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -289,10 +290,13 @@ public class ProvisionalMessageFragment extends Fragment {
                                 contentsRef.child(thisPost.getKey()).updateChildren(userDataKey);
 
                                 String boughtUid;
+                                String boughtUserName;
                                 if (thisPost.getUserId().equals(user.getUid())){
                                     boughtUid=otherData.getUid();
+                                    boughtUserName = otherData.getName();
                                 }else {
                                     boughtUid=user.getUid();
+                                    boughtUserName = myData.getName();
                                 }
                                 Map<String,Object> tradeKey = new HashMap<>();
                                 String key = tradeRef.child(user.getUid()).push().getKey();
@@ -300,7 +304,7 @@ public class ProvisionalMessageFragment extends Fragment {
                                 tradeKey.put("tradeKey",key);
                                 tradeKey.put("bought",boughtUid);
                                 tradeKey.put("sold",thisPost.getUserId());
-                                tradeKey.put("receiveDate","0");
+                                tradeKey.put("receiveDate",thisPost.getDate());
                                 tradeKey.put("date",time);
                                 tradeKey.put("payDay",time);
                                 tradeKey.put("userName",thisPost.getName());
@@ -311,7 +315,7 @@ public class ProvisionalMessageFragment extends Fragment {
                                 tradeKey.put("stock",stc);
                                 tradeKey.put("kind","購入");
                                 tradeKey.put("kindDetail","許可済み");
-                                tradeKey.put("buyName",myData.getName());
+                                tradeKey.put("buyName",boughtUserName);
                                 tradeKey.put("buyIconBitmapString",myData.getIconBitmapString());
                                 tradeKey.put("permittedDate",time);
 
@@ -319,13 +323,18 @@ public class ProvisionalMessageFragment extends Fragment {
                                 childUpdates.put(key,tradeKey);
                                 tradeRef.updateChildren(childUpdates);
 
+
+                                //評価させる通知を表示
+
+
                                 Bundle screenBundle = new Bundle();
-                                screenBundle.putString("screenKey","request");
+                                screenBundle.putString("screenKey", "business");
                                 BusinessFragment fragmentBusiness = new BusinessFragment();
                                 fragmentBusiness.setArguments(screenBundle);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.container, fragmentBusiness,BusinessFragment.TAG);
                                 transaction.commit();
+
                             }
                         }, 500);
                     }else if (view.getId()==R.id.provisionalMessageNoButton){
@@ -350,6 +359,7 @@ public class ProvisionalMessageFragment extends Fragment {
             }
         });
     }
+
 
     @Override
     public void onAttach(Context context){
