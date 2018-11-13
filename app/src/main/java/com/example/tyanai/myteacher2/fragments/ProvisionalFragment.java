@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ProvisionalListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ImageFragment;
 import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.ProvisionalKeyData;
 import com.example.tyanai.myteacher2.R;
@@ -199,18 +200,30 @@ public class ProvisionalFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
 
                 if (NetworkManager.isConnected(getContext())){
-                    Bundle pKeyBundle = new Bundle();
-                    if (which){
-                        pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
-                    }else {
-                        pKeyBundle.putString("intentPostKey",myProvisionalKeyDataArrayList.get(position).getPostKey());
+                    if (view.getId()==R.id.contentImageView){
+                        Bundle imageBundle = new Bundle();
+                        imageBundle.putString("imageBitmapString",newProvisionalKeyDataArrayList.get(position).getContentBitmapString());
+
+                        ImageFragment fragmentImage = new ImageFragment();
+                        fragmentImage.setArguments(imageBundle);
+                        getFragmentManager().beginTransaction()
+                                .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }else{
+                        Bundle pKeyBundle = new Bundle();
+                        if (which){
+                            pKeyBundle.putString("intentPostKey",newProvisionalKeyDataArrayList.get(position).getPostKey());
+                        }else {
+                            pKeyBundle.putString("intentPostKey",myProvisionalKeyDataArrayList.get(position).getPostKey());
+                        }
+                        ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
+                        fragmentProvisionalUser.setArguments(pKeyBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentProvisionalUser,ProvisionalUserFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
-                    ProvisionalUserFragment fragmentProvisionalUser = new ProvisionalUserFragment();
-                    fragmentProvisionalUser.setArguments(pKeyBundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container,fragmentProvisionalUser,ProvisionalUserFragment.TAG);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }

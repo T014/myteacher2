@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ImageFragment;
 import com.example.tyanai.myteacher2.Models.MessageListData;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.Models.UserData;
@@ -824,6 +825,21 @@ public class DetailsFragment extends Fragment {
                     usersRef.addChildEventListener(cEventListener);
                     Snackbar.make(MainActivity.snack, "データを取得できませんでした。もう一度押してください。", Snackbar.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        postContentsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle imageBundle = new Bundle();
+                imageBundle.putString("imageBitmapString",thisPost.getImageBitmapString());
+
+                ImageFragment fragmentImage = new ImageFragment();
+                fragmentImage.setArguments(imageBundle);
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

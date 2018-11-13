@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class ProvisionalListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         //ファイル名
         String iconBitmapString = provisionalKeyDataArrayList.get(position).getIconBitmapString();
         String userName = provisionalKeyDataArrayList.get(position).getName();
@@ -71,6 +72,12 @@ public class ProvisionalListAdapter extends BaseAdapter {
         if (count!=null){
             provisionalListViewHolder.countTextView.setText("仮契約"+count+"人");
         }
+        provisionalListViewHolder.contentImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.contentImageView);
+            }
+        });
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length>5){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);

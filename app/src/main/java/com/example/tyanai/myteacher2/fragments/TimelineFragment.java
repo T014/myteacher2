@@ -487,6 +487,7 @@ public class TimelineFragment extends Fragment {
                         fragmentProfileConfirm.setArguments(userBundle);
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                                .addToBackStack(null)
                                 .commit();
 
                     }else if (view.getId()==R.id.contentsImageView) {
