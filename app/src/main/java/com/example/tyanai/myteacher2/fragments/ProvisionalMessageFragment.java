@@ -213,6 +213,29 @@ public class ProvisionalMessageFragment extends Fragment {
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            for (int n=0;n<newProvisionalMessageDataArrayList.size();n++){
+                if (newProvisionalMessageDataArrayList.get(n).getConfirmKey().equals(dataSnapshot.getKey())){
+                    HashMap map = (HashMap) dataSnapshot.getValue();
+                    String booleans = (String) map.get("booleans");
+
+                    ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(newProvisionalMessageDataArrayList.get(n).getCaseNum()
+                            ,newProvisionalMessageDataArrayList.get(n).getConfirmKey(),newProvisionalMessageDataArrayList.get(n).getDate()
+                            ,newProvisionalMessageDataArrayList.get(n).getDetail(),newProvisionalMessageDataArrayList.get(n).getKey()
+                            ,newProvisionalMessageDataArrayList.get(n).getMessage(),newProvisionalMessageDataArrayList.get(n).getMoney()
+                            ,newProvisionalMessageDataArrayList.get(n).getReceiveUid(),newProvisionalMessageDataArrayList.get(n).getSendUid()
+                            ,newProvisionalMessageDataArrayList.get(n).getTime(),newProvisionalMessageDataArrayList.get(n).getTypePay()
+                            ,booleans,newProvisionalMessageDataArrayList.get(n).getIconBitmapString(),newProvisionalMessageDataArrayList.get(n).getUserName()
+                            ,newProvisionalMessageDataArrayList.get(n).getPostKey(),newProvisionalMessageDataArrayList.get(n).getPostUid()
+                            ,newProvisionalMessageDataArrayList.get(n).getWatchUid(),newProvisionalMessageDataArrayList.get(n).getLag());
+
+                    newProvisionalMessageDataArrayList.remove(n);
+                    newProvisionalMessageDataArrayList.add(n,newProvisionalMessageData);
+                    Collections.sort(newProvisionalMessageDataArrayList, new ProvisionalMessageLagComparator());
+                    mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
+                    provisionalMessageListView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -258,27 +281,33 @@ public class ProvisionalMessageFragment extends Fragment {
         provisionalMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //相手のメッセージ
                 contentsRef.orderByChild("key").equalTo(thisPostKey).addChildEventListener(tEventListener);
                 if (NetworkManager.isConnected(getContext())){
                     if (view.getId()==R.id.provisionalMessageOkButton){
-                        //買い手が押したら支払い画面に移動
-                        //支払い終わったら取引履歴にデータを移動する
-/*
-                        if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
-                            Map<String,Object> childUpdates = new HashMap<>();
-                            childUpdates.put("booleans","ok");
-                            String postUid = newProvisionalMessageDataArrayList.get(position).getPostUid();
-                            confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
-                                    .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
-                                    .updateChildren(childUpdates);
-                            //booleans=ok
-                            if (postUid.equals(user.getUid())){
-                                //通知を投げて支払いさせる
+                        if (thisPost!=null){
+                            if (thisPost.getUserId().equals(user.getUid())){
+                                //自分の投稿で相手のメッセージ
+                                Map<String,Object> childUpdates = new HashMap<>();
+                                childUpdates.put("booleans","ok");
+                                confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
+                                        .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
+                                        .updateChildren(childUpdates);
+                                //相手に通知
                             }else{
-                                //購入画面に移動
+                                //相手の投稿で相手のメッセージ
+                                //支払い画面に移動
+                                Map<String,Object> childUpdates = new HashMap<>();
+                                childUpdates.put("booleans","ok");
+                                confirmRef.child(newProvisionalMessageDataArrayList.get(position).getCaseNum())
+                                        .child(newProvisionalMessageDataArrayList.get(position).getConfirmKey())
+                                        .updateChildren(childUpdates);
                             }
                         }
 
+                        //買い手が押したら支払い画面に移動
+                        //支払い終わったら取引履歴にデータを移動する
+                        /*
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

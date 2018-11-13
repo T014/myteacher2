@@ -125,6 +125,35 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             }else {
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
             }
+            if (postUid.equals(watchUid)){
+                if (booleans.equals("ok")){
+                    provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.GONE);
+                    provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
+                }else{
+                    if (sendUid.equals(watchUid)){
+                        //okButton-gone
+                        provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+                    }else {
+                        //ok-Button-visible
+                        provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+                    }
+                }
+            }else {
+                if (sendUid.equals(watchUid)){
+                    if (booleans.equals("ok")){
+                        //pay
+                        provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.VISIBLE);
+                        provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.GONE);
+                        provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
+                    }else {
+                        //okButton-gone
+                        provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+                    }
+                }else {
+                    //okButton-visible
+                    provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+                }
+            }
         }else {
             provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
             provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.GONE);
@@ -134,16 +163,18 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             } else {
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255, 255, 255));
             }
+
         }
-        if (postUid.equals(watchUid) && !(postUid.equals(sendUid))){
-            provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
-        }else if (!(postUid.equals(watchUid)) && !(postUid.equals(sendUid))){
-            if (booleans.equals("ok")){
-                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
-            }else {
-                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
-            }
-        }
+//        if (postUid.equals(watchUid) && !(postUid.equals(sendUid))){
+//            provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+//        }else if (!(postUid.equals(watchUid)) && !(postUid.equals(sendUid))){
+//            if (booleans.equals("ok")){
+//                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
+//            }else {
+//                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+//            }
+//        }
+
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
