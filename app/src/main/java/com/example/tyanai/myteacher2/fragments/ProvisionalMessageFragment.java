@@ -267,7 +267,7 @@ public class ProvisionalMessageFragment extends Fragment {
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
         calNow = Calendar.getInstance();
-        
+
 
         new Handler().postDelayed(new Runnable() {
             @Override

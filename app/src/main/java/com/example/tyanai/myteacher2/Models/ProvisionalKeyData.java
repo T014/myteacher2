@@ -44,7 +44,7 @@ public class ProvisionalKeyData {
     }
 
     public ProvisionalKeyData(String caseNum, String postKey, String time, String uid, String iconBitmapString
-            , String contentBitmapString, String name, String content, String count,String postUid){
+            , String contentBitmapString, String name, String content, String count, String postUid){
         mCaseNum = caseNum;
         mPostKey = postKey;
         mTime = time;

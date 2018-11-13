@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ProvisionalFragment extends Fragment {
@@ -315,12 +316,15 @@ public class ProvisionalFragment extends Fragment {
             }else {
                 if (newProvisionalKeyDataArrayList.get(t).getContent()!=null && !(newProvisionalKeyDataArrayList.get(t).getContent().equals(""))){
                     if (newProvisionalKeyDataArrayList.get(t).getPostUid().equals(user.getUid())) {
+                        Collections.reverse(myProvisionalKeyDataArrayList);
                         myProvisionalKeyDataArrayList.add(newProvisionalKeyDataArrayList.get(t));
+                        Collections.reverse(myProvisionalKeyDataArrayList);
                         newProvisionalKeyDataArrayList.remove(newProvisionalKeyDataArrayList.get(t));
                     }
                 }
             }
         }
+        Collections.reverse(newProvisionalKeyDataArrayList);
         mAdapter.setProvisionalKeyDataArrayList(newProvisionalKeyDataArrayList);
         provisionalListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
