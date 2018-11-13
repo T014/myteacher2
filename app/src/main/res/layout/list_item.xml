@@ -70,10 +70,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:id="@+id/postTitleTextView"
+            android:layout_marginTop="60dp"
             android:layout_toEndOf="@+id/contentsImageView"
-            android:layout_below="@+id/goodDetailTextView"
-            android:padding="15dp"
+            android:layout_below="@+id/goodDetailTextView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/contentsImageView"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/postTitleTextView"
             android:id="@+id/postContentsTextView"/>
 
 

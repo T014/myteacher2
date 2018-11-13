@@ -91,10 +91,11 @@ public class ProvisionalMessageFragment extends Fragment {
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
+            String title = (String) map.get("title");
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock,title);
 
             thisPost=postData;
         }

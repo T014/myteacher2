@@ -1,6 +1,7 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +65,7 @@ public class SearchFragment extends Fragment {
     TextView typeTextView;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
-    DatabaseReference gridRef;
+    DatabaseReference contentsRef;
     DatabaseReference saveSearchRef;
     public static ArrayList<PostData> searchArrayList;
 
@@ -190,10 +192,11 @@ public class SearchFragment extends Fragment {
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
+            String title = (String) map.get("title");
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock,title);
 
             //条件分岐
             int iUserEvaluation = Integer.parseInt(userEvaluation);
@@ -236,7 +239,9 @@ public class SearchFragment extends Fragment {
                                                 if (postSex.equals("未設定") || sex.equals(postSex)){
                                                     //年齢
                                                     if (postAge.equals("未設定") || age.equals(postAge)){
+                                                        Collections.reverse(searchArrayList);
                                                         searchArrayList.add(postData);
+                                                        Collections.reverse(searchArrayList);
                                                     }
                                                 }
                                             }
@@ -371,19 +376,27 @@ public class SearchFragment extends Fragment {
                 postAge = (String)ageSpinner.getSelectedItem();
 
                 mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-                gridRef = mDataBaseReference.child(Const.ContentsPATH);
-                gridRef.orderByChild("postType").equalTo(postType).addChildEventListener(sEventListener);
+                contentsRef = mDataBaseReference.child(Const.ContentsPATH);
+                contentsRef.orderByChild("postType").equalTo(postType).addChildEventListener(sEventListener);
 
-                Bundle flagBundle = new Bundle();
-                flagBundle.putString("flag","search");
-                flagBundle.putString("area",postType);
 
-                GridFragment fragmentGrid = new GridFragment();
-                fragmentGrid.setArguments(flagBundle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bundle flagBundle = new Bundle();
+                        flagBundle.putString("flag","search");
+                        flagBundle.putString("postType",postType);
+
+                        GridFragment fragmentGrid = new GridFragment();
+                        fragmentGrid.setArguments(flagBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentGrid,GridFragment.TAG);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }, 1000);
+
+
             }
         });
     }

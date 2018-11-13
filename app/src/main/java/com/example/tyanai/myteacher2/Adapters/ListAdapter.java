@@ -26,6 +26,7 @@ class ListViewHolder {
     TextView contentsTextView;
     TextView contentsTimeTextView;
     ToggleButton goodButton;
+    TextView postTitleTextView;
     TextView goodCountTextView;
     LinearLayout listLinearLayout;
 }
@@ -50,6 +51,7 @@ public class ListAdapter extends BaseAdapter{
         String contents = timeLineArrayList.get(position).getContents();
         String contentsTime = timeLineArrayList.get(position).getTime();
         String goodCount = timeLineArrayList.get(position).getGood();
+        String title = timeLineArrayList.get(position).getTitle();
         String favFlag = timeLineArrayList.get(position).getFavFlag();
         final ListViewHolder listViewHolder;
 
@@ -64,6 +66,7 @@ public class ListAdapter extends BaseAdapter{
             listViewHolder.contentsTextView = (TextView) convertView.findViewById(R.id.postContentsTextView);
             listViewHolder.contentsTimeTextView = (TextView) convertView.findViewById(R.id.contentsTimeTextView);
             listViewHolder.goodButton = (ToggleButton) convertView.findViewById(R.id.goodButton);
+            listViewHolder.postTitleTextView=(TextView)convertView.findViewById(R.id.postTitleTextView);
             listViewHolder.goodCountTextView = (TextView) convertView.findViewById(R.id.goodCountTextView);
             listViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
             convertView.setTag(listViewHolder);
@@ -82,6 +85,15 @@ public class ListAdapter extends BaseAdapter{
             }else{
                 listViewHolder.contentsTextView.setText(contents);
             }
+        }
+        if (title!=null){
+            String newTitle;
+            if (title.length()>10){
+                newTitle = title.substring(0,9)+"...";
+            }else {
+                newTitle = title;
+            }
+            listViewHolder.postTitleTextView.setText(newTitle);
         }
         if (contentsTime!=null){
             listViewHolder.contentsTimeTextView.setText(contentsTime);

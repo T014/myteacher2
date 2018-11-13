@@ -29,6 +29,7 @@ public class PostData {
     private String mUserEvaluation;
     private String mUserIconBitmapString;
     private String mStock;
+    private String mTitle;
 
     public String getUserId(){
         return mUserId;
@@ -112,11 +113,16 @@ public class PostData {
         return mUserIconBitmapString;
     }
 
+    public String getTitle() {
+        return mTitle;
+    }
+
     public PostData(String userId, String name, String time, String key, String date
-            , String imageBitmapString, String contents,String costType, String cost, String howLong, String good
-            , String favFrag, String bought, String evaluation, String cancel, String method
-            , String postArea, String postType, String level, String career, String place
-            , String sex, String age, String taught, String userEvaluation,String userIconBitmapString,String stock){
+            , String imageBitmapString, String contents, String costType, String cost
+            , String howLong, String good, String favFrag, String bought, String evaluation
+            , String cancel, String method, String postArea, String postType, String level
+            , String career, String place, String sex, String age, String taught
+            , String userEvaluation, String userIconBitmapString, String stock, String title){
         mUserId = userId;
         mName = name;
         mTime = time;
@@ -144,5 +150,6 @@ public class PostData {
         mUserEvaluation = userEvaluation;
         mUserIconBitmapString = userIconBitmapString;
         mStock = stock;
+        mTitle = title;
     }
 }

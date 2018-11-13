@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/areaGroup"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="80dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -63,8 +63,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="80dp"
             android:id="@+id/sportsGroup"
             android:orientation="vertical">
 
@@ -81,12 +80,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/tennisImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="テニス"/>
 
                 </LinearLayout>
@@ -99,6 +101,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/soccerImageButton"/>
 
@@ -124,12 +127,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/athleticsImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="陸上"/>
 
                 </LinearLayout>
@@ -142,6 +148,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/swimImageButton"/>
 
@@ -166,12 +173,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/otherSportsImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="その他"/>
 
                 </LinearLayout>
@@ -183,8 +193,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="80dp"
             android:id="@+id/musicGroup"
             android:orientation="vertical">
 
@@ -201,12 +210,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/singImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="歌"/>
 
                 </LinearLayout>
@@ -219,6 +231,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/instrumentImageButton"/>
 
@@ -244,12 +257,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/vocalPercussionImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="ボイスパーカッション"/>
 
                 </LinearLayout>
@@ -262,6 +278,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/rapImageButton"/>
 
@@ -287,12 +304,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/otherMusicImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="その他"/>
 
                 </LinearLayout>
@@ -304,8 +324,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="0dp"
             android:id="@+id/movieGroup"
             android:orientation="vertical">
 
@@ -322,12 +341,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/filmImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="撮影"/>
 
                 </LinearLayout>
@@ -341,6 +363,7 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:src="@drawable/noimage"
+                        android:layout_marginTop="20dp"
                         android:id="@+id/editImageButton"/>
 
                     <TextView
@@ -365,16 +388,17 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
-                        android:id="@+id/otherMoviewImageButton"/>
+                        android:id="@+id/otherMovieImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="その他"/>
-
                 </LinearLayout>
-
             </LinearLayout>
 
 
@@ -385,8 +409,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/studyGroup"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="80dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -402,12 +425,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/japaneseImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="国語"/>
 
                 </LinearLayout>
@@ -419,6 +445,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/mathematicsImageButton"/>
 
@@ -445,12 +472,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/englishImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="英語"/>
 
                 </LinearLayout>
@@ -463,6 +493,7 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/scienceImageButton"/>
 
@@ -488,12 +519,15 @@
                     <ImageButton
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_margin="20dp"
                         android:src="@drawable/noimage"
                         android:id="@+id/otherStudyImageButton"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="-20dp"
                         android:text="その他"/>
 
                 </LinearLayout>

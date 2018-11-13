@@ -47,6 +47,7 @@ public class MakePostFragment extends Fragment {
     public static ImageView postImageView;
     private EditText contentsEditText;
     private EditText costEditText;
+    private EditText titleNameEditText;
     private Spinner methodSpinner;
     private Spinner howLongSpinner;
     private Spinner careerSpinner;
@@ -206,6 +207,7 @@ public class MakePostFragment extends Fragment {
             String careerPosition = (String) map.get("careerPosition");
             String stockPosition = (String) map.get("stockPosition");
             String placePosition = (String) map.get("placePosition");
+            String title = (String) map.get("title");
 
             if (croppedFlag==true){
                 if (croppedBitmapString!=null){
@@ -223,6 +225,9 @@ public class MakePostFragment extends Fragment {
                         postImageView.setImageBitmap(contentsImageBitmap);
                     }
                 }
+            }
+            if (title!=null){
+                titleNameEditText.setText(title);
             }
             if (postType==null){
                 //tennis
@@ -435,6 +440,7 @@ public class MakePostFragment extends Fragment {
         postImageView = (ImageView)v.findViewById(R.id.postImageView);
         contentsEditText = (EditText)v.findViewById(R.id.contentsEditText);
         costEditText = (EditText)v.findViewById(R.id.costEditText);
+        titleNameEditText = (EditText)v.findViewById(R.id.titleNameEditText);
         methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
         howLongSpinner = (Spinner)v.findViewById(R.id.howLongSpinner);
         careerSpinner = (Spinner)v.findViewById(R.id.careerSpinner);
@@ -763,6 +769,7 @@ public class MakePostFragment extends Fragment {
                             char firstCost = cost.charAt(0);
                             cFirstCost = String.valueOf(firstCost);
                         }
+                        String title = titleNameEditText.getText().toString();
 
                         String key = contentsRef.push().getKey();
                         filterKey = key;
@@ -799,6 +806,7 @@ public class MakePostFragment extends Fragment {
                                             data.put("userEvaluation",myData.getEvaluations());
                                             data.put("userIconBitmapString",myData.getIconBitmapString());
                                             data.put("stock",stock);
+                                            data.put("title",title);
                                             Map<String,Object> childUpdates = new HashMap<>();
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
@@ -852,6 +860,7 @@ public class MakePostFragment extends Fragment {
                                             data.put("userEvaluation",myData.getEvaluations());
                                             data.put("userIconBitmapString",myData.getIconBitmapString());
                                             data.put("stock",stock);
+                                            data.put("title",title);
                                             Map<String,Object> childUpdates = new HashMap<>();
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
@@ -883,6 +892,8 @@ public class MakePostFragment extends Fragment {
                         userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
                         Snackbar.make(MainActivity.snack,"送信が失敗しました。もう一度送信してください。",Snackbar.LENGTH_LONG).show();
                     }
+                }else {
+                    Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -917,6 +928,7 @@ public class MakePostFragment extends Fragment {
             String cts=contentsEditText.getText().toString();
             String contents =cts.replace("\n","");
             String cost = costEditText.getText().toString();
+            String title = titleNameEditText.getText().toString();
 
             int howLongPosition1 = howLongSpinner.getSelectedItemPosition();
             String howLongPosition = String.valueOf(howLongPosition1);
@@ -948,6 +960,7 @@ public class MakePostFragment extends Fragment {
             data.put("placePosition",placePosition);
             data.put("userIconBitmapString","");
             data.put("stockPosition",stockPosition);
+            data.put("title",title);
             Map<String,Object> childUpdates = new HashMap<>();
             childUpdates.put(user.getUid(),data);
             savePostRef.child(user.getUid()).updateChildren(childUpdates);

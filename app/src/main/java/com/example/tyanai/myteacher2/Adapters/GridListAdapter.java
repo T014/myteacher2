@@ -40,8 +40,8 @@ public class GridListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         //ファイル名
         String postImageBitmapString = gridList.get(position).getImageBitmapString();
-        String userName = gridList.get(position).getName();
         String contents = gridList.get(position).getContents();
+        String title = gridList.get(position).getTitle();
 
         ViewHolder holder;
         if (convertView == null) {
@@ -57,7 +57,7 @@ public class GridListAdapter extends BaseAdapter{
         else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textview.setText(userName);
+        holder.textview.setText(title);
         //ここで色指定できる評価の高さによって
         if (contents.equals("あああ")){
             holder.linearLayout.setBackgroundColor(Color.rgb(127,127,255));

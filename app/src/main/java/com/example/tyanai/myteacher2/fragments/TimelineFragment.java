@@ -87,6 +87,7 @@ public class TimelineFragment extends Fragment {
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
             String favFlag="";
+            String title = (String) map.get("title");
 
             //いいね済みの時端末内でfavFragをtrueにしてadapterでここをみて判断する
             for (NotificationFavData fav : favKeyArrayList){
@@ -99,7 +100,7 @@ public class TimelineFragment extends Fragment {
             }
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock,title);
 
                 //10以上の時はためておく！！
                 if (timeLineArrayList.size()>9){
@@ -134,7 +135,7 @@ public class TimelineFragment extends Fragment {
                             ,timeLineArrayList.get(p).getPostType(),timeLineArrayList.get(p).getLevel(),timeLineArrayList.get(p).getCareer()
                             ,timeLineArrayList.get(p).getPlace(),timeLineArrayList.get(p).getSex(),timeLineArrayList.get(p).getAge()
                             ,timeLineArrayList.get(p).getTaught(),timeLineArrayList.get(p).getUserEvaluation(),timeLineArrayList.get(p).getUserIconBitmapString()
-                            ,timeLineArrayList.get(p).getStock());
+                            ,timeLineArrayList.get(p).getStock(),timeLineArrayList.get(p).getTitle());
                     timeLineArrayList.remove(p);
                     timeLineArrayList.add(p,newPostData);
                     mAdapter.setTimeLineArrayList(timeLineArrayList);
@@ -262,10 +263,11 @@ public class TimelineFragment extends Fragment {
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
             String favFlag="";
+            String title = (String) map.get("title");
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,favFlag,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock,title);
 
             if (oldTimeLineArrayList.size()<=totalCount){
                 Collections.reverse(oldTimeLineArrayList);
@@ -424,7 +426,7 @@ public class TimelineFragment extends Fragment {
                                     ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
                                     ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
                                     ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
-                                    ,timeLineArrayList.get(position).getStock());
+                                    ,timeLineArrayList.get(position).getStock(),timeLineArrayList.get(position).getTitle());
                             timeLineArrayList.remove(position);
                             timeLineArrayList.add(position,newPostData);
                             mAdapter.setTimeLineArrayList(timeLineArrayList);
@@ -467,7 +469,7 @@ public class TimelineFragment extends Fragment {
                                     ,timeLineArrayList.get(position).getPostType(),timeLineArrayList.get(position).getLevel(),timeLineArrayList.get(position).getCareer()
                                     ,timeLineArrayList.get(position).getPlace(),timeLineArrayList.get(position).getSex(),timeLineArrayList.get(position).getAge()
                                     ,timeLineArrayList.get(position).getTaught(),timeLineArrayList.get(position).getUserEvaluation(),timeLineArrayList.get(position).getUserIconBitmapString()
-                                    ,timeLineArrayList.get(position).getStock());
+                                    ,timeLineArrayList.get(position).getStock(),timeLineArrayList.get(position).getTitle());
                             timeLineArrayList.remove(position);
                             timeLineArrayList.add(position,newPostData);
                             mAdapter.setTimeLineArrayList(timeLineArrayList);

@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class GridFragment extends Fragment {
@@ -68,12 +69,15 @@ public class GridFragment extends Fragment {
             String userEvaluation = (String) map.get("userEvaluation");
             String userIconBitmapString = (String) map.get("userIconBitmapString");
             String stock = (String) map.get("stock");
+            String title = (String) map.get("title");
 
             PostData postData = new PostData(userId,userName,time,key,date,imageBitmapString
                     , contents,costType,cost,howLong,goods,share,bought,evaluation,cancel,method,postArea
-                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock);
+                    , postType,level,career,place,sex,age,taught,userEvaluation,userIconBitmapString,stock,title);
 
+            Collections.reverse(postDataArrayList);
             postDataArrayList.add(postData);
+            Collections.reverse(postDataArrayList);
             mAdapter.setPostDataArrayList(postDataArrayList);
             gridView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -105,7 +109,6 @@ public class GridFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MainActivity.mToolbar.setTitle("???");
         if (!(NetworkManager.isConnected(getContext()))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
         }
@@ -115,15 +118,15 @@ public class GridFragment extends Fragment {
         if (flagBundle!=null){
             flag = flagBundle.getString("flag");
             String postType = flagBundle.getString("postType");
+            MainActivity.mToolbar.setTitle(postType);
             if (flag.equals("search")){
-                MainActivity.mToolbar.setTitle(postType);
                 mAdapter.setPostDataArrayList(SearchFragment.searchArrayList);
                 gridView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }else {
                 MainActivity.mToolbar.setTitle(flag);
                 gridRef = mDataBaseReference.child(Const.ContentsPATH);
-                gridRef.orderByChild("postType").equalTo(flag).limitToLast(30).addChildEventListener(gEventListener);
+                gridRef.orderByChild("postType").equalTo(postType).limitToLast(30).addChildEventListener(gEventListener);
             }
         }
 

@@ -86,7 +86,7 @@ public class AreaFragment extends Fragment {
 
         filmImageButton = (ImageButton)v.findViewById(R.id.filmImageButton);
         editImageButton = (ImageButton)v.findViewById(R.id.editImageButton);
-        otherMovieImageButton = (ImageButton)v.findViewById(R.id.otherMoviewImageButton);
+        otherMovieImageButton = (ImageButton)v.findViewById(R.id.otherMovieImageButton);
 
         japaneseImageButton = (ImageButton)v.findViewById(R.id.japaneseImageButton);
         mathematicsImageButton = (ImageButton)v.findViewById(R.id.mathematicsImageButton);
@@ -152,6 +152,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","テニス");
+                flagBundle.putString("postType","テニス");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -165,6 +166,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","サッカー");
+                flagBundle.putString("postType","サッカー");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -178,6 +180,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","陸上");
+                flagBundle.putString("postType","陸上");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -191,6 +194,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","水泳");
+                flagBundle.putString("postType","水泳");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -205,6 +209,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View view) {
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","その他のスポーツ");
+                flagBundle.putString("postType","その他のスポーツ");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -219,6 +224,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","歌");
+                flagBundle.putString("postType","歌");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -232,6 +238,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","楽器");
+                flagBundle.putString("postType","楽器");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -245,6 +252,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","ボイスパーカッション");
+                flagBundle.putString("postType","ボイスパーカッション");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -258,6 +266,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","ラップ");
+                flagBundle.putString("postType","ラップ");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -271,6 +280,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View view) {
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","その他の音楽");
+                flagBundle.putString("postType","その他の音楽");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -284,6 +294,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","撮影");
+                flagBundle.putString("postType","撮影");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -297,6 +308,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","編集");
+                flagBundle.putString("postType","編集");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -310,6 +322,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View view) {
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","その他の動画");
+                flagBundle.putString("postType","その他の動画");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -323,6 +336,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","国語");
+                flagBundle.putString("postType","国語");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -336,6 +350,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","数学");
+                flagBundle.putString("postType","数学");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -349,6 +364,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","英語");
+                flagBundle.putString("postType","英語");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -362,6 +378,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","理科");
+                flagBundle.putString("postType","理科");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
@@ -375,6 +392,7 @@ public class AreaFragment extends Fragment {
             public void onClick(View v){
                 Bundle flagBundle = new Bundle();
                 flagBundle.putString("flag","その他の教科");
+                flagBundle.putString("postType","その他の教科");
 
                 GridFragment fragmentGrid = new GridFragment();
                 fragmentGrid.setArguments(flagBundle);
