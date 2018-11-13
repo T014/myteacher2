@@ -30,6 +30,7 @@ class ProvisionalMessageListViewHolder{
     TextView provisionalMessageTextView;
     Button provisionalMessageOkButton;
     Button provisionalMessageNoButton;
+    TextView nowTimeTextView;
     RelativeLayout provisionalMessageRelativeLayout;
 }
 
@@ -56,6 +57,8 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         String sendUid = provisionalMessageArrayList.get(position).getSendUid();
         String watchUid = provisionalMessageArrayList.get(position).getWatchUid();
         String booleans = provisionalMessageArrayList.get(position).getBooleans();
+        String postUid = provisionalMessageArrayList.get(position).getPostUid();
+        String nowTime = provisionalMessageArrayList.get(position).getTime();
 
         ProvisionalMessageListViewHolder provisionalMessageListViewHolder;
         if (convertView == null) {
@@ -72,6 +75,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             provisionalMessageListViewHolder.provisionalMessageTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTextView);
             provisionalMessageListViewHolder.provisionalMessageOkButton = (Button) convertView.findViewById(R.id.provisionalMessageOkButton);
             provisionalMessageListViewHolder.provisionalMessageNoButton = (Button) convertView.findViewById(R.id.provisionalMessageNoButton);
+            provisionalMessageListViewHolder.nowTimeTextView = (TextView) convertView.findViewById(R.id.nowTimeTextView);
             provisionalMessageListViewHolder.provisionalMessageRelativeLayout = (RelativeLayout)convertView.findViewById(R.id.provisionalMessageRelativeLayout);
             convertView.setTag(provisionalMessageListViewHolder);
         }
@@ -96,6 +100,9 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         if (detail!=null){
             provisionalMessageListViewHolder.provisionalMessageDetailTextView.setText(detail);
         }
+        if (nowTime!=null){
+            provisionalMessageListViewHolder.nowTimeTextView.setText(nowTime);
+        }
         provisionalMessageListViewHolder.provisionalMessageOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,20 +125,24 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             }else {
                 provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
             }
-        }else{
+        }else {
             provisionalMessageListViewHolder.provisionalMessageOkButton.setVisibility(View.GONE);
             provisionalMessageListViewHolder.provisionalMessageNoButton.setVisibility(View.GONE);
-            if (sendUid.equals(watchUid)){
+            if (sendUid.equals(watchUid)) {
                 //自分で送ったやつ
-                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127,127,255));
-            }else {
-                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255,255,255));
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(127, 127, 255));
+            } else {
+                provisionalMessageListViewHolder.provisionalMessageRelativeLayout.setBackgroundColor(Color.rgb(255, 255, 255));
             }
         }
-        if (booleans.equals("ok")){
-            provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
-        }else{
+        if (postUid.equals(watchUid) && !(postUid.equals(sendUid))){
             provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+        }else if (!(postUid.equals(watchUid)) && !(postUid.equals(sendUid))){
+            if (booleans.equals("ok")){
+                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("支払う");
+            }else {
+                provisionalMessageListViewHolder.provisionalMessageOkButton.setText("契約する");
+            }
         }
         byte[] iconImageBytes = Base64.decode(iconBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){

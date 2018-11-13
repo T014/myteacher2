@@ -17,6 +17,7 @@ import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.Models.ProvisionalMessageData;
+import com.example.tyanai.myteacher2.Models.ProvisionalMessageLagComparator;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +57,7 @@ public class ProvisionalMessageFragment extends Fragment {
     ArrayList<ProvisionalMessageData> newProvisionalMessageDataArrayList;
     String thisPostKey;
     PostData thisPost;
+    Calendar calNow;
 
     private ChildEventListener tEventListener = new ChildEventListener() {
         @Override
@@ -130,6 +133,7 @@ public class ProvisionalMessageFragment extends Fragment {
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
 
+
             UserData userData = new UserData(name,uid,comment,follows,followers,posts
                     ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
@@ -143,15 +147,14 @@ public class ProvisionalMessageFragment extends Fragment {
                 if (a.getSendUid().equals(uid)){
                     ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
                             ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
-                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid());
+                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid(),a.getLag());
                     newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
-                    //sort
-                    //TimeLagComparator
-                    mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
-                    provisionalMessageListView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
                 }
             }
+            Collections.sort(newProvisionalMessageDataArrayList, new ProvisionalMessageLagComparator());
+            mAdapter.setProvisionalMessageArrayList(newProvisionalMessageDataArrayList);
+            provisionalMessageListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -190,9 +193,22 @@ public class ProvisionalMessageFragment extends Fragment {
             String postUid = (String)map.get("postUid");
             String watchUid = user.getUid();
 
+            Calendar calThen = Calendar.getInstance();
+            SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+
+            long newLag = 0;
+            try{
+                calThen.setTime(sdfThen.parse(time));
+                long diffMillis = calNow.getTimeInMillis() - calThen.getTimeInMillis();
+                newLag = (int)diffMillis;
+            }catch (ParseException e){
+            }
+
             thisPostKey = postKey;
+
+
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
-            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid);
+            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid,newLag);
             provisionalMessageDataArrayList.add(provisionalMessageData);
         }
         @Override
@@ -227,6 +243,7 @@ public class ProvisionalMessageFragment extends Fragment {
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         contentsRef = mDataBaseReference.child(Const.ContentsPATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
+        calNow = Calendar.getInstance();
 
 
 
@@ -246,7 +263,7 @@ public class ProvisionalMessageFragment extends Fragment {
                     if (view.getId()==R.id.provisionalMessageOkButton){
                         //買い手が押したら支払い画面に移動
                         //支払い終わったら取引履歴にデータを移動する
-
+/*
                         if (!(newProvisionalMessageDataArrayList.get(position).getSendUid().equals(user.getUid()))){
                             Map<String,Object> childUpdates = new HashMap<>();
                             childUpdates.put("booleans","ok");
@@ -337,6 +354,7 @@ public class ProvisionalMessageFragment extends Fragment {
 
                             }
                         }, 500);
+                        */
                     }else if (view.getId()==R.id.provisionalMessageNoButton){
                         //新しい契約内容を入力させるeditTextVisible
                         //契約内容確認画面に移動
@@ -356,6 +374,7 @@ public class ProvisionalMessageFragment extends Fragment {
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
+
             }
         });
     }

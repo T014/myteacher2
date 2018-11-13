@@ -64,13 +64,10 @@ public class UserData {
     public String getIconBitmapString(){
         return mIconBitmapString;
     }
-    public String getCoin(){
-        return mCoin;
-    }
 
     public UserData(String name, String userId, String comment, String follows, String followers
             , String posts, String favorites,String sex,String age, String evaluations, String taught
-            , String period, String group,String date, String iconBitmapString,String coin) {
+            , String period, String group,String date, String iconBitmapString) {
         mName = name;
         mUserId = userId;
         mComment = comment;
@@ -86,6 +83,5 @@ public class UserData {
         mGroups = group;
         mDate = date;
         mIconBitmapString = iconBitmapString;
-        mCoin = coin;
     }
 }

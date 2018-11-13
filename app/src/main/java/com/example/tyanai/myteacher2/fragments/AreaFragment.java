@@ -384,7 +384,6 @@ public class AreaFragment extends Fragment {
             }
         });
     }
-    
 
     @Override
     public void onResume() {

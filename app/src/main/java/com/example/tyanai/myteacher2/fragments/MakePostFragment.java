@@ -385,10 +385,9 @@ public class MakePostFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             myData = userData;
         }
@@ -411,10 +410,9 @@ public class MakePostFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             myData = userData;
         }

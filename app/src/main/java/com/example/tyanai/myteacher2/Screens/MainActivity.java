@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int PERMISSIONS_REQUEST_INTERNET_CODE = 200;
     private static final int PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE = 300;
 
+
     public static int pFlag = 0;
     ImageView accountImageView;
     TextView accountNameTextView;
@@ -217,7 +218,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String follows = (String) map.get("follows");
             String followers = (String) map.get("followers");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             if (user!=null){
                 if (userId.equals(user.getUid())){
@@ -229,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         transaction.commit();
                     }
                     accountNameTextView.setText(userName);
-                    accountCoinTextView.setText(coin+" coin");
                     int f = Integer.parseInt(follows);
                     String strF = String.valueOf(f);
                     accountFollowTextView.setText(strF);
@@ -255,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String follows = (String) map.get("follows");
                 String followers = (String) map.get("followers");
                 String iconBitmapString = (String) map.get("iconBitmapString");
-                String coin = (String) map.get("coin");
 
                 if (user!=null){
                     if (userId.equals(user.getUid())){
@@ -267,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             transaction.commit();
                         }
                         accountNameTextView.setText(userName);
-                        accountCoinTextView.setText(coin+" coin");
                         int f = Integer.parseInt(follows);
                         String strF = String.valueOf(f);
                         accountFollowTextView.setText(strF);
@@ -298,6 +295,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         //Push通知の購読開始
 //        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
 
@@ -306,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        String aaa = FirebaseInstanceId.getInstance().getId();
+//        String aaa = FirebaseInstanceId.getInstance().getId();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -335,7 +334,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         snack = (CoordinatorLayout)findViewById(R.id.snack);
         //BottomNavigationViewの定義して設置する
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-
         //リスナーのセット
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -362,7 +360,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View navHeaderMain = navigationView.inflateHeaderView(R.layout.nav_header_main);
         accountImageView = (ImageView)navHeaderMain.findViewById(R.id.accountImageView);
-        accountCoinTextView = (TextView)navHeaderMain.findViewById(R.id.accountCoinTextView);
         accountNameTextView = (TextView)navHeaderMain.findViewById(R.id.accountNameTextView);
         accountFollowTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollow);
         accountFollowerTextView = (TextView)navHeaderMain.findViewById(R.id.accountFollower);
@@ -509,118 +506,118 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (!(NetworkManager.isConnected(this))){
             Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+        }else {
+            if (currentFragment!=null) {
+                String currentFragmentTag = currentFragment.getTag();
 
-        }
-        if (currentFragment!=null) {
-            String currentFragmentTag = currentFragment.getTag();
-
-            if (currentFragmentTag != null) {
-                if (id == R.id.nav_profile) {
-                    mToolbar.setTitle("プロフィール");
-                    if (currentFragmentTag.equals("DetailsFragment")) {
-                        ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                        drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
-                        drawerTransaction.commit();
-                    } else {
-                        ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
-                        drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
-                        drawerTransaction.addToBackStack(null);
-                        drawerTransaction.commit();
-                    }
-                } else if (id == R.id.nav_business) {
-                    mToolbar.setTitle("取引履歴");
-                    if (currentFragmentTag != null) {
+                if (currentFragmentTag != null) {
+                    if (id == R.id.nav_profile) {
+                        mToolbar.setTitle("プロフィール");
                         if (currentFragmentTag.equals("DetailsFragment")) {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                            drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
                             drawerTransaction.commit();
                         } else {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            BusinessFragment fragmentBusiness = new BusinessFragment();
-                            fragmentBusiness.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                            ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                            drawerTransaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
                             drawerTransaction.addToBackStack(null);
                             drawerTransaction.commit();
                         }
-                    }
-                } else if (id == R.id.nav_provisional) {
-                    mToolbar.setTitle("仮契約");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
-                            fragmentProvisional.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            Bundle screenBundle = new Bundle();
-                            screenBundle.putString("screenKey", "business");
-                            ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
-                            fragmentProvisional.setArguments(screenBundle);
-                            drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
+                    } else if (id == R.id.nav_business) {
+                        mToolbar.setTitle("取引履歴");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                Bundle screenBundle = new Bundle();
+                                screenBundle.putString("screenKey", "business");
+                                BusinessFragment fragmentBusiness = new BusinessFragment();
+                                fragmentBusiness.setArguments(screenBundle);
+                                drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                Bundle screenBundle = new Bundle();
+                                screenBundle.putString("screenKey", "business");
+                                BusinessFragment fragmentBusiness = new BusinessFragment();
+                                fragmentBusiness.setArguments(screenBundle);
+                                drawerTransaction.replace(R.id.container, fragmentBusiness, BusinessFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
                         }
-                    }
-                } else if (id == R.id.nav_authentication) {
-                    mToolbar.setTitle("ユーザー認証");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
-                            drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
-                            drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
+                    } else if (id == R.id.nav_provisional) {
+                        mToolbar.setTitle("仮契約");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                Bundle screenBundle = new Bundle();
+                                screenBundle.putString("screenKey", "business");
+                                ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
+                                fragmentProvisional.setArguments(screenBundle);
+                                drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                Bundle screenBundle = new Bundle();
+                                screenBundle.putString("screenKey", "business");
+                                ProvisionalFragment fragmentProvisional = new ProvisionalFragment();
+                                fragmentProvisional.setArguments(screenBundle);
+                                drawerTransaction.replace(R.id.container, fragmentProvisional, ProvisionalFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
                         }
-                    }
-                } else if (id == R.id.nav_agreement) {
-                    mToolbar.setTitle("利用規約");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            AgreementFragment fragmentAgreement = new AgreementFragment();
-                            drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            AgreementFragment fragmentAgreement = new AgreementFragment();
-                            drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
+                    } else if (id == R.id.nav_authentication) {
+                        mToolbar.setTitle("ユーザー認証");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
+                                drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                AuthenticationFragment fragmentAuthentication = new AuthenticationFragment();
+                                drawerTransaction.replace(R.id.container, fragmentAuthentication, AuthenticationFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
                         }
-                    }
-                } else if (id == R.id.nav_contact) {
-                    mToolbar.setTitle("お問い合わせ");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            ContractFragment fragmentContract = new ContractFragment();
-                            drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            ContactFragment fragmentContact = new ContactFragment();
-                            drawerTransaction.replace(R.id.container, fragmentContact, ContactFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
+                    } else if (id == R.id.nav_agreement) {
+                        mToolbar.setTitle("利用規約");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                AgreementFragment fragmentAgreement = new AgreementFragment();
+                                drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                AgreementFragment fragmentAgreement = new AgreementFragment();
+                                drawerTransaction.replace(R.id.container, fragmentAgreement, AgreementFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
                         }
-                    }
-                } else if (id == R.id.nav_logout) {
-                    mToolbar.setTitle("ログアウト");
-                    if (currentFragmentTag != null) {
-                        if (currentFragmentTag.equals("DetailsFragment")) {
-                            LogoutFragment fragmentLogout = new LogoutFragment();
-                            drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
-                            drawerTransaction.commit();
-                        } else {
-                            LogoutFragment fragmentLogout = new LogoutFragment();
-                            drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
-                            drawerTransaction.addToBackStack(null);
-                            drawerTransaction.commit();
+                    } else if (id == R.id.nav_contact) {
+                        mToolbar.setTitle("お問い合わせ");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                ContractFragment fragmentContract = new ContractFragment();
+                                drawerTransaction.replace(R.id.container, fragmentContract, ContractFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                ContactFragment fragmentContact = new ContactFragment();
+                                drawerTransaction.replace(R.id.container, fragmentContact, ContactFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
+                        }
+                    } else if (id == R.id.nav_logout) {
+                        mToolbar.setTitle("ログアウト");
+                        if (currentFragmentTag != null) {
+                            if (currentFragmentTag.equals("DetailsFragment")) {
+                                LogoutFragment fragmentLogout = new LogoutFragment();
+                                drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
+                                drawerTransaction.commit();
+                            } else {
+                                LogoutFragment fragmentLogout = new LogoutFragment();
+                                drawerTransaction.replace(R.id.container, fragmentLogout, LogoutFragment.TAG);
+                                drawerTransaction.addToBackStack(null);
+                                drawerTransaction.commit();
+                            }
                         }
                     }
                 }

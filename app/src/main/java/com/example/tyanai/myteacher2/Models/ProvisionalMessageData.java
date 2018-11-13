@@ -18,6 +18,7 @@ public class ProvisionalMessageData {
     private String mPostKey;
     private String mPostUid;
     private String mWatchUid;
+    private long mLag;
 
     public String getCaseNum() {
         return mCaseNum;
@@ -71,10 +72,14 @@ public class ProvisionalMessageData {
         return mWatchUid;
     }
 
+    public long getLag() {
+        return mLag;
+    }
+
     public ProvisionalMessageData(String caseNum, String confirmKey, String date, String detail
             , String key, String message, String money, String receiveUid, String sendUid, String time
             , String typePay, String booleans, String iconBitmapString, String userName, String postKey
-            , String postUid,String watchUid){
+            , String postUid, String watchUid, long lag){
 
         mCaseNum = caseNum;
         mConfirmKey = confirmKey;
@@ -93,5 +98,6 @@ public class ProvisionalMessageData {
         mPostKey = postKey;
         mPostUid = postUid;
         mWatchUid = watchUid;
+        mLag = lag;
     }
 }

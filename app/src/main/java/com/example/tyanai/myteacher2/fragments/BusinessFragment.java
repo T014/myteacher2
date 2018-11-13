@@ -12,6 +12,7 @@ import com.example.tyanai.myteacher2.Adapters.BusinessDataListAdapter;
 import com.example.tyanai.myteacher2.Models.BusinessData;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.R;
+import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -123,6 +124,8 @@ public class BusinessFragment extends Fragment {
         requestRef = mDataBaseReference.child(Const.RequestPATH);
         tradeRef = mDataBaseReference.child(Const.TradePATH);
 
+        MainActivity.mToolbar.setTitle("取引履歴");
+
         Bundle screenBundle = getArguments();
         if (screenBundle!=null){
             screenNum = screenBundle.getString("screenKey");
@@ -157,6 +160,7 @@ public class BusinessFragment extends Fragment {
                 fragmentDetails.setArguments(businessBundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container,fragmentDetails,DetailsFragment.TAG)
+                        .addToBackStack(null)
                         .commit();
             }
         });

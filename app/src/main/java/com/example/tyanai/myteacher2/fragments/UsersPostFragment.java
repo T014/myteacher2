@@ -316,6 +316,7 @@ public class UsersPostFragment extends Fragment {
                     fragmentProfileConfirm.setArguments(userBundle);
                     getFragmentManager().beginTransaction()
                             .replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG)
+                            .addToBackStack(null)
                             .commit();
 
                 }else if (view.getId()==R.id.contentImageView) {
@@ -328,6 +329,7 @@ public class UsersPostFragment extends Fragment {
                     fragmentDetails.setArguments(bundle);
                     getFragmentManager().beginTransaction()
                             .replace(R.id.container, fragmentDetails, DetailsFragment.TAG)
+                            .addToBackStack(null)
                             .commit();
                 }
             }

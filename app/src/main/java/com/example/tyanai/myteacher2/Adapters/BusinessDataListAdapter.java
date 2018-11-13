@@ -21,6 +21,7 @@ import java.util.ArrayList;
 class BusinessDataHolder{
     ImageView iconImageView;
     ImageView contentImageView;
+    TextView boughtUserNameTextView;
     TextView userNameTextView;
     TextView dateTextView;
     TextView applyDateTextView;
@@ -46,6 +47,7 @@ public class BusinessDataListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         String iconImageBitmapString = businessDataArrayList.get(position).getUserIcon();
         String contentsImageBitmapString = businessDataArrayList.get(position).getContentImageBitmapString();
+        String boughtUserName = businessDataArrayList.get(position).getBuyName();
         String userName = businessDataArrayList.get(position).getUserName();
         String date = businessDataArrayList.get(position).getDate();
         String receiveDate = businessDataArrayList.get(position).getReceiveDate();
@@ -62,6 +64,7 @@ public class BusinessDataListAdapter extends BaseAdapter{
             // ViewHolder を生成
             businessDataHolder = new BusinessDataHolder();
             businessDataHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
+            businessDataHolder.boughtUserNameTextView = (TextView) convertView.findViewById(R.id.boughtUserNameTextView);
             businessDataHolder.contentImageView = (ImageView) convertView.findViewById(R.id.contentImageView);
             businessDataHolder.userNameTextView = (TextView) convertView.findViewById(R.id.userNameTextView);
             businessDataHolder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
@@ -101,7 +104,9 @@ public class BusinessDataListAdapter extends BaseAdapter{
         }else{
             businessDataHolder.permittedDateTextView.setText(permittedDate);
         }
-
+        if (boughtUserName!=null){
+            businessDataHolder.boughtUserNameTextView.setText("購入者"+boughtUserName);
+        }
         byte[] iconImageBytes = Base64.decode(iconImageBitmapString,Base64.DEFAULT);
         if(iconImageBytes.length!=0){
             Bitmap iconImageBitmap = BitmapFactory.decodeByteArray(iconImageBytes,0, iconImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);

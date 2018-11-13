@@ -62,10 +62,9 @@ public class FFListFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             UserData ffUsersData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             if (ffArrayList.size()!=0){
                 for (String aaa:ffArrayList){

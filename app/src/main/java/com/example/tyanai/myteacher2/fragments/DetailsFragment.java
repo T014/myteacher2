@@ -217,10 +217,9 @@ public class DetailsFragment extends Fragment {
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                    ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
             if (userData.getUid().equals(user.getUid())){
                 myData = userData;
@@ -329,6 +328,7 @@ public class DetailsFragment extends Fragment {
             howLongDetailTextView.setText("所要時間："+postData.getHowLong());
             costDetailTextView.setText("時給："+postData.getCost());
             methodDetailTextView.setText("手段："+postData.getMethod());
+
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -430,21 +430,22 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         if (screenNum!=null){
             if (screenNum.equals("permit")){
                 //取引履歴
                 stopButton.setVisibility(View.GONE);
-            }else if (screenNum.equals("apply")){
-                //取引申請
-                evaluationSpinner.setVisibility(View.GONE);
-                evaluationTextView.setVisibility(View.GONE);
-                saveButton.setVisibility(View.GONE);
-            }else if (screenNum.equals("request")){
-                //取引リクエスト
-                stopButton.setVisibility(View.GONE);
-                evaluationSpinner.setVisibility(View.GONE);
-                evaluationTextView.setVisibility(View.GONE);
-                saveButton.setVisibility(View.GONE);
+//            }else if (screenNum.equals("apply")){
+//                //取引申請
+//                evaluationSpinner.setVisibility(View.GONE);
+//                evaluationTextView.setVisibility(View.GONE);
+//                saveButton.setVisibility(View.GONE);
+//            }else if (screenNum.equals("request")){
+//                //取引リクエスト
+//                stopButton.setVisibility(View.GONE);
+//                evaluationSpinner.setVisibility(View.GONE);
+//                evaluationTextView.setVisibility(View.GONE);
+//                saveButton.setVisibility(View.GONE);
             }else if (screenNum.equals("reject")){
                 //タイムライン
                 evaluationSpinner.setVisibility(View.GONE);
@@ -456,6 +457,7 @@ public class DetailsFragment extends Fragment {
             }else if (screenNum.equals("timeLine")){
             }else if (screenNum.equals("business")){
                 stopButton.setVisibility(View.GONE);
+                discussButton.setVisibility(View.GONE);
             }
         }
         if (tradeKey==null){
@@ -657,6 +659,7 @@ public class DetailsFragment extends Fragment {
 //                }
 //            }
 //        });
+
 
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override

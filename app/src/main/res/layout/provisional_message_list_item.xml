@@ -133,6 +133,13 @@
             android:id="@+id/provisionalMessageNoButton"
             android:text="契約内容を変更する"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/provisionalMessageNoButton"
+            android:layout_marginStart="10dp"
+            android:id="@+id/nowTimeTextView"/>
+
     </RelativeLayout>
 
 

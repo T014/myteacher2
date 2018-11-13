@@ -49,7 +49,6 @@ public class ConfirmProfileFragment extends Fragment{
     TextView sexConfirmProfileTextView;
     TextView ageConfirmProfileTextView;
     TextView evaluationConfirmProfileTextView;
-    TextView coinConfirmProfileTextView;
     FirebaseUser user;
     DatabaseReference userRef;
     DatabaseReference mDataBaseReference;
@@ -90,11 +89,10 @@ public class ConfirmProfileFragment extends Fragment{
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             if (uid.equals(userId)){
                 UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
                 accountData = userData;
 
@@ -103,7 +101,6 @@ public class ConfirmProfileFragment extends Fragment{
                 evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
                 sexConfirmProfileTextView.setText("性別："+userData.getSex());
                 ageConfirmProfileTextView.setText("年齢："+userData.getAge());
-                coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
                 byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
                 if(iconBytes.length!=0){
                     Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -111,7 +108,7 @@ public class ConfirmProfileFragment extends Fragment{
                 }
             }else if (user.getUid().equals(userId)){
                 UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
                 myData = userData;
             }
         }
@@ -134,11 +131,10 @@ public class ConfirmProfileFragment extends Fragment{
             String groups = (String) map.get("groups");
             String date = (String) map.get("date");
             String iconBitmapString = (String) map.get("iconBitmapString");
-            String coin = (String) map.get("coin");
 
             if (accountData.getUid().equals(userId)){
                 UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
 
                 accountData = userData;
 
@@ -147,7 +143,6 @@ public class ConfirmProfileFragment extends Fragment{
                 evaluationConfirmProfileTextView.setText("評価："+userData.getEvaluations());
                 sexConfirmProfileTextView.setText("性別："+userData.getSex());
                 ageConfirmProfileTextView.setText("年齢："+userData.getAge());
-                coinConfirmProfileTextView.setText(userData.getCoin()+" coin");
                 byte[] iconBytes = Base64.decode(userData.getIconBitmapString(),Base64.DEFAULT);
                 if(iconBytes.length!=0){
                     Bitmap iconBitmap = BitmapFactory.decodeByteArray(iconBytes,0, iconBytes.length).copy(Bitmap.Config.ARGB_8888,true);
@@ -155,7 +150,7 @@ public class ConfirmProfileFragment extends Fragment{
                 }
             }else if (user.getUid().equals(userId)){
                 UserData userData = new UserData(userName,userId,comment,follows,followers,posts
-                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString,coin);
+                        ,favorites,sex,age,evaluations,taught,period,groups,date,iconBitmapString);
                 myData=userData;
             }
         }
@@ -294,7 +289,6 @@ public class ConfirmProfileFragment extends Fragment{
         messageButton = (Button)v.findViewById(R.id.messageButton);
         gdButton = (Button) v.findViewById(R.id.gdButton);
         editButton = (Button)v.findViewById(R.id.editButton);
-        coinConfirmProfileTextView = (TextView)v.findViewById(R.id.coinConfirmProfileTextView);
         confirmScrollView = (ScrollView)v.findViewById(R.id.confirmScrollView);
 
         return v;
