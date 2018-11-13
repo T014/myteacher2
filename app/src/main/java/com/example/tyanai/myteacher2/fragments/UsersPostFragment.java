@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.ListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ImageFragment;
 import com.example.tyanai.myteacher2.Models.NotificationFavData;
 import com.example.tyanai.myteacher2.Models.PostData;
 import com.example.tyanai.myteacher2.R;
@@ -320,8 +321,17 @@ public class UsersPostFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
 
-                }else if (view.getId()==R.id.contentImageView) {
+                }else if (view.getId()==R.id.contentsImageView) {
                     //画像拡大表示
+                    Bundle imageBundle = new Bundle();
+                    imageBundle.putString("imageBitmapString",timeLineArrayList.get(position).getImageBitmapString());
+
+                    ImageFragment fragmentImage = new ImageFragment();
+                    fragmentImage.setArguments(imageBundle);
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                            .addToBackStack(null)
+                            .commit();
                 }else {
                     Bundle bundle = new Bundle();
                     bundle.putString("key", timeLineArrayList.get(position).getKey());
@@ -347,4 +357,5 @@ public class UsersPostFragment extends Fragment {
         favKeyArrayList = new ArrayList<NotificationFavData>();
         favoriteRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(fvdEventListener);
     }
+
 }

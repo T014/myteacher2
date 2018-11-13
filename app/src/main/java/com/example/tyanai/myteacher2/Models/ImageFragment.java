@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -20,6 +22,7 @@ public class ImageFragment extends Fragment {
     public static final String TAG = "ImageFragment";
 
     ImageView upImageView;
+    RelativeLayout relativeLayout;
 
 
     @Override
@@ -29,6 +32,7 @@ public class ImageFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_image,container,false);
 
         upImageView = (ImageView)v.findViewById(R.id.upImageView);
+        relativeLayout = (RelativeLayout)v.findViewById(R.id.relativeLayout);
 
         return v;
     }
@@ -51,8 +55,14 @@ public class ImageFragment extends Fragment {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.container,this);
             transaction.commit();
-
         }
+
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
 
     }
 

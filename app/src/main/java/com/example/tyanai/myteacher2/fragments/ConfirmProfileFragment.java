@@ -19,6 +19,7 @@ import android.widget.ToggleButton;
 
 import com.example.tyanai.myteacher2.Adapters.ListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ImageFragment;
 import com.example.tyanai.myteacher2.Models.MessageListData;
 import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
@@ -329,6 +330,21 @@ public class ConfirmProfileFragment extends Fragment{
             MainActivity.bottomNavigationView.setSelectedItemId(R.id.item_Community);
         }
         userRef.addChildEventListener(cEventListener);
+
+        newIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle imageBundle = new Bundle();
+                imageBundle.putString("imageBitmapString",accountData.getIconBitmapString());
+
+                ImageFragment fragmentImage = new ImageFragment();
+                fragmentImage.setArguments(imageBundle);
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         followFollowerButton.setOnClickListener(new View.OnClickListener(){
             @Override
