@@ -279,6 +279,7 @@ public class ProvisionalMessageFragment extends Fragment {
                             }
                         }
 
+
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
