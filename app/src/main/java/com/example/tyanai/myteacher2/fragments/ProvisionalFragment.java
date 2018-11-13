@@ -195,6 +195,7 @@ public class ProvisionalFragment extends Fragment {
 
         confirmKeyRef.child(user.getUid()).addChildEventListener(cKeyEventListener);
 
+        
         provisionalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
