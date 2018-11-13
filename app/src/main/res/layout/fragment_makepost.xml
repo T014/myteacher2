@@ -249,7 +249,7 @@
                     android:minLines="3"
                     android:maxLines="5"
                     android:id="@+id/contentsEditText"
-                    android:hint="内容を入力"/>
+                    android:hint="内容を入力\n\n"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

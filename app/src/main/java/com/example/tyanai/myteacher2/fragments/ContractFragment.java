@@ -163,7 +163,7 @@ public class ContractFragment extends Fragment {
                     String time = sdf.format(cal.getTime());
                     String date = cldTextView.getText().toString();
                     if (money!=null){
-                        if (date!=null){
+                        if (date!=null && !(date.equals("指定しない"))){
                             if (detail!=null){
                                 if (message!=null){
                                     if (time!=null){
@@ -237,7 +237,7 @@ public class ContractFragment extends Fragment {
                             }
                         }else{
                             //date
-                            Snackbar.make(MainActivity.snack,"日時を入力してください。",Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(MainActivity.snack,"日時を選択してください。",Snackbar.LENGTH_SHORT).show();
                         }
                     }else {
                         //money
