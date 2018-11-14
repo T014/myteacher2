@@ -101,7 +101,6 @@ public class ContractFragment extends Fragment {
             contractTitleTextView.setText(caseTitle);
         }
 
-
         cldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

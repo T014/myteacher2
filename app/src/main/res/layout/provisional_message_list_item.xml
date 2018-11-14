@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -31,7 +30,6 @@
         android:layout_marginStart="10dp"
         android:id="@+id/provisionalMessageTitleTextView"/>
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +46,6 @@
         android:layout_below="@+id/provisionalMessageTitleTextView"
         android:layout_toEndOf="@+id/provisionalMessageDatesTextView"
         android:id="@+id/provisionalMessageDateTextView"/>
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -152,7 +149,4 @@
             android:id="@+id/nowTimeTextView"/>
 
     </RelativeLayout>
-
-
-
 </RelativeLayout>

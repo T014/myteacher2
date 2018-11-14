@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +22,6 @@
             android:text="タイトル"
             android:textColor="@color/black"
             android:id="@+id/contractTitleTextView"/>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +56,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,7 +73,6 @@
                 android:hint="0(円)"
                 android:id="@+id/moneyEditText"
                 android:inputType="number"/>
-
 
         </LinearLayout>
 
@@ -105,7 +101,6 @@
                 android:text="日付を選択"/>
 
         </LinearLayout>
-
 
         <EditText
             android:layout_width="match_parent"
@@ -143,13 +138,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/sendButton"
                 android:text="send"/>
-
         </LinearLayout>
-
     </LinearLayout>
-
-
-
-
-
 </ScrollView>

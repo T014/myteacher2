@@ -406,7 +406,6 @@ public class ProvisionalMessageFragment extends Fragment {
                 }else {
                     Snackbar.make(MainActivity.snack,"ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
-
             }
         });
     }
