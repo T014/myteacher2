@@ -33,7 +33,9 @@ public class ContractFragment extends Fragment {
     String caseNum;
     String postKey;
     String postUid;
+    String caseTitle;
     public static TextView cldTextView;
+    TextView contractTitleTextView;
     RadioGroup costTypeRadioGroup;
     RadioButton typeTimeRadioButton;
     RadioButton typeFixedRadiobutton;
@@ -56,6 +58,7 @@ public class ContractFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_contract,container,false);
 
         cldTextView = (TextView)v.findViewById(R.id.cldTextView);
+        contractTitleTextView = (TextView)v.findViewById(R.id.contractTitleTextView);
         costTypeRadioGroup = (RadioGroup)v.findViewById(R.id.costTypeRadioGroup);
         typeTimeRadioButton = (RadioButton)v.findViewById(R.id.typeTimeRadioButton);
         typeFixedRadiobutton = (RadioButton)v.findViewById(R.id.typeFixedRadiobutton);
@@ -87,12 +90,17 @@ public class ContractFragment extends Fragment {
         caseNum = caseNumBundle.getString("caseNum");
         postKey = caseNumBundle.getString("key");
         postUid = caseNumBundle.getString("postUid");
+        caseTitle = caseNumBundle.getString("caseTitle");
         String reqDate = caseNumBundle.getString("reqDate");
         String reqMoney = caseNumBundle.getString("reqMoney");
         String reqDetail = caseNumBundle.getString("reqDetail");
         cldTextView.setText(reqDate);
         moneyEditText.setText(reqMoney);
         detailEditText.setText(reqDetail);
+        if (caseTitle!=null){
+            contractTitleTextView.setText(caseTitle);
+        }
+
 
         cldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +193,7 @@ public class ContractFragment extends Fragment {
                                         data.put("booleans","");
                                         data.put("postKey",postKey);
                                         data.put("postUid",postUid);
+                                        data.put("title",caseTitle);
 
                                         Map<String,Object> childUpdates = new HashMap<>();
                                         childUpdates.put(confirmKey,data);
@@ -196,6 +205,7 @@ public class ContractFragment extends Fragment {
                                         datas.put("postKey",postKey);
                                         datas.put("caseNum",caseNum);
                                         datas.put("postUid",postUid);
+                                        datas.put("title",caseTitle);
                                         confirmKeyRef.child(user.getUid()).child(caseNum).updateChildren(datas);
 
                                         Map<String,Object> mdatas = new HashMap<>();
@@ -204,6 +214,7 @@ public class ContractFragment extends Fragment {
                                         mdatas.put("postKey",postKey);
                                         mdatas.put("caseNum",caseNum);
                                         mdatas.put("postUid",postUid);
+                                        mdatas.put("title",caseTitle);
                                         confirmKeyRef.child(postUid).child(caseNum).updateChildren(mdatas);
 
                                         Bundle cNumBundle = new Bundle();

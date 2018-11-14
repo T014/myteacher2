@@ -64,8 +64,9 @@ public class ProvisionalFragment extends Fragment {
             String mCount = "1";
             String mContentBitmapString = "";
             String postUid = (String) map.get("postUid");
+            String title = (String) map.get("title");
 
-            ProvisionalKeyData provisionalKeyData = new ProvisionalKeyData(caseNum, postKey, time, uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount,postUid);
+            ProvisionalKeyData provisionalKeyData = new ProvisionalKeyData(caseNum, postKey, time, uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount,postUid,title);
             provisionalKeyDataArrayList.add(provisionalKeyData);
         }
         @Override
@@ -99,7 +100,8 @@ public class ProvisionalFragment extends Fragment {
                     if (provisionalKeyDataArrayList.get(n).getPostUid().equals(uid)) {
                         ProvisionalKeyData newProvisionalKeyData = new ProvisionalKeyData(provisionalKeyDataArrayList.get(n).getCaseNum()
                                 , provisionalKeyDataArrayList.get(n).getPostKey(), provisionalKeyDataArrayList.get(n).getTime()
-                                , uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount,provisionalKeyDataArrayList.get(n).getPostUid());
+                                , uid, mIconBitmapString, mContentBitmapString, mName, mContent, mCount
+                                ,provisionalKeyDataArrayList.get(n).getPostUid(),provisionalKeyDataArrayList.get(n).getTitle());
                         newProvisionalKeyDataArrayList.add(newProvisionalKeyData);
                     }
                 }
@@ -138,13 +140,14 @@ public class ProvisionalFragment extends Fragment {
                                 , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
                                 , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
                                 , mContentBitmapString, newProvisionalKeyDataArrayList.get(k).getName(), mContent, mCount
-                                , newProvisionalKeyDataArrayList.get(k).getPostUid());
+                                , newProvisionalKeyDataArrayList.get(k).getPostUid(), newProvisionalKeyDataArrayList.get(k).getTitle());
                     }else{
                         newProvisionalKeyData = new ProvisionalKeyData(newProvisionalKeyDataArrayList.get(k).getCaseNum()
                                 , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
                                 , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
                                 , mContentBitmapString, newProvisionalKeyDataArrayList.get(k).getName(), mContent
-                                , newProvisionalKeyDataArrayList.get(k).getCount(), newProvisionalKeyDataArrayList.get(k).getPostUid());
+                                , newProvisionalKeyDataArrayList.get(k).getCount(), newProvisionalKeyDataArrayList.get(k).getPostUid()
+                                , newProvisionalKeyDataArrayList.get(k).getTitle());
                     }
                     newProvisionalKeyDataArrayList.remove(k);
                     newProvisionalKeyDataArrayList.add(k, newProvisionalKeyData);
@@ -288,7 +291,8 @@ public class ProvisionalFragment extends Fragment {
                                     , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
                                     , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
                                     , newProvisionalKeyDataArrayList.get(k).getContentBitmapString(), newProvisionalKeyDataArrayList.get(k).getName()
-                                    , newProvisionalKeyDataArrayList.get(k).getContent(), String.valueOf(a1),newProvisionalKeyDataArrayList.get(k).getPostUid());
+                                    , newProvisionalKeyDataArrayList.get(k).getContent(), String.valueOf(a1),newProvisionalKeyDataArrayList.get(k).getPostUid()
+                                    , newProvisionalKeyDataArrayList.get(k).getTitle());
 
                             newProvisionalKeyDataArrayList.remove(k);
                             newProvisionalKeyDataArrayList.add(k, A1provisionalKeyData);
@@ -297,7 +301,8 @@ public class ProvisionalFragment extends Fragment {
                                     , newProvisionalKeyDataArrayList.get(i).getPostKey(), newProvisionalKeyDataArrayList.get(i).getTime()
                                     , newProvisionalKeyDataArrayList.get(i).getUid(), newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
                                     , newProvisionalKeyDataArrayList.get(i).getContentBitmapString(), newProvisionalKeyDataArrayList.get(i).getName()
-                                    , newProvisionalKeyDataArrayList.get(i).getContent(), String.valueOf(a2),newProvisionalKeyDataArrayList.get(i).getPostUid());
+                                    , newProvisionalKeyDataArrayList.get(i).getContent(), String.valueOf(a2),newProvisionalKeyDataArrayList.get(i).getPostUid()
+                                    , newProvisionalKeyDataArrayList.get(i).getTitle());
 
                             newProvisionalKeyDataArrayList.remove(i);
                             newProvisionalKeyDataArrayList.add(i, A2provisionalKeyData);
@@ -306,7 +311,8 @@ public class ProvisionalFragment extends Fragment {
                                     , newProvisionalKeyDataArrayList.get(k).getPostKey(), newProvisionalKeyDataArrayList.get(k).getTime()
                                     , newProvisionalKeyDataArrayList.get(k).getUid(), newProvisionalKeyDataArrayList.get(k).getIconBitmapString()
                                     , newProvisionalKeyDataArrayList.get(k).getContentBitmapString(), newProvisionalKeyDataArrayList.get(k).getName()
-                                    , newProvisionalKeyDataArrayList.get(k).getContent(), String.valueOf(a2),newProvisionalKeyDataArrayList.get(k).getPostUid());
+                                    , newProvisionalKeyDataArrayList.get(k).getContent(), String.valueOf(a2),newProvisionalKeyDataArrayList.get(k).getPostUid()
+                                    , newProvisionalKeyDataArrayList.get(k).getTitle());
 
                             newProvisionalKeyDataArrayList.remove(k);
                             newProvisionalKeyDataArrayList.add(k, A1provisionalKeyData);
@@ -315,7 +321,8 @@ public class ProvisionalFragment extends Fragment {
                                     , newProvisionalKeyDataArrayList.get(i).getPostKey(), newProvisionalKeyDataArrayList.get(i).getTime()
                                     , newProvisionalKeyDataArrayList.get(i).getUid(), newProvisionalKeyDataArrayList.get(i).getIconBitmapString()
                                     , newProvisionalKeyDataArrayList.get(i).getContentBitmapString(), newProvisionalKeyDataArrayList.get(i).getName()
-                                    , newProvisionalKeyDataArrayList.get(i).getContent(), String.valueOf(a1),newProvisionalKeyDataArrayList.get(i).getPostUid());
+                                    , newProvisionalKeyDataArrayList.get(i).getContent(), String.valueOf(a1),newProvisionalKeyDataArrayList.get(i).getPostUid()
+                                    , newProvisionalKeyDataArrayList.get(i).getTitle());
 
                             newProvisionalKeyDataArrayList.remove(i);
                             newProvisionalKeyDataArrayList.add(i, A2provisionalKeyData);

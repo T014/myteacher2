@@ -730,6 +730,7 @@ public class DetailsFragment extends Fragment {
                                     caseNumBundle.putString("reqDate",thisPost.getDate());
                                     caseNumBundle.putString("reqMoney",thisPost.getCost());
                                     caseNumBundle.putString("reqDetail",thisPost.getContents());
+                                    caseNumBundle.putString("caseTitle",thisPost.getTitle());
                                     ContractFragment fragmentContract = new ContractFragment();
                                     fragmentContract.setArguments(caseNumBundle);
                                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

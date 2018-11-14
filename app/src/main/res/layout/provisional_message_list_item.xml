@@ -26,6 +26,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/provisionalMessageIconImageView"
         android:layout_alignParentLeft="true"
+        android:text="タイトル"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:id="@+id/provisionalMessageTitleTextView"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/provisionalMessageTitleTextView"
+        android:layout_alignParentLeft="true"
         android:layout_marginStart="10dp"
         android:id="@+id/provisionalMessageDatesTextView"
         android:text="日付"/>
@@ -34,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_below="@+id/provisionalMessageIconImageView"
+        android:layout_below="@+id/provisionalMessageTitleTextView"
         android:layout_toEndOf="@+id/provisionalMessageDatesTextView"
         android:id="@+id/provisionalMessageDateTextView"/>
 

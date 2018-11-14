@@ -28,6 +28,7 @@ class ProvisionalMessageListViewHolder{
     TextView provisionalMessageTypePayTextView;
     TextView provisionalMessageDetailTextView;
     TextView provisionalMessageTextView;
+    TextView provisionalMessageTitleTextView;
     Button provisionalMessageOkButton;
     Button provisionalMessageNoButton;
     TextView nowTimeTextView;
@@ -59,6 +60,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         String booleans = provisionalMessageArrayList.get(position).getBooleans();
         String postUid = provisionalMessageArrayList.get(position).getPostUid();
         String nowTime = provisionalMessageArrayList.get(position).getTime();
+        String title = provisionalMessageArrayList.get(position).getTitle();
 
         ProvisionalMessageListViewHolder provisionalMessageListViewHolder;
         if (convertView == null) {
@@ -73,6 +75,7 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
             provisionalMessageListViewHolder.provisionalMessageTypePayTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTypePayTextView);
             provisionalMessageListViewHolder.provisionalMessageDetailTextView = (TextView)convertView.findViewById(R.id.provisionalMessageDetailTextView);
             provisionalMessageListViewHolder.provisionalMessageTextView = (TextView)convertView.findViewById(R.id.provisionalMessageTextView);
+            provisionalMessageListViewHolder.provisionalMessageTitleTextView=(TextView)convertView.findViewById(R.id.provisionalMessageTitleTextView);
             provisionalMessageListViewHolder.provisionalMessageOkButton = (Button) convertView.findViewById(R.id.provisionalMessageOkButton);
             provisionalMessageListViewHolder.provisionalMessageNoButton = (Button) convertView.findViewById(R.id.provisionalMessageNoButton);
             provisionalMessageListViewHolder.nowTimeTextView = (TextView) convertView.findViewById(R.id.nowTimeTextView);
@@ -81,6 +84,9 @@ public class ProvisionalMessageListAdapter extends BaseAdapter{
         }
         else {
             provisionalMessageListViewHolder = (ProvisionalMessageListViewHolder) convertView.getTag();
+        }
+        if (title!=null){
+            provisionalMessageListViewHolder.provisionalMessageTitleTextView.setText(title);
         }
         if (message!=null){
             provisionalMessageListViewHolder.provisionalMessageTextView.setText(message);

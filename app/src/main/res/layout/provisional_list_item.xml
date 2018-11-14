@@ -47,7 +47,17 @@
         android:layout_toEndOf="@+id/contentImageView"
         android:layout_marginStart="10dp"
         android:layout_alignParentTop="true"
+        android:textColor="@color/black"
         android:layout_marginTop="70dp"
+        android:id="@+id/contentTitleTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/contentImageView"
+        android:layout_below="@+id/contentTitleTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         android:id="@+id/contentTextView"/>
 
 

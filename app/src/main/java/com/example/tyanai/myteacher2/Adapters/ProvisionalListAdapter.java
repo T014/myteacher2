@@ -22,6 +22,7 @@ class ProvisionalListViewHolder{
     ImageView iconImageView;
     TextView userNameTextView;
     ImageView contentImageView;
+    TextView contentTitleTextView;
     TextView contentTextView;
     TextView countTextView;
     RelativeLayout listRelativeLayout;
@@ -45,6 +46,7 @@ public class ProvisionalListAdapter extends BaseAdapter {
         String userName = provisionalKeyDataArrayList.get(position).getName();
         String content = provisionalKeyDataArrayList.get(position).getContent();
         String count = provisionalKeyDataArrayList.get(position).getCount();
+        String title =provisionalKeyDataArrayList.get(position).getTitle();
         String contentBitmapString = provisionalKeyDataArrayList.get(position).getContentBitmapString();
 
         ProvisionalListViewHolder provisionalListViewHolder;
@@ -56,12 +58,16 @@ public class ProvisionalListAdapter extends BaseAdapter {
             provisionalListViewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
             provisionalListViewHolder.userNameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
             provisionalListViewHolder.contentImageView = (ImageView) convertView.findViewById(R.id.contentImageView);
+            provisionalListViewHolder.contentTitleTextView = (TextView) convertView.findViewById(R.id.contentTitleTextView);
             provisionalListViewHolder.contentTextView = (TextView) convertView.findViewById(R.id.contentTextView);
             provisionalListViewHolder.countTextView = (TextView) convertView.findViewById(R.id.countTextView);
             provisionalListViewHolder.listRelativeLayout = (RelativeLayout) convertView.findViewById(R.id.listRelativeLayout);
             convertView.setTag(provisionalListViewHolder);
         } else {
             provisionalListViewHolder = (ProvisionalListViewHolder) convertView.getTag();
+        }
+        if (title!=null){
+            provisionalListViewHolder.contentTitleTextView.setText(title);
         }
         if (userName != null){
             provisionalListViewHolder.userNameTextView.setText(userName);

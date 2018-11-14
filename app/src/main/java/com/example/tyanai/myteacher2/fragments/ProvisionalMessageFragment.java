@@ -148,7 +148,7 @@ public class ProvisionalMessageFragment extends Fragment {
                 if (a.getSendUid().equals(uid)){
                     ProvisionalMessageData newProvisionalMessageData = new ProvisionalMessageData(a.getCaseNum(),a.getConfirmKey(),a.getDate()
                             ,a.getDetail(),a.getKey(),a.getMessage(),a.getMoney(),a.getReceiveUid(),a.getSendUid(),a.getTime(),a.getTypePay()
-                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid(),a.getLag());
+                            ,a.getBooleans(),iconBitmapString,name,a.getPostKey(),a.getPostUid(),a.getWatchUid(),a.getLag(), a.getTitle());
                     newProvisionalMessageDataArrayList.add(newProvisionalMessageData);
                 }
             }
@@ -193,6 +193,7 @@ public class ProvisionalMessageFragment extends Fragment {
             String postKey = (String) map.get("postKey");
             String postUid = (String)map.get("postUid");
             String watchUid = user.getUid();
+            String title = (String) map.get("title");
 
             Calendar calThen = Calendar.getInstance();
             SimpleDateFormat sdfThen = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -209,7 +210,7 @@ public class ProvisionalMessageFragment extends Fragment {
 
 
             ProvisionalMessageData provisionalMessageData = new ProvisionalMessageData(caseNum,confirmKey,date,detail
-            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid,newLag);
+            ,key,message,money,receiveUid,sendUid,time,typePay,booleans,icon,name,postKey,postUid,watchUid,newLag,title);
             provisionalMessageDataArrayList.add(provisionalMessageData);
         }
         @Override
@@ -227,7 +228,8 @@ public class ProvisionalMessageFragment extends Fragment {
                             ,newProvisionalMessageDataArrayList.get(n).getTime(),newProvisionalMessageDataArrayList.get(n).getTypePay()
                             ,booleans,newProvisionalMessageDataArrayList.get(n).getIconBitmapString(),newProvisionalMessageDataArrayList.get(n).getUserName()
                             ,newProvisionalMessageDataArrayList.get(n).getPostKey(),newProvisionalMessageDataArrayList.get(n).getPostUid()
-                            ,newProvisionalMessageDataArrayList.get(n).getWatchUid(),newProvisionalMessageDataArrayList.get(n).getLag());
+                            ,newProvisionalMessageDataArrayList.get(n).getWatchUid(),newProvisionalMessageDataArrayList.get(n).getLag()
+                            ,newProvisionalMessageDataArrayList.get(n).getTitle());
 
                     newProvisionalMessageDataArrayList.remove(n);
                     newProvisionalMessageDataArrayList.add(n,newProvisionalMessageData);
@@ -394,6 +396,7 @@ public class ProvisionalMessageFragment extends Fragment {
                         caseNumBundle.putString("reqDate",newProvisionalMessageDataArrayList.get(position).getDate());
                         caseNumBundle.putString("reqMoney",newProvisionalMessageDataArrayList.get(position).getMoney());
                         caseNumBundle.putString("reqDetail",newProvisionalMessageDataArrayList.get(position).getDetail());
+                        caseNumBundle.putString("caseTitle",newProvisionalMessageDataArrayList.get(position).getTitle());
                         ContractFragment fragmentContract = new ContractFragment();
                         fragmentContract.setArguments(caseNumBundle);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
