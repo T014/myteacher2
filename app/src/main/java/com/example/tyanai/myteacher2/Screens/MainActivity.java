@@ -658,7 +658,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case PERMISSIONS_REQUEST_INTERNET_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("ANDROID", "許可された");
-                    showChooser();
                 } else {
                     Log.d("ANDROID", "許可されなかった");
                 }
@@ -666,7 +665,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case PERMISSIONS_REQUEST_ACCESS_NETWORK_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("ANDROID", "許可された");
-                    showChooser();
                 } else {
                     Log.d("ANDROID", "許可されなかった");
                 }
@@ -706,12 +704,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     File fileSize = new File(abc);
                     long size = fileSize.length();
                     Log.d("aaaaa","サイズ=" + size);
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+                    String currentFragmentTag = currentFragment.getTag();
                     if (size<3000000){
-                        Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        SimpleCropViewFragment.cropImageView.setImageBitmap(null);
-                        SimpleCropViewFragment.cropImageView.setImageBitmap(img);
-                        SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
-                        SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
+                        if (currentFragmentTag.equals("ThisMessageFragment")){
+                            //画像送信
+                            
+                        }else {
+                            Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.cropImageView.setImageBitmap(img);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
+                            SimpleCropViewFragment.croppedImageView.setImageBitmap(SimpleCropViewFragment.cropImageView.getCroppedBitmap());
+                        }
+
                     }else {
                         SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                         SimpleCropViewFragment.cropImageView.setImageResource(R.drawable.plusbutton);

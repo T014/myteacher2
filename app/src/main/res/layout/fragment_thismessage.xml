@@ -30,6 +30,7 @@
             android:layout_alignBottom="@+id/editMessageEditText"
             android:id="@+id/confirmButton"/>
 
+
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +47,17 @@
             android:maxLines="3"
             android:background="@drawable/edit_frame"
             android:id="@+id/editMessageEditText"/>
+
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="35dp"
+            android:id="@+id/sendImageButton"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/editMessageEditText"
+            android:layout_marginStart="-30dp"
+            android:layout_alignBottom="@+id/editMessageEditText"/>
+
+
         <Button
             android:layout_width="35dp"
             android:layout_marginRight="5dp"

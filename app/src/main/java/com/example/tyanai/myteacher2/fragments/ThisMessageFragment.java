@@ -17,7 +17,6 @@ import android.widget.ListView;
 import com.example.tyanai.myteacher2.Adapters.MessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
 import com.example.tyanai.myteacher2.Models.MessageListData;
-import com.example.tyanai.myteacher2.Models.UserData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
 import com.example.tyanai.myteacher2.Models.NetworkManager;
@@ -35,8 +34,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class ThisMessageFragment extends Fragment{
     public static final String TAG = "ThisMessageFragment";
+
 
     public static ListView messageListView;
     FirebaseUser user;
@@ -47,6 +48,7 @@ public class ThisMessageFragment extends Fragment{
     MessageListAdapter mAdapter;
     EditText editMessageEditText;
     Button sendMessageButton;
+    Button sendImageButton;
     DatabaseReference messageKeyRef;
     String msKey;
     Button confirmButton;
@@ -57,7 +59,6 @@ public class ThisMessageFragment extends Fragment{
     int nowY = 0;
     int lvp = 15;
     String otherUid;
-    
 
     private ChildEventListener umEventListener = new ChildEventListener() {
         @Override
@@ -151,6 +152,7 @@ public class ThisMessageFragment extends Fragment{
 
         messageListView = (ListView)v.findViewById(R.id.messageListView);
         sendMessageButton = (Button)v.findViewById(R.id.sendMessageButton);
+        sendImageButton = (Button)v.findViewById(R.id.sendImageButton);
         editMessageEditText = (EditText)v.findViewById(R.id.editMessageEditText);
         confirmButton = (Button)v.findViewById(R.id.confirmButton);
 
@@ -338,6 +340,14 @@ public class ThisMessageFragment extends Fragment{
                 transaction.commit();
             }
         });
+
+        sendImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.onSelfCheck();
+            }
+        });
     }
     @Override
     public void onAttach(Context context){
@@ -352,4 +362,22 @@ public class ThisMessageFragment extends Fragment{
         super.onDestroyView();
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
