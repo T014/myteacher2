@@ -57,6 +57,7 @@ public class ThisMessageFragment extends Fragment{
     int nowY = 0;
     int lvp = 15;
     String otherUid;
+    
 
     private ChildEventListener umEventListener = new ChildEventListener() {
         @Override
