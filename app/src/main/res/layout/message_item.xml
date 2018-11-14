@@ -42,7 +42,6 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/holo_green_light"
             android:rotation="45" />
-
     </LinearLayout>
 
     <LinearLayout
