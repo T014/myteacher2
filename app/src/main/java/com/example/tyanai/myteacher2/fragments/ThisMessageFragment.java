@@ -400,8 +400,6 @@ public class ThisMessageFragment extends Fragment{
                     messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
                     messageListView.setSelectionFromTop(nowPosition,nowY);
                 }
-
-
                 return false;
             }
         });
@@ -493,9 +491,7 @@ public class ThisMessageFragment extends Fragment{
                 messageKeyRef.child(otherUid).child(msKey).updateChildren(makeMessageKeyRef);
 
                 messageListView.setSelectionFromTop(nowPosition,nowY);
-
                 sendImageBitmapString=null;
-
             }
         }
     }
