@@ -68,9 +68,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 
@@ -707,11 +709,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
                     String currentFragmentTag = currentFragment.getTag();
                     if (size<3000000){
+                        Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         if (currentFragmentTag.equals("ThisMessageFragment")){
                             //画像送信
-                            
+                            ByteArrayOutputStream croppedBaos = new ByteArrayOutputStream();
+                            img.compress(Bitmap.CompressFormat.JPEG,80,croppedBaos);
+                            String sendImageBitmapString = Base64.encodeToString(croppedBaos.toByteArray(), Base64.DEFAULT);
+                            ThisMessageFragment.sendImageBitmapString=sendImageBitmapString;
+                            sendImageBitmapString=null;
                         }else {
-                            Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(null);
                             SimpleCropViewFragment.cropImageView.setImageBitmap(img);
                             SimpleCropViewFragment.croppedImageView.setImageBitmap(null);
