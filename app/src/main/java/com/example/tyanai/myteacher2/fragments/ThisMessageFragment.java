@@ -398,9 +398,11 @@ public class ThisMessageFragment extends Fragment{
                         nowY = messageListView.getChildAt(0).getTop();
                     }
                     messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
+                    messageListDataArrayList.remove(position);
+                    //keyに削除したって通知
                     messageListView.setSelectionFromTop(nowPosition,nowY);
                 }
-                return false;
+                return true;
             }
         });
     }
