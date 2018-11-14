@@ -62,6 +62,7 @@ public class MessageFragment extends Fragment {
             String iconBitmapString="";
             String userName = "";
             String bitmapString="";
+            String removeKey="";
 
             if (time!=null && !(time.equals(""))){
                 //投稿日
@@ -112,7 +113,7 @@ public class MessageFragment extends Fragment {
                     }
                 }catch (ParseException e){
                 }
-                MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag);
+                MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag,removeKey);
                 messageListDataArrayList.add(MessageListData);
             }
         }
@@ -128,6 +129,7 @@ public class MessageFragment extends Fragment {
                 String iconBitmapString="";
                 String userName = "";
                 String bitmapString="";
+                String removeKey="";
 
                 ArrayList<String> ketList = new ArrayList<String>();
                 for (int f = 0;f<newMessageListDataArrayList.size();f++) {
@@ -152,7 +154,7 @@ public class MessageFragment extends Fragment {
                                 MessageListData newMessageListData = new MessageListData(newMessageListDataArrayList.get(n).getUid()
                                         , newMessageListDataArrayList.get(n).getUserName(), newMessageListDataArrayList.get(n).getIconBitmapString()
                                         , time, content, newMessageListDataArrayList.get(n).getBitmapString(), newMessageListDataArrayList.get(n).getKey()
-                                        , user.getUid(), newLag);
+                                        , user.getUid(), newLag,newMessageListDataArrayList.get(n).getRemoveKey());
                                 newMessageListDataArrayList.remove(n);
                                 newMessageListDataArrayList.add(newMessageListData);
                                 Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
@@ -177,7 +179,7 @@ public class MessageFragment extends Fragment {
                             lag = (int)diffMillis;
                         }catch (ParseException e){
                         }
-                        MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag);
+                        MessageListData MessageListData = new MessageListData(userId,userName,iconBitmapString,time,content,bitmapString,roomKey,user.getUid(),lag,removeKey);
                         messageListDataArrayList.add(MessageListData);
                         userRef.orderByChild("userId").equalTo(MessageListData.getUid()).addChildEventListener(userEventListener);
                     }
@@ -203,10 +205,11 @@ public class MessageFragment extends Fragment {
             String userName = (String) map.get("userName");
             String userId = (String) map.get("userId");
             String iconBitmapString = (String) map.get("iconBitmapString");
+            String removeKey="";
 
             for (MessageListData a :messageListDataArrayList){
                 if (userId.equals(a.getUid())){
-                    MessageListData newMessageListData = new MessageListData(userId,userName,iconBitmapString,a.getTime(),a.getContent(),a.getBitmapString(),a.getKey(),user.getUid(),a.getLag());
+                    MessageListData newMessageListData = new MessageListData(userId,userName,iconBitmapString,a.getTime(),a.getContent(),a.getBitmapString(),a.getKey(),user.getUid(),a.getLag(),removeKey);
                     newMessageListDataArrayList.add(newMessageListData);
                     Collections.sort(newMessageListDataArrayList, new TimeLagComparator());
                     mAdapter.setNewMessageKeyArrayList(newMessageListDataArrayList);
@@ -230,7 +233,8 @@ public class MessageFragment extends Fragment {
                         MessageListData newMessageListData = new MessageListData(newMessageListDataArrayList.get(n).getUid()
                                 ,userName,iconBitmapString,newMessageListDataArrayList.get(n).getTime()
                                 ,newMessageListDataArrayList.get(n).getContent(), newMessageListDataArrayList.get(n).getBitmapString()
-                                ,newMessageListDataArrayList.get(n).getKey(),user.getUid(),newMessageListDataArrayList.get(n).getLag());
+                                ,newMessageListDataArrayList.get(n).getKey(),user.getUid(),newMessageListDataArrayList.get(n).getLag()
+                                ,newMessageListDataArrayList.get(n).getRemoveKey());
                         newMessageListDataArrayList.remove(n);
                         newMessageListDataArrayList.add(newMessageListData);
                         Collections.sort(newMessageListDataArrayList, new TimeLagComparator());

@@ -10,6 +10,7 @@ public class MessageListData {
     private String mKey;
     private String mMyUid;
     private long mLag;
+    private String mRemoveKey;
 
     public String getUid(){
         return mUid;
@@ -38,8 +39,11 @@ public class MessageListData {
     public long getLag() {
         return mLag;
     }
+    public String getRemoveKey(){
+        return mRemoveKey;
+    }
 
-    public MessageListData(String uid, String userName, String iconBitmapString, String time, String content, String bitmapString, String key, String myUid,long lag){
+    public MessageListData(String uid, String userName, String iconBitmapString, String time, String content, String bitmapString, String key, String myUid,long lag,String removeKey){
         mUid = uid;
         mUserName = userName;
         mIconBitmapString = iconBitmapString;
@@ -49,5 +53,6 @@ public class MessageListData {
         mKey = key;
         mMyUid = myUid;
         mLag =lag;
+        mRemoveKey = removeKey;
     }
 }

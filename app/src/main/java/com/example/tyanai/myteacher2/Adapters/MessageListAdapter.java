@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -119,14 +120,15 @@ public class MessageListAdapter extends BaseAdapter {
             String n = time.substring(11,16);
             if (uid.equals(myUid)){
                 //自分の時の処理
-                byte[] myContentsImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
-                if(myContentsImageBytes.length!=0){
-                    //自分が画像送信した
-                    Bitmap myContentsImageBitmap = BitmapFactory.decodeByteArray(myContentsImageBytes,0, myContentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                    messageListViewHolder.myMessageImageView.setImageBitmap(myContentsImageBitmap);
-                    if (time!=null){
-                        messageListViewHolder.myMessageImageTimeTextView.setText(n);
-                    }
+//                byte[] myContentsImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+//                if(myContentsImageBytes.length!=0){
+                if (bitmapString!=null && bitmapString.length()>5){
+//                    //自分が画像送信した
+//                    Bitmap myContentsImageBitmap = BitmapFactory.decodeByteArray(myContentsImageBytes,0, myContentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+//                    messageListViewHolder.myMessageImageView.setImageBitmap(myContentsImageBitmap);
+//                    if (time!=null){
+//                        messageListViewHolder.myMessageImageTimeTextView.setText(n);
+//                    }
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
@@ -175,12 +177,14 @@ public class MessageListAdapter extends BaseAdapter {
                     messageListViewHolder.newDateLinearLayout.setVisibility(View.GONE);
                 }
             }else{
+                if (bitmapString!=null && bitmapString.length()>5){
+
                 //他の人の時の処理
-                byte[] otherContentsImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
-                if(otherContentsImageBytes.length!=0){
-                    //他の人が画像送信した
-                    Bitmap otherContentsImageBitmap = BitmapFactory.decodeByteArray(otherContentsImageBytes,0, otherContentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                    messageListViewHolder.otherMessageImageView.setImageBitmap(otherContentsImageBitmap);
+//                byte[] otherContentsImageBytes = Base64.decode(bitmapString,Base64.DEFAULT);
+//                if(otherContentsImageBytes.length!=0){
+//                    //他の人が画像送信した
+//                    Bitmap otherContentsImageBitmap = BitmapFactory.decodeByteArray(otherContentsImageBytes,0, otherContentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+//                    messageListViewHolder.otherMessageImageView.setImageBitmap(otherContentsImageBitmap);
                     if (time!=null){
                         messageListViewHolder.otherMessageImageTimeTextView.setText(n);
                     }
@@ -244,6 +248,39 @@ public class MessageListAdapter extends BaseAdapter {
                 }
             }
         }
+        bitmapString=null;
+        messageListViewHolder.myMessageImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.myMessageImageView);
+            }
+        });
+        messageListViewHolder.otherMessageImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.otherMessageImageView);
+            }
+        });
+
+        messageListViewHolder.messageListLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.messageListLinearLayout);
+                return false;
+            }
+        });
+
+        messageListViewHolder.myMessageImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ((ListView)parent).performItemClick(view,position,R.id.myMessageImageView);
+                return false;
+            }
+        });
+
+
+
+
         return convertView;
     }
     @Override

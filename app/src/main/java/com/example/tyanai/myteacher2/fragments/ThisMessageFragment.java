@@ -10,12 +10,14 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.tyanai.myteacher2.Adapters.MessageListAdapter;
 import com.example.tyanai.myteacher2.Models.Const;
+import com.example.tyanai.myteacher2.Models.ImageFragment;
 import com.example.tyanai.myteacher2.Models.MessageListData;
 import com.example.tyanai.myteacher2.R;
 import com.example.tyanai.myteacher2.Screens.MainActivity;
@@ -72,10 +74,11 @@ public class ThisMessageFragment extends Fragment{
             String bitmapString=(String) map.get("bitmapString");
             String userName = "";
             String key = "";
+            String removeKey=(String)map.get("removeKey");
             long lag =0;
 
             if (time!=null && !(time.equals(""))){
-                MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag);
+                MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag,removeKey);
                 if (messageListData.getUid()!=null && messageListData.getTime()!=null){
 
                     if (getView()!=null && getView().getTop()!=0){
@@ -125,10 +128,11 @@ public class ThisMessageFragment extends Fragment{
             String bitmapString=(String) map.get("bitmapString");
             String userName = "";
             String key = "";
+            String removeKey=(String)map.get("removeKey");
             long lag =0;
 
             if (time != null && !(time.equals(""))){
-                MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag);
+                MessageListData messageListData = new MessageListData(userId,userName,icon,time,content,bitmapString,key,user.getUid(),lag,removeKey);
                 oldMessageListDataArrayList.add(messageListData);
             }
         }
@@ -238,7 +242,6 @@ public class ThisMessageFragment extends Fragment{
                     }
                 }
             }
-
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 lvp = messageListView.getLastVisiblePosition();
@@ -314,6 +317,7 @@ public class ThisMessageFragment extends Fragment{
                     messageData.put("time",time);
                     messageData.put("userId",user.getUid());
                     messageData.put("roomKey",msKey);
+                    messageData.put("removeKey",key);
                     Map<String,Object> childUpdates = new HashMap<>();
                     childUpdates.put(key,messageData);
                     messageRef.child(msKey).updateChildren(childUpdates);
@@ -347,6 +351,58 @@ public class ThisMessageFragment extends Fragment{
             public void onClick(View view) {
                 MainActivity mainActivity = (MainActivity)getActivity();
                 mainActivity.onSelfCheck();
+            }
+        });
+
+        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (NetworkManager.isConnected(getContext())){
+                    if (view.getId()==R.id.myMessageImageView){
+                        Bundle imageBundle = new Bundle();
+                        imageBundle.putString("imageBitmapString",messageListDataArrayList.get(position).getBitmapString());
+
+                        ImageFragment fragmentImage = new ImageFragment();
+                        fragmentImage.setArguments(imageBundle);
+                        getFragmentManager().beginTransaction()
+                                .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }else if (view.getId()==R.id.otherMessageImageView){
+                        Bundle imageBundle = new Bundle();
+                        imageBundle.putString("imageBitmapString",messageListDataArrayList.get(position).getBitmapString());
+
+                        ImageFragment fragmentImage = new ImageFragment();
+                        fragmentImage.setArguments(imageBundle);
+                        getFragmentManager().beginTransaction()
+                                .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }else {
+                    //network
+                }
+            }
+        });
+
+        messageListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //remove?自分のメッセージならアラート表示で削除
+                //時間は消せないようにする
+                if (messageListDataArrayList.get(position).getUid()!=null && !(messageListDataArrayList.get(position).getUid().equals("")) && messageListDataArrayList.get(position).getUid().equals(user.getUid())){
+                    //alert
+                    //remove
+                    nowPosition = messageListView.getFirstVisiblePosition();
+                    if (nowPosition!=0){
+                        nowY = messageListView.getChildAt(0).getTop();
+                    }
+                    messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
+                    messageListView.setSelectionFromTop(nowPosition,nowY);
+                }
+
+
+                return false;
             }
         });
     }
@@ -424,6 +480,7 @@ public class ThisMessageFragment extends Fragment{
                 messageData.put("time",time);
                 messageData.put("userId",user.getUid());
                 messageData.put("roomKey",msKey);
+                messageData.put("removeKey",key);
                 Map<String,Object> childUpdates = new HashMap<>();
                 childUpdates.put(key,messageData);
                 messageRef.child(msKey).updateChildren(childUpdates);
@@ -441,7 +498,6 @@ public class ThisMessageFragment extends Fragment{
 
             }
         }
-
     }
     @Override
     public void onPause(){

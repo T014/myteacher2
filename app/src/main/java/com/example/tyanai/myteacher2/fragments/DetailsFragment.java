@@ -376,8 +376,9 @@ public class DetailsFragment extends Fragment {
             String contents = "";
             String bitmapString = "";
             long lag=0;
+            String removeKey="";
 
-            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid(),lag);
+            MessageListData messageListData = new MessageListData(uid,userName,iconBitmapString,time,contents,bitmapString,messageKey,user.getUid(),lag,removeKey);
             messageUidArrayList.add(messageListData);
         }
         @Override
