@@ -288,6 +288,15 @@ public class MessageFragment extends Fragment {
         newMessageListDataArrayList = new ArrayList<MessageListData>();
         messageKeyRef.child(user.getUid()).addChildEventListener(mkEventListener);
 
+        userRef = mDataBaseReference.child(Const.UsersPATH);
+        newMessageListDataArrayList.clear();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                userRef.addChildEventListener(userEventListener);
+            }
+        }, 500);
+
         messageKeyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -315,15 +324,15 @@ public class MessageFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
-        userRef = mDataBaseReference.child(Const.UsersPATH);
-        newMessageListDataArrayList.clear();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                userRef.addChildEventListener(userEventListener);
-            }
-        }, 200);
+//        mDataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        userRef = mDataBaseReference.child(Const.UsersPATH);
+//        newMessageListDataArrayList.clear();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                userRef.addChildEventListener(userEventListener);
+//            }
+//        }, 200);
     }
     @Override
     public void onResume(){
