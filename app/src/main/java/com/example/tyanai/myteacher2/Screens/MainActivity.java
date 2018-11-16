@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    fragmentCommunity = new CommunityFragment();
 //                    transaction.replace(R.id.container, fragmentCommunity,CommunityFragment.TAG);
 //                    transaction.commit();
-
                     return true;
             }
             return false;
