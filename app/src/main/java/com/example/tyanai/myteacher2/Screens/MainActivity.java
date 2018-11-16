@@ -315,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //それに伴う変更
         //タイムラインに分野を表示
 
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
