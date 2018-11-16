@@ -235,7 +235,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
-                    accountNameTextView.setText(userName);
+                    String name = "";
+                    if (userName.length()>14){
+                        name=userName.substring(0,13)+"...";
+                    }else if (userName.length()==14){
+                        name=userName;
+                    }else {
+                        name=userName;
+                    }
+                    accountNameTextView.setText(name);
                     int f = Integer.parseInt(follows);
                     String strF = String.valueOf(f);
                     accountFollowTextView.setText(strF);
