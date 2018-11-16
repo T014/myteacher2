@@ -3,6 +3,7 @@ package com.example.tyanai.myteacher2.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ class ListViewHolder {
     TextView userNameTextVew;
     TextView contentsTextView;
     TextView contentsTimeTextView;
+    TextView areaBalloonTextView;
+    TextView typeBalloonTextView;
     ToggleButton goodButton;
     TextView postTitleTextView;
     TextView goodCountTextView;
@@ -51,6 +54,8 @@ public class ListAdapter extends BaseAdapter{
         String contents = timeLineArrayList.get(position).getContents();
         String contentsTime = timeLineArrayList.get(position).getTime();
         String goodCount = timeLineArrayList.get(position).getGood();
+        String area = timeLineArrayList.get(position).getPostArea();
+        String type = timeLineArrayList.get(position).getPostType();
         String title = timeLineArrayList.get(position).getTitle();
         String favFlag = timeLineArrayList.get(position).getFavFlag();
         final ListViewHolder listViewHolder;
@@ -66,6 +71,8 @@ public class ListAdapter extends BaseAdapter{
             listViewHolder.contentsTextView = (TextView) convertView.findViewById(R.id.postContentsTextView);
             listViewHolder.contentsTimeTextView = (TextView) convertView.findViewById(R.id.contentsTimeTextView);
             listViewHolder.goodButton = (ToggleButton) convertView.findViewById(R.id.goodButton);
+            listViewHolder.areaBalloonTextView = (TextView)convertView.findViewById(R.id.areaBalloonTextView);
+            listViewHolder.typeBalloonTextView = (TextView)convertView.findViewById(R.id.typeBalloonTextView);
             listViewHolder.postTitleTextView=(TextView)convertView.findViewById(R.id.postTitleTextView);
             listViewHolder.goodCountTextView = (TextView) convertView.findViewById(R.id.goodCountTextView);
             listViewHolder.listLinearLayout = (LinearLayout)convertView.findViewById(R.id.listLinearLayout);
@@ -74,7 +81,15 @@ public class ListAdapter extends BaseAdapter{
             listViewHolder = (ListViewHolder) convertView.getTag();
         }
         if (userName != null){
-            listViewHolder.userNameTextVew.setText(userName);
+            String name ="";
+            if (userName.length()==12){
+                name = userName;
+            }else if (userName.length()>12){
+                name = userName.substring(0,12)+"...";
+            }else {
+                name = userName;
+            }
+            listViewHolder.userNameTextVew.setText(name);
         }
         if (contents != null){
             int aaa = contents.length();
@@ -107,6 +122,20 @@ public class ListAdapter extends BaseAdapter{
             }else {
                 listViewHolder.goodButton.setChecked(false);
             }
+        }
+        if (area!=null){
+            listViewHolder.areaBalloonTextView.setText(area);
+        }
+        if (type!=null){
+            String nType="";
+            if (type.length()==4) {
+                nType=type;
+            }else if (type.length()>3){
+                nType=type.substring(0,3)+"...";
+            }else {
+                nType=type;
+            }
+            listViewHolder.typeBalloonTextView.setText(nType);
         }
         listViewHolder.goodButton.setOnClickListener(new View.OnClickListener() {
             @Override

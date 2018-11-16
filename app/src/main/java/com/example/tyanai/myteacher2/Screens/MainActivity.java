@@ -776,9 +776,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 backStackTransaction.remove(currentFragment);
                 backStackTransaction.commit();
-
-
-
             }
         }
         return super.onKeyDown(keyCode, event);
