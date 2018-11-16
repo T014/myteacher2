@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 transaction.addToBackStack(null);
                                 transaction.commit();
                             }else if (currentFragmentTag.equals("MakePostFragment")){
-                                DetailsFragment.detailScrollview.fullScroll(ScrollView.FOCUS_UP);
+                                MakePostFragment.makePostScrollView.fullScroll(ScrollView.FOCUS_UP);
                             }
                         }
                     }
@@ -359,6 +359,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ProvisionalMessageFragment.provisionalMessageListView.setSelectionFromTop(0,0);
                 }else if (currentFragment.getTag().equals("ProvisionalUserFragment")){
                     ProvisionalUserFragment.provisionalUserListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("BusinessFragment")){
+                    BusinessFragment.businessListView.setSelectionFromTop(0,0);
                 }
             }
         });

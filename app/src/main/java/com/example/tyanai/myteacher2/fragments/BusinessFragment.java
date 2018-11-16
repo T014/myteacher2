@@ -28,7 +28,7 @@ import java.util.HashMap;
 public class BusinessFragment extends Fragment {
     public static final String TAG = "BusinessFragment";
 
-    ListView businessListView;
+    public static ListView businessListView;
     private ArrayList<BusinessData> businessDataArrayList;
     private BusinessDataListAdapter mAdapter;
     DatabaseReference mDataBaseReference;
