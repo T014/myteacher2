@@ -308,6 +308,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        String aaa = FirebaseInstanceId.getInstance().getId();
 
+
+        //今日やったこと
+        //削除機能完成
+        //投稿作成画面でラジオボタンをプルダウンに変更
+        //それに伴う変更
+        //タイムラインに分野を表示
+
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
