@@ -397,6 +397,7 @@ public class ThisMessageFragment extends Fragment{
                     if (nowPosition!=0){
                         nowY = messageListView.getChildAt(0).getTop();
                     }
+                    
                     messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
                     messageListDataArrayList.remove(position);
                     messageListDataArrayList.clear();
