@@ -519,10 +519,6 @@ public class TimelineFragment extends Fragment {
         });
     }
 
-    public static  void backTop(){
-        timeLineListView.setSelectionFromTop(0,0);
-    }
-
     @Override
     public void onStart(){
         super.onStart();

@@ -42,7 +42,7 @@ public class ProvisionalFragment extends Fragment {
     DatabaseReference confirmKeyRef;
     DatabaseReference userRef;
     DatabaseReference contentsRef;
-    ListView provisionalListView;
+    public static ListView provisionalListView;
     ProvisionalListAdapter mAdapter;
     FirebaseUser user;
     Button myListButton;

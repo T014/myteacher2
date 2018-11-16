@@ -55,10 +55,13 @@ import com.example.tyanai.myteacher2.Models.NetworkManager;
 import com.example.tyanai.myteacher2.fragments.NotificationFragment;
 import com.example.tyanai.myteacher2.fragments.ProvisionalFragment;
 import com.example.tyanai.myteacher2.R;
+import com.example.tyanai.myteacher2.fragments.ProvisionalMessageFragment;
+import com.example.tyanai.myteacher2.fragments.ProvisionalUserFragment;
 import com.example.tyanai.myteacher2.fragments.SearchFragment;
 import com.example.tyanai.myteacher2.fragments.SimpleCropViewFragment;
 import com.example.tyanai.myteacher2.fragments.ThisMessageFragment;
 import com.example.tyanai.myteacher2.fragments.TimelineFragment;
+import com.example.tyanai.myteacher2.fragments.UsersPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 transaction.addToBackStack(null);
                                 transaction.commit();
                             }else if (currentFragmentTag.equals("TimelineFragment")){
-                                TimelineFragment.backTop();
+                                TimelineFragment.timeLineListView.setSelectionFromTop(0,0);
                             }
                         }
                     }
@@ -161,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 transaction.replace(R.id.container, fragmentMakePost,MakePostFragment.TAG);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
+                            }else if (currentFragmentTag.equals("MakePostFragment")){
+                                DetailsFragment.detailScrollview.fullScroll(ScrollView.FOCUS_UP);
                             }
                         }
                     }
@@ -266,7 +271,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             transaction.addToBackStack(null);
                             transaction.commit();
                         }
-                        accountNameTextView.setText(userName);
+                        String name = "";
+                        if (userName.length()>14){
+                            name=userName.substring(0,13)+"...";
+                        }else if (userName.length()==14){
+                            name=userName;
+                        }else {
+                            name=userName;
+                        }
+                        accountNameTextView.setText(name);
                         int f = Integer.parseInt(follows);
                         String strF = String.valueOf(f);
                         accountFollowTextView.setText(strF);
@@ -308,13 +321,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        String aaa = FirebaseInstanceId.getInstance().getId();
 
-
-        //今日やったこと
-        //削除機能完成
-        //投稿作成画面でラジオボタンをプルダウンに変更
-        //それに伴う変更
-        //タイムラインに分野を表示
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -326,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v){
                 //currentfragment
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-                if (currentFragment.getTag().equals("TimeLineFragment")){
+                if (currentFragment.getTag().equals("TimelineFragment")){
                     TimelineFragment.timeLineListView.setSelectionFromTop(0,0);
                 }else if (currentFragment.getTag().equals("ThisMessageFragment")){
                     ThisMessageFragment.messageListView.setSelectionFromTop(0,0);
@@ -336,6 +342,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ConfirmProfileFragment.confirmScrollView.fullScroll(ScrollView.FOCUS_UP);
                 }else if (currentFragment.getTag().equals("DetailsFragment")){
                     DetailsFragment.detailScrollview.fullScroll(ScrollView.FOCUS_UP);
+                }else if (currentFragment.getTag().equals("UserPostFragment")){
+                    UsersPostFragment.profileListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("FFListFragment")){
+                    FFListFragment.ffListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("ProvisionalFragment")){
+                    ProvisionalFragment.provisionalListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("ProvisionalMessageFragment")){
+                    ProvisionalMessageFragment.provisionalMessageListView.setSelectionFromTop(0,0);
+                }else if (currentFragment.getTag().equals("ProvisionalUserFragment")){
+                    ProvisionalUserFragment.provisionalUserListView.setSelectionFromTop(0,0);
                 }
             }
         });

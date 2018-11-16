@@ -33,7 +33,7 @@ public class FFListFragment extends Fragment {
 
     private ArrayList<String> ffArrayList;
     private ArrayList<UserData> ffUsersArrayList;
-    ListView ffListView;
+    public static ListView ffListView;
     DatabaseReference mDataBaseReference;
     DatabaseReference followRef;
     DatabaseReference usersRef;

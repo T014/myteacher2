@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -88,6 +89,7 @@ public class MakePostFragment extends Fragment {
     String filterKey;
     String croppedBitmapString;
     Boolean croppedFlag = false;
+    public static ScrollView makePostScrollView;
 
     private ChildEventListener ssEventListener = new ChildEventListener() {
         @Override
@@ -363,6 +365,7 @@ public class MakePostFragment extends Fragment {
         dateTextView = (TextView)v.findViewById(R.id.dateTextView);
         clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
         sendButton = (Button)v.findViewById(R.id.sendButton);
+        makePostScrollView = (ScrollView)v.findViewById(R.id.makePostScrollView);
 
 
 

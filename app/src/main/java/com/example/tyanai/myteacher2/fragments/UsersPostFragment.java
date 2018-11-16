@@ -34,7 +34,7 @@ import java.util.Map;
 public class UsersPostFragment extends Fragment {
     public static final String TAG = "UserPostFragment";
 
-    ListView profileListView;
+    public static ListView profileListView;
     FirebaseUser user;
     DatabaseReference mDataBaseReference;
     DatabaseReference contentsRef;

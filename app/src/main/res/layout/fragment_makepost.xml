@@ -1,186 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/makePostScrollView">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleNameEditText"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="タイトルを入力"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/areaSpinner"
+            android:entries="@array/areaList"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sportsSpinner"
+            android:entries="@array/sportsTypeList"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/musicSpinner"
+            android:entries="@array/musicTypeList"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/movieSpinner"
+            android:entries="@array/movieTypeList"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/studySpinner"
+            android:entries="@array/studyTypeList"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginBottom="100dp"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/postImageView"
+                android:layout_gravity="center"
+                android:src="@drawable/noimage"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/titleNameEditText"
-                android:inputType="text"
-                android:maxLines="1"
-                android:hint="タイトルを入力"/>
-
-            <Spinner
-                android:layout_width="match_parent"
+                android:inputType="textMultiLine"
+                android:background="@drawable/edit_frame"
+                android:padding="5dp"
+                android:maxLength="120"
+                android:minLines="3"
+                android:maxLines="5"
+                android:id="@+id/contentsEditText"
+                android:hint="内容を入力\n\n"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/areaSpinner"
-                android:entries="@array/areaList"/>
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/sportsSpinner"
-                android:entries="@array/sportsTypeList"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/musicSpinner"
-                android:entries="@array/musicTypeList"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/movieSpinner"
-                android:entries="@array/movieTypeList"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/studySpinner"
-                android:entries="@array/studyTypeList"/>
-
+                android:id="@+id/dateButton"
+                android:text="日時を選択"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:id="@+id/postImageView"
-                    android:layout_gravity="center"
-                    android:src="@drawable/noimage"/>
-
-                <EditText
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:background="@drawable/edit_frame"
-                    android:padding="5dp"
-                    android:maxLength="120"
-                    android:minLines="3"
-                    android:maxLines="5"
-                    android:id="@+id/contentsEditText"
-                    android:hint="内容を入力\n\n"/>
+                    android:id="@+id/dateTextView"
+                    android:text="指定しない"/>
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:id="@+id/dateButton"
-                    android:text="日時を選択"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="8"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/dateTextView"
-                        android:text="指定しない"/>
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/clearDateButton"
-                        android:text="消去"/>
-
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="都道府県を選択"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/placeSpinner"
-                    android:entries="@array/placeList"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="価格形式を選択"/>
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/postCost"
-                    android:id="@+id/costSpinner"/>
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/costEditText"
-                    android:maxLines="1"
-                    android:maxLength="5"
-                    android:inputType="number"
-                    android:hint="時給を入力(コイン)"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="指導時間"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/howLongSpinner"
-                    android:entries="@array/howLongList"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="指導方法を選択"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/methodSpinner"
-                    android:entries="@array/methodList"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="何年やってる？"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/careerSpinner"
-                    android:entries="@array/careerList"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="レベルを選択する"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/levelSpinner"
-                    android:entries="@array/postLevelList"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="何人に教える？"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/stockSpinner"
-                    android:entries="@array/postStockList"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="100dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/sendButton"
-                    android:text="送信"/>
+                    android:id="@+id/clearDateButton"
+                    android:text="消去"/>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="都道府県を選択"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/placeSpinner"
+                android:entries="@array/placeList"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="価格形式を選択"/>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/postCost"
+                android:id="@+id/costSpinner"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/costEditText"
+                android:maxLines="1"
+                android:maxLength="5"
+                android:inputType="number"
+                android:hint="時給を入力(コイン)"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="指導時間"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howLongSpinner"
+                android:entries="@array/howLongList"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="指導方法を選択"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/methodSpinner"
+                android:entries="@array/methodList"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="何年やってる？"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/careerSpinner"
+                android:entries="@array/careerList"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="レベルを選択する"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/levelSpinner"
+                android:entries="@array/postLevelList"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="何人に教える？"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/stockSpinner"
+                android:entries="@array/postStockList"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:layout_gravity="center"
+                android:id="@+id/sendButton"
+                android:text="送信"/>
 
         </LinearLayout>
 
-    </ScrollView>
-
     </LinearLayout>
+
+</ScrollView>

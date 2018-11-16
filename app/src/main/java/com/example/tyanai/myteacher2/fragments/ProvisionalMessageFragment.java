@@ -41,7 +41,7 @@ public class ProvisionalMessageFragment extends Fragment {
 
     public static final String TAG = "ProvisionalMessageFragment";
 
-    ListView provisionalMessageListView;
+    public static ListView provisionalMessageListView;
     DatabaseReference mDataBaseReference;
     DatabaseReference userRef;
     DatabaseReference confirmRef;

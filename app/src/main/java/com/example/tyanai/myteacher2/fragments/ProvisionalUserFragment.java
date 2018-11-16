@@ -32,7 +32,7 @@ public class ProvisionalUserFragment extends Fragment {
 
     public static final String TAG = "ProvisionalUserFragment";
 
-    ListView provisionalUserListView;
+    public static ListView provisionalUserListView;
     ProvisionalUserListAdapter mAdapter;
     DatabaseReference mDataBaseReference;
     FirebaseUser user;
