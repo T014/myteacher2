@@ -79,6 +79,5 @@ public class ImageFragment extends Fragment {
         if (bottomNavigationVisibility){
             MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
         }
-
     }
 }

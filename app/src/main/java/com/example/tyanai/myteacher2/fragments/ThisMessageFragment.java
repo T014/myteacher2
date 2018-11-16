@@ -381,6 +381,7 @@ public class ThisMessageFragment extends Fragment{
                     }
                 }else {
                     //network
+                    Snackbar.make(MainActivity.snack, "ネットワークに接続してください。", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -462,6 +463,7 @@ public class ThisMessageFragment extends Fragment{
                             }
                         }else {
                             //network
+                            Snackbar.make(MainActivity.snack, "ネットワークに接続してください。", Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -570,6 +572,7 @@ public class ThisMessageFragment extends Fragment{
 
     public void onDestroyView() {
         super.onDestroyView();
+        
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }
