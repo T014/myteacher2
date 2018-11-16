@@ -1,10 +1,12 @@
 package com.example.tyanai.myteacher2.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -366,7 +368,6 @@ public class ThisMessageFragment extends Fragment{
                         fragmentImage.setArguments(imageBundle);
                         getFragmentManager().beginTransaction()
                                 .add(R.id.container,fragmentImage,ImageFragment.TAG)
-                                .addToBackStack(null)
                                 .commit();
                     }else if (view.getId()==R.id.otherMessageImageView){
                         Bundle imageBundle = new Bundle();
@@ -376,7 +377,6 @@ public class ThisMessageFragment extends Fragment{
                         fragmentImage.setArguments(imageBundle);
                         getFragmentManager().beginTransaction()
                                 .add(R.id.container,fragmentImage,ImageFragment.TAG)
-                                .addToBackStack(null)
                                 .commit();
                     }
                 }else {
@@ -388,31 +388,87 @@ public class ThisMessageFragment extends Fragment{
         messageListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                //remove?自分のメッセージならアラート表示で削除
-                //時間は消せないようにする
-                if (messageListDataArrayList.get(position).getUid()!=null && !(messageListDataArrayList.get(position).getUid().equals("")) && messageListDataArrayList.get(position).getUid().equals(user.getUid())){
-                    //alert
-                    //remove
-                    nowPosition = messageListView.getFirstVisiblePosition();
-                    if (nowPosition!=0){
-                        nowY = messageListView.getChildAt(0).getTop();
-                    }
-                    
-                    messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
-                    messageListDataArrayList.remove(position);
-                    messageListDataArrayList.clear();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            messageRef.child(msKey).limitToLast(30).addChildEventListener(umEventListener);
-                        }
-                    }, 300);
-                    //keyに削除したって通知
-                    messageListView.setSelectionFromTop(nowPosition,nowY);
-                }
+                showRemoveAlertDialog(position,view.getId());
+
                 return true;
             }
         });
+    }
+    private void showRemoveAlertDialog(final int nPosition, final long id){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle("削除確認");
+        alertDialogBuilder.setMessage("このメッセージを削除しますか？");
+
+        // 否定ボタンに表示される文字列、押したときのリスナーを設定する
+        alertDialogBuilder.setNegativeButton("いいえ",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Log.d("UI_PARTS", "否定ボタン");
+                    }
+                });
+
+        // 肯定ボタンに表示される文字列、押したときのリスナーを設定する
+        alertDialogBuilder.setPositiveButton("はい",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Log.d("UI_PARTS", "肯定ボタン");
+                        if (NetworkManager.isConnected(getContext())){
+                            if (messageListDataArrayList.get(nPosition).getUid()!=null && !(messageListDataArrayList.get(nPosition).getUid().equals("")) && messageListDataArrayList.get(nPosition).getUid().equals(user.getUid())){
+                                //alert
+                                //remove
+                                nowPosition = messageListView.getFirstVisiblePosition();
+                                if (nowPosition!=0){
+                                    nowY = messageListView.getChildAt(0).getTop();
+                                }
+
+                                Map<String,Object> removeDataKey = new HashMap<>();
+                                removeDataKey.put("bitmapString","");
+                                removeDataKey.put("contents","");
+                                removeDataKey.put("roomKey",msKey);
+                                removeDataKey.put("time","このメッセージは削除されました。");
+                                removeDataKey.put("userId","");
+                                messageRef.child(msKey).child(messageListDataArrayList.get(nPosition).getRemoveKey()).updateChildren(removeDataKey);
+
+                                MessageListData messageListData = new MessageListData("","","","このメッセージは削除されました。"
+                                        ,"","","","",0,"");
+                                messageListDataArrayList.remove(nPosition);
+                                messageListDataArrayList.add(nPosition,messageListData);
+
+                                mAdapter.setMessageArrayList(messageListDataArrayList);
+                                messageListView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
+
+                                if (nPosition==messageListDataArrayList.size()-1){
+                                    Map<String,Object> newDataKey = new HashMap<>();
+                                    newDataKey.put("content","このメッセージは削除されました。");
+                                    messageKeyRef.child(user.getUid()).child(msKey).updateChildren(newDataKey);
+                                    messageKeyRef.child(otherUid).child(msKey).updateChildren(newDataKey);
+                                }
+                                if (id == R.id.myMessageImageView){
+//                                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
+//                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
+//                                    transaction.addToBackStack(null);
+//                                    transaction.commit();
+                                    Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
+                                    FragmentTransaction backStackTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    backStackTransaction.remove(currentFragment);
+                                    backStackTransaction.commit();
+                                }
+
+                                messageListView.setSelectionFromTop(nowPosition,nowY);
+                            }
+                        }else {
+                            //network
+                        }
+                    }
+                });
+
+        // AlertDialogを作成して表示する
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
     @Override
     public void onAttach(Context context){

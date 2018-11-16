@@ -769,9 +769,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    bottomNavigationView.setVisibility(View.VISIBLE);
 //                }else if (currentFragmentTag.equals("ImageFragment")){
 //
+                }else if (currentFragmentTag.equals("ImageFragment")){
+                    backStackTransaction.remove(currentFragment);
+                    backStackTransaction.commit();
+                    return true;
                 }
                 backStackTransaction.remove(currentFragment);
                 backStackTransaction.commit();
+
+
+
             }
         }
         return super.onKeyDown(keyCode, event);

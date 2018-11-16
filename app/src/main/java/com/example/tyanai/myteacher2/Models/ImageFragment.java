@@ -23,6 +23,7 @@ public class ImageFragment extends Fragment {
 
     ImageView upImageView;
     RelativeLayout relativeLayout;
+    Boolean bottomNavigationVisibility=true;
 
 
     @Override
@@ -41,7 +42,12 @@ public class ImageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         MainActivity.mToolbar.setVisibility(View.GONE);
-        MainActivity.bottomNavigationView.setVisibility(View.GONE);
+        if (MainActivity.bottomNavigationView.isShown()){
+            bottomNavigationVisibility = true;
+            MainActivity.bottomNavigationView.setVisibility(View.GONE);
+        }else {
+            bottomNavigationVisibility = false;
+        }
 
         Bundle bundle = getArguments();
         String imageBitmapString = bundle.getString("imageBitmapString");
@@ -70,6 +76,9 @@ public class ImageFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
-        MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+        if (bottomNavigationVisibility){
+            MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+        }
+
     }
 }
