@@ -18,213 +18,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/titleNameEditText"
+                android:inputType="text"
+                android:maxLines="1"
                 android:hint="タイトルを入力"/>
 
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/areaRadioGroup1">
-
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sportsRadiobutton"
-                    android:text="スポーツ"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/musicRadioButton"
-                    android:text="音楽"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/movieRadioButton"
-                    android:text="動画"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/studyRadioButton"
-                    android:text="学習"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherRadioButton"
-                    android:text="その他"/>
-
-
-
-            </RadioGroup>
-<!--
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/areaRadioGroup2">
-
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/handicraftRadioButton"
-                    android:text="手芸"/>
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/artRadioButton"
-                    android:text="芸術"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/comicRadioButton"
-                    android:text="漫画"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gameRadioButton"
-                    android:text="ゲーム"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherRadioButton"
-                    android:text="その他"/>
-
-
-            </RadioGroup>
-
--->
-
-
-            <RadioGroup
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/sportsRadioGroup"
-                android:orientation="horizontal">
+                android:id="@+id/areaSpinner"
+                android:entries="@array/areaList"/>
 
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tennisRadioButton"
-                    android:text="テニス"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/soccerRadioButton"
-                    android:text="サッカー"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/athleticsRadioButton"
-                    android:text="陸上"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/swimRadioButton"
-                    android:text="水泳"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherSportsRadioButton"
-                    android:text="その他"/>
-            </RadioGroup>
-
-            <RadioGroup
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/musicRadioGroup"
-                android:orientation="horizontal">
-
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/singRadioButton"
-                    android:text="歌"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/instrumentRadioButton"
-                    android:text="楽器"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vocalPercussionRadioButton"
-                    android:text="ボイパ"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rapRadioButton"
-                    android:text="ラップ"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherMusicRadioButton"
-                    android:text="その他"/>
-            </RadioGroup>
-
-            <RadioGroup
+                android:id="@+id/sportsSpinner"
+                android:entries="@array/sportsTypeList"/>
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/movieRadioGroup"
-                android:orientation="horizontal">
-
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/filmRadioButton"
-                    android:text="撮影"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editRadioButton"
-                    android:text="編集"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherMovieRadioButton"
-                    android:text="その他"/>
-            </RadioGroup>
-
-
-            <RadioGroup
+                android:id="@+id/musicSpinner"
+                android:entries="@array/musicTypeList"/>
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/studyRadioGroup"
-                android:orientation="horizontal">
-
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/japaneseRadioButton"
-                    android:text="国語"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/mathematicsRadioButton"
-                    android:text="数学"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/englishRadioButton"
-                    android:text="英語"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/scienceRadioButton"
-                    android:text="理科"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/otherStudyRadioButton"
-                    android:text="その他"/>
-            </RadioGroup>
-
-
+                android:id="@+id/movieSpinner"
+                android:entries="@array/movieTypeList"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/studySpinner"
+                android:entries="@array/studyTypeList"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -353,8 +176,6 @@
                     android:layout_gravity="center"
                     android:id="@+id/sendButton"
                     android:text="送信"/>
-
-                <!--いくつかスクロールで選択させたい-->
 
             </LinearLayout>
 

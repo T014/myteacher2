@@ -572,7 +572,7 @@ public class ThisMessageFragment extends Fragment{
 
     public void onDestroyView() {
         super.onDestroyView();
-        
+
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }

@@ -13,11 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,6 +47,13 @@ public class MakePostFragment extends Fragment {
     private EditText contentsEditText;
     private EditText costEditText;
     private EditText titleNameEditText;
+    private Spinner areaSpinner;
+    private Spinner sportsSpinner;
+    private Spinner musicSpinner;
+    private Spinner movieSpinner;
+    private Spinner studySpinner;
+
+
     private Spinner methodSpinner;
     private Spinner howLongSpinner;
     private Spinner careerSpinner;
@@ -55,41 +61,12 @@ public class MakePostFragment extends Fragment {
     private Spinner levelSpinner;
     private Spinner placeSpinner;
     private Spinner stockSpinner;
-    private RadioGroup areaGroup1;
-    private RadioGroup areaGroup2;
-    private RadioGroup sportsGroup;
-    private RadioGroup musicGroup;
-    private RadioGroup movieGroup;
-    private RadioGroup studyGroup;
     private Button sendButton;
     private String area;
     private String type;
     private Button dateButton;
     private Button clearDateButton;
-    private RadioButton sportsRadioButton;
-    private RadioButton musicRadioButton;
-    private RadioButton movieRadioButton;
-    private RadioButton studyRadioButton;
-    private RadioButton otherRadioButton;
     boolean flag = false;
-    private RadioButton tennisRadioButton;
-    private RadioButton soccerRadioButton;
-    private RadioButton athleticsRadioButton;
-    private RadioButton swimRadioButton;
-    private RadioButton otherSportsRadioButton;
-    private RadioButton singRadioButton;
-    private RadioButton instrumentRadioButton;
-    private RadioButton vocalPercussionRadioButton;
-    private RadioButton rapRadioButton;
-    private RadioButton otherMusicRadioButton;
-    private RadioButton filmRadioButton;
-    private RadioButton editRadioButton;
-    private RadioButton otherMovieRadioButton;
-    private RadioButton japaneseRadioButton;
-    private RadioButton mathematicsRadioButton;
-    private RadioButton englishRadioButton;
-    private RadioButton scienceRadioButton;
-    private RadioButton otherStudyRadioButton;
 
     public static TextView dateTextView;
     FirebaseUser user;
@@ -101,8 +78,6 @@ public class MakePostFragment extends Fragment {
     DatabaseReference saveSearchRef;
     DatabaseReference filterRef;
     UserData myData;
-    String makeAreaRef;
-    String makeTypeRef;
     private int mYear, mMonth, mDay, mHour, mMinute;
     String level;
     String method;
@@ -229,72 +204,41 @@ public class MakePostFragment extends Fragment {
             if (title!=null){
                 titleNameEditText.setText(title);
             }
-            if (postType==null){
-                //tennis
-                postArea = "sports";
-                postType = "tennis";
-                tennisRadioButton.setChecked(true);
+
+
+            int ap = Integer.valueOf(postArea);
+            areaSpinner.setSelection(ap);
+            int tp = Integer.valueOf(postType);
+            if (ap==0){
+                sportsSpinner.setVisibility(View.VISIBLE);
+                musicSpinner.setVisibility(View.GONE);
+                movieSpinner.setVisibility(View.GONE);
+                studySpinner.setVisibility(View.GONE);
+                sportsSpinner.setSelection(tp);
+            }else if (ap==1){
+                sportsSpinner.setVisibility(View.GONE);
+                musicSpinner.setVisibility(View.VISIBLE);
+                movieSpinner.setVisibility(View.GONE);
+                studySpinner.setVisibility(View.GONE);
+                musicSpinner.setSelection(tp);
+            }else if (ap==2){
+                sportsSpinner.setVisibility(View.GONE);
+                musicSpinner.setVisibility(View.GONE);
+                movieSpinner.setVisibility(View.VISIBLE);
+                studySpinner.setVisibility(View.GONE);
+                movieSpinner.setSelection(tp);
+            }else if (ap==3){
+                sportsSpinner.setVisibility(View.GONE);
+                musicSpinner.setVisibility(View.GONE);
+                movieSpinner.setVisibility(View.GONE);
+                studySpinner.setVisibility(View.VISIBLE);
+                studySpinner.setSelection(tp);
+            }else if (ap==4){
+
+            }else if (ap==5){
+
             }
-            if (postArea!=null){
-                if (postArea.equals("sports")){
-                    sportsRadioButton.setChecked(true);
-                    sportsGroup.setVisibility(View.VISIBLE);
-                    if (postType.equals("tennis")){
-                        tennisRadioButton.setChecked(true);
-                    }else if (postType.equals("soccer")){
-                        soccerRadioButton.setChecked(true);
-                    }else if (postType.equals("athletics")){
-                        athleticsRadioButton.setChecked(true);
-                    }else if (postType.equals("swim")){
-                        swimRadioButton.setChecked(true);
-                    }else if (postType.equals("otherSports")){
-                        otherSportsRadioButton.setChecked(true);
-                    }
-                }else if (postArea.equals("music")){
-                    musicRadioButton.setChecked(true);
-                    musicGroup.setVisibility(View.VISIBLE);
-                    if (postType.equals("sing")){
-                        singRadioButton.setChecked(true);
-                    }else if (postType.equals("instrument")){
-                        instrumentRadioButton.setChecked(true);
-                    }else if (postType.equals("vocalPercussion")){
-                        vocalPercussionRadioButton.setChecked(true);
-                    }else if (postType.equals("rap")){
-                        rapRadioButton.setChecked(true);
-                    }else if (postType.equals("otherMusic")){
-                        otherMusicRadioButton.setChecked(true);
-                    }
-                }else if (postArea.equals("movie")){
-                    movieRadioButton.setChecked(true);
-                    movieGroup.setVisibility(View.VISIBLE);
-                    if (postType.equals("film")){
-                        filmRadioButton.setChecked(true);
-                    }else if (postType.equals("edit")){
-                        editRadioButton.setChecked(true);
-                    }else if (postType.equals("otherMovie")){
-                        otherMovieRadioButton.setChecked(true);
-                    }
-                }else if (postArea.equals("study")){
-                    studyRadioButton.setChecked(true);
-                    studyGroup.setVisibility(View.VISIBLE);
-                    if (postType.equals("japanese")){
-                        japaneseRadioButton.setChecked(true);
-                    }else if (postType.equals("mathematics")){
-                        mathematicsRadioButton.setChecked(true);
-                    }else if (postType.equals("english")){
-                        englishRadioButton.setChecked(true);
-                    }else if (postType.equals("science")){
-                        scienceRadioButton.setChecked(true);
-                    }else if (postType.equals("otherStudy")){
-                        otherStudyRadioButton.setChecked(true);
-                    }
-                }else if (postArea.equals("other")){
-                    otherRadioButton.setChecked(true);
-                }
-            }else{
-                sportsRadioButton.setChecked(true);
-                sportsGroup.setVisibility(View.VISIBLE);
-            }
+
 
             int cp = Integer.valueOf(costTypePosition);
             costTypeSpinner.setSelection(cp);
@@ -305,7 +249,7 @@ public class MakePostFragment extends Fragment {
             int lp = Integer.valueOf(levelPosition);
             levelSpinner.setSelection(lp);
             int dp = Integer.valueOf(careerPosition);
-            careerSpinner.setSelection(cp);
+            careerSpinner.setSelection(dp);
             int sp = Integer.valueOf(stockPosition);
             stockSpinner.setSelection(sp);
 
@@ -316,44 +260,6 @@ public class MakePostFragment extends Fragment {
             placeSpinner.setSelection(p);
 
 
-
-//            if (costTypePosition!=null){
-//                int cp = Integer.valueOf(costTypePosition);
-//                costTypeSpinner.setSelection(cp);
-//            }
-//            if (howLongPosition!=null){
-//                int hp = Integer.valueOf(howLongPosition);
-//                howLongSpinner.setSelection(hp);
-//            }
-//            if (methodPosition!=null){
-//                int mp = Integer.valueOf(methodPosition);
-//                methodSpinner.setSelection(mp);
-//            }
-//            if (levelPosition!=null){
-//                int lp = Integer.valueOf(levelPosition);
-//                levelSpinner.setSelection(lp);
-//            }
-//            if (careerPosition!=null){
-//                int cp = Integer.valueOf(careerPosition);
-//                careerSpinner.setSelection(cp);
-//            }
-//            if (stockPosition!=null){
-//                int sp = Integer.valueOf(stockPosition);
-//                stockSpinner.setSelection(sp);
-//            }
-//            if (contents!=null){
-//                contentsEditText.setText(contents);
-//            }
-//            if (cost!=null){
-//                costEditText.setText(cost);
-//            }
-//            if (date!=null){
-//                dateTextView.setText(date);
-//            }
-//            if (placePosition!=null){
-//                int p = Integer.valueOf(placePosition);
-//                placeSpinner.setSelection(p);
-//            }
 
         }
         @Override
@@ -441,6 +347,11 @@ public class MakePostFragment extends Fragment {
         contentsEditText = (EditText)v.findViewById(R.id.contentsEditText);
         costEditText = (EditText)v.findViewById(R.id.costEditText);
         titleNameEditText = (EditText)v.findViewById(R.id.titleNameEditText);
+        areaSpinner = (Spinner)v.findViewById(R.id.areaSpinner);
+        sportsSpinner = (Spinner)v.findViewById(R.id.sportsSpinner);
+        musicSpinner = (Spinner)v.findViewById(R.id.musicSpinner);
+        movieSpinner = (Spinner)v.findViewById(R.id.movieSpinner);
+        studySpinner = (Spinner)v.findViewById(R.id.studySpinner);
         methodSpinner = (Spinner)v.findViewById(R.id.methodSpinner);
         howLongSpinner = (Spinner)v.findViewById(R.id.howLongSpinner);
         careerSpinner = (Spinner)v.findViewById(R.id.careerSpinner);
@@ -453,41 +364,7 @@ public class MakePostFragment extends Fragment {
         clearDateButton = (Button)v.findViewById(R.id.clearDateButton);
         sendButton = (Button)v.findViewById(R.id.sendButton);
 
-        areaGroup1 = (RadioGroup)v.findViewById(R.id.areaRadioGroup1);
-        //areaGroup2 = (RadioGroup)v.findViewById(R.id.areaRadioGroup2);
-        sportsGroup = (RadioGroup)v.findViewById(R.id.sportsRadioGroup);
-        musicGroup = (RadioGroup)v.findViewById(R.id.musicRadioGroup);
-        movieGroup = (RadioGroup)v.findViewById(R.id.movieRadioGroup);
-        studyGroup = (RadioGroup)v.findViewById(R.id.studyRadioGroup);
 
-        sportsRadioButton = (RadioButton)v.findViewById(R.id.sportsRadiobutton);
-        musicRadioButton = (RadioButton)v.findViewById(R.id.musicRadioButton);
-        movieRadioButton = (RadioButton)v.findViewById(R.id.movieRadioButton);
-        studyRadioButton = (RadioButton)v.findViewById(R.id.studyRadioButton);
-        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
-//        handicraftRadioButton = (RadioButton)v.findViewById(R.id.handicraftRadioButton);
-//        artRadioButton = (RadioButton)v.findViewById(R.id.artRadioButton);
-//        comicRadioButton = (RadioButton)v.findViewById(R.id.comicRadioButton);
-//        gameRadioButton = (RadioButton)v.findViewById(R.id.gameRadioButton);
-//        otherRadioButton = (RadioButton)v.findViewById(R.id.otherRadioButton);
-        tennisRadioButton = (RadioButton)v.findViewById(R.id.tennisRadioButton);
-        soccerRadioButton = (RadioButton)v.findViewById(R.id.soccerRadioButton);
-        athleticsRadioButton = (RadioButton)v.findViewById(R.id.athleticsRadioButton);
-        swimRadioButton = (RadioButton)v.findViewById(R.id.swimRadioButton);
-        otherSportsRadioButton = (RadioButton)v.findViewById(R.id.otherSportsRadioButton);
-        singRadioButton = (RadioButton)v.findViewById(R.id.singRadioButton);
-        instrumentRadioButton = (RadioButton)v.findViewById(R.id.instrumentRadioButton);
-        vocalPercussionRadioButton = (RadioButton)v.findViewById(R.id.vocalPercussionRadioButton);
-        rapRadioButton = (RadioButton)v.findViewById(R.id.rapRadioButton);
-        otherMusicRadioButton = (RadioButton)v.findViewById(R.id.otherMusicRadioButton);
-        filmRadioButton = (RadioButton)v.findViewById(R.id.filmRadioButton);
-        editRadioButton = (RadioButton)v.findViewById(R.id.editRadioButton);
-        otherMovieRadioButton = (RadioButton)v.findViewById(R.id.otherMovieRadioButton);
-        japaneseRadioButton = (RadioButton)v.findViewById(R.id.japaneseRadioButton);
-        mathematicsRadioButton = (RadioButton)v.findViewById(R.id.mathematicsRadioButton);
-        englishRadioButton = (RadioButton)v.findViewById(R.id.englishRadioButton);
-        scienceRadioButton = (RadioButton)v.findViewById(R.id.scienceRadioButton);
-        otherStudyRadioButton = (RadioButton)v.findViewById(R.id.otherStudyRadioButton);
 
         return v;
     }
@@ -523,186 +400,60 @@ public class MakePostFragment extends Fragment {
         saveSearchRef = mDataBaseReference.child(Const.SaveSearchPATH);
         filterRef = mDataBaseReference.child(Const.FilterPATH);
 
-        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
+        musicSpinner.setVisibility(View.GONE);
+        movieSpinner.setVisibility(View.GONE);
+        studySpinner.setVisibility(View.GONE);
 
-        sportsGroup.setVisibility(View.GONE);
-        musicGroup.setVisibility(View.GONE);
-        movieGroup.setVisibility(View.GONE);
-        studyGroup.setVisibility(View.GONE);
+        userRef.orderByChild("userId").equalTo(user.getUid()).addChildEventListener(mEventListener);
 
         area = "";
         type = "";
 
-        areaGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String aa = areaSpinner.getSelectedItem().toString();
+                if (aa.equals("スポーツ")){
+                    sportsSpinner.setVisibility(View.VISIBLE);
+                    musicSpinner.setVisibility(View.GONE);
+                    movieSpinner.setVisibility(View.GONE);
+                    studySpinner.setVisibility(View.GONE);
+                }else if (aa.equals("音楽")){
+                    sportsSpinner.setVisibility(View.GONE);
+                    musicSpinner.setVisibility(View.VISIBLE);
+                    movieSpinner.setVisibility(View.GONE);
+                    studySpinner.setVisibility(View.GONE);
+                }else if (aa.equals("動画")){
+                    sportsSpinner.setVisibility(View.GONE);
+                    musicSpinner.setVisibility(View.GONE);
+                    movieSpinner.setVisibility(View.VISIBLE);
+                    studySpinner.setVisibility(View.GONE);
+                }else if (aa.equals("学習")){
+                    sportsSpinner.setVisibility(View.GONE);
+                    musicSpinner.setVisibility(View.GONE);
+                    movieSpinner.setVisibility(View.GONE);
+                    studySpinner.setVisibility(View.VISIBLE);
+                }else if (aa.equals("")){
 
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedArea = selectedRadioButton.getText().toString();
-                    if (selectedArea.equals("スポーツ")){
-                        //スポーツの一覧を表示する
-                        sportsGroup.setVisibility(View.VISIBLE);
-                        musicGroup.setVisibility(View.GONE);
-                        movieGroup.setVisibility(View.GONE);
-                        studyGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="sports";
-                    }else if(selectedArea.equals("音楽")){
-                        sportsGroup.setVisibility(View.GONE);
-                        musicGroup.setVisibility(View.VISIBLE);
-                        movieGroup.setVisibility(View.GONE);
-                        studyGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="music";
-                    }else if(selectedArea.equals("動画")){
-                        sportsGroup.setVisibility(View.GONE);
-                        musicGroup.setVisibility(View.GONE);
-                        movieGroup.setVisibility(View.VISIBLE);
-                        studyGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="movie";
-                    }else if(selectedArea.equals("学習")){
-                        sportsGroup.setVisibility(View.GONE);
-                        musicGroup.setVisibility(View.GONE);
-                        movieGroup.setVisibility(View.GONE);
-                        studyGroup.setVisibility(View.VISIBLE);
-                        area=selectedArea;
-                        makeAreaRef="study";
-                    }else if(selectedArea.equals("その他")){
-                        sportsGroup.setVisibility(View.GONE);
-                        musicGroup.setVisibility(View.GONE);
-                        movieGroup.setVisibility(View.GONE);
-                        studyGroup.setVisibility(View.GONE);
-                        area=selectedArea;
-                        makeAreaRef="other";
-                    }
+                }else if (aa.equals("その他")){
+                    sportsSpinner.setVisibility(View.GONE);
+                    musicSpinner.setVisibility(View.GONE);
+                    movieSpinner.setVisibility(View.GONE);
+                    studySpinner.setVisibility(View.GONE);
                 }
+                area=aa;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
-
-        sportsGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedType = selectedRadioButton.getText().toString();
-
-                    if (selectedType.equals("テニス")){
-                        //スポーツの一覧を表示する
-                        type=selectedType;
-                        makeTypeRef="tennis";
-                    }else if(selectedType.equals("サッカー")){
-                        type=selectedType;
-                        makeTypeRef="soccer";
-                    }else if(selectedType.equals("陸上")){
-                        type=selectedType;
-                        makeTypeRef="athletics";
-                    }else if(selectedType.equals("水泳")){
-                        type=selectedType;
-                        makeTypeRef="swim";
-                    }else{
-                        type=selectedType;
-                        makeTypeRef="otherSports";
-                    }
-                }
-            }
-        });
-
-        musicGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedType = selectedRadioButton.getText().toString();
-
-                    if (selectedType.equals("歌")){
-                        //スポーツの一覧を表示する
-                        type=selectedType;
-                        makeTypeRef="sing";
-                    }else if(selectedType.equals("楽器")){
-                        type=selectedType;
-                        makeTypeRef="instrument";
-                    }else if(selectedType.equals("ボイスパーカッション")){
-                        type=selectedType;
-                        makeTypeRef="vocalPercussion";
-                    }else if(selectedType.equals("ラップ")){
-                        type=selectedType;
-                        makeTypeRef="rap";
-                    }else{
-                        type=selectedType;
-                        makeTypeRef="otherMusic";
-                    }
-                }
-            }
-        });
-
-        movieGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedType = selectedRadioButton.getText().toString();
-                    if (selectedType.equals("撮影")){
-                        //スポーツの一覧を表示する
-                        type=selectedType;
-                        makeTypeRef="film";
-                    }else if(selectedType.equals("編集")){
-                        type=selectedType;
-                        makeTypeRef="edit";
-                    }else{
-                        type=selectedType;
-                        makeTypeRef="otherMovie";
-                    }
-                }
-            }
-        });
-
-        studyGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId != -1){
-                    //選択されているボタンの取得
-                    RadioButton selectedRadioButton = (RadioButton)view.findViewById(checkedId);
-                    String selectedType = selectedRadioButton.getText().toString();
-                    if (selectedType.equals("国語")){
-                        //スポーツの一覧を表示する
-                        type=selectedType;
-                        makeTypeRef="japanese";
-                    }else if(selectedType.equals("数学")){
-                        type=selectedType;
-                        makeTypeRef="mathematics";
-                    }else if(selectedType.equals("英語")){
-                        type=selectedType;
-                        makeTypeRef="english";
-                    }else if(selectedType.equals("理科")){
-                        type=selectedType;
-                        makeTypeRef="science";
-                    }else{
-                        type=selectedType;
-                        makeTypeRef="otherStudy";
-                    }
-                }
-            }
-        });
 
         postImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //pFragを変更
-                ////                //icon画像選択に移動
-                ////                MainActivity mainActivity = (MainActivity)getActivity();
-                ////                mainActivity.onSelfCheck();
-//                MainActivity.pFlag=3;
                 croppedFlag = false;
                 Bundle cropFlagBundle = new Bundle();
                 cropFlagBundle.putString("flag","make");
@@ -739,6 +490,17 @@ public class MakePostFragment extends Fragment {
                 if (NetworkManager.isConnected(getContext())){
                     //必須事項が入力されているかの確認
                     if (myData!=null){
+                        if (area.equals("スポーツ")){
+                            type =sportsSpinner.getSelectedItem().toString();
+                        }else if(area.equals("音楽")){
+                            type = musicSpinner.getSelectedItem().toString();
+                        }else if(area.equals("動画")){
+                            type = movieSpinner.getSelectedItem().toString();
+                        }else if(area.equals("学習")){
+                            type = studySpinner.getSelectedItem().toString();
+                        }else if(area.equals("その他")){
+                        }
+
                         String userId = user.getUid();
                         String time = mYear + "/" + String.format("%02d",(mMonth + 1)) + "/" + String.format("%02d", mDay)+"/"+String.format("%02d", mHour) + ":" + String.format("%02d", mMinute);
                         date = dateTextView.getText().toString();
@@ -810,8 +572,6 @@ public class MakePostFragment extends Fragment {
                                             Map<String,Object> childUpdates = new HashMap<>();
                                             childUpdates.put(key,data);
                                             contentsRef.updateChildren(childUpdates);
-
-
 
                                             Map<String,Object> userPostCount = new HashMap<>();
                                             int postCountInt = Integer.valueOf(myData.getPosts());
@@ -930,6 +690,21 @@ public class MakePostFragment extends Fragment {
             String cost = costEditText.getText().toString();
             String title = titleNameEditText.getText().toString();
 
+            int areaPosition1 = areaSpinner.getSelectedItemPosition();
+            String areaPosition = String.valueOf(areaPosition1);
+            int typePosition1=0;
+            if (areaPosition1==0){
+                typePosition1 =sportsSpinner.getSelectedItemPosition();
+            }else if(areaPosition1==1){
+                typePosition1 =musicSpinner.getSelectedItemPosition();
+            }else if(areaPosition1==2){
+                typePosition1 =movieSpinner.getSelectedItemPosition();
+            }else if(areaPosition1==3){
+                typePosition1 =studySpinner.getSelectedItemPosition();
+            }else if(areaPosition1==4){
+            }
+            String typePosition = String.valueOf(typePosition1);
+
             int howLongPosition1 = howLongSpinner.getSelectedItemPosition();
             String howLongPosition = String.valueOf(howLongPosition1);
             int methodPosition1 = methodSpinner.getSelectedItemPosition();
@@ -953,8 +728,10 @@ public class MakePostFragment extends Fragment {
             data.put("cost",cost );
             data.put("howLongPosition", howLongPosition);
             data.put("methodPosition", methodPosition);
-            data.put("postArea", makeAreaRef);
-            data.put("postType",makeTypeRef );
+//            data.put("postArea", makeAreaRef);
+//            data.put("postType",makeTypeRef );
+            data.put("postArea", areaPosition);
+            data.put("postType", typePosition);
             data.put("levelPosition",levelPosition);
             data.put("careerPosition", careerPosition);
             data.put("placePosition",placePosition);
