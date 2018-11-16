@@ -399,6 +399,13 @@ public class ThisMessageFragment extends Fragment{
                     }
                     messageRef.child(msKey).child(messageListDataArrayList.get(position).getRemoveKey()).removeValue();
                     messageListDataArrayList.remove(position);
+                    messageListDataArrayList.clear();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageRef.child(msKey).limitToLast(30).addChildEventListener(umEventListener);
+                        }
+                    }, 300);
                     //keyに削除したって通知
                     messageListView.setSelectionFromTop(nowPosition,nowY);
                 }
