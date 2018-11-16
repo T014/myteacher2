@@ -298,7 +298,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
 
-
         //Push通知の購読開始
 //        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
 
