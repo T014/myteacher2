@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -108,6 +109,35 @@ public class ThisMessageFragment extends Fragment{
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String content = (String) map.get("contents");
+            String time = (String) map.get("time");
+            String bitmapString=(String) map.get("bitmapString");
+            String removeKey=(String)map.get("removeKey");
+
+            nowPosition = messageListView.getFirstVisiblePosition();
+            if (nowPosition!=0){
+                nowY = messageListView.getChildAt(0).getTop();
+            }
+            for (int r =0;r<messageListDataArrayList.size();r++){
+                String rKey = messageListDataArrayList.get(r).getRemoveKey();
+                if(rKey!=null){
+                    if (rKey.equals(removeKey)){
+                        MessageListData messageListData = new MessageListData("",messageListDataArrayList.get(r).getUserName()
+                                ,messageListDataArrayList.get(r).getIconBitmapString(),time,content,bitmapString
+                                ,messageListDataArrayList.get(r).getKey(),messageListDataArrayList.get(r).getMyUid()
+                                ,messageListDataArrayList.get(r).getLag(),messageListDataArrayList.get(r).getRemoveKey());
+                        messageListDataArrayList.remove(r);
+                        messageListDataArrayList.add(r,messageListData);
+                        mAdapter.setMessageArrayList(messageListDataArrayList);
+                        messageListView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                        messageListView.setSelectionFromTop(nowPosition+2,nowY);
+                        break;
+                    }
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -141,6 +171,27 @@ public class ThisMessageFragment extends Fragment{
         }
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String content = (String) map.get("contents");
+            String time = (String) map.get("time");
+            String bitmapString=(String) map.get("bitmapString");
+            String removeKey=(String)map.get("removeKey");
+
+            for (int r =0;r<messageListDataArrayList.size();r++){
+                String rKey = messageListDataArrayList.get(r).getRemoveKey();
+                if(rKey!=null){
+                    if (rKey.equals(removeKey)){
+                        MessageListData messageListData = new MessageListData(messageListDataArrayList.get(r).getUid()
+                                ,messageListDataArrayList.get(r).getUserName(),messageListDataArrayList.get(r).getIconBitmapString()
+                                ,time,content,bitmapString,messageListDataArrayList.get(r).getKey(),messageListDataArrayList.get(r).getMyUid()
+                                ,messageListDataArrayList.get(r).getLag(),messageListDataArrayList.get(r).getRemoveKey());
+                        messageListDataArrayList.remove(r);
+                        messageListDataArrayList.add(r,messageListData);
+                        break;
+                    }
+                }
+            }
         }
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -257,17 +308,17 @@ public class ThisMessageFragment extends Fragment{
             public void onClick(View view) {
 
                 String contents = editMessageEditText.getText().toString();
-                if (contents!=null && !(contents.equals(""))){
+                if (contents!=null && !(contents.equals(""))) {
                     //最新のメッセージの日付と比較して違かったら日付を送信
-                    if (messageListDataArrayList.size()>0){
+                    if (messageListDataArrayList.size() > 0) {
                         nowPosition = messageListView.getFirstVisiblePosition();
-                        if (nowPosition!=0){
+                        if (nowPosition != 0) {
                             nowY = messageListView.getChildAt(0).getTop();
                         }
-                    }else{
-                        if (getView().getTop()!=0){
+                    } else {
+                        if (getView().getTop() != 0) {
                             nowPosition = messageListView.getFirstVisiblePosition();
-                            if (nowPosition!=0){
+                            if (nowPosition != 0) {
                                 nowY = messageListView.getChildAt(0).getTop();
                             }
                         }
@@ -277,44 +328,32 @@ public class ThisMessageFragment extends Fragment{
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
                     String time = sdf.format(cal1.getTime());
                     //投稿日
-                    String nowDay = time.substring(0,10);
-                    if (messageListDataArrayList.size()!=0){
-                        String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
-                        if (lastDate!=null && !(lastDate.equals(""))){
-                            //削除メッセージか日付かの確認
-                            //1文字目が数字なら日付
-                            String lastDay = lastDate.substring(0,10);
-                            try {
-                                int aa = Integer.valueOf(String.valueOf(lastDay.charAt(0)));
-                            }catch (NumberFormatException e){
-                                String newLastDate = messageListDataArrayList.get(messageListDataArrayList.size()-2).getTime();
-                                if (newLastDate!=null && !(newLastDate.equals(""))){
-                                    //削除メッセージか日付かの確認
-                                    //1文字目が数字なら日付
-                                    String newLastDay = newLastDate.substring(0,10);
-                                    try {
-                                        int aa = Integer.valueOf(String.valueOf(newLastDay.charAt(0)));
-                                        lastDay=newLastDay;
-                                    }catch (NumberFormatException n){
+                    String nowDay = time.substring(0, 10);
+                    if (messageListDataArrayList.size() != 0) {
+                        for (int n = 1; n < messageListDataArrayList.size() + 1; n++) {
+                            String lastDate = messageListDataArrayList.get(messageListDataArrayList.size() - n).getTime();
+                            if (lastDate != null && !(lastDate.equals(""))) {
+                                String lastDay = lastDate.substring(0,10);
+                                try {
+                                    int aa = Integer.valueOf(String.valueOf(lastDay.charAt(0)));
+                                    int deff = nowDay.compareTo(lastDay);
+                                    if (deff!=0){
+                                        //日付送信
+                                        Map<String,Object> messageData = new HashMap<>();
+                                        String key = messageRef.child(msKey).push().getKey();
 
+                                        messageData.put("bitmapString","");
+                                        messageData.put("contents","");
+                                        messageData.put("time",nowDay);
+                                        messageData.put("userId","");
+                                        messageData.put("roomKey",msKey);
+                                        Map<String,Object> childUpdates = new HashMap<>();
+                                        childUpdates.put(key,messageData);
+                                        messageRef.child(msKey).updateChildren(childUpdates);
+                                        break;
                                     }
+                                }catch (NumberFormatException e){
                                 }
-
-                            }
-                            int deff = nowDay.compareTo(lastDay);
-                            if (deff!=0){
-                                //日付送信
-                                Map<String,Object> messageData = new HashMap<>();
-                                String key = messageRef.child(msKey).push().getKey();
-
-                                messageData.put("bitmapString","");
-                                messageData.put("contents","");
-                                messageData.put("time",nowDay);
-                                messageData.put("userId","");
-                                messageData.put("roomKey",msKey);
-                                Map<String,Object> childUpdates = new HashMap<>();
-                                childUpdates.put(key,messageData);
-                                messageRef.child(msKey).updateChildren(childUpdates);
                             }
                         }
                     }else {
@@ -473,7 +512,6 @@ public class ThisMessageFragment extends Fragment{
                                     backStackTransaction.remove(currentFragment);
                                     backStackTransaction.commit();
                                 }
-
                                 messageListView.setSelectionFromTop(nowPosition,nowY);
                             }
                         }else {
@@ -482,7 +520,6 @@ public class ThisMessageFragment extends Fragment{
                         }
                     }
                 });
-
         // AlertDialogを作成して表示する
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -519,24 +556,31 @@ public class ThisMessageFragment extends Fragment{
                 //投稿日
                 String nowDay = time.substring(0,10);
                 if (messageListDataArrayList.size()!=0){
-                    String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
-                    if (lastDate!=null && !(lastDate.equals(""))){
-                        String lastDay = lastDate.substring(0,10);
+                    for (int n = 1; n < messageListDataArrayList.size() + 1; n++) {
+                        String lastDate = messageListDataArrayList.get(messageListDataArrayList.size() - n).getTime();
+                        if (lastDate != null && !(lastDate.equals(""))) {
+                            String lastDay = lastDate.substring(0,10);
+                            try {
+                                int aa = Integer.valueOf(String.valueOf(lastDay.charAt(0)));
+                                int deff = nowDay.compareTo(lastDay);
+                                if (deff!=0){
+                                    //日付送信
+                                    Map<String,Object> messageData = new HashMap<>();
+                                    String key = messageRef.child(msKey).push().getKey();
 
-                        int deff = nowDay.compareTo(lastDay);
-                        if (deff!=0){
-                            //日付送信
-                            Map<String,Object> messageData = new HashMap<>();
-                            String key = messageRef.child(msKey).push().getKey();
+                                    messageData.put("bitmapString","");
+                                    messageData.put("contents","");
+                                    messageData.put("time",nowDay);
+                                    messageData.put("userId","");
+                                    messageData.put("roomKey",msKey);
+                                    Map<String,Object> childUpdates = new HashMap<>();
+                                    childUpdates.put(key,messageData);
+                                    messageRef.child(msKey).updateChildren(childUpdates);
 
-                            messageData.put("bitmapString","");
-                            messageData.put("contents","");
-                            messageData.put("time",nowDay);
-                            messageData.put("userId","");
-                            messageData.put("roomKey",msKey);
-                            Map<String,Object> childUpdates = new HashMap<>();
-                            childUpdates.put(key,messageData);
-                            messageRef.child(msKey).updateChildren(childUpdates);
+                                    break;
+                                }
+                            }catch (NumberFormatException e){
+                            }
                         }
                     }
                 }else {
