@@ -41,6 +41,7 @@ public class InputProfileFragment extends Fragment {
     public static EditText userNameEditText;
     public static EditText commentEditText;
     Button okButton;
+    Button noChangeButton;
     public static Spinner sexSpinner;
     public static Spinner ageSpinner;
     FirebaseUser user;
@@ -167,6 +168,7 @@ public class InputProfileFragment extends Fragment {
         sexSpinner = (Spinner)v.findViewById(R.id.sexSpinner);
         ageSpinner = (Spinner)v.findViewById(R.id.ageSpinner);
         okButton = (Button)v.findViewById(R.id.okButton);
+        noChangeButton = (Button)v.findViewById(R.id.noChangeButton);
 
         return v;
     }
@@ -228,8 +230,22 @@ public class InputProfileFragment extends Fragment {
                 }
             }
         });
+        noChangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager im = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                ConfirmProfileFragment fragmentConfirmProfile = new ConfirmProfileFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, fragmentConfirmProfile, ConfirmProfileFragment.TAG);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
     }
-    public static void saveData(){
+    public void saveData(){
         if (saveDataFrag == 1) {
             //バックボタン押されたとき
             newUserName = userNameEditText.getText().toString();
@@ -333,6 +349,5 @@ public class InputProfileFragment extends Fragment {
         MainActivity.mToolbar.setVisibility(View.VISIBLE);
         MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
         croppedFlag = false;
-        //保存したい
     }
 }

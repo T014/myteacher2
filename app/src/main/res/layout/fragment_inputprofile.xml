@@ -28,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/commentEditText"
-            android:minLines="4"
-            android:maxLength="120"
-            android:hint="自己紹介を入力\n\n\n"/>
+            android:minLines="6"
+            android:maxLength="200"
+            android:hint="自己紹介を入力\n\n\n\n\n"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,11 +49,25 @@
             android:layout_height="wrap_content"
             android:entries="@array/ageList"
             android:id="@+id/ageSpinner"/>
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/okButton"
-            android:text="確認"/>
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/okButton"
+                android:layout_marginBottom="50dp"
+                android:text="確認"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="キャンセル"
+                android:id="@+id/noChangeButton"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

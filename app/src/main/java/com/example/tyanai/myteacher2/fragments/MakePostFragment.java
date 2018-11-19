@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -483,6 +485,36 @@ public class MakePostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dateTextView.setText("指定しない");
+            }
+        });
+        titleNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String a =s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().indexOf("\n")>-1){
+                    String d = s.toString().replace("\n"," ");
+                    titleNameEditText.setText(d);
+                    titleNameEditText.setSelection(start+count);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String b = s.toString();
+            }
+        });
+
+        titleNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus){
+                    //focusされたとき
+                    titleNameEditText.setSelection(0);
+                }
             }
         });
 

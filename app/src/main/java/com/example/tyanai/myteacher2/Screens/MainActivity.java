@@ -785,10 +785,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentTransaction backStackTransaction = getSupportFragmentManager().beginTransaction();
             if (currentFragment!=null){
                 String currentFragmentTag = currentFragment.getTag();
-                if (currentFragmentTag.equals("InputProfileFragment")){
-                    InputProfileFragment.saveDataFrag=1;
-                    InputProfileFragment.saveData();
-                }else if (currentFragmentTag.equals("AreaFragment")){
+                if (currentFragmentTag.equals("AreaFragment")){
                     if (!(AreaFragment.areaGroup.isShown())){
                         fragmentArea = new AreaFragment();
                         backStackTransaction.replace(R.id.container, fragmentArea,AreaFragment.TAG);
