@@ -103,8 +103,8 @@ public class ListAdapter extends BaseAdapter{
         }
         if (title!=null){
             String newTitle;
-            if (title.length()>10){
-                newTitle = title.substring(0,9)+"...";
+            if (title.length()>12){
+                newTitle = title.substring(0,11)+"...";
             }else {
                 newTitle = title;
             }

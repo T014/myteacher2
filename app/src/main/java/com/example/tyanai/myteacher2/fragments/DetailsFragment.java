@@ -79,6 +79,7 @@ public class DetailsFragment extends Fragment {
     TextView howLongDetailTextView;
     TextView costDetailTextView;
     TextView methodDetailTextView;
+    TextView titleDetailTextView;
     Button stopButton;
     String screenNum;
     Boolean goodFlag = false;
@@ -330,6 +331,7 @@ public class DetailsFragment extends Fragment {
             howLongDetailTextView.setText("所要時間："+postData.getHowLong());
             costDetailTextView.setText("時給："+postData.getCost());
             methodDetailTextView.setText("手段："+postData.getMethod());
+            titleDetailTextView.setText(title);
 
         }
         @Override
@@ -421,6 +423,7 @@ public class DetailsFragment extends Fragment {
         howLongDetailTextView = (TextView)v.findViewById(R.id.howLongDetailTextView);
         costDetailTextView = (TextView)v.findViewById(R.id.costDetailTextView);
         methodDetailTextView = (TextView)v.findViewById(R.id.methodDetailTextView);
+        titleDetailTextView = (TextView)v.findViewById(R.id.titleDetailTextView);
         stopButton = (Button)v.findViewById(R.id.stopButton);
         gTextView = (TextView)v.findViewById(R.id.iine);
         bTextView = (TextView)v.findViewById(R.id.kounyuu);
