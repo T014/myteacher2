@@ -49,6 +49,7 @@ public class MessageFragment extends Fragment {
     String today;
     Calendar calDay2;
     Calendar calNow;
+    String myName;
 
     private ChildEventListener mkEventListener = new ChildEventListener() {
         @Override
@@ -207,6 +208,10 @@ public class MessageFragment extends Fragment {
             String iconBitmapString = (String) map.get("iconBitmapString");
             String removeKey="";
 
+            if (userId.equals(user.getUid())){
+                myName=userName;
+            }
+
             for (MessageListData a :messageListDataArrayList){
                 if (userId.equals(a.getUid())){
                     MessageListData newMessageListData = new MessageListData(userId,userName,iconBitmapString,a.getTime(),a.getContent(),a.getBitmapString(),a.getKey(),user.getUid(),a.getLag(),removeKey);
@@ -310,6 +315,7 @@ public class MessageFragment extends Fragment {
                     messageKeyBundle.putString("name",newMessageListDataArrayList.get(position).getUserName());
                     messageKeyBundle.putString("icon",newMessageListDataArrayList.get(position).getIconBitmapString());
                     messageKeyBundle.putString("uid",newMessageListDataArrayList.get(position).getUid());
+                    messageKeyBundle.putString("myName",myName);
                     messageListDataArrayList.clear();
                     newMessageListDataArrayList.clear();
                     ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();

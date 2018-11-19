@@ -31,13 +31,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/userNameTextView"
-                    android:id="@+id/evaluationConfirmProfileTextView"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/newIconImageView"
                     android:layout_below="@+id/userNameTextView"
                     android:layout_marginStart="10dp"
@@ -51,6 +44,13 @@
                     android:layout_marginStart="10dp"
                     android:id="@+id/sexConfirmProfileTextView"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/sexConfirmProfileTextView"
+                    android:id="@+id/evaluationConfirmProfileTextView"/>
+
                 <ToggleButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,6 +60,7 @@
                     android:layout_toEndOf="@+id/newIconImageView"
                     android:layout_marginStart="10dp"
                     android:id="@+id/followFollowerButton"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

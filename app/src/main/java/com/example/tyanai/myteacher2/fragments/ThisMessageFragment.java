@@ -64,6 +64,7 @@ public class ThisMessageFragment extends Fragment{
     int lvp = 15;
     String otherUid;
     public static String sendImageBitmapString;
+    String myName;
 
     private ChildEventListener umEventListener = new ChildEventListener() {
         @Override
@@ -188,6 +189,7 @@ public class ThisMessageFragment extends Fragment{
             MainActivity.mToolbar.setTitle(roomName);
             icon = bundle.getString("icon");
             otherUid = bundle.getString("uid");
+            myName = bundle.getString("myName");
             messageRef.child(msKey).limitToLast(30).addChildEventListener(umEventListener);
         }
 
@@ -428,11 +430,11 @@ public class ThisMessageFragment extends Fragment{
                                 removeDataKey.put("bitmapString","");
                                 removeDataKey.put("contents","");
                                 removeDataKey.put("roomKey",msKey);
-                                removeDataKey.put("time","このメッセージは削除されました。");
+                                removeDataKey.put("time",myName+"がメッセージを削除しました。");
                                 removeDataKey.put("userId","");
                                 messageRef.child(msKey).child(messageListDataArrayList.get(nPosition).getRemoveKey()).updateChildren(removeDataKey);
 
-                                MessageListData messageListData = new MessageListData("","","","このメッセージは削除されました。"
+                                MessageListData messageListData = new MessageListData("","","",myName+"がメッセージを削除しました。"
                                         ,"","","","",0,"");
                                 messageListDataArrayList.remove(nPosition);
                                 messageListDataArrayList.add(nPosition,messageListData);
@@ -443,7 +445,7 @@ public class ThisMessageFragment extends Fragment{
 
                                 if (nPosition==messageListDataArrayList.size()-1){
                                     Map<String,Object> newDataKey = new HashMap<>();
-                                    newDataKey.put("content","このメッセージは削除されました。");
+                                    newDataKey.put("content",myName+"がメッセージを削除しました。");
                                     messageKeyRef.child(user.getUid()).child(msKey).updateChildren(newDataKey);
                                     messageKeyRef.child(otherUid).child(msKey).updateChildren(newDataKey);
                                 }

@@ -470,6 +470,7 @@ public class ConfirmProfileFragment extends Fragment{
                             messageKeyBundle.putString("name",accountData.getName());
                             messageKeyBundle.putString("icon",accountData.getIconBitmapString());
                             messageKeyBundle.putString("uid",accountData.getUid());
+                            messageKeyBundle.putString("myName",myData.getName());
                             ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
                             fragmentThisMessage.setArguments(messageKeyBundle);
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -513,6 +514,7 @@ public class ConfirmProfileFragment extends Fragment{
                     messageKeyBundle.putString("name",accountData.getName());
                     messageKeyBundle.putString("icon",accountData.getIconBitmapString());
                     messageKeyBundle.putString("uid",accountData.getUid());
+                    messageKeyBundle.putString("myName",myData.getName());
                     ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
                     fragmentThisMessage.setArguments(messageKeyBundle);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
