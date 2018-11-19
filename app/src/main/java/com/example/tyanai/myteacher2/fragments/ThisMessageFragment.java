@@ -281,8 +281,26 @@ public class ThisMessageFragment extends Fragment{
                     if (messageListDataArrayList.size()!=0){
                         String lastDate = messageListDataArrayList.get(messageListDataArrayList.size()-1).getTime();
                         if (lastDate!=null && !(lastDate.equals(""))){
+                            //削除メッセージか日付かの確認
+                            //1文字目が数字なら日付
                             String lastDay = lastDate.substring(0,10);
+                            try {
+                                int aa = Integer.valueOf(String.valueOf(lastDay.charAt(0)));
+                            }catch (NumberFormatException e){
+                                String newLastDate = messageListDataArrayList.get(messageListDataArrayList.size()-2).getTime();
+                                if (newLastDate!=null && !(newLastDate.equals(""))){
+                                    //削除メッセージか日付かの確認
+                                    //1文字目が数字なら日付
+                                    String newLastDay = newLastDate.substring(0,10);
+                                    try {
+                                        int aa = Integer.valueOf(String.valueOf(newLastDay.charAt(0)));
+                                        lastDay=newLastDay;
+                                    }catch (NumberFormatException n){
 
+                                    }
+                                }
+
+                            }
                             int deff = nowDay.compareTo(lastDay);
                             if (deff!=0){
                                 //日付送信
@@ -450,11 +468,6 @@ public class ThisMessageFragment extends Fragment{
                                     messageKeyRef.child(otherUid).child(msKey).updateChildren(newDataKey);
                                 }
                                 if (id == R.id.myMessageImageView){
-//                                    ThisMessageFragment fragmentThisMessage = new ThisMessageFragment();
-//                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                                    transaction.replace(R.id.container,fragmentThisMessage,ThisMessageFragment.TAG);
-//                                    transaction.addToBackStack(null);
-//                                    transaction.commit();
                                     Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
                                     FragmentTransaction backStackTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                                     backStackTransaction.remove(currentFragment);
@@ -481,7 +494,7 @@ public class ThisMessageFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        //send
+        //sendimage
         if (sendImageBitmapString!=null){
             if (sendImageBitmapString.length()>5){
 
