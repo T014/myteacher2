@@ -843,7 +843,6 @@ public class DetailsFragment extends Fragment {
                 fragmentImage.setArguments(imageBundle);
                 getFragmentManager().beginTransaction()
                         .add(R.id.container,fragmentImage,ImageFragment.TAG)
-                        .addToBackStack(null)
                         .commit();
             }
         });

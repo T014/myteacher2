@@ -448,7 +448,9 @@ public class ThisMessageFragment extends Fragment{
         messageListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                showRemoveAlertDialog(position,view.getId());
+                if (messageListDataArrayList.get(position).getUid().equals(user.getUid())){
+                    showRemoveAlertDialog(position,view.getId());
+                }
 
                 return true;
             }

@@ -330,7 +330,6 @@ public class UsersPostFragment extends Fragment {
                     fragmentImage.setArguments(imageBundle);
                     getFragmentManager().beginTransaction()
                             .add(R.id.container,fragmentImage,ImageFragment.TAG)
-                            .addToBackStack(null)
                             .commit();
                 }else {
                     Bundle bundle = new Bundle();
