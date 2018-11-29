@@ -351,6 +351,8 @@ public class ThisMessageFragment extends Fragment{
                                         childUpdates.put(key,messageData);
                                         messageRef.child(msKey).updateChildren(childUpdates);
                                         break;
+                                    }else if (deff==0){
+                                        break;
                                     }
                                 }catch (NumberFormatException e){
                                 }
