@@ -28,7 +28,6 @@
         <!-- [START fcm_default_channel] -->
 
 
-
         <activity android:name=".Screens.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

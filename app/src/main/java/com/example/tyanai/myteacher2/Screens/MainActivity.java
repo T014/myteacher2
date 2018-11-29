@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-//        String aaa = FirebaseInstanceId.getInstance().getId();
+        //String aaa = FirebaseInstanceId.getInstance().getId();
 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
