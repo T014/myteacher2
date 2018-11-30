@@ -68,7 +68,7 @@ public class BusinessFragment extends Fragment {
             String subPermittedDate="0";
             String subPayDay="0";
             String subReceiveDate="0";
-            
+
             try {
                 subDate = date.substring(0,16);
                 subPermittedDate = permittedDate.substring(0,16);

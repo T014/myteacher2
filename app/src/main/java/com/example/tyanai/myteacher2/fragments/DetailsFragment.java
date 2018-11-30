@@ -501,14 +501,23 @@ public class DetailsFragment extends Fragment {
         iconDetailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle userBundle = new Bundle();
-                if (thisPost!=null){
-                    userBundle.putString("userId",thisPost.getUserId());
-                    ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
-                    fragmentProfileConfirm.setArguments(userBundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
-                    transaction.commit();
+
+                try {
+                    Bundle userBundle = new Bundle();
+                    if (thisPost!=null){
+                        userBundle.putString("userId",thisPost.getUserId());
+                        ConfirmProfileFragment fragmentProfileConfirm = new ConfirmProfileFragment();
+                        fragmentProfileConfirm.setArguments(userBundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container,fragmentProfileConfirm,ConfirmProfileFragment.TAG);
+                        transaction.commit();
+                    }
+                }catch (NullPointerException e){
+                    if (!(NetworkManager.isConnected(getContext()))){
+                        Snackbar.make(view,"画像を表示できませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
+                    }else {
+                        Snackbar.make(view,"画像を表示できませんでした。",Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -516,46 +525,51 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                //ボタンの色がどっちならどう的な感じで上と連携してる
-                if (goodFlag == true){
-                    //いいね済み
-                    favRef.child(intentKey).removeValue();
-                    int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
-                    totalGoods =totalGoods-1;
-                    String totalGd =String.valueOf(totalGoods);
-                    favRef.child(removeFavKey).removeValue();
+                if (NetworkManager.isConnected(getContext())){
+                    //ボタンの色がどっちならどう的な感じで上と連携してる
+                    if (goodFlag == true){
+                        //いいね済み
+                        favRef.child(intentKey).removeValue();
+                        int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
+                        totalGoods =totalGoods-1;
+                        String totalGd =String.valueOf(totalGoods);
+                        favRef.child(removeFavKey).removeValue();
 
-                    Map<String,Object> postGoodKey = new HashMap<>();
-                    postGoodKey.put("goods",totalGd);
-                    contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
-                    goodFlag = false;
-                }else{
-                    //未いいね
-                    Calendar cal1 = Calendar.getInstance();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
-                    String time = sdf.format(cal1.getTime());
+                        Map<String,Object> postGoodKey = new HashMap<>();
+                        postGoodKey.put("goods",totalGd);
+                        contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+                        goodFlag = false;
+                    }else{
+                        //未いいね
+                        Calendar cal1 = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+                        String time = sdf.format(cal1.getTime());
 
-                    Map<String,Object> favKey = new HashMap<>();
-                    String key = favRef.push().getKey();
-                    favKey.put("postUid",thisPost.getUserId());
-                    favKey.put("userId",user.getUid());
-                    favKey.put("userName",myData.getName());
-                    favKey.put("iconBitmapString",myData.getIconBitmapString());
-                    favKey.put("time",time);
-                    favKey.put("favKey",key);
-                    favKey.put("kind","いいね");
-                    favKey.put("kindDetail","いいね");
-                    favKey.put("postKey",thisPost.getKey());
-                    favRef.child(key).updateChildren(favKey);
+                        Map<String,Object> favKey = new HashMap<>();
+                        String key = favRef.push().getKey();
+                        favKey.put("postUid",thisPost.getUserId());
+                        favKey.put("userId",user.getUid());
+                        favKey.put("userName",myData.getName());
+                        favKey.put("iconBitmapString",myData.getIconBitmapString());
+                        favKey.put("time",time);
+                        favKey.put("favKey",key);
+                        favKey.put("kind","いいね");
+                        favKey.put("kindDetail","いいね");
+                        favKey.put("postKey",thisPost.getKey());
+                        favRef.child(key).updateChildren(favKey);
 
-                    int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
-                    totalGoods =totalGoods+1;
-                    String totalGd =String.valueOf(totalGoods);
-                    Map<String,Object> postGoodKey = new HashMap<>();
-                    postGoodKey.put("goods",totalGd);
-                    contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
-                    goodFlag = true;
+                        int totalGoods = Integer.parseInt(goodDetailTextView.getText().toString());
+                        totalGoods =totalGoods+1;
+                        String totalGd =String.valueOf(totalGoods);
+                        Map<String,Object> postGoodKey = new HashMap<>();
+                        postGoodKey.put("goods",totalGd);
+                        contentsRef.child(thisPost.getKey()).updateChildren(postGoodKey);
+                        goodFlag = true;
+                    }
+                }else {
+                    Snackbar.make(view,"いいねできませんでした。ネットワークに接続してください。",Snackbar.LENGTH_LONG).show();
                 }
+
             }
         });
 
@@ -836,14 +850,22 @@ public class DetailsFragment extends Fragment {
         postContentsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle imageBundle = new Bundle();
-                imageBundle.putString("imageBitmapString",thisPost.getImageBitmapString());
+                try {
+                    Bundle imageBundle = new Bundle();
+                    imageBundle.putString("imageBitmapString",thisPost.getImageBitmapString());
 
-                ImageFragment fragmentImage = new ImageFragment();
-                fragmentImage.setArguments(imageBundle);
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container,fragmentImage,ImageFragment.TAG)
-                        .commit();
+                    ImageFragment fragmentImage = new ImageFragment();
+                    fragmentImage.setArguments(imageBundle);
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.container,fragmentImage,ImageFragment.TAG)
+                            .commit();
+                }catch (NullPointerException e){
+                    if (NetworkManager.isConnected(getContext())){
+                        Snackbar.make(MainActivity.snack, "画像を表示できませんでした。", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        Snackbar.make(MainActivity.snack, "画像を表示できませんでした。ネットワークに接続してください。", Snackbar.LENGTH_LONG).show();
+                    }
+                }
             }
         });
     }
