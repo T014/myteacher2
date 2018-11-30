@@ -61,6 +61,8 @@ public class GridListAdapter extends BaseAdapter{
         //ここで色指定できる評価の高さによって
         if (contents.equals("あああ")){
             holder.linearLayout.setBackgroundColor(Color.rgb(127,127,255));
+        }else {
+            holder.linearLayout.setBackgroundColor(Color.rgb(255,255,255));
         }
         byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
         if(postImageBytes.length!=0){
