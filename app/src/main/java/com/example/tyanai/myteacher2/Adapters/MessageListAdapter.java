@@ -129,13 +129,16 @@ public class MessageListAdapter extends BaseAdapter {
 //                    if (time!=null){
 //                        messageListViewHolder.myMessageImageTimeTextView.setText(n);
 //                    }
+                    if (n!=null) {
+                        messageListViewHolder.myMessageImageTimeTextView.setText(n);
+                    }
                     messageListViewHolder.myMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageLayout.setVisibility(View.GONE);
                     messageListViewHolder.otherMessageImageLinearLayout.setVisibility(View.GONE);
                     messageListViewHolder.newDateLinearLayout.setVisibility(View.GONE);
                 }else{
                     //自分がテキストの送信
-                    if (time!=null){
+                    if (n!=null){
                         messageListViewHolder.messageTimeTextView.setText(n);
                     }
                     if (contents!=null){
@@ -185,7 +188,7 @@ public class MessageListAdapter extends BaseAdapter {
 //                    //他の人が画像送信した
 //                    Bitmap otherContentsImageBitmap = BitmapFactory.decodeByteArray(otherContentsImageBytes,0, otherContentsImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
 //                    messageListViewHolder.otherMessageImageView.setImageBitmap(otherContentsImageBitmap);
-                    if (time!=null){
+                    if (n!=null){
                         messageListViewHolder.otherMessageImageTimeTextView.setText(n);
                     }
                     byte[] otherMessageIconImageBytes = Base64.decode(userIconBitmapString,Base64.DEFAULT);
@@ -199,7 +202,7 @@ public class MessageListAdapter extends BaseAdapter {
                     messageListViewHolder.newDateLinearLayout.setVisibility(View.GONE);
                 }else{
                     //他の人がテキストの送信
-                    if (time!=null){
+                    if (n!=null){
                         messageListViewHolder.otherMessageTimeTextView.setText(n);
                     }
                     if (contents!=null){

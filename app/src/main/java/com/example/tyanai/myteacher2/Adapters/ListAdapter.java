@@ -158,8 +158,13 @@ public class ListAdapter extends BaseAdapter{
         if (postImageBitmapString!=null){
             byte[] postImageBytes = Base64.decode(postImageBitmapString,Base64.DEFAULT);
             if(postImageBytes.length!=0){
-                Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
-                listViewHolder.contentsImageView.setImageBitmap(postImageBitmap);
+                try {
+                    Bitmap postImageBitmap = BitmapFactory.decodeByteArray(postImageBytes,0, postImageBytes.length).copy(Bitmap.Config.ARGB_8888,true);
+                    listViewHolder.contentsImageView.setImageBitmap(postImageBitmap);
+                }catch (OutOfMemoryError e){
+
+                }
+
             }
         }
         if (userIconImageBitmapString!=null){

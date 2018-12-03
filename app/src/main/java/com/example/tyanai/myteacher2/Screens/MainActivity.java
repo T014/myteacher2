@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView accountNameTextView;
     TextView accountFollowTextView;
     TextView accountFollowerTextView;
-    TextView accountCoinTextView;
     TextView followTextView;
     TextView followerTextView;
     DatabaseReference userRef;
@@ -498,6 +497,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             NotificationFragment fragmentNotification = new NotificationFragment();
                             optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
                             optionTransaction.commit();
+                        }else if (currentFragmentTag.equals("ThisMessageFragment")){
+                            FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
+                            NotificationFragment fragmentNotification = new NotificationFragment();
+                            optionTransaction.replace(R.id.container, fragmentNotification,NotificationFragment.TAG);
+                            optionTransaction.commit();
                         }else if (!(currentFragmentTag.equals("NotificationFragment"))){
                             FragmentTransaction optionTransaction = getSupportFragmentManager().beginTransaction();
                             NotificationFragment fragmentNotification = new NotificationFragment();
@@ -516,6 +520,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (currentFragmentTag.equals("DetailFragment")){
                             FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
                             //電話番号とか身分証を登録しているかの確認
+                            SearchFragment fragmentSearch = new SearchFragment();
+                            optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
+                            optionsTransaction.commit();
+                        }else if (currentFragmentTag.equals("ThisMessageFragment")){
+                            FragmentTransaction optionsTransaction = getSupportFragmentManager().beginTransaction();
                             SearchFragment fragmentSearch = new SearchFragment();
                             optionsTransaction.replace(R.id.container, fragmentSearch,SearchFragment.TAG);
                             optionsTransaction.commit();
